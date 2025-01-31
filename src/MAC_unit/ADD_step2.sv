@@ -15,6 +15,7 @@
 //    carry_out   - signal if there is an oveflow from the addition
 //    exp_max_out - if sum is non-zero, this is equal to exp_max_in
 
+
 module ADD_step2 (
     input      [12:0] frac1,
     input             sign1,

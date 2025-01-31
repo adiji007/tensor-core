@@ -14,6 +14,7 @@
 //    frac_not_shifted     - fraction of the floating point that does not get shifted
 //    exp_max              - max exponent of the two given floating points
 
+
 module ADD_step1 (
     input [15:0] floating_point1_in,
     input [15:0] floating_point2_in,
@@ -37,6 +38,7 @@ module ADD_step1 (
         .u_diff(unsigned_exp_diff),
         .cmp_out(cmp_out)
     );
+    
     assign floating_point_shift = cmp_out ? floating_point1_in : floating_point2_in;
     assign floating_point_not_shift = cmp_out ? floating_point2_in : floating_point1_in;
     assign exp_max = cmp_out ? floating_point2_in[14:10] : floating_point1_in[14:10];

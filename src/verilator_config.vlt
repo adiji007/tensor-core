@@ -1,0 +1,27 @@
+`verilator_config
+
+--binary
++incdir+include
++incdir+MAC_unit
++incdir+testbench
+mac_unit.sv
+#ADD_step1.sv
+#ADD_step2.sv
+#ADD_step3.sv
+#adder_5b.sv
+#adder_13b.sv
+#int_compare.sv
+#left_shift.sv
+#right_shift.sv
+#mul_13b.sv
+#MUL_step1.sv
+#MUL_step2.sv
+#rounder.sv
+#s_to_u.sv
+#subtract.sv
+#u_to_s.sv
+-Wall
+--hierarchical
+-j 6
+
+

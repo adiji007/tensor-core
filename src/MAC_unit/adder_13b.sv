@@ -10,6 +10,7 @@
 //    sum     - output of sum operation regardless of overflow
 //    ovf     - high if an overflow has occured
 
+
 module adder_13b (
     input      [13:0] frac1,
     input      [13:0] frac2,
@@ -24,7 +25,7 @@ module adder_13b (
 
         if (frac1[13] == 1 && frac2[13] == 1 && sum[13] == 0) begin
             ovf = 1;
-            sum[13 = 1;
+            sum[13] = 1;
         end
 
         if (frac1[13] == 0 && frac2[13] == 0 && sum[13] == 1) begin

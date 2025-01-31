@@ -23,7 +23,7 @@ module rounder (
     reg round_amount;
 
     localparam RNE = 3'b000;
-    localparam RZE = 3'b001;
+    localparam RZE = 3'b001;    // Truncation
     localparam RDN = 3'b010;
     localparam RUP = 3'b011;
     localparam RMM = 3'b100;

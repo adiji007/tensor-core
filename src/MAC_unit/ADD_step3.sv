@@ -24,7 +24,7 @@ module ADD_step3 (
     input sign_in,
     input [12:0] frac_in,
     input carry_out,
-    output [31:0] floating_point_out,
+    output [15:0] floating_point_out,
     output [4:0] flags
 );
 
@@ -73,6 +73,7 @@ module ADD_step3 (
     end
 
     reg [15:0] round_out;
+    logic round_flag;               // I added this. --Vinay 1/31/2025. Verilator wouldn't compile without it.
 
     rounder ROUND (
         .frm(frm),
