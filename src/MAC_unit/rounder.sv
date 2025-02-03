@@ -12,6 +12,8 @@
 //Ouputs:
 //    rount_out - resulting floating point after rounding operation
 
+`timescale 1ns/1ps
+
 module rounder (
     input      [ 2:0] frm,
     input             sign,
@@ -46,7 +48,7 @@ module rounder (
     end  // always_comb
 
     assign rounded   = round_amount;
-    assign round_out = {sign, exp_in, fraction[11:2] + round_amount};
+    assign round_out = {sign, exp_in, fraction[11:2] + {9'b0,round_amount}};
 
 endmodule
 

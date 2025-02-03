@@ -10,6 +10,8 @@
 //Outputs:
 //    frac_signed   - 14 bit signed result of conversion
 
+`timescale 1ns/1ps
+
 module u_to_s (
     input             sign,
     input      [12:0] frac_unsigned,

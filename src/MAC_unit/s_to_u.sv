@@ -10,6 +10,8 @@
 //    sign          - 1 bit sign 'frac_unsigned'
 //    frac_unsigned - 13 bit magnitude of 'frac_signed'
 
+`timescale 1ns/1ps
+
 module s_to_u (
     input      [13:0] frac_signed,
     output reg        sign,

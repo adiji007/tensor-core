@@ -10,6 +10,8 @@
 //    frac_out   - 13 bit result of operation regardless of overflow occuring
 //    overflow   - flags if an overflow has occured
 
+`timescale 1ns/1ps
+
 module mul_13b (
     input  [12:0] frac_in1,
     input  [12:0] frac_in2,

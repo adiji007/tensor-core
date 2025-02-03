@@ -14,6 +14,8 @@
 //Outputs:
 //    floating_point_out - final floating point
 
+`timescale 1ns/1ps
+
 module ADD_step3 (
     input ovf_in,
     input unf_in,
@@ -35,7 +37,7 @@ module ADD_step3 (
 
     assign {sign, exponent, frac} = floating_point_out;
 
-    reg [ 8:0] exp_minus_shift_amount;
+    reg [ 4:0] exp_minus_shift_amount;
     reg [12:0] shifted_frac;
     reg [ 4:0] shifted_amount;
     reg [ 4:0] exp_out;
@@ -68,7 +70,7 @@ module ADD_step3 (
         end else begin
             round_this = shifted_frac[11:0];
             exp_out    = exp_minus_shift_amount;
-            if (({1'b0, exponent_max_in} < shifted_amount) && (~ovf_in)) unf = 1;
+            if (({1'b0, exponent_max_in} < {1'b0,shifted_amount}) && (~ovf_in)) unf = 1;
         end
     end
 

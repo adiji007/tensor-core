@@ -14,6 +14,7 @@
 //    frac_not_shifted     - fraction of the floating point that does not get shifted
 //    exp_max              - max exponent of the two given floating points
 
+`timescale 1ns/1ps
 
 module ADD_step1 (
     input [15:0] floating_point1_in,

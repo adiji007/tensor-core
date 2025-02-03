@@ -14,6 +14,8 @@
 //    ovf      - signal if an overflow has occurred
 //    unf      - signal if an undeflow has occurred
 
+`timescale 1ns/1ps
+
 module MUL_step2 (
     input            sign1,
     input            sign2,

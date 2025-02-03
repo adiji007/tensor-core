@@ -10,6 +10,7 @@
 //    sum     - output of sum operation regardless of overflow
 //    ovf     - high if an overflow has occured
 
+`timescale 1ns/1ps
 
 module adder_13b (
     input      [13:0] frac1,

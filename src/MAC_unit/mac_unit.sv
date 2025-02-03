@@ -23,22 +23,20 @@ https://www.veripool.org/ftp/verilator_doc.pdf
  
 // 
 
-
-
-
 `include "include/systolic_array_MAC_if.vh"
+`timescale 1ns/1ps
 
 module mac_unit(input logic clk, input logic nRST, systolic_array_MAC_if.MAC mac_if);
 
     // phase 1: multiply
 
     // signals connecting mul stage1 with stage2. these are registered, so need 2 signals (one coming out of stage1 going into register, the other coming out of register going into stage2)
-    logic mul_sign1_out, mul_sign2_out, carryout_out;
-    logic mul_sign1_in, mul_sign2_in, carryout_in;
-    logic [5:0] mul_exp1_out, mul_exp2_out;
-    logic [5:0] mul_exp1_in, mul_exp2_in;
-    logic [25:0] mul_product_out;
-    logic [25:0] mul_product_in;
+    logic mul_sign1_out, mul_sign2_out, mul_carryout_out;
+    logic mul_sign1_in, mul_sign2_in, mul_carryout_in;
+    logic [4:0] mul_exp1_out, mul_exp2_out;
+    logic [4:0] mul_exp1_in, mul_exp2_in;
+    logic [12:0] mul_product_out;
+    logic [12:0] mul_product_in;
 
     MUL_step1 mul1 (mac_if.in_value, mac_if.weight, mul_sign1_out, mul_sign2_out, mul_exp1_out, mul_exp2_out, mul_product_out, mul_carryout_out);
     
@@ -67,11 +65,11 @@ module mac_unit(input logic clk, input logic nRST, systolic_array_MAC_if.MAC mac
     logic [4:0] mul_sum_exp;
     logic mul_ovf, mul_unf;
 
-    MUL_step2 mul2 (mul_sign1_out, mul_sign2_out, mul_exp1_out, mul_exp2_out, mul_sign_result, mul_sum_exp, mul_ovf, mul_unf, mul_carryout_in);
+    MUL_step2 mul2 (mul_sign1_in, mul_sign2_in, mul_exp1_in, mul_exp2_in, mul_sign_result, mul_sum_exp, mul_ovf, mul_unf, mul_carryout_in);
 
     //final multiplication result
     logic [15:0] mul_result;
-    assign mul_result = {mul_sign_result, mul_sum_exp, mul_product_out[9:0]};
+    assign mul_result = {mul_sign_result, mul_sum_exp, mul_product_in[11:2]};
 
 
     // phase 2: accumulate
@@ -83,7 +81,7 @@ module mac_unit(input logic clk, input logic nRST, systolic_array_MAC_if.MAC mac
     logic [12:0] frac_shifted_in, frac_not_shifted_in;
     logic [4:0] add_exp_max_out, add_exp_max_in;
 
-    ADD_step1 add1 (mul_resullt, mac_if.in_accumulate, add_sign_shifted_out, frac_shifted_out, add_sign_not_shifted_out, frac_not_shifted_out, add_exp_max_out);
+    ADD_step1 add1 (mul_result, mac_if.in_accumulate, add_sign_shifted_out, frac_shifted_out, add_sign_not_shifted_out, frac_not_shifted_out, add_exp_max_out);
 
     // flipflop to connect add stage1 and stage2
     always_ff @(posedge clk, negedge nRST) begin

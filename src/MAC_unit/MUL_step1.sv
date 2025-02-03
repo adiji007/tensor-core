@@ -17,14 +17,16 @@
 //    product   - result of fraction multiplication
 //    carry_out - signal if there is a carry out of the multiplication
 
+`timescale 1ns/1ps
+
 module MUL_step1 (
     input  [15:0] fp1_in,
     input  [15:0] fp2_in,
     output        sign1,
     output        sign2,
-    output [ 5:0] exp1,
-    output [ 5:0] exp2,
-    output [25:0] product,
+    output [ 4:0] exp1,
+    output [ 4:0] exp2,
+    output [12:0] product,
     output        carry_out
 );
 

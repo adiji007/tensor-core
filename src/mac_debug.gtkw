@@ -1,0 +1,87 @@
+[*]
+[*] GTKWave Analyzer v3.3.120 (w)1999-2024 BSI
+[*] Sun Feb  2 23:02:14 2025
+[*]
+[dumpfile] "/home/vinay/tensorcore/tensor-core/src/waves.vcd"
+[dumpfile_mtime] "Sun Feb  2 21:48:47 2025"
+[dumpfile_size] 10082
+[savefile] "/home/vinay/tensorcore/tensor-core/src/mac_debug.gtkw"
+[timestart] 0
+[size] 2560 1458
+[pos] -27 -24
+*-9.300000 2394 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] MAC_unit_tb.
+[treeopen] MAC_unit_tb.dut.
+[treeopen] MAC_unit_tb.dut.mul1.
+[sst_width] 278
+[signals_width] 190
+[sst_expanded] 1
+[sst_vpaned_height] 456
+@c00022
+MAC_unit_tb.dut.mul1.fp1_in[15:0]
+@28
+(0)MAC_unit_tb.dut.mul1.fp1_in[15:0]
+(1)MAC_unit_tb.dut.mul1.fp1_in[15:0]
+(2)MAC_unit_tb.dut.mul1.fp1_in[15:0]
+(3)MAC_unit_tb.dut.mul1.fp1_in[15:0]
+(4)MAC_unit_tb.dut.mul1.fp1_in[15:0]
+(5)MAC_unit_tb.dut.mul1.fp1_in[15:0]
+(6)MAC_unit_tb.dut.mul1.fp1_in[15:0]
+(7)MAC_unit_tb.dut.mul1.fp1_in[15:0]
+(8)MAC_unit_tb.dut.mul1.fp1_in[15:0]
+(9)MAC_unit_tb.dut.mul1.fp1_in[15:0]
+(10)MAC_unit_tb.dut.mul1.fp1_in[15:0]
+(11)MAC_unit_tb.dut.mul1.fp1_in[15:0]
+(12)MAC_unit_tb.dut.mul1.fp1_in[15:0]
+(13)MAC_unit_tb.dut.mul1.fp1_in[15:0]
+(14)MAC_unit_tb.dut.mul1.fp1_in[15:0]
+(15)MAC_unit_tb.dut.mul1.fp1_in[15:0]
+@1401200
+-group_end
+@22
+MAC_unit_tb.dut.mul1.fp2_in[15:0]
+@28
+MAC_unit_tb.dut.mul1.carry_out
+@22
+MAC_unit_tb.dut.mul1.exp1[4:0]
+MAC_unit_tb.dut.mul1.exp2[4:0]
+MAC_unit_tb.dut.mul1.product[12:0]
+@28
+MAC_unit_tb.dut.mul1.sign1
+MAC_unit_tb.dut.mul1.sign2
+MAC_unit_tb.dut.mul_carryout_in
+@800022
+MAC_unit_tb.dut.mul_exp1_in[4:0]
+@28
+(0)MAC_unit_tb.dut.mul_exp1_in[4:0]
+(1)MAC_unit_tb.dut.mul_exp1_in[4:0]
+(2)MAC_unit_tb.dut.mul_exp1_in[4:0]
+(3)MAC_unit_tb.dut.mul_exp1_in[4:0]
+(4)MAC_unit_tb.dut.mul_exp1_in[4:0]
+@1001200
+-group_end
+@800022
+MAC_unit_tb.dut.mul_exp2_in[4:0]
+@28
+(0)MAC_unit_tb.dut.mul_exp2_in[4:0]
+(1)MAC_unit_tb.dut.mul_exp2_in[4:0]
+(2)MAC_unit_tb.dut.mul_exp2_in[4:0]
+(3)MAC_unit_tb.dut.mul_exp2_in[4:0]
+(4)MAC_unit_tb.dut.mul_exp2_in[4:0]
+@1001200
+-group_end
+@22
+MAC_unit_tb.dut.mul_product_in[12:0]
+@28
+MAC_unit_tb.dut.mul_sign1_in
+MAC_unit_tb.dut.mul_sign2_in
+MAC_unit_tb.dut.mul_ovf
+MAC_unit_tb.dut.mul_sign_result
+@22
+MAC_unit_tb.dut.mul_sum_exp[4:0]
+@28
+MAC_unit_tb.dut.mul_unf
+@22
+MAC_unit_tb.dut.mul_result[15:0]
+[pattern_trace] 1
+[pattern_trace] 0

@@ -10,9 +10,11 @@
 //Outputs:
 //    result       - 13 bit result of the shift
 
+`timescale 1ns/1ps
+
 module right_shift (
     input      [12:0] fraction,
-    input      [ 7:0] shift_amount,
+    input      [ 4:0] shift_amount,
     output reg [12:0] result
 );
 

@@ -10,6 +10,8 @@
 //    ovf    - signal overflow has occurred
 //    unf    - signal underflow has occurred
 
+`timescale 1ns/1ps
+
 module adder_5b (
     input        carry,
     input  [4:0] exp1,
@@ -30,7 +32,7 @@ module adder_5b (
         r_sum  = r_exp1 + r_exp2;
     end
 
-    assign sum = (exp1 + exp2) - 5'b10000;  // add with offset
+    assign sum = (exp1 + exp2) - 5'b01111;  // Changed from 5'b10000add with offset
     assign ovf = r_sum[4] && ~r_exp1[4] && ~r_exp2[4];
     assign unf = ((carry != 1) || (sum != 5'b11111)) && (~r_sum[4] && r_exp1[4] && r_exp2[4]);
 

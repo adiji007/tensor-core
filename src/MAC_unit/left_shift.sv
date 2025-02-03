@@ -9,10 +9,12 @@
 //Outputs:
 //    result   - resulting 13 bit value with a '1' in most significance and zeros shifted in from the right
 
+`timescale 1ns/1ps
+
 module left_shift (
     input      [12:0] fraction,
     output reg [12:0] result,
-    output reg [ 7:0] shifted_amount
+    output reg [ 4:0] shifted_amount
 );
 
     always_comb begin
@@ -66,6 +68,10 @@ module left_shift (
             13'b0000000000001: begin
                 result = {fraction[0], 12'd0};
                 shifted_amount = 12;
+            end
+            default: begin
+                result = fraction;
+                shifted_amount = 0;
             end
         endcase
     end

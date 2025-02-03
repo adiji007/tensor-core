@@ -10,6 +10,8 @@
 //    u_diff  - unsigned difference between exp1 and exp2
 //    cmp_out - exp1 < exp2 -> 1, exp1 >= exp2 -> 0
 
+`timescale 1ns/1ps
+
 module int_compare (
     input      [4:0] exp1,
     input      [4:0] exp2,
@@ -21,7 +23,7 @@ module int_compare (
     wire [5:0] u_exp2 = {1'b0, exp2};
     reg  [5:0] diff;
 
-    assign u_diff = diff[7:0];
+    assign u_diff = diff[4:0];
 
     always_comb begin
         diff = u_exp1 - u_exp2;
