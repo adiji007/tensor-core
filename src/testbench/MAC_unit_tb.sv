@@ -38,9 +38,18 @@ module MAC_unit_tb;
         #CLK_PERIOD;
         tb_nrst = 1;
 
+        mac_if.start = 0;
         mac_if.in_value = 16'h4B80;
         mac_if.weight = 16'h4000;
         mac_if.in_accumulate = 16'h4500;
+
+        #(CLK_PERIOD * 5);
+        mac_if.start = 1;
+        #CLK_PERIOD;
+        mac_if.start = 0;
+
+
+
         #(CLK_PERIOD * 6) 
 
         $finish;

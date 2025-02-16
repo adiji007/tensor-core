@@ -155,6 +155,11 @@ VL_ATTR_COLD void VMAC_unit_tb___024root___ctor_var_reset(VMAC_unit_tb___024root
     // Body
     vlSelf->MAC_unit_tb__DOT__tb_clk = VL_RAND_RESET_I(1);
     vlSelf->MAC_unit_tb__DOT__tb_nrst = VL_RAND_RESET_I(1);
+    vlSelf->MAC_unit_tb__DOT__dut__DOT__run_latched = VL_RAND_RESET_I(1);
+    vlSelf->MAC_unit_tb__DOT__dut__DOT__start_passthrough_1 = VL_RAND_RESET_I(1);
+    vlSelf->MAC_unit_tb__DOT__dut__DOT__start_passthrough_2 = VL_RAND_RESET_I(1);
+    vlSelf->MAC_unit_tb__DOT__dut__DOT__start_passthrough_3 = VL_RAND_RESET_I(1);
+    vlSelf->MAC_unit_tb__DOT__dut__DOT__run = VL_RAND_RESET_I(1);
     vlSelf->MAC_unit_tb__DOT__dut__DOT__mul_sign1_in = VL_RAND_RESET_I(1);
     vlSelf->MAC_unit_tb__DOT__dut__DOT__mul_sign2_in = VL_RAND_RESET_I(1);
     vlSelf->MAC_unit_tb__DOT__dut__DOT__mul_carryout_in = VL_RAND_RESET_I(1);

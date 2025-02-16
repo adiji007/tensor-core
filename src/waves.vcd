@@ -3,174 +3,179 @@ $timescale 1ps $end
  $scope module $rootio $end
  $upscope $end
  $scope module MAC_unit_tb $end
-  $var wire 32 m CLK_PERIOD [31:0] $end
-  $var wire 1 a tb_clk $end
+  $var wire 32 s CLK_PERIOD [31:0] $end
+  $var wire 1 f tb_clk $end
   $var wire 1 # tb_nrst $end
   $scope module mac_if $end
-   $var wire 32 t data_w [31:0] $end
-   $var wire 1 u start $end
-   $var wire 1 v count $end
+   $var wire 32 z data_w [31:0] $end
+   $var wire 1 / start $end
+   $var wire 1 { count $end
    $var wire 16 , weight [15:0] $end
    $var wire 16 + in_value [15:0] $end
    $var wire 16 ( in_accumulate [15:0] $end
-   $var wire 16 ` out_accumulate [15:0] $end
+   $var wire 16 e out_accumulate [15:0] $end
   $upscope $end
   $scope module dut $end
-   $var wire 1 a clk $end
+   $var wire 1 f clk $end
    $var wire 1 # nRST $end
    $scope module mac_if $end
-    $var wire 32 t data_w [31:0] $end
-    $var wire 1 u start $end
-    $var wire 1 v count $end
+    $var wire 32 z data_w [31:0] $end
+    $var wire 1 / start $end
+    $var wire 1 { count $end
     $var wire 16 , weight [15:0] $end
     $var wire 16 + in_value [15:0] $end
     $var wire 16 ( in_accumulate [15:0] $end
-    $var wire 16 ` out_accumulate [15:0] $end
+    $var wire 16 e out_accumulate [15:0] $end
    $upscope $end
+   $var wire 1 0 run_latched $end
+   $var wire 1 1 start_passthrough_1 $end
+   $var wire 1 2 start_passthrough_2 $end
+   $var wire 1 3 start_passthrough_3 $end
+   $var wire 1 g run $end
    $var wire 1 $ mul_sign1_out $end
    $var wire 1 % mul_sign2_out $end
-   $var wire 1 b mul_carryout_out $end
-   $var wire 1 / mul_sign1_in $end
-   $var wire 1 0 mul_sign2_in $end
-   $var wire 1 1 mul_carryout_in $end
+   $var wire 1 h mul_carryout_out $end
+   $var wire 1 4 mul_sign1_in $end
+   $var wire 1 5 mul_sign2_in $end
+   $var wire 1 6 mul_carryout_in $end
    $var wire 5 & mul_exp1_out [4:0] $end
    $var wire 5 ' mul_exp2_out [4:0] $end
-   $var wire 5 2 mul_exp1_in [4:0] $end
-   $var wire 5 3 mul_exp2_in [4:0] $end
-   $var wire 13 c mul_product_out [12:0] $end
-   $var wire 13 4 mul_product_in [12:0] $end
-   $var wire 1 5 mul_sign_result $end
-   $var wire 5 6 mul_sum_exp [4:0] $end
-   $var wire 1 7 mul_ovf $end
-   $var wire 1 8 mul_unf $end
-   $var wire 16 9 mul_result [15:0] $end
-   $var wire 1 : add_sign_shifted_in $end
-   $var wire 1 ; add_sign_not_shifted_in $end
-   $var wire 1 d add_sign_shifted_out $end
-   $var wire 1 e add_sign_not_shifted_out $end
-   $var wire 13 f frac_shifted_out [12:0] $end
-   $var wire 13 g frac_not_shifted_out [12:0] $end
-   $var wire 13 < frac_shifted_in [12:0] $end
-   $var wire 13 = frac_not_shifted_in [12:0] $end
-   $var wire 5 h add_exp_max_out [4:0] $end
-   $var wire 5 > add_exp_max_in [4:0] $end
-   $var wire 1 ? add_sign_out $end
-   $var wire 1 @ add_sign_in $end
-   $var wire 13 A add_sum_out [12:0] $end
-   $var wire 13 B add_sum_in [12:0] $end
-   $var wire 1 C add_carry_out $end
-   $var wire 1 D add_carry_in $end
-   $var wire 5 E add_exp_max_s2_out [4:0] $end
-   $var wire 5 F add_exp_max_s3_in [4:0] $end
-   $var wire 16 G accumulate_result [15:0] $end
-   $var wire 5 H add_flags [4:0] $end
+   $var wire 5 7 mul_exp1_in [4:0] $end
+   $var wire 5 8 mul_exp2_in [4:0] $end
+   $var wire 13 i mul_product_out [12:0] $end
+   $var wire 13 9 mul_product_in [12:0] $end
+   $var wire 1 : mul_sign_result $end
+   $var wire 5 ; mul_sum_exp [4:0] $end
+   $var wire 1 < mul_ovf $end
+   $var wire 1 = mul_unf $end
+   $var wire 16 > mul_result [15:0] $end
+   $var wire 1 ? add_sign_shifted_in $end
+   $var wire 1 @ add_sign_not_shifted_in $end
+   $var wire 1 j add_sign_shifted_out $end
+   $var wire 1 k add_sign_not_shifted_out $end
+   $var wire 13 l frac_shifted_out [12:0] $end
+   $var wire 13 m frac_not_shifted_out [12:0] $end
+   $var wire 13 A frac_shifted_in [12:0] $end
+   $var wire 13 B frac_not_shifted_in [12:0] $end
+   $var wire 5 n add_exp_max_out [4:0] $end
+   $var wire 5 C add_exp_max_in [4:0] $end
+   $var wire 1 D add_sign_out $end
+   $var wire 1 E add_sign_in $end
+   $var wire 13 F add_sum_out [12:0] $end
+   $var wire 13 G add_sum_in [12:0] $end
+   $var wire 1 H add_carry_out $end
+   $var wire 1 I add_carry_in $end
+   $var wire 5 J add_exp_max_s2_out [4:0] $end
+   $var wire 5 K add_exp_max_s3_in [4:0] $end
+   $var wire 16 L accumulate_result [15:0] $end
+   $var wire 5 M add_flags [4:0] $end
    $scope module add1 $end
-    $var wire 16 9 floating_point1_in [15:0] $end
+    $var wire 16 > floating_point1_in [15:0] $end
     $var wire 16 ( floating_point2_in [15:0] $end
-    $var wire 1 d sign_shifted $end
-    $var wire 13 f frac_shifted [12:0] $end
-    $var wire 1 e sign_not_shifted $end
-    $var wire 13 g frac_not_shifted [12:0] $end
-    $var wire 5 h exp_max [4:0] $end
-    $var wire 5 i unsigned_exp_diff [4:0] $end
-    $var wire 1 j cmp_out $end
+    $var wire 1 j sign_shifted $end
+    $var wire 13 l frac_shifted [12:0] $end
+    $var wire 1 k sign_not_shifted $end
+    $var wire 13 m frac_not_shifted [12:0] $end
+    $var wire 5 n exp_max [4:0] $end
+    $var wire 5 o unsigned_exp_diff [4:0] $end
+    $var wire 1 p cmp_out $end
     $scope module cmp_exponents $end
-     $var wire 5 6 exp1 [4:0] $end
+     $var wire 5 ; exp1 [4:0] $end
      $var wire 5 ) exp2 [4:0] $end
-     $var wire 5 i u_diff [4:0] $end
-     $var wire 1 j cmp_out $end
-     $var wire 6 I u_exp1 [5:0] $end
+     $var wire 5 o u_diff [4:0] $end
+     $var wire 1 p cmp_out $end
+     $var wire 6 N u_exp1 [5:0] $end
      $var wire 6 * u_exp2 [5:0] $end
-     $var wire 6 k diff [5:0] $end
+     $var wire 6 q diff [5:0] $end
     $upscope $end
    $upscope $end
    $scope module add2 $end
-    $var wire 13 < frac1 [12:0] $end
-    $var wire 1 : sign1 $end
-    $var wire 13 = frac2 [12:0] $end
-    $var wire 1 ; sign2 $end
-    $var wire 5 > exp_max_in [4:0] $end
-    $var wire 1 ? sign_out $end
-    $var wire 13 A sum [12:0] $end
-    $var wire 1 C carry_out $end
-    $var wire 5 E exp_max_out [4:0] $end
-    $var wire 14 J frac1_signed [13:0] $end
-    $var wire 14 K frac2_signed [13:0] $end
-    $var wire 14 L sum_signed [13:0] $end
+    $var wire 13 A frac1 [12:0] $end
+    $var wire 1 ? sign1 $end
+    $var wire 13 B frac2 [12:0] $end
+    $var wire 1 @ sign2 $end
+    $var wire 5 C exp_max_in [4:0] $end
+    $var wire 1 D sign_out $end
+    $var wire 13 F sum [12:0] $end
+    $var wire 1 H carry_out $end
+    $var wire 5 J exp_max_out [4:0] $end
+    $var wire 14 O frac1_signed [13:0] $end
+    $var wire 14 P frac2_signed [13:0] $end
+    $var wire 14 Q sum_signed [13:0] $end
     $scope module add_signed_fracs $end
-     $var wire 14 J frac1 [13:0] $end
-     $var wire 14 K frac2 [13:0] $end
-     $var wire 14 L sum [13:0] $end
-     $var wire 1 C ovf $end
+     $var wire 14 O frac1 [13:0] $end
+     $var wire 14 P frac2 [13:0] $end
+     $var wire 14 Q sum [13:0] $end
+     $var wire 1 H ovf $end
     $upscope $end
     $scope module change_to_signed1 $end
-     $var wire 1 : sign $end
-     $var wire 13 < frac_unsigned [12:0] $end
-     $var wire 14 J frac_signed [13:0] $end
-    $upscope $end
-    $scope module change_to_signed2 $end
-     $var wire 1 ; sign $end
-     $var wire 13 = frac_unsigned [12:0] $end
-     $var wire 14 K frac_signed [13:0] $end
-    $upscope $end
-    $scope module change_to_unsigned $end
-     $var wire 14 L frac_signed [13:0] $end
      $var wire 1 ? sign $end
      $var wire 13 A frac_unsigned [12:0] $end
-     $var wire 14 M rfrac_signed [13:0] $end
+     $var wire 14 O frac_signed [13:0] $end
+    $upscope $end
+    $scope module change_to_signed2 $end
+     $var wire 1 @ sign $end
+     $var wire 13 B frac_unsigned [12:0] $end
+     $var wire 14 P frac_signed [13:0] $end
+    $upscope $end
+    $scope module change_to_unsigned $end
+     $var wire 14 Q frac_signed [13:0] $end
+     $var wire 1 D sign $end
+     $var wire 13 F frac_unsigned [12:0] $end
+     $var wire 14 R rfrac_signed [13:0] $end
     $upscope $end
    $upscope $end
    $scope module add3 $end
-    $var wire 1 n ovf_in $end
-    $var wire 1 n unf_in $end
-    $var wire 1 n dz $end
-    $var wire 1 n inv $end
-    $var wire 3 o frm [2:0] $end
-    $var wire 5 F exponent_max_in [4:0] $end
-    $var wire 1 @ sign_in $end
-    $var wire 13 B frac_in [12:0] $end
-    $var wire 1 D carry_out $end
-    $var wire 16 G floating_point_out [15:0] $end
-    $var wire 5 H flags [4:0] $end
-    $var wire 1 N inexact $end
-    $var wire 1 @ sign $end
-    $var wire 5 O exponent [4:0] $end
-    $var wire 10 P frac [9:0] $end
-    $var wire 5 Q exp_minus_shift_amount [4:0] $end
-    $var wire 13 R shifted_frac [12:0] $end
-    $var wire 5 S shifted_amount [4:0] $end
-    $var wire 5 T exp_out [4:0] $end
-    $var wire 1 U ovf $end
-    $var wire 1 V unf $end
-    $var wire 12 W round_this [11:0] $end
-    $var wire 16 X round_out [15:0] $end
-    $var wire 1 Y round_flag $end
+    $var wire 1 t ovf_in $end
+    $var wire 1 t unf_in $end
+    $var wire 1 t dz $end
+    $var wire 1 t inv $end
+    $var wire 3 u frm [2:0] $end
+    $var wire 5 K exponent_max_in [4:0] $end
+    $var wire 1 E sign_in $end
+    $var wire 13 G frac_in [12:0] $end
+    $var wire 1 I carry_out $end
+    $var wire 16 L floating_point_out [15:0] $end
+    $var wire 5 M flags [4:0] $end
+    $var wire 1 S inexact $end
+    $var wire 1 E sign $end
+    $var wire 5 T exponent [4:0] $end
+    $var wire 10 U frac [9:0] $end
+    $var wire 5 V exp_minus_shift_amount [4:0] $end
+    $var wire 13 W shifted_frac [12:0] $end
+    $var wire 5 X shifted_amount [4:0] $end
+    $var wire 5 Y exp_out [4:0] $end
+    $var wire 1 Z ovf $end
+    $var wire 1 [ unf $end
+    $var wire 12 \ round_this [11:0] $end
+    $var wire 16 ] round_out [15:0] $end
+    $var wire 1 ^ round_flag $end
     $scope module ROUND $end
-     $var wire 3 o frm [2:0] $end
-     $var wire 1 @ sign $end
-     $var wire 5 T exp_in [4:0] $end
-     $var wire 12 W fraction [11:0] $end
-     $var wire 16 X round_out [15:0] $end
-     $var wire 1 Y rounded $end
-     $var wire 1 Y round_amount $end
-     $var wire 3 p RNE [2:0] $end
-     $var wire 3 o RZE [2:0] $end
-     $var wire 3 q RDN [2:0] $end
-     $var wire 3 r RUP [2:0] $end
-     $var wire 3 s RMM [2:0] $end
+     $var wire 3 u frm [2:0] $end
+     $var wire 1 E sign $end
+     $var wire 5 Y exp_in [4:0] $end
+     $var wire 12 \ fraction [11:0] $end
+     $var wire 16 ] round_out [15:0] $end
+     $var wire 1 ^ rounded $end
+     $var wire 1 ^ round_amount $end
+     $var wire 3 v RNE [2:0] $end
+     $var wire 3 u RZE [2:0] $end
+     $var wire 3 w RDN [2:0] $end
+     $var wire 3 x RUP [2:0] $end
+     $var wire 3 y RMM [2:0] $end
     $upscope $end
     $scope module SUB $end
-     $var wire 5 F exp1 [4:0] $end
-     $var wire 5 S shifted_amount [4:0] $end
-     $var wire 5 Q result [4:0] $end
-     $var wire 6 Z u_exp1 [5:0] $end
-     $var wire 6 [ u_shifted_amount [5:0] $end
-     $var wire 6 \ u_result [5:0] $end
+     $var wire 5 K exp1 [4:0] $end
+     $var wire 5 X shifted_amount [4:0] $end
+     $var wire 5 V result [4:0] $end
+     $var wire 6 _ u_exp1 [5:0] $end
+     $var wire 6 ` u_shifted_amount [5:0] $end
+     $var wire 6 a u_result [5:0] $end
     $upscope $end
     $scope module shift_left $end
-     $var wire 13 B fraction [12:0] $end
-     $var wire 13 R result [12:0] $end
-     $var wire 5 S shifted_amount [4:0] $end
+     $var wire 13 G fraction [12:0] $end
+     $var wire 13 W result [12:0] $end
+     $var wire 5 X shifted_amount [4:0] $end
     $upscope $end
    $upscope $end
    $scope module mul1 $end
@@ -180,36 +185,36 @@ $timescale 1ps $end
     $var wire 1 % sign2 $end
     $var wire 5 & exp1 [4:0] $end
     $var wire 5 ' exp2 [4:0] $end
-    $var wire 13 c product [12:0] $end
-    $var wire 1 b carry_out $end
+    $var wire 13 i product [12:0] $end
+    $var wire 1 h carry_out $end
     $scope module MUL $end
      $var wire 13 - frac_in1 [12:0] $end
      $var wire 13 . frac_in2 [12:0] $end
-     $var wire 13 c frac_out [12:0] $end
-     $var wire 1 b overflow $end
-     $var wire 26 l frac_out_26b [25:0] $end
+     $var wire 13 i frac_out [12:0] $end
+     $var wire 1 h overflow $end
+     $var wire 26 r frac_out_26b [25:0] $end
     $upscope $end
    $upscope $end
    $scope module mul2 $end
-    $var wire 1 / sign1 $end
-    $var wire 1 0 sign2 $end
-    $var wire 5 2 exp1 [4:0] $end
-    $var wire 5 3 exp2 [4:0] $end
-    $var wire 1 5 sign_out $end
-    $var wire 5 6 sum_exp [4:0] $end
-    $var wire 1 7 ovf $end
-    $var wire 1 8 unf $end
-    $var wire 1 1 carry $end
+    $var wire 1 4 sign1 $end
+    $var wire 1 5 sign2 $end
+    $var wire 5 7 exp1 [4:0] $end
+    $var wire 5 8 exp2 [4:0] $end
+    $var wire 1 : sign_out $end
+    $var wire 5 ; sum_exp [4:0] $end
+    $var wire 1 < ovf $end
+    $var wire 1 = unf $end
+    $var wire 1 6 carry $end
     $scope module add_EXPs $end
-     $var wire 1 1 carry $end
-     $var wire 5 2 exp1 [4:0] $end
-     $var wire 5 3 exp2 [4:0] $end
-     $var wire 5 6 sum [4:0] $end
-     $var wire 1 7 ovf $end
-     $var wire 1 8 unf $end
-     $var wire 5 ] r_exp1 [4:0] $end
-     $var wire 5 ^ r_exp2 [4:0] $end
-     $var wire 5 _ r_sum [4:0] $end
+     $var wire 1 6 carry $end
+     $var wire 5 7 exp1 [4:0] $end
+     $var wire 5 8 exp2 [4:0] $end
+     $var wire 5 ; sum [4:0] $end
+     $var wire 1 < ovf $end
+     $var wire 1 = unf $end
+     $var wire 5 b r_exp1 [4:0] $end
+     $var wire 5 c r_exp2 [4:0] $end
+     $var wire 5 d r_sum [4:0] $end
     $upscope $end
    $upscope $end
   $upscope $end
@@ -233,77 +238,82 @@ b1000000000000 .
 0/
 00
 01
-b00000 2
-b00000 3
-b0000000000000 4
+02
+03
+04
 05
-b10001 6
-07
-18
-b0100010000000000 9
+06
+b00000 7
+b00000 8
+b0000000000000 9
 0:
-0;
-b0000000000000 <
-b0000000000000 =
-b00000 >
+b10001 ;
+0<
+1=
+b0100010000000000 >
 0?
 0@
 b0000000000000 A
 b0000000000000 B
-0C
+b00000 C
 0D
-b00000 E
-b00000 F
-b0000000000000000 G
-b00000 H
-b010001 I
-b00000000000000 J
-b00000000000000 K
-b00000000000000 L
-b00000000000000 M
-0N
-b00000 O
-b0000000000 P
-b00000 Q
-b0000000000000 R
-b00000 S
+0E
+b0000000000000 F
+b0000000000000 G
+0H
+0I
+b00000 J
+b00000 K
+b0000000000000000 L
+b00000 M
+b010001 N
+b00000000000000 O
+b00000000000000 P
+b00000000000000 Q
+b00000000000000 R
+0S
 b00000 T
-0U
-0V
-b000000000000 W
-b0000000000000000 X
-0Y
-b000000 Z
-b000000 [
-b000000 \
-b10000 ]
-b10000 ^
-b00000 _
-b0000000000000000 `
-0a
-0b
-b1000000000000 c
-0d
-0e
-b0000000000000 f
-b1000000000000 g
-b10001 h
-b10001 i
+b0000000000 U
+b00000 V
+b0000000000000 W
+b00000 X
+b00000 Y
+0Z
+0[
+b000000000000 \
+b0000000000000000 ]
+0^
+b000000 _
+b000000 `
+b000000 a
+b10000 b
+b10000 c
+b00000 d
+b0000000000000000 e
+0f
+0g
+0h
+b1000000000000 i
 0j
-b010001 k
-b01000000000000000000000000 l
-b00000000000000000000000000000001 m
-0n
-b001 o
-b000 p
-b010 q
-b011 r
-b100 s
-b00000000000000000000000000010000 t
-0u
-0v
+0k
+b0000000000000 l
+b1000000000000 m
+b10001 n
+b10001 o
+0p
+b010001 q
+b01000000000000000000000000 r
+b00000000000000000000000000000001 s
+0t
+b001 u
+b000 v
+b010 w
+b011 x
+b100 y
+b00000000000000000000000000010000 z
+0{
 #500
-1a
+1f
 #1000
 1#
 b10010 &
@@ -314,98 +324,134 @@ b010001 *
 b0100101110000000 +
 b0100000000000000 ,
 b1111000000000 -
-0a
-b1111000000000 c
-b1010000000000 f
-b00000 i
-b000000 k
-b01111000000000000000000000 l
+0f
+b1111000000000 i
+b1010000000000 l
+b00000 o
+b000000 q
+b01111000000000000000000000 r
 #1500
-b10010 2
-b10000 3
-b1111000000000 4
-b10011 6
-08
-b0100111110000000 9
-b1010000000000 <
-b1000000000000 =
-b10001 >
-b0010000000000 A
-1C
-b10001 E
-b010011 I
-b01010000000000 J
-b01000000000000 K
-b00010000000000 L
-b00010000000000 M
-b00010 ]
-b00000 ^
-b00010 _
-1a
-b0010100000000 f
-b1111000000000 g
-b10011 h
-b00010 i
-b000010 k
+1f
 #2000
-0a
+0f
 #2500
-b0010100000000 <
-b1111000000000 =
-b10011 >
-b0001100000000 A
-b0010000000000 B
-1D
-b10011 E
-b10001 F
-b0100100010000000 G
-b00010100000000 J
-b01111000000000 K
-b00001100000000 L
-b00001100000000 M
-b10010 O
-b0010000000 P
-b01111 Q
-b1000000000000 R
-b00010 S
-b10010 T
-b001000000000 W
-b0100100010000000 X
-b010001 Z
-b000010 [
-b001111 \
-b0100100010000000 `
-1a
+1f
 #3000
-0a
+0f
 #3500
-b0001100000000 B
-b10011 F
-b0101000001100000 G
-b10100 O
-b0001100000 P
-b10000 Q
-b1100000000000 R
-b00011 S
-b10100 T
-b000110000000 W
-b0101000001100000 X
-b010011 Z
-b000011 [
-b010000 \
-b0101000001100000 `
-1a
+1f
 #4000
-0a
+0f
 #4500
-1a
+1f
 #5000
-0a
+0f
 #5500
-1a
+1f
 #6000
-0a
+1/
+0f
+1g
 #6500
-1a
+10
+11
+b10010 7
+b10000 8
+b1111000000000 9
+b10011 ;
+0=
+b0100111110000000 >
+b1010000000000 A
+b1000000000000 B
+b10001 C
+b0010000000000 F
+1H
+b10001 J
+b010011 N
+b01010000000000 O
+b01000000000000 P
+b00010000000000 Q
+b00010000000000 R
+b00010 b
+b00000 c
+b00010 d
+1f
+b0010100000000 l
+b1111000000000 m
+b10011 n
+b00010 o
+b000010 q
 #7000
-0a
+0/
+0f
+#7500
+01
+12
+b0010100000000 A
+b1111000000000 B
+b10011 C
+b0001100000000 F
+b0010000000000 G
+1I
+b10011 J
+b10001 K
+b0100100010000000 L
+b00010100000000 O
+b01111000000000 P
+b00001100000000 Q
+b00001100000000 R
+b10010 T
+b0010000000 U
+b01111 V
+b1000000000000 W
+b00010 X
+b10010 Y
+b001000000000 \
+b0100100010000000 ]
+b010001 _
+b000010 `
+b001111 a
+b0100100010000000 e
+1f
+#8000
+0f
+#8500
+02
+13
+b0001100000000 G
+b10011 K
+b0101000001100000 L
+b10100 T
+b0001100000 U
+b10000 V
+b1100000000000 W
+b00011 X
+b10100 Y
+b000110000000 \
+b0101000001100000 ]
+b010011 _
+b000011 `
+b010000 a
+b0101000001100000 e
+1f
+#9000
+0f
+#9500
+00
+03
+1f
+0g
+#10000
+0f
+#10500
+1f
+#11000
+0f
+#11500
+1f
+#12000
+0f
+#12500
+1f
+#13000
+0f

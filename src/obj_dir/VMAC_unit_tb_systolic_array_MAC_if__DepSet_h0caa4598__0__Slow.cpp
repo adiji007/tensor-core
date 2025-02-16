@@ -10,7 +10,7 @@ VL_ATTR_COLD void VMAC_unit_tb_systolic_array_MAC_if___ctor_var_reset(VMAC_unit_
     VMAC_unit_tb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
-    vlSelf->__PVT__start = VL_RAND_RESET_I(1);
+    vlSelf->start = VL_RAND_RESET_I(1);
     vlSelf->__PVT__count = VL_RAND_RESET_I(1);
     vlSelf->weight = VL_RAND_RESET_I(16);
     vlSelf->in_value = VL_RAND_RESET_I(16);

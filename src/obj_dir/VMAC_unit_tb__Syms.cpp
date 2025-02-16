@@ -45,7 +45,7 @@ VMAC_unit_tb__Syms::VMAC_unit_tb__Syms(VerilatedContext* contextp, const char* n
     , TOP__MAC_unit_tb__DOT__mac_if{this, Verilated::catName(namep, "MAC_unit_tb.mac_if")}
 {
         // Check resources
-        Verilated::stackCheck(30);
+        Verilated::stackCheck(36);
     // Configure time unit / time precision
     _vm_contextp__->timeunit(-9);
     _vm_contextp__->timeprecision(-12);

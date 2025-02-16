@@ -20,6 +20,11 @@ class alignas(VL_CACHE_LINE_BYTES) VMAC_unit_tb___024root final : public Verilat
     // DESIGN SPECIFIC STATE
     CData/*0:0*/ MAC_unit_tb__DOT__tb_clk;
     CData/*0:0*/ MAC_unit_tb__DOT__tb_nrst;
+    CData/*0:0*/ MAC_unit_tb__DOT__dut__DOT__run_latched;
+    CData/*0:0*/ MAC_unit_tb__DOT__dut__DOT__start_passthrough_1;
+    CData/*0:0*/ MAC_unit_tb__DOT__dut__DOT__start_passthrough_2;
+    CData/*0:0*/ MAC_unit_tb__DOT__dut__DOT__start_passthrough_3;
+    CData/*0:0*/ MAC_unit_tb__DOT__dut__DOT__run;
     CData/*0:0*/ MAC_unit_tb__DOT__dut__DOT__mul_sign1_in;
     CData/*0:0*/ MAC_unit_tb__DOT__dut__DOT__mul_sign2_in;
     CData/*0:0*/ MAC_unit_tb__DOT__dut__DOT__mul_carryout_in;

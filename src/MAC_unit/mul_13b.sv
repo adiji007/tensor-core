@@ -1,5 +1,5 @@
 //By            : Joe Nasti
-//Last Updated  : 11/03/2024 by Vinay Pundith - converted to 13b multiplier for TPU Systolic Aray
+//Last Updated  : 11/03/2024 by Vinay Pundith - converted to 13b multiplier for TPU Systolic Array
 //
 //Module Summary:
 //    multiplies two 13 bit fraction values with decimal point after the first bit

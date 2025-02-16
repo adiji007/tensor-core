@@ -15,7 +15,7 @@ class alignas(VL_CACHE_LINE_BYTES) VMAC_unit_tb_systolic_array_MAC_if final : pu
   public:
 
     // DESIGN SPECIFIC STATE
-    CData/*0:0*/ __PVT__start;
+    CData/*0:0*/ start;
     CData/*0:0*/ __PVT__count;
     SData/*15:0*/ weight;
     SData/*15:0*/ in_value;

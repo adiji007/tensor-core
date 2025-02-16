@@ -28,6 +28,8 @@ VL_ATTR_COLD void VMAC_unit_tb___024root___stl_sequent__TOP__0(VMAC_unit_tb___02
     VMAC_unit_tb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
+    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__run = ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__run_latched) 
+                                                 | (IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.start));
     vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add3__DOT__ovf = 0U;
     vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul1__DOT__MUL__DOT__frac_out_26b 
         = (0x3ffffffU & ((0x1000U | (0xffcU & ((IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_value) 

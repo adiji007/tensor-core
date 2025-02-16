@@ -28,6 +28,21 @@ https://www.veripool.org/ftp/verilator_doc.pdf
 
 module mac_unit(input logic clk, input logic nRST, systolic_array_MAC_if.MAC mac_if);
 
+    logic run_latched;
+    logic start_passthrough_1, start_passthrough_2, start_passthrough_3;    //, start_passthrough_4, start_passthrough_final;
+    logic run;
+
+    always_ff @(posedge clk, negedge nRST) begin    // "latching" enable signal
+        if(nRST == 1'b0) begin
+            run_latched <= 1'b0;
+        end
+        else begin
+            run_latched <= (run_latched | mac_if.start) & ~start_passthrough_3;
+        end
+    end
+
+    assign run = run_latched | mac_if.start;       // This is to avoid a 1 clock cycle delay between receiving the start signal and actually starting the operation
+
     // phase 1: multiply
 
     // signals connecting mul stage1 with stage2. these are registered, so need 2 signals (one coming out of stage1 going into register, the other coming out of register going into stage2)
@@ -49,14 +64,25 @@ module mac_unit(input logic clk, input logic nRST, systolic_array_MAC_if.MAC mac
             mul_exp2_in <= 0;
             mul_carryout_in <= 0;
             mul_product_in <= 0;
+            start_passthrough_1 <= 0;
         end
-        else begin
+        else if(run) begin
             mul_sign1_in    <= mul_sign1_out;
             mul_sign2_in    <= mul_sign2_out;
             mul_exp1_in     <= mul_exp1_out;
             mul_exp2_in     <= mul_exp2_out;
             mul_carryout_in <= mul_carryout_out;
             mul_product_in  <= mul_product_out;
+            start_passthrough_1 <= mac_if.start;
+        end
+        else begin
+            mul_sign1_in    <= mul_sign1_in;
+            mul_sign2_in    <= mul_sign2_in;
+            mul_exp1_in     <= mul_exp1_in;
+            mul_exp2_in     <= mul_exp2_in;
+            mul_carryout_in <= mul_carryout_in;
+            mul_product_in  <= mul_product_in;
+            start_passthrough_1 <= start_passthrough_1;
         end
     end
 
@@ -91,13 +117,23 @@ module mac_unit(input logic clk, input logic nRST, systolic_array_MAC_if.MAC mac
             frac_shifted_in         <= 0;
             frac_not_shifted_in     <= 0;
             add_exp_max_in          <= 0;
+            start_passthrough_2 <= 0;
         end
-        else begin
+        else if(run) begin
             add_sign_shifted_in     <= add_sign_shifted_out;
             add_sign_not_shifted_in <= add_sign_not_shifted_out;
             frac_shifted_in         <= frac_shifted_out;
             frac_not_shifted_in     <= frac_not_shifted_out;
             add_exp_max_in          <= add_exp_max_out;
+            start_passthrough_2 <= start_passthrough_1;
+        end
+        else begin
+            add_sign_shifted_in     <= add_sign_shifted_in;
+            add_sign_not_shifted_in <= add_sign_not_shifted_in;
+            frac_shifted_in         <= frac_shifted_in;
+            frac_not_shifted_in     <= frac_not_shifted_in;
+            add_exp_max_in          <= add_exp_max_in;
+            start_passthrough_2 <= start_passthrough_2;
         end
     end
 
@@ -115,12 +151,21 @@ module mac_unit(input logic clk, input logic nRST, systolic_array_MAC_if.MAC mac
             add_sum_in              <= 0;
             add_carry_in            <= 0;
             add_exp_max_s3_in       <= 0;
+            start_passthrough_3 <= 0;
         end
-        else begin
+        else if(run) begin
             add_sign_in             <= add_sign_out;
             add_sum_in              <= add_sum_out;
             add_carry_in            <= add_carry_out;
             add_exp_max_s3_in       <= add_exp_max_s2_out;
+            start_passthrough_3 <= start_passthrough_2;
+        end
+        else begin
+            add_sign_in             <= add_sign_in;
+            add_sum_in              <= add_sum_in;
+            add_carry_in            <= add_carry_in;
+            add_exp_max_s3_in       <= add_exp_max_s3_in;
+            start_passthrough_3 <= start_passthrough_3;
         end
     end
 
