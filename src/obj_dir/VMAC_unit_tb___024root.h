@@ -56,9 +56,6 @@ class alignas(VL_CACHE_LINE_BYTES) VMAC_unit_tb___024root final : public Verilat
     SData/*12:0*/ MAC_unit_tb__DOT__dut__DOT__frac_shifted_in;
     SData/*12:0*/ MAC_unit_tb__DOT__dut__DOT__frac_not_shifted_in;
     SData/*12:0*/ MAC_unit_tb__DOT__dut__DOT__add_sum_in;
-    SData/*15:0*/ MAC_unit_tb__DOT__dut__DOT__add1__DOT__floating_point_shift;
-    SData/*15:0*/ MAC_unit_tb__DOT__dut__DOT__add1__DOT__floating_point_not_shift;
-    SData/*15:0*/ MAC_unit_tb__DOT__dut__DOT__add1__DOT__shifted_floating_point;
     SData/*13:0*/ MAC_unit_tb__DOT__dut__DOT__add2__DOT__frac1_signed;
     SData/*13:0*/ MAC_unit_tb__DOT__dut__DOT__add2__DOT__frac2_signed;
     SData/*13:0*/ MAC_unit_tb__DOT__dut__DOT__add2__DOT__sum_signed;
@@ -67,7 +64,7 @@ class alignas(VL_CACHE_LINE_BYTES) VMAC_unit_tb___024root final : public Verilat
     SData/*11:0*/ MAC_unit_tb__DOT__dut__DOT__add3__DOT__round_this;
     IData/*25:0*/ MAC_unit_tb__DOT__dut__DOT__mul1__DOT__MUL__DOT__frac_out_26b;
     IData/*31:0*/ __VactIterCount;
-    VlUnpacked<CData/*0:0*/, 6> __Vm_traceActivity;
+    VlUnpacked<CData/*0:0*/, 4> __Vm_traceActivity;
     VlDelayScheduler __VdlySched;
     VlTriggerVec<1> __VstlTriggered;
     VlTriggerVec<3> __VactTriggered;

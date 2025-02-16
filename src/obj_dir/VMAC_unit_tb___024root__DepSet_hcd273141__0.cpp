@@ -83,17 +83,6 @@ VL_INLINE_OPT void VMAC_unit_tb___024root___act_sequent__TOP__0(VMAC_unit_tb___0
     } else {
         vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_out = 0U;
     }
-    if (vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_out) {
-        vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__floating_point_shift 
-            = vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_result;
-        vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__floating_point_not_shift 
-            = vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_accumulate;
-    } else {
-        vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__floating_point_shift 
-            = vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_accumulate;
-        vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__floating_point_not_shift 
-            = vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_result;
-    }
 }
 
 VL_INLINE_OPT void VMAC_unit_tb___024root___nba_sequent__TOP__0(VMAC_unit_tb___024root* vlSelf) {
@@ -120,49 +109,80 @@ VL_INLINE_OPT void VMAC_unit_tb___024root___nba_sequent__TOP__0(VMAC_unit_tb___0
         vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_product_in 
             = (0x1fffU & (vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul1__DOT__MUL__DOT__frac_out_26b 
                           >> 0xcU));
-        vlSelfRef.MAC_unit_tb__DOT__dut__DOT__frac_not_shifted_in 
-            = (0x1000U | (0xffcU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__floating_point_not_shift) 
-                                    << 2U)));
-        vlSelfRef.MAC_unit_tb__DOT__dut__DOT__frac_shifted_in 
-            = (0x1fffU & ((0x1000U | (0xffcU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__floating_point_shift) 
-                                                << 2U))) 
-                          << (0x1fU & (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_exponents__DOT__diff))));
-        vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_sum_in 
-            = (0x1fffU & (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add2__DOT__change_to_unsigned__DOT__rfrac_signed));
         vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp1_in 
             = (0x1fU & ((IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_value) 
                         >> 0xaU));
         vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp2_in 
             = (0x1fU & ((IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.weight) 
                         >> 0xaU));
+        vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_sum_in 
+            = (0x1fffU & (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add2__DOT__change_to_unsigned__DOT__rfrac_signed));
         vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_exp_max_s3_in 
-            = ((0U == (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add2__DOT__sum_signed))
+            = ((0U == (0x1fffU & (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add2__DOT__change_to_unsigned__DOT__rfrac_signed)))
                 ? 0U : (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_exp_max_in));
-        vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_exp_max_in 
-            = (0x1fU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_out)
-                         ? ((IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_accumulate) 
-                            >> 0xaU) : (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sum_exp)));
+        if (vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_out) {
+            vlSelfRef.MAC_unit_tb__DOT__dut__DOT__frac_not_shifted_in 
+                = (0x1000U | (0xffcU & ((IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_accumulate) 
+                                        << 2U)));
+            vlSelfRef.MAC_unit_tb__DOT__dut__DOT__frac_shifted_in 
+                = (0x1fffU & ((0x1000U | (0xffcU & 
+                                          ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_result) 
+                                           << 2U))) 
+                              >> (0x1fU & (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_exponents__DOT__diff))));
+            vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_exp_max_in 
+                = (0x1fU & ((IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_accumulate) 
+                            >> 0xaU));
+        } else {
+            vlSelfRef.MAC_unit_tb__DOT__dut__DOT__frac_not_shifted_in 
+                = (0x1000U | (0xffcU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_result) 
+                                        << 2U)));
+            vlSelfRef.MAC_unit_tb__DOT__dut__DOT__frac_shifted_in 
+                = (0x1fffU & ((0x1000U | (0xffcU & 
+                                          ((IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_accumulate) 
+                                           << 2U))) 
+                              >> (0x1fU & (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_exponents__DOT__diff))));
+            vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_exp_max_in 
+                = (0x1fU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_result) 
+                            >> 0xaU));
+        }
     } else {
         vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_product_in = 0U;
+        vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp1_in = 0U;
+        vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp2_in = 0U;
         vlSelfRef.MAC_unit_tb__DOT__dut__DOT__frac_not_shifted_in = 0U;
         vlSelfRef.MAC_unit_tb__DOT__dut__DOT__frac_shifted_in = 0U;
         vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_sum_in = 0U;
-        vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp1_in = 0U;
-        vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp2_in = 0U;
         vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_exp_max_s3_in = 0U;
         vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_exp_max_in = 0U;
     }
-    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_sign_shifted_in 
-        = ((IData)(vlSelfRef.MAC_unit_tb__DOT__tb_nrst) 
-           && (1U & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__floating_point_shift) 
-                     >> 0xfU)));
-    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_sign_not_shifted_in 
-        = ((IData)(vlSelfRef.MAC_unit_tb__DOT__tb_nrst) 
-           && (1U & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__floating_point_not_shift) 
-                     >> 0xfU)));
     vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_carry_in 
         = ((IData)(vlSelfRef.MAC_unit_tb__DOT__tb_nrst) 
            && (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_carry_out));
+    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_sign_shifted_in 
+        = ((IData)(vlSelfRef.MAC_unit_tb__DOT__tb_nrst) 
+           && (1U & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_out)
+                      ? ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_result) 
+                         >> 0xfU) : ((IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_accumulate) 
+                                     >> 0xfU))));
+    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_sign_not_shifted_in 
+        = ((IData)(vlSelfRef.MAC_unit_tb__DOT__tb_nrst) 
+           && (1U & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_out)
+                      ? ((IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_accumulate) 
+                         >> 0xfU) : ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_result) 
+                                     >> 0xfU))));
+    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul2__DOT__add_EXPs__DOT__r_exp1 
+        = (0x1fU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp1_in) 
+                    - (IData)(0x10U)));
+    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul2__DOT__add_EXPs__DOT__r_exp2 
+        = (0x1fU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp2_in) 
+                    - (IData)(0x10U)));
+    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul2__DOT__add_EXPs__DOT__r_sum 
+        = (0x1fU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul2__DOT__add_EXPs__DOT__r_exp1) 
+                    + (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul2__DOT__add_EXPs__DOT__r_exp2)));
+    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sum_exp 
+        = (0x1fU & (((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp1_in) 
+                     + (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp2_in)) 
+                    - (IData)(0xfU)));
     vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add2__DOT__frac2_signed 
         = vlSelfRef.MAC_unit_tb__DOT__dut__DOT__frac_not_shifted_in;
     if (vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_sign_not_shifted_in) {
@@ -249,15 +269,6 @@ VL_INLINE_OPT void VMAC_unit_tb___024root___nba_sequent__TOP__0(VMAC_unit_tb___0
             = vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_sum_in;
         vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add3__DOT__shifted_amount = 0U;
     }
-    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul2__DOT__add_EXPs__DOT__r_exp1 
-        = (0x1fU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp1_in) 
-                    - (IData)(0x10U)));
-    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul2__DOT__add_EXPs__DOT__r_exp2 
-        = (0x1fU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp2_in) 
-                    - (IData)(0x10U)));
-    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul2__DOT__add_EXPs__DOT__r_sum 
-        = (0x1fU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul2__DOT__add_EXPs__DOT__r_exp1) 
-                    + (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul2__DOT__add_EXPs__DOT__r_exp2)));
     vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add3__DOT__ovf = 0U;
     vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add2__DOT__sum_signed 
         = (0x3fffU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add2__DOT__frac1_signed) 
@@ -309,10 +320,12 @@ VL_INLINE_OPT void VMAC_unit_tb___024root___nba_sequent__TOP__0(VMAC_unit_tb___0
         vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add3__DOT__exp_out 
             = (0x1fU & (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add3__DOT__SUB__DOT__u_result));
     }
-    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sum_exp 
-        = (0x1fU & (((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp1_in) 
-                     + (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp2_in)) 
-                    - (IData)(0xfU)));
+    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_result 
+        = ((((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sign1_in) 
+             ^ (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sign2_in)) 
+            << 0xfU) | (((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sum_exp) 
+                         << 0xaU) | (0x3ffU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_product_in) 
+                                               >> 2U))));
     vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_sign_out = 0U;
     vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add2__DOT__change_to_unsigned__DOT__rfrac_signed 
         = vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add2__DOT__sum_signed;
@@ -326,12 +339,6 @@ VL_INLINE_OPT void VMAC_unit_tb___024root___nba_sequent__TOP__0(VMAC_unit_tb___0
                               >> 2U)))) {
         vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add3__DOT__ROUND__DOT__round_amount = 0U;
     }
-    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_result 
-        = ((((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sign1_in) 
-             ^ (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sign2_in)) 
-            << 0xfU) | (((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sum_exp) 
-                         << 0xaU) | (0x3ffU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_product_in) 
-                                               >> 2U))));
 }
 
 VL_INLINE_OPT void VMAC_unit_tb___024root___nba_sequent__TOP__1(VMAC_unit_tb___024root* vlSelf) {
@@ -363,16 +370,5 @@ VL_INLINE_OPT void VMAC_unit_tb___024root___nba_comb__TOP__0(VMAC_unit_tb___024r
         }
     } else {
         vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_out = 0U;
-    }
-    if (vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_out) {
-        vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__floating_point_shift 
-            = vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_result;
-        vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__floating_point_not_shift 
-            = vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_accumulate;
-    } else {
-        vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__floating_point_shift 
-            = vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_accumulate;
-        vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__floating_point_not_shift 
-            = vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_result;
     }
 }

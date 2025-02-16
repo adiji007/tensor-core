@@ -23,9 +23,9 @@ module ADD_step2 (
     input      [12:0] frac2,
     input             sign2,
     input      [ 4:0] exp_max_in,  //
-    output            sign_out,
-    output     [12:0] sum,
-    output            carry_out,
+    output logic            sign_out,
+    output logic     [12:0] sum,
+    output logic            carry_out,
     output reg [ 4:0] exp_max_out  //
 );
 
@@ -34,11 +34,18 @@ module ADD_step2 (
     reg [13:0] sum_signed;
 
     always_comb begin : exp_max_assignment
-        if (sum_signed == 0) exp_max_out = 5'b00000;
+        if (sum == 0) exp_max_out = 5'b00000;
         else exp_max_out = exp_max_in;
     end
 
-
+    // always_comb begin
+    //     case({sign1, sign2})
+    //         2'b00: sum = frac1 + frac2;
+    //         2'b01: sum = frac1 - frac2;
+    //         2'b10: sum = frac2 - frac1;
+    //         2'b11: sum = frac1 + frac2;
+    //     endcase
+    // end
 
     u_to_s change_to_signed1 (
         .sign(sign1),

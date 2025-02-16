@@ -154,6 +154,25 @@ VL_ATTR_COLD void VMAC_unit_tb___024root___stl_sequent__TOP__0(VMAC_unit_tb___02
         vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add2__DOT__sum_signed 
             = (0x1fffU & (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add2__DOT__sum_signed));
     }
+    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_exponents__DOT__diff 
+        = (0x3fU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sum_exp) 
+                    - (0x1fU & ((IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_accumulate) 
+                                >> 0xaU))));
+    if ((0x20U & (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_exponents__DOT__diff))) {
+        if ((0x20U & (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_exponents__DOT__diff))) {
+            vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_exponents__DOT__diff 
+                = (0x3fU & (- (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_exponents__DOT__diff)));
+            vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_out = 1U;
+        }
+    } else {
+        vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_out = 0U;
+    }
+    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_result 
+        = ((((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sign1_in) 
+             ^ (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sign2_in)) 
+            << 0xfU) | (((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sum_exp) 
+                         << 0xaU) | (0x3ffU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_product_in) 
+                                               >> 2U))));
     vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add3__DOT__unf = 0U;
     if ((1U & (~ (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_carry_in)))) {
         if (((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_exp_max_s3_in) 
@@ -183,25 +202,6 @@ VL_ATTR_COLD void VMAC_unit_tb___024root___stl_sequent__TOP__0(VMAC_unit_tb___02
         vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add3__DOT__exp_out 
             = (0x1fU & (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add3__DOT__SUB__DOT__u_result));
     }
-    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_exponents__DOT__diff 
-        = (0x3fU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sum_exp) 
-                    - (0x1fU & ((IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_accumulate) 
-                                >> 0xaU))));
-    if ((0x20U & (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_exponents__DOT__diff))) {
-        if ((0x20U & (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_exponents__DOT__diff))) {
-            vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_exponents__DOT__diff 
-                = (0x3fU & (- (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_exponents__DOT__diff)));
-            vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_out = 1U;
-        }
-    } else {
-        vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_out = 0U;
-    }
-    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_result 
-        = ((((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sign1_in) 
-             ^ (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sign2_in)) 
-            << 0xfU) | (((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sum_exp) 
-                         << 0xaU) | (0x3ffU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_product_in) 
-                                               >> 2U))));
     vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add3__DOT__ROUND__DOT__round_amount = 0U;
     if ((0x3ffU != (0x3ffU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add3__DOT__round_this) 
                               >> 2U)))) {
@@ -214,16 +214,5 @@ VL_ATTR_COLD void VMAC_unit_tb___024root___stl_sequent__TOP__0(VMAC_unit_tb___02
         vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_sign_out = 1U;
         vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add2__DOT__change_to_unsigned__DOT__rfrac_signed 
             = (0x3fffU & (- (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add2__DOT__sum_signed)));
-    }
-    if (vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_out) {
-        vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__floating_point_shift 
-            = vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_result;
-        vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__floating_point_not_shift 
-            = vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_accumulate;
-    } else {
-        vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__floating_point_shift 
-            = vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_accumulate;
-        vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__floating_point_not_shift 
-            = vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_result;
     }
 }

@@ -17,22 +17,21 @@
 `timescale 1ns/1ps
 
 module ADD_step1 (
-    input [15:0] floating_point1_in,
-    input [15:0] floating_point2_in,
-    output sign_shifted,
-    output [12:0] frac_shifted,
-    output sign_not_shifted,
-    output [12:0] frac_not_shifted,
-    output [4:0] exp_max
+    input  logic [15:0] floating_point1_in,
+    input  logic [15:0] floating_point2_in,
+    output logic sign_shifted,
+    output logic [12:0] frac_shifted,
+    output logic sign_not_shifted,
+    output logic [12:0] frac_not_shifted,
+    output logic [4:0] exp_max
 );
 
     reg  [4:0]   unsigned_exp_diff;
-    reg    cmp_out; //exp1 >= exp2 -> cmp_out == 0
-    //exp1 <  exp2 -> cmp_out == 1
-    wire [15:0]   floating_point_shift;
-    wire [15:0]   floating_point_not_shift;
-    reg  [15:0]   shifted_floating_point;
+    reg    cmp_out;
 
+    // int_compare:
+    // if exp1 >= exp2: cmp_out = 0
+    // if exp2 > exp1: cmp_out = 1
     int_compare cmp_exponents (
         .exp1(floating_point1_in[14:10]),
         .exp2(floating_point2_in[14:10]),
@@ -40,19 +39,23 @@ module ADD_step1 (
         .cmp_out(cmp_out)
     );
     
-    assign floating_point_shift = cmp_out ? floating_point1_in : floating_point2_in;
-    assign floating_point_not_shift = cmp_out ? floating_point2_in : floating_point1_in;
-    assign exp_max = cmp_out ? floating_point2_in[14:10] : floating_point1_in[14:10];
-
-    right_shift shift_frac_with_smaller_exp (
-        .fraction({1'b1, floating_point_shift[9:0], 2'b0}),
-        .shift_amount(unsigned_exp_diff),
-        .result(frac_shifted)
-    );
-
-    assign frac_not_shifted = {1'b1, floating_point_not_shift[9:0], 2'b0};
-    assign sign_not_shifted = floating_point_not_shift[15];
-    assign sign_shifted     = floating_point_shift[15];
-
+    // need to: right shift significand (fraction) of number with smaller exponent
+    // Fraction format: {1'b1, fp_fraction[9:0], 2'b00}
+    always_comb begin
+        if(cmp_out == 1) begin
+            frac_shifted = {1'b1, floating_point1_in[9:0], 2'b00} >> unsigned_exp_diff;
+            sign_shifted = floating_point1_in[15];
+            frac_not_shifted = {1'b1, floating_point2_in[9:0], 2'b00};
+            sign_not_shifted = floating_point2_in[15];
+            exp_max = floating_point2_in[14:10];
+        end
+        else begin
+            frac_shifted = {1'b1, floating_point2_in[9:0], 2'b00} >> unsigned_exp_diff;
+            sign_shifted = floating_point2_in[15];
+            frac_not_shifted = {1'b1, floating_point1_in[9:0], 2'b00};
+            sign_not_shifted = floating_point1_in[15];
+            exp_max = floating_point1_in[14:10];
+        end
+    end
 
 endmodule

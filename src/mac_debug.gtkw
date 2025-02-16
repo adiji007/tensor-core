@@ -1,22 +1,23 @@
 [*]
 [*] GTKWave Analyzer v3.3.120 (w)1999-2024 BSI
-[*] Sun Feb  2 23:02:14 2025
+[*] Tue Feb 11 20:56:14 2025
 [*]
 [dumpfile] "/home/vinay/tensorcore/tensor-core/src/waves.vcd"
-[dumpfile_mtime] "Sun Feb  2 21:48:47 2025"
-[dumpfile_size] 10082
+[dumpfile_mtime] "Mon Feb 10 18:11:52 2025"
+[dumpfile_size] 9511
 [savefile] "/home/vinay/tensorcore/tensor-core/src/mac_debug.gtkw"
 [timestart] 0
 [size] 2560 1458
-[pos] -27 -24
-*-9.300000 2394 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[pos] -151 -151
+*-9.300000 3500 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] MAC_unit_tb.
 [treeopen] MAC_unit_tb.dut.
+[treeopen] MAC_unit_tb.dut.add1.
 [treeopen] MAC_unit_tb.dut.mul1.
 [sst_width] 278
-[signals_width] 190
+[signals_width] 289
 [sst_expanded] 1
-[sst_vpaned_height] 456
+[sst_vpaned_height] 992
 @c00022
 MAC_unit_tb.dut.mul1.fp1_in[15:0]
 @28
@@ -81,7 +82,68 @@ MAC_unit_tb.dut.mul_sign_result
 MAC_unit_tb.dut.mul_sum_exp[4:0]
 @28
 MAC_unit_tb.dut.mul_unf
-@22
+@c00022
 MAC_unit_tb.dut.mul_result[15:0]
+@28
+(0)MAC_unit_tb.dut.mul_result[15:0]
+(1)MAC_unit_tb.dut.mul_result[15:0]
+(2)MAC_unit_tb.dut.mul_result[15:0]
+(3)MAC_unit_tb.dut.mul_result[15:0]
+(4)MAC_unit_tb.dut.mul_result[15:0]
+(5)MAC_unit_tb.dut.mul_result[15:0]
+(6)MAC_unit_tb.dut.mul_result[15:0]
+(7)MAC_unit_tb.dut.mul_result[15:0]
+(8)MAC_unit_tb.dut.mul_result[15:0]
+(9)MAC_unit_tb.dut.mul_result[15:0]
+(10)MAC_unit_tb.dut.mul_result[15:0]
+(11)MAC_unit_tb.dut.mul_result[15:0]
+(12)MAC_unit_tb.dut.mul_result[15:0]
+(13)MAC_unit_tb.dut.mul_result[15:0]
+(14)MAC_unit_tb.dut.mul_result[15:0]
+(15)MAC_unit_tb.dut.mul_result[15:0]
+@1401200
+-group_end
+@c00022
+MAC_unit_tb.mac_if.in_accumulate[15:0]
+@28
+(0)MAC_unit_tb.mac_if.in_accumulate[15:0]
+(1)MAC_unit_tb.mac_if.in_accumulate[15:0]
+(2)MAC_unit_tb.mac_if.in_accumulate[15:0]
+(3)MAC_unit_tb.mac_if.in_accumulate[15:0]
+(4)MAC_unit_tb.mac_if.in_accumulate[15:0]
+(5)MAC_unit_tb.mac_if.in_accumulate[15:0]
+(6)MAC_unit_tb.mac_if.in_accumulate[15:0]
+(7)MAC_unit_tb.mac_if.in_accumulate[15:0]
+(8)MAC_unit_tb.mac_if.in_accumulate[15:0]
+(9)MAC_unit_tb.mac_if.in_accumulate[15:0]
+(10)MAC_unit_tb.mac_if.in_accumulate[15:0]
+(11)MAC_unit_tb.mac_if.in_accumulate[15:0]
+(12)MAC_unit_tb.mac_if.in_accumulate[15:0]
+(13)MAC_unit_tb.mac_if.in_accumulate[15:0]
+(14)MAC_unit_tb.mac_if.in_accumulate[15:0]
+(15)MAC_unit_tb.mac_if.in_accumulate[15:0]
+@1401200
+-group_end
+@22
+MAC_unit_tb.dut.accumulate_result[15:0]
+MAC_unit_tb.dut.add1.exp_max[4:0]
+MAC_unit_tb.dut.add1.frac_not_shifted[12:0]
+MAC_unit_tb.dut.add1.frac_shifted[12:0]
+@28
+MAC_unit_tb.dut.add1.sign_not_shifted
+MAC_unit_tb.dut.add1.sign_shifted
+@22
+MAC_unit_tb.dut.add1.cmp_exponents.u_diff[4:0]
+MAC_unit_tb.dut.add2.sum[12:0]
+@28
+MAC_unit_tb.dut.add2.carry_out
+@22
+MAC_unit_tb.dut.add3.floating_point_out[15:0]
+MAC_unit_tb.dut.add3.exponent_max_in[4:0]
+MAC_unit_tb.dut.add3.exponent[4:0]
+MAC_unit_tb.dut.add_exp_max_s3_in[4:0]
+MAC_unit_tb.dut.add_exp_max_s2_out[4:0]
+@23
+MAC_unit_tb.dut.add2.exp_max_in[4:0]
 [pattern_trace] 1
 [pattern_trace] 0

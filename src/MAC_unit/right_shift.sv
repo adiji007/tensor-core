@@ -19,7 +19,7 @@ module right_shift (
 );
 
     always_comb begin
-        result = fraction << shift_amount;
+        result = fraction >> shift_amount;
         // case (shift_amount)
         //     0: result = fraction;
 
