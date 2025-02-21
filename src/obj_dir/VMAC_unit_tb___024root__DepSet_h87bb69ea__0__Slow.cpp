@@ -38,7 +38,7 @@ VL_ATTR_COLD void VMAC_unit_tb___024root___eval_settle(VMAC_unit_tb___024root* v
 #ifdef VL_DEBUG
             VMAC_unit_tb___024root___dump_triggers__stl(vlSelf);
 #endif
-            VL_FATAL_MT("testbench/MAC_unit_tb.sv", 8, "", "Settle region did not converge.");
+            VL_FATAL_MT("testbench/MAC_unit_tb.sv", 13, "", "Settle region did not converge.");
         }
         __VstlIterCount = ((IData)(1U) + __VstlIterCount);
         __VstlContinue = 0U;

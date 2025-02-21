@@ -3,6 +3,11 @@
 `include "systolic_array_MAC_if.vh"
 
 // to run this: verilator --binary -j 0 -Wall -Wno-fatal MAC_unit_tb -IMAC_unit -Itestbench -Iinclude --hierarchical --trace
+// ./obj_dir/VMAC_unit_tb
+// gtkwave waves.vcd --save=mac_debug.gtkw
+
+// to run this: verilator --binary -j 0 -Wall -Wno-fatal MAC_unit_tb -IMAC_unit -Itestbench -Iinclude --hierarchical --trace; ./obj_dir/VMAC_unit_tb; gtkwave waves.vcd --save=mac_debug.gtkw
+
 
 /* verilator lint_off UNUSEDSIGNAL */
 module MAC_unit_tb;
@@ -43,12 +48,20 @@ module MAC_unit_tb;
         mac_if.weight = 16'h4000;
         mac_if.in_accumulate = 16'h4500;
 
-        #(CLK_PERIOD * 5);
+        #(CLK_PERIOD * 2);
         mac_if.start = 1;
         #CLK_PERIOD;
         mac_if.start = 0;
 
+        #(CLK_PERIOD*5)
 
+        mac_if.in_value = 16'h439a;
+        mac_if.weight = 16'h5c96;
+        mac_if.in_accumulate = 16'h58c3;
+
+        mac_if.start = 1;
+        #CLK_PERIOD;
+        mac_if.start = 0;
 
         #(CLK_PERIOD * 6) 
 

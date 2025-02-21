@@ -95,7 +95,9 @@ module mac_unit(input logic clk, input logic nRST, systolic_array_MAC_if.MAC mac
 
     //final multiplication result
     logic [15:0] mul_result;
-    assign mul_result = {mul_sign_result, mul_sum_exp, mul_product_in[11:2]};
+    logic [9:0] mul_significand_product_selected;
+    assign mul_significand_product_selected = mul_carryout_in ? mul_product_in[12:3] : mul_product_in[11:2];
+    assign mul_result = {mul_sign_result, mul_sum_exp, mul_significand_product_selected};
 
 
     // phase 2: accumulate
