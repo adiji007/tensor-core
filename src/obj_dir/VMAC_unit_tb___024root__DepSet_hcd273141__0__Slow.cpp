@@ -32,10 +32,16 @@ VL_ATTR_COLD void VMAC_unit_tb___024root___stl_sequent__TOP__0(VMAC_unit_tb___02
                                                  | (IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.start));
     vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add3__DOT__ovf = 0U;
     vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul1__DOT__MUL__DOT__frac_out_26b 
-        = (0x3ffffffU & ((0x1000U | (0xffcU & ((IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_value) 
+        = (0x3ffffffU & ((0x1000U | (0xffcU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__input_x) 
                                                << 2U))) 
                          * (0x1000U | (0xffcU & ((IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.weight) 
                                                  << 2U)))));
+    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__nxt_input_x 
+        = vlSelfRef.MAC_unit_tb__DOT__dut__DOT__input_x;
+    if (vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.MAC_shift) {
+        vlSelfRef.MAC_unit_tb__DOT__dut__DOT__nxt_input_x 
+            = vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_value;
+    }
     vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul2__DOT__add_EXPs__DOT__r_exp1 
         = (0x1fU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp1_in) 
                     - (IData)(0x10U)));

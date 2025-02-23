@@ -51,26 +51,39 @@ module MAC_unit_tb;
 
         @(posedge tb_clk);
         #(CLK_PERIOD * 2);
+
+        // Startup sequence: first turn MAC_shift on for one cycle then start
+        mac_if.MAC_shift = 1;
+        #CLK_PERIOD;
+        mac_if.MAC_shift = 0;
         mac_if.start = 1;
         #CLK_PERIOD;
         mac_if.start = 0;
+
 
         #(CLK_PERIOD*5)
 
+        @(posedge tb_clk);
+        // Intentionally de-sync inputs from clock edge
+        // #(CLK_PERIOD * 0.1)
+        // mac_if.in_value = 16'h439a;
+        // mac_if.weight = 16'h5c96;
+        // mac_if.in_accumulate = 16'h58c3;
+
+        // then set values
         mac_if.in_value = 16'h439a;
         mac_if.weight = 16'h5c96;
         mac_if.in_accumulate = 16'h58c3;
 
-        @(posedge tb_clk);
-        // Intentionally de-sync inputs from clock edge
-        #(CLK_PERIOD * 0.1)
-        mac_if.in_value = 16'h439a;
-        mac_if.weight = 16'h5c96;
-        mac_if.in_accumulate = 16'h58c3;
+        // Startup sequence: first turn MAC_shift on for one cycle then start
+        mac_if.MAC_shift = 1;
+        #CLK_PERIOD;
+        mac_if.MAC_shift = 0;
 
         mac_if.start = 1;
         #CLK_PERIOD;
         mac_if.start = 0;
+
 
         #(CLK_PERIOD * 6) 
 

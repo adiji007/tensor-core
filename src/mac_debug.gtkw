@@ -1,22 +1,22 @@
 [*]
 [*] GTKWave Analyzer v3.3.120 (w)1999-2024 BSI
-[*] Sun Feb 16 22:03:15 2025
+[*] Sun Feb 23 21:11:43 2025
 [*]
 [dumpfile] "/home/vinay/tensorcore/tensor-core/src/waves.vcd"
-[dumpfile_mtime] "Sun Feb 16 21:26:12 2025"
-[dumpfile_size] 11142
+[dumpfile_mtime] "Sun Feb 23 21:10:56 2025"
+[dumpfile_size] 12082
 [savefile] "/home/vinay/tensorcore/tensor-core/src/mac_debug.gtkw"
-[timestart] 0
+[timestart] 2866
 [size] 2560 1458
-[pos] 51 45
-*-10.500000 9883 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[pos] 77 68
+*-10.500000 6603 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] MAC_unit_tb.
 [treeopen] MAC_unit_tb.dut.
 [treeopen] MAC_unit_tb.dut.mul1.
 [sst_width] 278
 [signals_width] 289
 [sst_expanded] 1
-[sst_vpaned_height] 917
+[sst_vpaned_height] 882
 @c00022
 MAC_unit_tb.dut.mul1.fp1_in[15:0]
 @28
@@ -134,6 +134,10 @@ MAC_unit_tb.dut.add_exp_max_s2_out[4:0]
 MAC_unit_tb.dut.add2.exp_max_in[4:0]
 @28
 MAC_unit_tb.dut.run
+MAC_unit_tb.dut.mac_if.start
+@29
+MAC_unit_tb.dut.mac_if.MAC_shift
+@28
 MAC_unit_tb.dut.clk
 @c00022
 MAC_unit_tb.dut.mul_result[15:0]
@@ -200,7 +204,7 @@ MAC_unit_tb.dut.mul1.product[12:0]
 (12)MAC_unit_tb.dut.mul1.product[12:0]
 @1401200
 -group_end
-@29
+@28
 MAC_unit_tb.dut.mul2.carry
 @800022
 MAC_unit_tb.dut.mul_sum_exp[4:0]

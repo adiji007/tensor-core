@@ -56,6 +56,8 @@ class alignas(VL_CACHE_LINE_BYTES) VMAC_unit_tb___024root final : public Verilat
     CData/*0:0*/ __Vtrigprevexpr___TOP__MAC_unit_tb__DOT__tb_clk__0;
     CData/*0:0*/ __Vtrigprevexpr___TOP__MAC_unit_tb__DOT__tb_nrst__0;
     CData/*0:0*/ __VactContinue;
+    SData/*15:0*/ MAC_unit_tb__DOT__dut__DOT__input_x;
+    SData/*15:0*/ MAC_unit_tb__DOT__dut__DOT__nxt_input_x;
     SData/*12:0*/ MAC_unit_tb__DOT__dut__DOT__mul_product_in;
     SData/*15:0*/ MAC_unit_tb__DOT__dut__DOT__mul_result;
     SData/*12:0*/ MAC_unit_tb__DOT__dut__DOT__frac_shifted_in;
@@ -69,7 +71,7 @@ class alignas(VL_CACHE_LINE_BYTES) VMAC_unit_tb___024root final : public Verilat
     SData/*11:0*/ MAC_unit_tb__DOT__dut__DOT__add3__DOT__round_this;
     IData/*25:0*/ MAC_unit_tb__DOT__dut__DOT__mul1__DOT__MUL__DOT__frac_out_26b;
     IData/*31:0*/ __VactIterCount;
-    VlUnpacked<CData/*0:0*/, 4> __Vm_traceActivity;
+    VlUnpacked<CData/*0:0*/, 6> __Vm_traceActivity;
     VlDelayScheduler __VdlySched;
     VlTriggerScheduler __VtrigSched_h32c40dbe__0;
     VlTriggerVec<1> __VstlTriggered;

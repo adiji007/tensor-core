@@ -146,6 +146,8 @@ VL_ATTR_COLD void VMAC_unit_tb___024root____Vm_traceActivitySetAll(VMAC_unit_tb_
     vlSelfRef.__Vm_traceActivity[1U] = 1U;
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     vlSelfRef.__Vm_traceActivity[3U] = 1U;
+    vlSelfRef.__Vm_traceActivity[4U] = 1U;
+    vlSelfRef.__Vm_traceActivity[5U] = 1U;
 }
 
 VL_ATTR_COLD void VMAC_unit_tb___024root___ctor_var_reset(VMAC_unit_tb___024root* vlSelf) {
@@ -155,6 +157,8 @@ VL_ATTR_COLD void VMAC_unit_tb___024root___ctor_var_reset(VMAC_unit_tb___024root
     // Body
     vlSelf->MAC_unit_tb__DOT__tb_clk = VL_RAND_RESET_I(1);
     vlSelf->MAC_unit_tb__DOT__tb_nrst = VL_RAND_RESET_I(1);
+    vlSelf->MAC_unit_tb__DOT__dut__DOT__input_x = VL_RAND_RESET_I(16);
+    vlSelf->MAC_unit_tb__DOT__dut__DOT__nxt_input_x = VL_RAND_RESET_I(16);
     vlSelf->MAC_unit_tb__DOT__dut__DOT__run_latched = VL_RAND_RESET_I(1);
     vlSelf->MAC_unit_tb__DOT__dut__DOT__start_passthrough_1 = VL_RAND_RESET_I(1);
     vlSelf->MAC_unit_tb__DOT__dut__DOT__start_passthrough_2 = VL_RAND_RESET_I(1);
@@ -201,7 +205,7 @@ VL_ATTR_COLD void VMAC_unit_tb___024root___ctor_var_reset(VMAC_unit_tb___024root
     vlSelf->MAC_unit_tb__DOT__dut__DOT__add3__DOT__ROUND__DOT__round_amount = VL_RAND_RESET_I(1);
     vlSelf->__Vtrigprevexpr___TOP__MAC_unit_tb__DOT__tb_clk__0 = VL_RAND_RESET_I(1);
     vlSelf->__Vtrigprevexpr___TOP__MAC_unit_tb__DOT__tb_nrst__0 = VL_RAND_RESET_I(1);
-    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 6; ++__Vi0) {
         vlSelf->__Vm_traceActivity[__Vi0] = 0;
     }
 }

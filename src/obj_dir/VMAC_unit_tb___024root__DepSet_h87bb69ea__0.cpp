@@ -50,12 +50,12 @@ void VMAC_unit_tb___024root___eval_act(VMAC_unit_tb___024root* vlSelf) {
     // Body
     if ((5ULL & vlSelfRef.__VactTriggered.word(0U))) {
         VMAC_unit_tb___024root___act_comb__TOP__0(vlSelf);
+        vlSelfRef.__Vm_traceActivity[3U] = 1U;
     }
 }
 
 void VMAC_unit_tb___024root___nba_sequent__TOP__0(VMAC_unit_tb___024root* vlSelf);
 void VMAC_unit_tb___024root___nba_comb__TOP__0(VMAC_unit_tb___024root* vlSelf);
-void VMAC_unit_tb___024root___nba_comb__TOP__1(VMAC_unit_tb___024root* vlSelf);
 
 void VMAC_unit_tb___024root___eval_nba(VMAC_unit_tb___024root* vlSelf) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    VMAC_unit_tb___024root___eval_nba\n"); );
@@ -64,13 +64,11 @@ void VMAC_unit_tb___024root___eval_nba(VMAC_unit_tb___024root* vlSelf) {
     // Body
     if ((3ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
         VMAC_unit_tb___024root___nba_sequent__TOP__0(vlSelf);
-        vlSelfRef.__Vm_traceActivity[3U] = 1U;
-    }
-    if ((5ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
-        VMAC_unit_tb___024root___nba_comb__TOP__0(vlSelf);
+        vlSelfRef.__Vm_traceActivity[4U] = 1U;
     }
     if ((7ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
-        VMAC_unit_tb___024root___nba_comb__TOP__1(vlSelf);
+        VMAC_unit_tb___024root___nba_comb__TOP__0(vlSelf);
+        vlSelfRef.__Vm_traceActivity[5U] = 1U;
     }
 }
 

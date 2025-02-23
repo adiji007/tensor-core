@@ -26,7 +26,26 @@ https://www.veripool.org/ftp/verilator_doc.pdf
 `include "include/systolic_array_MAC_if.vh"
 `timescale 1ns/1ps
 
-module mac_unit(input logic clk, input logic nRST, systolic_array_MAC_if.MAC mac_if);
+module mac_unit#(parameter WIDTH = 16, parameter MUL_LEN = 2, parameter ADD_LEN = 3)(input logic clk, input logic nRST, systolic_array_MAC_if.MAC mac_if);
+
+    logic [WIDTH-1:0] input_x;
+    logic [WIDTH-1:0] nxt_input_x;
+    assign mac_if.in_pass = input_x;
+
+    // Latching MAC unit input value, to pass it on to the next 
+    always_ff @(posedge clk, negedge nRST) begin
+        if(nRST == 1'b0)begin
+            input_x <= '0;
+        end else begin
+            input_x <= nxt_input_x;
+        end 
+    end
+    always_comb begin
+        nxt_input_x = input_x;
+        if (mac_if.MAC_shift)begin
+            nxt_input_x = mac_if.in_value;
+        end
+    end
 
     logic run_latched;
     logic start_passthrough_1, start_passthrough_2, start_passthrough_3;    //, start_passthrough_4, start_passthrough_final;
@@ -53,7 +72,8 @@ module mac_unit(input logic clk, input logic nRST, systolic_array_MAC_if.MAC mac
     logic [12:0] mul_product_out;
     logic [12:0] mul_product_in;
 
-    MUL_step1 mul1 (mac_if.in_value, mac_if.weight, mul_sign1_out, mul_sign2_out, mul_exp1_out, mul_exp2_out, mul_product_out, mul_carryout_out);
+    // MUL takes in latched input_x from above
+    MUL_step1 mul1 (input_x, mac_if.weight, mul_sign1_out, mul_sign2_out, mul_exp1_out, mul_exp2_out, mul_product_out, mul_carryout_out);
     
     // flipflop to connect mul stage1 and stage 2
     always_ff @(posedge clk, negedge nRST) begin

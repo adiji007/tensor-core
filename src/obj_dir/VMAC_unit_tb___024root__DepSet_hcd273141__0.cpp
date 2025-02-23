@@ -44,43 +44,48 @@ VL_INLINE_OPT VlCoroutine VMAC_unit_tb___024root___eval_initial__TOP__Vtiming__0
                                          nullptr, "testbench/MAC_unit_tb.sv", 
                                          53);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
+    vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.MAC_shift = 1U;
+    co_await vlSelfRef.__VdlySched.delay(0x3e8ULL, 
+                                         nullptr, "testbench/MAC_unit_tb.sv", 
+                                         57);
+    vlSelfRef.__Vm_traceActivity[2U] = 1U;
+    vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.MAC_shift = 0U;
     vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.start = 1U;
     co_await vlSelfRef.__VdlySched.delay(0x3e8ULL, 
                                          nullptr, "testbench/MAC_unit_tb.sv", 
-                                         55);
+                                         60);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.start = 0U;
     co_await vlSelfRef.__VdlySched.delay(0x1388ULL, 
                                          nullptr, "testbench/MAC_unit_tb.sv", 
-                                         58);
+                                         64);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
-    vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_value = 0x439aU;
-    vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.weight = 0x5c96U;
-    vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_accumulate = 0x58c3U;
     co_await vlSelfRef.__VtrigSched_h32c40dbe__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge MAC_unit_tb.tb_clk)", 
                                                          "testbench/MAC_unit_tb.sv", 
-                                                         64);
-    vlSelfRef.__Vm_traceActivity[2U] = 1U;
-    co_await vlSelfRef.__VdlySched.delay(0x64ULL, nullptr, 
-                                         "testbench/MAC_unit_tb.sv", 
-                                         66);
+                                                         66);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_value = 0x439aU;
     vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.weight = 0x5c96U;
     vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_accumulate = 0x58c3U;
+    vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.MAC_shift = 1U;
+    co_await vlSelfRef.__VdlySched.delay(0x3e8ULL, 
+                                         nullptr, "testbench/MAC_unit_tb.sv", 
+                                         80);
+    vlSelfRef.__Vm_traceActivity[2U] = 1U;
+    vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.MAC_shift = 0U;
     vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.start = 1U;
     co_await vlSelfRef.__VdlySched.delay(0x3e8ULL, 
                                          nullptr, "testbench/MAC_unit_tb.sv", 
-                                         72);
+                                         84);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.start = 0U;
     co_await vlSelfRef.__VdlySched.delay(0x1770ULL, 
                                          nullptr, "testbench/MAC_unit_tb.sv", 
-                                         75);
+                                         88);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
-    VL_FINISH_MT("testbench/MAC_unit_tb.sv", 77, "");
+    VL_FINISH_MT("testbench/MAC_unit_tb.sv", 90, "");
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
 }
 
@@ -117,10 +122,16 @@ VL_INLINE_OPT void VMAC_unit_tb___024root___act_comb__TOP__0(VMAC_unit_tb___024r
     vlSelfRef.MAC_unit_tb__DOT__dut__DOT__run = ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__run_latched) 
                                                  | (IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.start));
     vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul1__DOT__MUL__DOT__frac_out_26b 
-        = (0x3ffffffU & ((0x1000U | (0xffcU & ((IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_value) 
+        = (0x3ffffffU & ((0x1000U | (0xffcU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__input_x) 
                                                << 2U))) 
                          * (0x1000U | (0xffcU & ((IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.weight) 
                                                  << 2U)))));
+    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__nxt_input_x 
+        = vlSelfRef.MAC_unit_tb__DOT__dut__DOT__input_x;
+    if (vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.MAC_shift) {
+        vlSelfRef.MAC_unit_tb__DOT__dut__DOT__nxt_input_x 
+            = vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_value;
+    }
     vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_exponents__DOT__diff 
         = (0x3fU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sum_exp) 
                     - (0x1fU & ((IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_accumulate) 
@@ -179,16 +190,40 @@ VL_INLINE_OPT void VMAC_unit_tb___024root___nba_sequent__TOP__0(VMAC_unit_tb___0
            && ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__run)
                 ? (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__start_passthrough_2)
                 : (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__start_passthrough_3)));
-    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sign1_in 
-        = ((IData)(vlSelfRef.MAC_unit_tb__DOT__tb_nrst) 
-           && (1U & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__run)
-                      ? ((IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_value) 
-                         >> 0xfU) : (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sign1_in))));
     vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sign2_in 
         = ((IData)(vlSelfRef.MAC_unit_tb__DOT__tb_nrst) 
            && (1U & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__run)
                       ? ((IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.weight) 
                          >> 0xfU) : (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sign2_in))));
+    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_carry_in 
+        = ((IData)(vlSelfRef.MAC_unit_tb__DOT__tb_nrst) 
+           && ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__run)
+                ? (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_carry_out)
+                : (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_carry_in)));
+    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_carryout_in 
+        = ((IData)(vlSelfRef.MAC_unit_tb__DOT__tb_nrst) 
+           && (1U & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__run)
+                      ? (vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul1__DOT__MUL__DOT__frac_out_26b 
+                         >> 0x19U) : (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_carryout_in))));
+    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_sign_shifted_in 
+        = ((IData)(vlSelfRef.MAC_unit_tb__DOT__tb_nrst) 
+           && (1U & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__run)
+                      ? ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_out)
+                          ? ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_result) 
+                             >> 0xfU) : ((IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_accumulate) 
+                                         >> 0xfU)) : (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_sign_shifted_in))));
+    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_sign_not_shifted_in 
+        = ((IData)(vlSelfRef.MAC_unit_tb__DOT__tb_nrst) 
+           && (1U & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__run)
+                      ? ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_out)
+                          ? ((IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_accumulate) 
+                             >> 0xfU) : ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_result) 
+                                         >> 0xfU)) : (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_sign_not_shifted_in))));
+    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sign1_in 
+        = ((IData)(vlSelfRef.MAC_unit_tb__DOT__tb_nrst) 
+           && (1U & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__run)
+                      ? ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__input_x) 
+                         >> 0xfU) : (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sign1_in))));
     if (vlSelfRef.MAC_unit_tb__DOT__tb_nrst) {
         if (vlSelfRef.MAC_unit_tb__DOT__dut__DOT__run) {
             vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_product_in 
@@ -219,9 +254,6 @@ VL_INLINE_OPT void VMAC_unit_tb___024root___nba_sequent__TOP__0(VMAC_unit_tb___0
                                                  << 2U))) 
                                   >> (0x1fU & (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_exponents__DOT__diff))));
             }
-            vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp1_in 
-                = (0x1fU & ((IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_value) 
-                            >> 0xaU));
             vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp2_in 
                 = (0x1fU & ((IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.weight) 
                             >> 0xaU));
@@ -230,13 +262,14 @@ VL_INLINE_OPT void VMAC_unit_tb___024root___nba_sequent__TOP__0(VMAC_unit_tb___0
                     ? 0U : (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_exp_max_in));
             vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_sum_in 
                 = (0x1fffU & (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add2__DOT__change_to_unsigned__DOT__rfrac_signed));
+            vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp1_in 
+                = (0x1fU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__input_x) 
+                            >> 0xaU));
         } else {
             vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_product_in 
                 = (0x1fffU & (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_product_in));
             __Vdly__MAC_unit_tb__DOT__dut__DOT__add_exp_max_in 
                 = (0x1fU & (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_exp_max_in));
-            vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp1_in 
-                = (0x1fU & (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp1_in));
             vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp2_in 
                 = (0x1fU & (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp2_in));
             vlSelfRef.MAC_unit_tb__DOT__dut__DOT__frac_not_shifted_in 
@@ -247,61 +280,28 @@ VL_INLINE_OPT void VMAC_unit_tb___024root___nba_sequent__TOP__0(VMAC_unit_tb___0
                 = (0x1fffU & (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__frac_shifted_in));
             vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_sum_in 
                 = (0x1fffU & (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_sum_in));
+            vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp1_in 
+                = (0x1fU & (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp1_in));
         }
+        vlSelfRef.MAC_unit_tb__DOT__dut__DOT__input_x 
+            = vlSelfRef.MAC_unit_tb__DOT__dut__DOT__nxt_input_x;
     } else {
         vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_product_in = 0U;
         __Vdly__MAC_unit_tb__DOT__dut__DOT__add_exp_max_in = 0U;
-        vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp1_in = 0U;
         vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp2_in = 0U;
         vlSelfRef.MAC_unit_tb__DOT__dut__DOT__frac_not_shifted_in = 0U;
         vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_exp_max_s3_in = 0U;
         vlSelfRef.MAC_unit_tb__DOT__dut__DOT__frac_shifted_in = 0U;
         vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_sum_in = 0U;
+        vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp1_in = 0U;
+        vlSelfRef.MAC_unit_tb__DOT__dut__DOT__input_x = 0U;
     }
-    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_carry_in 
-        = ((IData)(vlSelfRef.MAC_unit_tb__DOT__tb_nrst) 
-           && ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__run)
-                ? (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_carry_out)
-                : (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_carry_in)));
-    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_carryout_in 
-        = ((IData)(vlSelfRef.MAC_unit_tb__DOT__tb_nrst) 
-           && (1U & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__run)
-                      ? (vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul1__DOT__MUL__DOT__frac_out_26b 
-                         >> 0x19U) : (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_carryout_in))));
-    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_sign_shifted_in 
-        = ((IData)(vlSelfRef.MAC_unit_tb__DOT__tb_nrst) 
-           && (1U & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__run)
-                      ? ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_out)
-                          ? ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_result) 
-                             >> 0xfU) : ((IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_accumulate) 
-                                         >> 0xfU)) : (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_sign_shifted_in))));
-    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_sign_not_shifted_in 
-        = ((IData)(vlSelfRef.MAC_unit_tb__DOT__tb_nrst) 
-           && (1U & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__run)
-                      ? ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_out)
-                          ? ((IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_accumulate) 
-                             >> 0xfU) : ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_result) 
-                                         >> 0xfU)) : (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_sign_not_shifted_in))));
     vlSelfRef.MAC_unit_tb__DOT__dut__DOT__start_passthrough_1 
         = __Vdly__MAC_unit_tb__DOT__dut__DOT__start_passthrough_1;
     vlSelfRef.MAC_unit_tb__DOT__dut__DOT__start_passthrough_2 
         = __Vdly__MAC_unit_tb__DOT__dut__DOT__start_passthrough_2;
     vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_exp_max_in 
         = __Vdly__MAC_unit_tb__DOT__dut__DOT__add_exp_max_in;
-    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul2__DOT__add_EXPs__DOT__r_exp1 
-        = (0x1fU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp1_in) 
-                    - (IData)(0x10U)));
-    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul2__DOT__add_EXPs__DOT__r_exp2 
-        = (0x1fU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp2_in) 
-                    - (IData)(0x10U)));
-    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul2__DOT__add_EXPs__DOT__r_sum 
-        = (0x1fU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul2__DOT__add_EXPs__DOT__r_exp1) 
-                    + (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul2__DOT__add_EXPs__DOT__r_exp2)));
-    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sum_exp 
-        = (0x1fU & (((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp1_in) 
-                     + ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp2_in) 
-                        + (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_carryout_in))) 
-                    - (IData)(0xfU)));
     vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add2__DOT__frac2_signed 
         = vlSelfRef.MAC_unit_tb__DOT__dut__DOT__frac_not_shifted_in;
     if (vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_sign_not_shifted_in) {
@@ -389,15 +389,20 @@ VL_INLINE_OPT void VMAC_unit_tb___024root___nba_sequent__TOP__0(VMAC_unit_tb___0
             = vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_sum_in;
         vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add3__DOT__shifted_amount = 0U;
     }
-    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_result 
-        = ((((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sign1_in) 
-             ^ (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sign2_in)) 
-            << 0xfU) | (((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sum_exp) 
-                         << 0xaU) | (0x3ffU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_carryout_in)
-                                                ? ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_product_in) 
-                                                   >> 3U)
-                                                : ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_product_in) 
-                                                   >> 2U)))));
+    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul2__DOT__add_EXPs__DOT__r_exp1 
+        = (0x1fU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp1_in) 
+                    - (IData)(0x10U)));
+    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul2__DOT__add_EXPs__DOT__r_exp2 
+        = (0x1fU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp2_in) 
+                    - (IData)(0x10U)));
+    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul2__DOT__add_EXPs__DOT__r_sum 
+        = (0x1fU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul2__DOT__add_EXPs__DOT__r_exp1) 
+                    + (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul2__DOT__add_EXPs__DOT__r_exp2)));
+    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sum_exp 
+        = (0x1fU & (((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp1_in) 
+                     + ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_exp2_in) 
+                        + (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_carryout_in))) 
+                    - (IData)(0xfU)));
     vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add2__DOT__sum_signed 
         = (0x3fffU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add2__DOT__frac1_signed) 
                       + (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add2__DOT__frac2_signed)));
@@ -448,6 +453,15 @@ VL_INLINE_OPT void VMAC_unit_tb___024root___nba_sequent__TOP__0(VMAC_unit_tb___0
         vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add3__DOT__exp_out 
             = (0x1fU & (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add3__DOT__SUB__DOT__u_result));
     }
+    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_result 
+        = ((((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sign1_in) 
+             ^ (IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sign2_in)) 
+            << 0xfU) | (((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_sum_exp) 
+                         << 0xaU) | (0x3ffU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_carryout_in)
+                                                ? ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_product_in) 
+                                                   >> 3U)
+                                                : ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul_product_in) 
+                                                   >> 2U)))));
     vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add_sign_out = 0U;
     vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add2__DOT__change_to_unsigned__DOT__rfrac_signed 
         = vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add2__DOT__sum_signed;
@@ -468,18 +482,6 @@ VL_INLINE_OPT void VMAC_unit_tb___024root___nba_comb__TOP__0(VMAC_unit_tb___024r
     VMAC_unit_tb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
-    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul1__DOT__MUL__DOT__frac_out_26b 
-        = (0x3ffffffU & ((0x1000U | (0xffcU & ((IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_value) 
-                                               << 2U))) 
-                         * (0x1000U | (0xffcU & ((IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.weight) 
-                                                 << 2U)))));
-}
-
-VL_INLINE_OPT void VMAC_unit_tb___024root___nba_comb__TOP__1(VMAC_unit_tb___024root* vlSelf) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    VMAC_unit_tb___024root___nba_comb__TOP__1\n"); );
-    VMAC_unit_tb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
-    auto& vlSelfRef = std::ref(*vlSelf).get();
-    // Body
     vlSelfRef.MAC_unit_tb__DOT__dut__DOT__run = ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__run_latched) 
                                                  | (IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.start));
     vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_exponents__DOT__diff 
@@ -494,5 +496,16 @@ VL_INLINE_OPT void VMAC_unit_tb___024root___nba_comb__TOP__1(VMAC_unit_tb___024r
         }
     } else {
         vlSelfRef.MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_out = 0U;
+    }
+    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__mul1__DOT__MUL__DOT__frac_out_26b 
+        = (0x3ffffffU & ((0x1000U | (0xffcU & ((IData)(vlSelfRef.MAC_unit_tb__DOT__dut__DOT__input_x) 
+                                               << 2U))) 
+                         * (0x1000U | (0xffcU & ((IData)(vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.weight) 
+                                                 << 2U)))));
+    vlSelfRef.MAC_unit_tb__DOT__dut__DOT__nxt_input_x 
+        = vlSelfRef.MAC_unit_tb__DOT__dut__DOT__input_x;
+    if (vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.MAC_shift) {
+        vlSelfRef.MAC_unit_tb__DOT__dut__DOT__nxt_input_x 
+            = vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_value;
     }
 }
