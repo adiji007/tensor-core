@@ -6,7 +6,7 @@
 // ./obj_dir/VMAC_unit_tb
 // gtkwave waves.vcd --save=mac_debug.gtkw
 
-// to run this: verilator --binary -j 0 -Wall -Wno-fatal MAC_unit_tb -IMAC_unit -Itestbench -Iinclude --hierarchical --trace; ./obj_dir/VMAC_unit_tb; gtkwave waves.vcd --save=mac_debug.gtkw
+// to run this: verilator --binary -j 0 -Wall -Wno-fatal MAC_unit_tb -Imodules -Itestbench -Iinclude --hierarchical --trace; ./obj_dir/VMAC_unit_tb; gtkwave waves.vcd --save=mac_debug.gtkw
 
 
 /* verilator lint_off UNUSEDSIGNAL */
