@@ -97,7 +97,7 @@ endmodule
     fbif.current_pc = 32'd12;
     fbif.imm = 32'd42;
     fbif.predicted_outcome = '0;
-
+    
     #(CLOCK_TIME * 4);
     
     $finish;
