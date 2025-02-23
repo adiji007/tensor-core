@@ -24,23 +24,48 @@ VL_INLINE_OPT VlCoroutine VMAC_unit_tb___024root___eval_initial__TOP__Vtiming__0
                                          43);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     vlSelfRef.MAC_unit_tb__DOT__tb_nrst = 1U;
+    co_await vlSelfRef.__VtrigSched_h32c40dbe__0.trigger(0U, 
+                                                         nullptr, 
+                                                         "@(posedge MAC_unit_tb.tb_clk)", 
+                                                         "testbench/MAC_unit_tb.sv", 
+                                                         46);
+    vlSelfRef.__Vm_traceActivity[2U] = 1U;
     vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.start = 0U;
     vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_value = 0x4b80U;
     vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.weight = 0x4000U;
     vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_accumulate = 0x4500U;
+    co_await vlSelfRef.__VtrigSched_h32c40dbe__0.trigger(0U, 
+                                                         nullptr, 
+                                                         "@(posedge MAC_unit_tb.tb_clk)", 
+                                                         "testbench/MAC_unit_tb.sv", 
+                                                         52);
+    vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VdlySched.delay(0x7d0ULL, 
                                          nullptr, "testbench/MAC_unit_tb.sv", 
-                                         51);
+                                         53);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.start = 1U;
     co_await vlSelfRef.__VdlySched.delay(0x3e8ULL, 
                                          nullptr, "testbench/MAC_unit_tb.sv", 
-                                         53);
+                                         55);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.start = 0U;
     co_await vlSelfRef.__VdlySched.delay(0x1388ULL, 
                                          nullptr, "testbench/MAC_unit_tb.sv", 
-                                         56);
+                                         58);
+    vlSelfRef.__Vm_traceActivity[2U] = 1U;
+    vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_value = 0x439aU;
+    vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.weight = 0x5c96U;
+    vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_accumulate = 0x58c3U;
+    co_await vlSelfRef.__VtrigSched_h32c40dbe__0.trigger(0U, 
+                                                         nullptr, 
+                                                         "@(posedge MAC_unit_tb.tb_clk)", 
+                                                         "testbench/MAC_unit_tb.sv", 
+                                                         64);
+    vlSelfRef.__Vm_traceActivity[2U] = 1U;
+    co_await vlSelfRef.__VdlySched.delay(0x64ULL, nullptr, 
+                                         "testbench/MAC_unit_tb.sv", 
+                                         66);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.in_value = 0x439aU;
     vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.weight = 0x5c96U;
@@ -48,14 +73,14 @@ VL_INLINE_OPT VlCoroutine VMAC_unit_tb___024root___eval_initial__TOP__Vtiming__0
     vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.start = 1U;
     co_await vlSelfRef.__VdlySched.delay(0x3e8ULL, 
                                          nullptr, "testbench/MAC_unit_tb.sv", 
-                                         63);
+                                         72);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     vlSymsp->TOP__MAC_unit_tb__DOT__mac_if.start = 0U;
     co_await vlSelfRef.__VdlySched.delay(0x1770ULL, 
                                          nullptr, "testbench/MAC_unit_tb.sv", 
-                                         66);
+                                         75);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
-    VL_FINISH_MT("testbench/MAC_unit_tb.sv", 68, "");
+    VL_FINISH_MT("testbench/MAC_unit_tb.sv", 77, "");
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
 }
 
@@ -84,8 +109,8 @@ void VMAC_unit_tb___024root___eval_triggers__act(VMAC_unit_tb___024root* vlSelf)
 #endif
 }
 
-VL_INLINE_OPT void VMAC_unit_tb___024root___act_sequent__TOP__0(VMAC_unit_tb___024root* vlSelf) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    VMAC_unit_tb___024root___act_sequent__TOP__0\n"); );
+VL_INLINE_OPT void VMAC_unit_tb___024root___act_comb__TOP__0(VMAC_unit_tb___024root* vlSelf) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    VMAC_unit_tb___024root___act_comb__TOP__0\n"); );
     VMAC_unit_tb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
@@ -438,8 +463,8 @@ VL_INLINE_OPT void VMAC_unit_tb___024root___nba_sequent__TOP__0(VMAC_unit_tb___0
     }
 }
 
-VL_INLINE_OPT void VMAC_unit_tb___024root___nba_sequent__TOP__1(VMAC_unit_tb___024root* vlSelf) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    VMAC_unit_tb___024root___nba_sequent__TOP__1\n"); );
+VL_INLINE_OPT void VMAC_unit_tb___024root___nba_comb__TOP__0(VMAC_unit_tb___024root* vlSelf) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    VMAC_unit_tb___024root___nba_comb__TOP__0\n"); );
     VMAC_unit_tb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
@@ -450,8 +475,8 @@ VL_INLINE_OPT void VMAC_unit_tb___024root___nba_sequent__TOP__1(VMAC_unit_tb___0
                                                  << 2U)))));
 }
 
-VL_INLINE_OPT void VMAC_unit_tb___024root___nba_comb__TOP__0(VMAC_unit_tb___024root* vlSelf) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    VMAC_unit_tb___024root___nba_comb__TOP__0\n"); );
+VL_INLINE_OPT void VMAC_unit_tb___024root___nba_comb__TOP__1(VMAC_unit_tb___024root* vlSelf) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    VMAC_unit_tb___024root___nba_comb__TOP__1\n"); );
     VMAC_unit_tb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body

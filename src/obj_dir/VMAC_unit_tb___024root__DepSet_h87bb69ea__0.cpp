@@ -41,21 +41,21 @@ VL_INLINE_OPT VlCoroutine VMAC_unit_tb___024root___eval_initial__TOP__Vtiming__1
     }
 }
 
-void VMAC_unit_tb___024root___act_sequent__TOP__0(VMAC_unit_tb___024root* vlSelf);
+void VMAC_unit_tb___024root___act_comb__TOP__0(VMAC_unit_tb___024root* vlSelf);
 
 void VMAC_unit_tb___024root___eval_act(VMAC_unit_tb___024root* vlSelf) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    VMAC_unit_tb___024root___eval_act\n"); );
     VMAC_unit_tb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
-    if ((4ULL & vlSelfRef.__VactTriggered.word(0U))) {
-        VMAC_unit_tb___024root___act_sequent__TOP__0(vlSelf);
+    if ((5ULL & vlSelfRef.__VactTriggered.word(0U))) {
+        VMAC_unit_tb___024root___act_comb__TOP__0(vlSelf);
     }
 }
 
 void VMAC_unit_tb___024root___nba_sequent__TOP__0(VMAC_unit_tb___024root* vlSelf);
-void VMAC_unit_tb___024root___nba_sequent__TOP__1(VMAC_unit_tb___024root* vlSelf);
 void VMAC_unit_tb___024root___nba_comb__TOP__0(VMAC_unit_tb___024root* vlSelf);
+void VMAC_unit_tb___024root___nba_comb__TOP__1(VMAC_unit_tb___024root* vlSelf);
 
 void VMAC_unit_tb___024root___eval_nba(VMAC_unit_tb___024root* vlSelf) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    VMAC_unit_tb___024root___eval_nba\n"); );
@@ -66,11 +66,11 @@ void VMAC_unit_tb___024root___eval_nba(VMAC_unit_tb___024root* vlSelf) {
         VMAC_unit_tb___024root___nba_sequent__TOP__0(vlSelf);
         vlSelfRef.__Vm_traceActivity[3U] = 1U;
     }
-    if ((4ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
-        VMAC_unit_tb___024root___nba_sequent__TOP__1(vlSelf);
+    if ((5ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
+        VMAC_unit_tb___024root___nba_comb__TOP__0(vlSelf);
     }
     if ((7ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
-        VMAC_unit_tb___024root___nba_comb__TOP__0(vlSelf);
+        VMAC_unit_tb___024root___nba_comb__TOP__1(vlSelf);
     }
 }
 
@@ -79,8 +79,23 @@ void VMAC_unit_tb___024root___timing_resume(VMAC_unit_tb___024root* vlSelf) {
     VMAC_unit_tb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
+    if ((1ULL & vlSelfRef.__VactTriggered.word(0U))) {
+        vlSelfRef.__VtrigSched_h32c40dbe__0.resume(
+                                                   "@(posedge MAC_unit_tb.tb_clk)");
+    }
     if ((4ULL & vlSelfRef.__VactTriggered.word(0U))) {
         vlSelfRef.__VdlySched.resume();
+    }
+}
+
+void VMAC_unit_tb___024root___timing_commit(VMAC_unit_tb___024root* vlSelf) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    VMAC_unit_tb___024root___timing_commit\n"); );
+    VMAC_unit_tb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
+    auto& vlSelfRef = std::ref(*vlSelf).get();
+    // Body
+    if ((! (1ULL & vlSelfRef.__VactTriggered.word(0U)))) {
+        vlSelfRef.__VtrigSched_h32c40dbe__0.commit(
+                                                   "@(posedge MAC_unit_tb.tb_clk)");
     }
 }
 
@@ -95,6 +110,7 @@ bool VMAC_unit_tb___024root___eval_phase__act(VMAC_unit_tb___024root* vlSelf) {
     CData/*0:0*/ __VactExecute;
     // Body
     VMAC_unit_tb___024root___eval_triggers__act(vlSelf);
+    VMAC_unit_tb___024root___timing_commit(vlSelf);
     __VactExecute = vlSelfRef.__VactTriggered.any();
     if (__VactExecute) {
         __VpreTriggered.andNot(vlSelfRef.__VactTriggered, vlSelfRef.__VnbaTriggered);

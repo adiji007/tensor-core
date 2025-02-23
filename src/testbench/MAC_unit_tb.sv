@@ -43,11 +43,13 @@ module MAC_unit_tb;
         #CLK_PERIOD;
         tb_nrst = 1;
 
+        @(posedge tb_clk);
         mac_if.start = 0;
         mac_if.in_value = 16'h4B80;
         mac_if.weight = 16'h4000;
         mac_if.in_accumulate = 16'h4500;
 
+        @(posedge tb_clk);
         #(CLK_PERIOD * 2);
         mac_if.start = 1;
         #CLK_PERIOD;
@@ -55,6 +57,13 @@ module MAC_unit_tb;
 
         #(CLK_PERIOD*5)
 
+        mac_if.in_value = 16'h439a;
+        mac_if.weight = 16'h5c96;
+        mac_if.in_accumulate = 16'h58c3;
+
+        @(posedge tb_clk);
+        // Intentionally de-sync inputs from clock edge
+        #(CLK_PERIOD * 0.1)
         mac_if.in_value = 16'h439a;
         mac_if.weight = 16'h5c96;
         mac_if.in_accumulate = 16'h58c3;

@@ -71,6 +71,7 @@ class alignas(VL_CACHE_LINE_BYTES) VMAC_unit_tb___024root final : public Verilat
     IData/*31:0*/ __VactIterCount;
     VlUnpacked<CData/*0:0*/, 4> __Vm_traceActivity;
     VlDelayScheduler __VdlySched;
+    VlTriggerScheduler __VtrigSched_h32c40dbe__0;
     VlTriggerVec<1> __VstlTriggered;
     VlTriggerVec<3> __VactTriggered;
     VlTriggerVec<3> __VnbaTriggered;
