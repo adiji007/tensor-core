@@ -66,7 +66,8 @@ package datapath_pkg;
   typedef enum logic [1:0] {
     FU_S_ALU    = 2'd0,
     FU_S_LD_ST  = 2'd1,
-    FU_S_BRANCH = 2'd2
+    FU_S_BRANCH = 2'd2,
+    FU_NONE     = 2'd3
   } fu_scalar_t;
 
   typedef enum logic [2:0] {
@@ -76,21 +77,20 @@ package datapath_pkg;
   } fu_matrix_t;
 
   typedef struct packed {
-    logic busy;
     regbits_t rd;
     regbits_t rs1;
     regbits_t rs2;
     word_t imm; //instr[31:7] TODO: double check this is right 
-    fu_sbits_t t1;
-    fu_sbits_t t2;
   } fust_s_row_t;
 
   typedef struct packed {
+    logic [2:0] busy;
+    logic [2:0][1:0] t1;
+    logic [2:0][1:0] t2;
     fust_s_row_t [2:0] op;
   } fust_s_t;
 
   typedef struct packed {
-    logic busy;
     matbits_t rd;
     regbits_t rs1;
     regbits_t rs2;
@@ -101,11 +101,11 @@ package datapath_pkg;
   } fust_m_row_t;
 
   typedef struct packed {
+    logic busy;
     fust_m_row_t op;
   } fust_m_t;
 
   typedef struct packed {
-    logic busy;
     matbits_t rd;
     matbits_t ms1;
     matbits_t ms2;
@@ -116,6 +116,7 @@ package datapath_pkg;
   } fust_g_row_t;
 
   typedef struct packed {
+    logic busy;
     fust_g_row_t op;
   } fust_g_t;
 
@@ -172,12 +173,23 @@ package datapath_pkg;
     // only GEMM?
   } ex_ctr_t;
 
+  // output for Writeback.sv
   typedef struct packed {
     logic s_rw_en;
     regbits_t s_rw;
     logic m_rw_en;
     matbits_t m_rw; // still need m_rw in wb for dispatch loopback to clear RST
+    logic load_done;  // Load Done Signal for Score Board
+    logic alu_done;   // Alu Done Signal for Score Board
   } wb_ctr_t;
+
+  typedef struct packed {
+    logic s_rw_en;  // scalar read write reg enable
+    regbits_t s_rw; // scalar read write register
+    logic [WORD_W-1:0] s_wdata; //empty until execute (write data)
+    logic load_done;  // Load Done Signal for Score Board
+    logic alu_done;   // Alu Done Signal for Score Board
+  } wb_t;
 
   /**********
     DISPATCH
@@ -205,6 +217,59 @@ package datapath_pkg;
     matbits_t ms2;
     matbits_t ms3;
   } issue_t;
+
+
+  
+  typedef struct packed {
+    logic [3:0] rs1;
+    logic [3:0] rs2;
+    logic [3:0] rs3;
+    logic [3:0] rd;
+  } fu_gemm_t;
+
+
+
+  typedef struct packed {
+    logic           done;       // Done signal to Issue Queue
+    logic [1:0]     ls_out;     // Load or store to Scratchpad [Load, Store]
+    logic [3:0]     rd_out;     // Matrix Reg destination (to Scratchpad)
+    logic [10:0]    imm_out;    // Immediate to Scratchpad
+    word_t          address;    // Address to Scratchpad
+    word_t          stride_out; // stride value
+  } matrix_ls_t;
+
+  typedef struct packed {
+    // Branch FU
+    logic bfu_branch_outcome;
+    word_t bfu_updated_pc;
+    logic bfu_misprediction;
+    word_t bfu_correct_pc;
+    logic bfu_update_btb;
+    word_t bfu_update_pc;
+    word_t bfu_branch_target;
+
+    // Scalar ALU FU
+    logic salu_negative;
+    logic salu_overflow;
+    word_t salu_port_output;
+    logic salu_zero;
+    
+    // Scalar Load/Store FU
+    word_t sls_dmemaddr;
+    logic sls_dmemREN;
+    logic sls_dmemWEN;
+    word_t sls_dmemstore;
+    word_t sls_dmemload;
+    logic sls_dhit;
+    
+    // MLS FU
+    matrix_ls_t fu_matls_out;
+    
+    // Gemm FU
+    logic gemm_new_weight_out;
+    fu_gemm_t gemm_matrix_num;
+  } eif_output_t;
+
 
 endpackage
 `endif

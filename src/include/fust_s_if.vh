@@ -9,12 +9,17 @@ interface fust_s_if;
   logic en;
   fu_scalar_t fu;
   fust_s_row_t fust_row;
+  logic [2:0][1:0] t1;
+  logic [2:0][1:0] t2;
+
+  // Inputs from issue
+  logic [2:0] busy;
 
   // Outputs of stage
   fust_s_t fust;
     
   modport FUSTS (
-      input en, fu, fust_row,
+      input en, fu, fust_row, busy, t1, t2,
       output fust
   );
 

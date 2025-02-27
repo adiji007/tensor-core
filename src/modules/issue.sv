@@ -53,16 +53,16 @@ module issue(
 
     always_comb begin : Incoming_Instr_Logic
       incoming_instr = '0;
-      if (isif.n_fust_s_en) begin
+      if (isif.n_fu_t == FU_S_T) begin
         case (isif.n_fu_s)
           FU_S_ALU:    incoming_instr = 5'b00001;
           FU_S_LD_ST:  incoming_instr = 5'b00010;
           FU_S_BRANCH: incoming_instr = 5'b00100;
           default: incoming_instr = '0;
         endcase
-      end else if (isif.n_fust_m_en)
+      end else if (isif.n_fu_t == FU_M_T)
         incoming_instr = 5'b01000;
-      else if (isif.n_fust_g_en)
+      else if (isif.n_fu_t == FU_G_T)
         incoming_instr = 5'b10000;
     end
       
@@ -90,15 +90,26 @@ module issue(
     end
 
     always_comb begin : FUST
+      // this needs verified, only dispatch writes to the FUST, but on a wb
+      // complete, the row should be made available for a new isntruction.
+      // Right now the table doesnt get cleared, but the busy bit gets cleared
+      // by the issue stage which should allow dispatch to overwrite it.
       fusif.en       = isif.n_fust_s_en;
       fusif.fu       = isif.n_fu_s;
       fusif.fust_row = isif.n_fust_s;
+      fusif.busy[0]  = (fust_state[0] == FUST_EX && (next_fust_state[0] == FUST_EMPTY || next_fust_state[0] == FUST_WAIT)) ? 1'd0 : next_fust_state[0] != FUST_EMPTY;
+      fusif.busy[1]  = (fust_state[1] == FUST_EX && (next_fust_state[1] == FUST_EMPTY || next_fust_state[1] == FUST_WAIT)) ? 1'd0 : next_fust_state[1] != FUST_EMPTY;
+      fusif.busy[2]  = (fust_state[2] == FUST_EX && (next_fust_state[2] == FUST_EMPTY || next_fust_state[2] == FUST_WAIT)) ? 1'd0 : next_fust_state[2] != FUST_EMPTY;
+      fusif.t1 = isif.n_t1;
+      fusif.t2 = isif.n_t2;
 
       fumif.en       = isif.n_fust_m_en;
       fumif.fust_row = isif.n_fust_m;
+      fumif.busy     = next_fust_state[3] != FUST_EMPTY;
 
       fugif.en       = isif.n_fust_g_en;
       fugif.fust_row = isif.n_fust_g;
+      fugif.busy     = next_fust_state[4] != FUST_EMPTY;
     end
 
     always_ff @ (posedge CLK, negedge nRST) begin: Age_Latch
@@ -157,7 +168,7 @@ module issue(
           FUST_EMPTY: n_rdy[i] = 1'b0;
           FUST_WAIT: begin // implies instruction is already loaded
             if (i < 3) begin // Scalar FUST
-              n_rdy[i] = (~|fusif.fust.op[i].t1 & ~|fusif.fust.op[i].t2);
+              n_rdy[i] = (~|fusif.fust.t1[i] & ~|fusif.fust.t2[i]);
             end else if (i == 3) begin // Matrix LD/ST FUST
               n_rdy[i] = (~|fumif.fust.op.t1 & ~|fumif.fust.op.t2);
             end else if (i == 4) begin // GEMM FUST
@@ -184,34 +195,76 @@ module issue(
     // Issue Policy: Oldest instruction first
     always_comb begin : FUST_Next_State
       next_fust_state = fust_state;
+
       for (int i = 0; i < 5; i++) begin
         case (fust_state[i])
-          FUST_EMPTY: next_fust_state[i] = incoming_instr[i] ? FUST_WAIT : FUST_EMPTY;
+          FUST_EMPTY: begin
+            next_fust_state[i] = incoming_instr[i] ? FUST_WAIT : FUST_EMPTY;
+          end
           FUST_WAIT: begin
             if (n_rdy[i])
               next_fust_state[i] = (n_rdy[i] == next_oldest_rdy[i]) ? FUST_EX : FUST_RDY;
           end
-          FUST_RDY: next_fust_state[i] = (next_oldest_rdy[i]) ? FUST_EX : FUST_RDY;
-          FUST_EX: begin
-            //TODO:wait for wb to flag done and go back to emtpy/wait based on
-            //incoming_instr
-            //TODO:handle flushing
-
-            next_fust_state[i] = FUST_EMPTY;//temp
+          FUST_RDY: begin
+            next_fust_state[i] = (next_oldest_rdy[i]) ? FUST_EX : FUST_RDY;
           end
-          default: next_fust_state = fust_state;
+          FUST_EX: begin
+            //TODO:handle flushing on speculation
+
+            if (isif.wb.s_rw_en & isif.wb.alu_done & (i == 0)) begin
+              next_fust_state[i] = incoming_instr[i] ? FUST_WAIT : FUST_EMPTY;
+            //   // TODO 
+            //   fusif.fust.op[1].t1 = (fusif.fust.op[1].t1 == 2'd1) && fusif.busy[1] ? '0 : fusif.fust.op[1].t1;
+            //   fusif.fust.op[1].t2 = (fusif.fust.op[1].t2 == 2'd1) && fusif.busy[1] ? '0 : fusif.fust.op[1].t2;
+            //   fusif.fust.op[2].t1 = (fusif.fust.op[2].t1 == 2'd1) && fusif.busy[2] ? '0 : fusif.fust.op[2].t1;
+            //   fusif.fust.op[2].t2 = (fusif.fust.op[2].t2 == 2'd1) && fusif.busy[2] ? '0 : fusif.fust.op[2].t2;
+            end else if (isif.wb.s_rw_en & isif.wb.load_done & (i == 1)) begin
+              next_fust_state[i] = incoming_instr[i] ? FUST_WAIT : FUST_EMPTY;
+            //   // TODO 
+            //   fusif.fust.op[0].t1 = (fusif.fust.op[0].t1 == 2'd2) && fusif.busy[0] ? '0 : fusif.fust.op[0].t1;
+            //   fusif.fust.op[0].t2 = (fusif.fust.op[0].t2 == 2'd2) && fusif.busy[0] ? '0 : fusif.fust.op[0].t2;
+            //   fusif.fust.op[2].t1 = (fusif.fust.op[2].t1 == 2'd2) && fusif.busy[2] ? '0 : fusif.fust.op[2].t1;
+            //   fusif.fust.op[2].t2 = (fusif.fust.op[2].t2 == 2'd2) && fusif.busy[2] ? '0 : fusif.fust.op[2].t2;
+            end
+            //TODO: handle dones from branch and matrix FUs
+
+            // WAR HANDLING
+            //writing to reg A, where an older FUST thats in RDY or WAIT (hasnt
+            //read register) needs to stall the write to A until all reads to
+            //reg A are in EX
+            
+            // TODO: need stall signals for the execute FUs if next_fust_state
+            // is stalled in EX
+            if ((i == 0 & (fusif.fust.t1[1] == 2'd0 | fusif.fust.t2[1] == 2'd0)) &
+                (fust_state[1] == FUST_WAIT | fust_state[1] == FUST_RDY) &
+                age[1] > age[0]) begin
+              // stall ALU from writing
+              next_fust_state[i] = FUST_EX;
+            end
+            if ((i == 1 & (fusif.fust.t1[0] == 2'd1 | fusif.fust.t2[0] == 2'd1) &&
+                (fust_state[0] == FUST_WAIT | fust_state[0] == FUST_RDY) &&
+                age[0] > age[1])) begin
+              // stall LD/ST from writing
+              next_fust_state[i] = FUST_EX;
+            end
+          end
+          default: begin
+            next_fust_state = fust_state;
+          end
         endcase
       end
     end
 
     always_comb begin : Output_Logic
       issue = isif.out;
+      isif.fust_state = fust_state;
       s_rs1 = '0;
       s_rs2 = '0;
       for (int i = 0; i < 5; i++) begin
         //TODO:verify this will only ever apply to one instruction per cycle
         if (fust_state[i] != FUST_EX & next_fust_state[i] == FUST_EX) begin
           // issue this instruction
+          // TODO: add opcode to be sent to FUs
           if (i < 3) begin
             s_rs1 = fusif.fust.op[i].rs1;
             s_rs2 = fusif.fust.op[i].rs2;
@@ -220,7 +273,7 @@ module issue(
             s_rs1 = fumif.fust.op.rs1;
             s_rs2 = fumif.fust.op.rs2;
             issue.fu_en = i[2:0];
-          end else if (i == 4) begin //TODO: update fust_m_row_t to ms1-3
+          end else if (i == 4) begin
             issue.ms1 = fugif.fust.op.ms1;
             issue.ms2 = fugif.fust.op.ms2;
             issue.ms3 = fugif.fust.op.ms3;
