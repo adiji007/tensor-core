@@ -1,3 +1,5 @@
+// 2-24-2025: changed to read in hex fp16's instead of ints from data input file
+
 `include "systolic_array_if.vh"
 `include "systolic_array_control_unit_if.vh"
 `include "systolic_array_MAC_if.vh"
@@ -96,11 +98,11 @@ module systolic_array_tb();
         for (i = 0; i < N; i = i + 1) begin
           for (j = 0; j < N; j = j + 1) begin
             if (which == 1)begin
-              $fscanf(file, "%d ", temp_weights[i][j]);
+              $fscanf(file, "%x ", temp_weights[i][j]);
             end else if (which == 2) begin
-              $fscanf(file, "%d ", temp_inputs[i][j]);
+              $fscanf(file, "%x ", temp_inputs[i][j]);
             end else begin
-              $fscanf(file, "%d ", temp_partials[i][j]);
+              $fscanf(file, "%x ", temp_partials[i][j]);
             end
           end  
         end
@@ -118,7 +120,7 @@ module systolic_array_tb();
     begin
       for (i = 0; i < N; i = i + 1) begin
         for (j = 0; j < N; j = j + 1) begin
-          $fscanf(out_file, "%d ", temp_outputs[i][N-1-j]);
+          $fscanf(out_file, "%x ", temp_outputs[i][N-1-j]);
         end
       end
       for (i = 0; i < N; i++)begin
@@ -160,13 +162,13 @@ module systolic_array_tb();
         $display("Output incorrect\n");
         $display("Our Output is");
         for (y = 0; y < N; y++)begin
-          $write("%d, ", memory_if.array_output[(y+1)*WIDTH-1-:WIDTH]);
+          $write("%x, ", memory_if.array_output[(y+1)*WIDTH-1-:WIDTH]);
         end
         $display("");
       end
       $display("Correct Output is");
       for (z = 0; z < N; z++)begin
-          $write("%d, ", m_outputs[memory_if.row_out][(z+1)*WIDTH-1-:WIDTH]);
+          $write("%x, ", m_outputs[memory_if.row_out][(z+1)*WIDTH-1-:WIDTH]);
       end
       $display("");
       /* verilator lint_off WIDTHEXPAND */
@@ -191,7 +193,7 @@ module systolic_array_tb();
     
     // any file
     file = $fopen("matops3.txt", "r");
-    $system("/bin/python3 /home/asicfab/a/wagne329/tensor-core/matrix_mul.py matops3");
+    $system("/bin/python3 /home/vinay/tensorcore/tensor-core/systolic_array_utils/matrix_mul_fp.py systolic_array_utils/matops3_encoded");
     out_file = $fopen("matops3_output.txt", "r");
     reset();
     get_matrices(.weights(loaded_weights));

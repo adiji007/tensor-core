@@ -32,12 +32,27 @@ module ADD_step1 (
     // int_compare:
     // if exp1 >= exp2: cmp_out = 0
     // if exp2 > exp1: cmp_out = 1
-    int_compare cmp_exponents (
-        .exp1(floating_point1_in[14:10]),
-        .exp2(floating_point2_in[14:10]),
-        .u_diff(unsigned_exp_diff),
-        .cmp_out(cmp_out)
-    );
+
+    //--------------------------------------------------------------------------------------------
+    // Comparing exponents (Logic copied over from what used to be int_compare.sv)
+    wire [5:0] u_exp1 = {1'b0, floating_point1_in[14:10]};
+    wire [5:0] u_exp2 = {1'b0, floating_point2_in[14:10]};
+    reg  [5:0] diff;
+
+    assign unsigned_exp_diff = diff[4:0];
+
+    always_comb begin
+        diff = u_exp1 - u_exp2;
+        case (diff[5])
+            1'b0: cmp_out = 1'b0;
+            1'b1: begin
+                cmp_out = 1'b1;
+                diff = -diff;
+            end
+        endcase
+    end
+    //--------------------------------------------------------------------------------------------
+    
     
     // need to: right shift significand (fraction) of number with smaller exponent
     // Fraction format: {1'b1, fp_fraction[9:0], 2'b00}

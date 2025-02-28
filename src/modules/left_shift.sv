@@ -1,3 +1,6 @@
+
+// Fancy left shifter used for floating-point addition.
+
 //By            : Joe Nasti
 //Last Updated  : 11/17/2024 - Convert to FP16 for systolic array MAC unit
 //

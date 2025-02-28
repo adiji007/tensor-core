@@ -32,7 +32,7 @@ module MAC_unit_tb;
     // sysarr_control_unit_if instance
     systolic_array_MAC_if mac_if();
 
-    mac_unit dut (.clk(tb_clk), .nRST(tb_nrst), .mac_if(mac_if.MAC));
+    sysarr_MAC dut (.clk(tb_clk), .nRST(tb_nrst), .mac_if(mac_if.MAC));
     
     // Test sequence
     initial begin

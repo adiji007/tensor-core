@@ -10,6 +10,8 @@
 //    frac_out   - 13 bit result of operation regardless of overflow occuring
 //    overflow   - flags if an overflow has occured
 
+/* verilator lint_off UNUSEDSIGNAL */
+
 `timescale 1ns/1ps
 
 module mul_13b (

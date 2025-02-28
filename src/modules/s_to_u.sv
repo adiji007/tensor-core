@@ -10,6 +10,8 @@
 //    sign          - 1 bit sign 'frac_unsigned'
 //    frac_unsigned - 13 bit magnitude of 'frac_signed'
 
+/* verilator lint_off UNUSEDSIGNAL */
+
 `timescale 1ns/1ps
 
 module s_to_u (

@@ -5,6 +5,7 @@
 `include "systolic_array_FIFO_if.vh"
 `include "systolic_array_OUT_FIFO_if.vh"
 
+
 module systolic_array #(
     parameter N = 4,    // Default dimension of the systolic array
     parameter WIDTH = 16       // Default data width
@@ -131,7 +132,7 @@ module systolic_array #(
                     MAC_outputs[z][y] <= '0;
                 end
             end
-        end else if (control_unit_if.MAC_count == (3+2-1))begin //add params later
+        end else if (control_unit_if.MAC_count == (3))begin //add params later
             MAC_outputs <= nxt_MAC_outputs;
         end 
     end
@@ -141,7 +142,7 @@ module systolic_array #(
                 sysarr_MAC mac_inst (
                     .clk(clk),
                     .nRST(nRST),
-                    .mac(mac_ifs[m*N + n].MAC)
+                    .mac_if(mac_ifs[m*N + n].MAC)
                 );
                 assign mac_ifs[m*N + n].start = control_unit_if.MAC_start;
                 assign mac_ifs[m*N + n].count = control_unit_if.MAC_count;

@@ -15,6 +15,8 @@
 //    carry_out   - signal if there is an oveflow from the addition
 //    exp_max_out - if sum is non-zero, this is equal to exp_max_in
 
+/* verilator lint_off UNUSEDSIGNAL */
+
 `timescale 1ns/1ps
 
 module ADD_step2 (

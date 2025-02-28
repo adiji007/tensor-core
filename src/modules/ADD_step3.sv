@@ -14,6 +14,8 @@
 //Outputs:
 //    floating_point_out - final floating point
 
+/* verilator lint_off UNUSEDSIGNAL */
+
 `timescale 1ns/1ps
 
 module ADD_step3 (
@@ -31,11 +33,11 @@ module ADD_step3 (
 );
 
     wire        inexact;
-    wire        sign;
-    wire [ 4:0] exponent;
-    wire [9:0] frac;
+    // wire        sign;
+    // wire [ 4:0] exponent;
+    // wire [9:0] frac;
 
-    assign {sign, exponent, frac} = floating_point_out;
+    // assign {sign, exponent, frac} = floating_point_out;      // I have no idea what this line was doing? It creates a combinational loop
 
     reg [ 4:0] exp_minus_shift_amount;
     reg [12:0] shifted_frac;
@@ -51,12 +53,20 @@ module ADD_step3 (
         .shifted_amount(shifted_amount)
     );
 
-    subtract SUB (
-        .exp1(exponent_max_in),
-        .shifted_amount(shifted_amount),
-        .result(exp_minus_shift_amount)
-    );
+    //------------------------------------------------------------------------------------
+    // Subtract exponents. I forgot why this exists. Transferred out of subtract.sv
+    logic [5:0] u_exp1;
+    logic [5:0] u_shifted_amount;
+    logic [5:0] u_result;
 
+    always_comb begin
+        u_exp1           = {1'b0, exponent_max_in};
+        u_shifted_amount = {1'b0, shifted_amount};
+        u_result         = u_exp1 - u_shifted_amount;
+    end
+
+    assign exp_minus_shift_amount = u_result[4:0];
+    //------------------------------------------------------------------------------------
 
     reg [11:0] round_this;
 
@@ -74,17 +84,57 @@ module ADD_step3 (
         end
     end
 
-    reg [15:0] round_out;
+    logic [15:0] round_out;
     logic round_flag;               // I added this. --Vinay 1/31/2025. Verilator wouldn't compile without it.
 
-    rounder ROUND (
-        .frm(frm),
-        .sign(sign_in),
-        .exp_in(exp_out),
-        .fraction(round_this),
-        .round_out(round_out),
-        .rounded(round_flag)
-    );
+    //----------------------------------------------------------------------------------------------
+    // Rounding mode used: Round to Nearest, Tie to Max Magnitude (RMM)
+    logic [11:0] rounded_fraction;
+    always_comb begin
+        if(round_this[1] == 1) begin
+            rounded_fraction = round_this + 1;
+            round_flag = 1;
+        end
+        else begin
+            rounded_fraction = round_this;
+            round_flag = 0;
+        end
+    end
+
+    assign round_out = {sign_in, exp_out, rounded_fraction[11:2]};
+
+    // Old rounding logic that we dont need. Copied from what used to be rounder.sv
+    // reg round_amount;
+
+    // localparam RNE = 3'b000;
+    // localparam RZE = 3'b001;    // Truncation
+    // localparam RDN = 3'b010;
+    // localparam RUP = 3'b011;
+    // localparam RMM = 3'b100;
+
+    // always_comb begin
+    //     round_amount = 0;
+    //     if (round_this[11:2] != '1) begin
+    //         if (frm == RNE) begin
+    //             if (round_this[1:0] == 2'b11) round_amount = 1;
+    //         end else if (frm == RZE) begin
+    //             round_amount = 0;
+    //         end else if (frm == RDN) begin
+    //             if (sign == 1 && ((round_this[0] == 1) || (round_this[1] == 1))) round_amount = 1;
+    //         end else if (frm == RUP) begin
+    //             if (sign == 0 && ((round_this[0] == 1) || (round_this[1] == 1))) round_amount = 1;
+    //         end else if (frm == RMM) begin
+    //             if (round_this[1] == 1) round_amount = 1;
+    //         end
+    //     end  // if (fraction[24:2] != '1)
+    // end  // always_comb
+
+    // assign round_flag   = round_amount;
+
+    
+
+    //----------------------------------------------------------------------------------------------
+
 
     assign inexact = ovf_in | ovf | unf_in | unf | round_flag;
     assign flags = {inv, dz, (ovf | ovf_in), (unf | unf_in), inexact};
