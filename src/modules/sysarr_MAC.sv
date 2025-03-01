@@ -1,4 +1,8 @@
 `include "systolic_array_MAC_if.vh"
+`include "sys_arr_pkg.vh"
+/* verilator lint_off IMPORTSTAR */
+import sys_arr_pkg::*;
+/* verilator lint_off IMPORTSTAR */
 
 // MAC unit top level file for systolic array. Ties together adder and multiplier.
 /* 
@@ -30,10 +34,9 @@ https://www.veripool.org/ftp/verilator_doc.pdf
 `include "systolic_array_MAC_if.vh"
 `timescale 1ns/1ps
 
-module sysarr_MAC#(parameter WIDTH = 16, parameter MUL_LEN = 2, parameter ADD_LEN = 3)(input logic clk, input logic nRST, systolic_array_MAC_if.MAC mac_if);
-
-    logic [WIDTH-1:0] input_x;
-    logic [WIDTH-1:0] nxt_input_x;
+module sysarr_MAC(input logic clk, input logic nRST, systolic_array_MAC_if.MAC mac_if);
+    logic [DW-1:0] input_x;
+    logic [DW-1:0] nxt_input_x;
     assign mac_if.in_pass = input_x;
 
     // Latching MAC unit input value, to pass it on to the next 
@@ -216,7 +219,7 @@ endmodule
 
 
 // module sysarr_MAC #(
-//     parameter WIDTH = 16,
+//     parameter DW = 16,
 //     parameter MUL_LEN = 2,
 //     parameter ADD_LEN = 3
 // )(
@@ -225,8 +228,8 @@ endmodule
 //     /* verilator lint_off UNUSEDSIGNAL */
 //     systolic_array_MAC_if.MAC mac
 // );
-//     logic [WIDTH-1:0] input_x;
-//     logic [WIDTH-1:0] nxt_input_x;
+//     logic [DW-1:0] input_x;
+//     logic [DW-1:0] nxt_input_x;
 //     assign mac.in_pass = input_x;
 
 //     always_ff @(posedge clk, negedge nRST) begin

@@ -1,21 +1,20 @@
 `include "systolic_array_control_unit_if.vh"
+`include "sys_arr_pkg.vh"
+/* verilator lint_off IMPORTSTAR */
+import sys_arr_pkg::*;
+/* verilator lint_off IMPORTSTAR */
 
-module sysarr_control_unit #(
-    parameter N = 4,    // Default dimension of the systolic array
-    parameter MUL_LEN = 2,
-    parameter ADD_LEN = 3
-)(
+module sysarr_control_unit(
     input logic clk, 
     input logic nRST,
     systolic_array_control_unit_if.control_unit cu
 );
-
     logic start_flag;
     // next MAC signals
-    logic [$clog2(MUL_LEN+ADD_LEN)-1:0] nxt_MAC_count;
+    logic [$clog2(MUL_LEN+ADD_LEN):0] nxt_MAC_count;
     logic nxt_MAC_start;
     // next add signals for adding partial sums
-    logic [$clog2(ADD_LEN)-1:0] nxt_add_count;
+    logic [$clog2(ADD_LEN):0] nxt_add_count;
     logic nxt_add_start;
     // next signals for iterations
     logic [$clog2(3*N)-1:0] iteration [2:0];    //there can be at most 3 instructions in flight in saturated pipeline
