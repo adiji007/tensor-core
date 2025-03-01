@@ -192,9 +192,9 @@ module systolic_array_tb();
     loaded_weights = 0;
     
     // any file
-    file = $fopen("matops3.txt", "r");
-    $system("/bin/python3 /home/vinay/tensorcore/tensor-core/systolic_array_utils/matrix_mul_fp.py systolic_array_utils/matops3_encoded");
-    out_file = $fopen("matops3_output.txt", "r");
+    file = $fopen("matops_encoded.txt", "r");
+    $system("/bin/python3 /home/vinay/tensorcore/tensor-core/systolic_array_utils/matrix_mul_fp.py systolic_array_utils/matops_encoded");
+    out_file = $fopen("matops_output.txt", "r");
     reset();
     get_matrices(.weights(loaded_weights));
     get_m_output();

@@ -69,7 +69,7 @@ Vsystolic_array_tb__Syms::Vsystolic_array_tb__Syms(VerilatedContext* contextp, c
     , TOP__systolic_array_tb__DOT__memory_if{this, Verilated::catName(namep, "systolic_array_tb.memory_if")}
 {
         // Check resources
-        Verilated::stackCheck(1309);
+        Verilated::stackCheck(1317);
     // Configure time unit / time precision
     _vm_contextp__->timeunit(-9);
     _vm_contextp__->timeprecision(-12);

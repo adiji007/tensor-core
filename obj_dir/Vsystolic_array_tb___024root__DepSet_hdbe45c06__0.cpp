@@ -6,7 +6,7 @@
 #include "Vsystolic_array_tb__Syms.h"
 #include "Vsystolic_array_tb___024root.h"
 
-extern const VlWide<31>/*991:0*/ Vsystolic_array_tb__ConstPool__CONST_hb9dccb4d_0;
+extern const VlWide<31>/*991:0*/ Vsystolic_array_tb__ConstPool__CONST_hc596c996_0;
 
 VL_INLINE_OPT VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtiming__0(Vsystolic_array_tb___024root* vlSelf) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vsystolic_array_tb___024root___eval_initial__TOP__Vtiming__0\n"); );
@@ -137,7 +137,7 @@ VL_INLINE_OPT VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtim
     __Vtask_systolic_array_tb__DOT__row_load__19__rinput = 0;
     QData/*63:0*/ __Vtask_systolic_array_tb__DOT__row_load__19__rpartial;
     __Vtask_systolic_array_tb__DOT__row_load__19__rpartial = 0;
-    VlWide<3>/*95:0*/ __Vtemp_1;
+    VlWide<5>/*159:0*/ __Vtemp_1;
     VlWide<5>/*159:0*/ __Vtemp_2;
     // Body
     vlSymsp->_vm_contextp__->dumpfile(std::string{"dump.vcd"});
@@ -151,19 +151,21 @@ VL_INLINE_OPT VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtim
     vlSymsp->TOP__systolic_array_tb__DOT__memory_if.array_in_partials = 0ULL;
     vlSelfRef.systolic_array_tb__DOT__loaded_weights = 0U;
     __Vtemp_1[0U] = 0x2e747874U;
-    __Vtemp_1[1U] = 0x6f707333U;
-    __Vtemp_1[2U] = 0x6d6174U;
+    __Vtemp_1[1U] = 0x6f646564U;
+    __Vtemp_1[2U] = 0x5f656e63U;
+    __Vtemp_1[3U] = 0x746f7073U;
+    __Vtemp_1[4U] = 0x6d61U;
     vlSelfRef.systolic_array_tb__DOT__file = VL_FOPEN_NN(
-                                                         VL_CVT_PACK_STR_NW(3, __Vtemp_1)
+                                                         VL_CVT_PACK_STR_NW(5, __Vtemp_1)
                                                          , 
                                                          std::string{"r"});
     ;
-    (void)VL_SYSTEM_IW(31, Vsystolic_array_tb__ConstPool__CONST_hb9dccb4d_0);
+    (void)VL_SYSTEM_IW(31, Vsystolic_array_tb__ConstPool__CONST_hc596c996_0);
     __Vtemp_2[0U] = 0x2e747874U;
     __Vtemp_2[1U] = 0x74707574U;
-    __Vtemp_2[2U] = 0x335f6f75U;
-    __Vtemp_2[3U] = 0x746f7073U;
-    __Vtemp_2[4U] = 0x6d61U;
+    __Vtemp_2[2U] = 0x735f6f75U;
+    __Vtemp_2[3U] = 0x61746f70U;
+    __Vtemp_2[4U] = 0x6dU;
     vlSelfRef.systolic_array_tb__DOT__out_file = VL_FOPEN_NN(
                                                              VL_CVT_PACK_STR_NW(5, __Vtemp_2)
                                                              , 

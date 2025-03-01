@@ -43,15 +43,14 @@ class alignas(VL_CACHE_LINE_BYTES) VMAC_unit_tb___024root final : public Verilat
     CData/*4:0*/ MAC_unit_tb__DOT__dut__DOT__mul2__DOT__add_EXPs__DOT__r_exp2;
     CData/*4:0*/ MAC_unit_tb__DOT__dut__DOT__mul2__DOT__add_EXPs__DOT__r_sum;
     CData/*0:0*/ MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_out;
-    CData/*5:0*/ MAC_unit_tb__DOT__dut__DOT__add1__DOT__cmp_exponents__DOT__diff;
+    CData/*5:0*/ MAC_unit_tb__DOT__dut__DOT__add1__DOT__diff;
     CData/*4:0*/ MAC_unit_tb__DOT__dut__DOT__add3__DOT__shifted_amount;
-    CData/*4:0*/ MAC_unit_tb__DOT__dut__DOT__add3__DOT__exp_out;
     CData/*0:0*/ MAC_unit_tb__DOT__dut__DOT__add3__DOT__ovf;
     CData/*0:0*/ MAC_unit_tb__DOT__dut__DOT__add3__DOT__unf;
-    CData/*5:0*/ MAC_unit_tb__DOT__dut__DOT__add3__DOT__SUB__DOT__u_exp1;
-    CData/*5:0*/ MAC_unit_tb__DOT__dut__DOT__add3__DOT__SUB__DOT__u_shifted_amount;
-    CData/*5:0*/ MAC_unit_tb__DOT__dut__DOT__add3__DOT__SUB__DOT__u_result;
-    CData/*0:0*/ MAC_unit_tb__DOT__dut__DOT__add3__DOT__ROUND__DOT__round_amount;
+    CData/*5:0*/ MAC_unit_tb__DOT__dut__DOT__add3__DOT__u_exp1;
+    CData/*5:0*/ MAC_unit_tb__DOT__dut__DOT__add3__DOT__u_shifted_amount;
+    CData/*5:0*/ MAC_unit_tb__DOT__dut__DOT__add3__DOT__u_result;
+    CData/*0:0*/ MAC_unit_tb__DOT__dut__DOT__add3__DOT__round_flag;
     CData/*0:0*/ __VstlFirstIteration;
     CData/*0:0*/ __Vtrigprevexpr___TOP__MAC_unit_tb__DOT__tb_clk__0;
     CData/*0:0*/ __Vtrigprevexpr___TOP__MAC_unit_tb__DOT__tb_nrst__0;
@@ -69,6 +68,7 @@ class alignas(VL_CACHE_LINE_BYTES) VMAC_unit_tb___024root final : public Verilat
     SData/*13:0*/ MAC_unit_tb__DOT__dut__DOT__add2__DOT__change_to_unsigned__DOT__rfrac_signed;
     SData/*12:0*/ MAC_unit_tb__DOT__dut__DOT__add3__DOT__shifted_frac;
     SData/*11:0*/ MAC_unit_tb__DOT__dut__DOT__add3__DOT__round_this;
+    SData/*11:0*/ MAC_unit_tb__DOT__dut__DOT__add3__DOT__rounded_fraction;
     IData/*25:0*/ MAC_unit_tb__DOT__dut__DOT__mul1__DOT__MUL__DOT__frac_out_26b;
     IData/*31:0*/ __VactIterCount;
     VlUnpacked<CData/*0:0*/, 6> __Vm_traceActivity;

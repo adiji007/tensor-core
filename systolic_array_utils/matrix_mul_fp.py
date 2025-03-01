@@ -47,7 +47,7 @@ for line in lines:
         continue
     
     row = list(map(float16_conv, line.strip().split()))
-    print(f'Row: {row}')
+    # print(f'Row: {row}')
     if (flag == "Weights"):
         weight_matrix.append(row)
     elif (flag == "Inputs"):
