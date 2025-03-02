@@ -29,7 +29,6 @@ VM_CLASSES_FAST += \
 	Vsystolic_array_tb_systolic_array_if__DepSet_h6d5a8c78__0 \
 	Vsystolic_array_tb_sysarr_MAC__DepSet_h5d926e79__0 \
 	Vsystolic_array_tb_systolic_array_control_unit_if__DepSet_h190b6bc7__0 \
-	Vsystolic_array_tb_systolic_array_add_if__DepSet_h45933ba3__0 \
 	Vsystolic_array_tb__main \
 
 # Generated module classes, non-fast-path, compile with low/medium optimization
@@ -45,8 +44,6 @@ VM_CLASSES_SLOW += \
 	Vsystolic_array_tb_sysarr_MAC__DepSet_hf63d4583__0__Slow \
 	Vsystolic_array_tb_systolic_array_control_unit_if__Slow \
 	Vsystolic_array_tb_systolic_array_control_unit_if__DepSet_h190b6bc7__0__Slow \
-	Vsystolic_array_tb_systolic_array_add_if__Slow \
-	Vsystolic_array_tb_systolic_array_add_if__DepSet_h45933ba3__0__Slow \
 
 # Generated support classes, fast-path, compile with highest optimization
 VM_SUPPORT_FAST += \

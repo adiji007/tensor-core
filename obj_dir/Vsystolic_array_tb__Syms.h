@@ -19,7 +19,6 @@
 #include "Vsystolic_array_tb_systolic_array_if.h"
 #include "Vsystolic_array_tb_sysarr_MAC.h"
 #include "Vsystolic_array_tb_systolic_array_control_unit_if.h"
-#include "Vsystolic_array_tb_systolic_array_add_if.h"
 
 // SYMS CLASS (contains all model state)
 class alignas(VL_CACHE_LINE_BYTES)Vsystolic_array_tb__Syms final : public VerilatedSyms {
@@ -36,10 +35,6 @@ class alignas(VL_CACHE_LINE_BYTES)Vsystolic_array_tb__Syms final : public Verila
 
     // MODULE INSTANCE STATE
     Vsystolic_array_tb___024root   TOP;
-    Vsystolic_array_tb_systolic_array_add_if TOP__systolic_array_tb__DOT__DUT__DOT__add_ifs__BRA__0__KET__;
-    Vsystolic_array_tb_systolic_array_add_if TOP__systolic_array_tb__DOT__DUT__DOT__add_ifs__BRA__1__KET__;
-    Vsystolic_array_tb_systolic_array_add_if TOP__systolic_array_tb__DOT__DUT__DOT__add_ifs__BRA__2__KET__;
-    Vsystolic_array_tb_systolic_array_add_if TOP__systolic_array_tb__DOT__DUT__DOT__add_ifs__BRA__3__KET__;
     Vsystolic_array_tb_systolic_array_control_unit_if TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if;
     Vsystolic_array_tb_sysarr_MAC  TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst;
     Vsystolic_array_tb_sysarr_MAC  TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst;

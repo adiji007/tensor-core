@@ -8,7 +8,7 @@ module sysarr_add (
 );
 
     logic run_latched;
-    logic start_passthrough_1, start_passthrough_2, start_passthrough_3;    //, start_passthrough_4, start_passthrough_final;
+    logic start_passthrough_2, start_passthrough_3;    //, start_passthrough_4, start_passthrough_final;
     logic run;
 
     always_ff @(posedge clk, negedge nRST) begin    // "latching" enable signal
@@ -28,7 +28,7 @@ module sysarr_add (
     logic [12:0] frac_shifted_in, frac_not_shifted_in;
     logic [4:0] add_exp_max_out, add_exp_max_in;
 
-    ADD_step1 add1 (adder.add_input1, addif.add_input2, add_sign_shifted_out, frac_shifted_out, add_sign_not_shifted_out, frac_not_shifted_out, add_exp_max_out);
+    ADD_step1 add1 (adder.add_input1, adder.add_input2, add_sign_shifted_out, frac_shifted_out, add_sign_not_shifted_out, frac_not_shifted_out, add_exp_max_out);
 
     // flipflop to connect add stage1 and stage2
     always_ff @(posedge clk, negedge nRST) begin
@@ -46,7 +46,7 @@ module sysarr_add (
             frac_shifted_in         <= frac_shifted_out;
             frac_not_shifted_in     <= frac_not_shifted_out;
             add_exp_max_in          <= add_exp_max_out;
-            start_passthrough_2 <= start_passthrough_1;
+            start_passthrough_2 <= adder.start;
         end
         else begin
             add_sign_shifted_in     <= add_sign_shifted_in;
@@ -95,7 +95,7 @@ module sysarr_add (
     logic [4:0] add_flags;
     // Rounding mode: truncation. Maybe should pick something else?
     ADD_step3 add3(0, 0, 0, 0, 3'b001, add_exp_max_s3_in, add_sign_in, add_sum_in, add_carry_in, accumulate_result, add_flags);
-    assign adder_if.add_output = add_flags[2] ? 16'b0111110000000000 : accumulate_result;   // Overflow handler
+    assign adder.add_ouput = add_flags[2] ? 16'b0111110000000000 : accumulate_result;   // Overflow handler
 
 
 

@@ -14,7 +14,6 @@ class Vsystolic_array_tb__Syms;
 class Vsystolic_array_tb___024root;
 class VerilatedFstC;
 class Vsystolic_array_tb_sysarr_MAC;
-class Vsystolic_array_tb_systolic_array_add_if;
 class Vsystolic_array_tb_systolic_array_control_unit_if;
 class Vsystolic_array_tb_systolic_array_if;
 
@@ -40,10 +39,6 @@ class alignas(VL_CACHE_LINE_BYTES) Vsystolic_array_tb VL_NOT_FINAL : public Veri
     // Otherwise the application code can consider these internals.
     Vsystolic_array_tb_systolic_array_if* const __PVT__systolic_array_tb__DOT__memory_if;
     Vsystolic_array_tb_systolic_array_control_unit_if* const __PVT__systolic_array_tb__DOT__DUT__DOT__control_unit_if;
-    Vsystolic_array_tb_systolic_array_add_if* const __PVT__systolic_array_tb__DOT__DUT__DOT__add_ifs__BRA__3__KET__;
-    Vsystolic_array_tb_systolic_array_add_if* const __PVT__systolic_array_tb__DOT__DUT__DOT__add_ifs__BRA__2__KET__;
-    Vsystolic_array_tb_systolic_array_add_if* const __PVT__systolic_array_tb__DOT__DUT__DOT__add_ifs__BRA__1__KET__;
-    Vsystolic_array_tb_systolic_array_add_if* const __PVT__systolic_array_tb__DOT__DUT__DOT__add_ifs__BRA__0__KET__;
     Vsystolic_array_tb_sysarr_MAC* const __PVT__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst;
     Vsystolic_array_tb_sysarr_MAC* const __PVT__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst;
     Vsystolic_array_tb_sysarr_MAC* const __PVT__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst;
