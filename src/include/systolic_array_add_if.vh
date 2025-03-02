@@ -16,6 +16,7 @@ interface systolic_array_add_if #(parameter data_w = 16, parameter add_len = 3);
   logic [data_w-1:0] add_input1;            // Input weight value to be pre-loaded
   logic [data_w-1:0] add_input2;          // Input value to be multiplied
   logic [data_w-1:0] add_ouput;     // Input accumulate value from above
+  logic value_ready;                // is 1 when the adder is not currently processing an operation
 
   // add Port for Array
   modport add(
