@@ -171,7 +171,6 @@ module systolic_array(
                 .adder(add_ifs[o].add)
             );
             assign add_ifs[o].start = control_unit_if.add_start;
-            assign add_ifs[o].count = control_unit_if.add_count;
             assign add_ifs[o].add_input1 = ps_add_inputs[o];
             assign add_ifs[o].add_input2 = MAC_outputs[N-1][o];
         end
@@ -187,7 +186,7 @@ module systolic_array(
                 .out_fifo(out_fifos_ifs[p].OUT_FIFO));
                 
             assign out_fifos_ifs[p].shift = control_unit_if.out_fifo_shift;
-            assign out_fifos_ifs[p].shift_value = add_ifs[p].add_ouput;
+            assign out_fifos_ifs[p].shift_value = add_ifs[p].add_output;
             assign current_out[p] = out_fifos_ifs[p].out;
         end
     endgenerate
