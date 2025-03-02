@@ -6,7 +6,9 @@
 #include "Vsystolic_array_tb__Syms.h"
 #include "Vsystolic_array_tb___024root.h"
 
+extern const VlWide<10>/*319:0*/ Vsystolic_array_tb__ConstPool__CONST_h19761995_0;
 extern const VlWide<31>/*991:0*/ Vsystolic_array_tb__ConstPool__CONST_hc596c996_0;
+extern const VlWide<12>/*383:0*/ Vsystolic_array_tb__ConstPool__CONST_h2d12ea0e_0;
 
 VL_INLINE_OPT VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtiming__0(Vsystolic_array_tb___024root* vlSelf) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vsystolic_array_tb___024root___eval_initial__TOP__Vtiming__0\n"); );
@@ -137,8 +139,6 @@ VL_INLINE_OPT VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtim
     __Vtask_systolic_array_tb__DOT__row_load__19__rinput = 0;
     QData/*63:0*/ __Vtask_systolic_array_tb__DOT__row_load__19__rpartial;
     __Vtask_systolic_array_tb__DOT__row_load__19__rpartial = 0;
-    VlWide<5>/*159:0*/ __Vtemp_1;
-    VlWide<5>/*159:0*/ __Vtemp_2;
     // Body
     vlSymsp->_vm_contextp__->dumpfile(std::string{"dump.vcd"});
     vlSymsp->_traceDumpOpen();
@@ -150,24 +150,14 @@ VL_INLINE_OPT VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtim
     vlSymsp->TOP__systolic_array_tb__DOT__memory_if.array_in = 0ULL;
     vlSymsp->TOP__systolic_array_tb__DOT__memory_if.array_in_partials = 0ULL;
     vlSelfRef.systolic_array_tb__DOT__loaded_weights = 0U;
-    __Vtemp_1[0U] = 0x2e747874U;
-    __Vtemp_1[1U] = 0x6f646564U;
-    __Vtemp_1[2U] = 0x5f656e63U;
-    __Vtemp_1[3U] = 0x746f7073U;
-    __Vtemp_1[4U] = 0x6d61U;
     vlSelfRef.systolic_array_tb__DOT__file = VL_FOPEN_NN(
-                                                         VL_CVT_PACK_STR_NW(5, __Vtemp_1)
+                                                         VL_CVT_PACK_STR_NW(10, Vsystolic_array_tb__ConstPool__CONST_h19761995_0)
                                                          , 
                                                          std::string{"r"});
     ;
     (void)VL_SYSTEM_IW(31, Vsystolic_array_tb__ConstPool__CONST_hc596c996_0);
-    __Vtemp_2[0U] = 0x2e747874U;
-    __Vtemp_2[1U] = 0x74707574U;
-    __Vtemp_2[2U] = 0x735f6f75U;
-    __Vtemp_2[3U] = 0x61746f70U;
-    __Vtemp_2[4U] = 0x6dU;
     vlSelfRef.systolic_array_tb__DOT__out_file = VL_FOPEN_NN(
-                                                             VL_CVT_PACK_STR_NW(5, __Vtemp_2)
+                                                             VL_CVT_PACK_STR_NW(12, Vsystolic_array_tb__ConstPool__CONST_h2d12ea0e_0)
                                                              , 
                                                              std::string{"r"});
     ;
@@ -203,10 +193,12 @@ VL_INLINE_OPT VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtim
                                                          "src/testbench/systolic_array_tb.sv", 
                                                          50);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
+    VL_WRITEF_NX("In get matrices task\n",0);
     __Vtask_systolic_array_tb__DOT__get_matrices__2__weights = 0U;
     vlSelfRef.systolic_array_tb__DOT__which = 0U;
     (void)VL_FGETS_NI(vlSelfRef.systolic_array_tb__DOT__line, vlSelfRef.systolic_array_tb__DOT__file);
-    vlSelfRef.systolic_array_tb__DOT__k = 0U;
+    VL_WRITEF_NX("In get matrices task. just fgets'ed\nLine read in: %@\n",0,
+                 -1,&(vlSelfRef.systolic_array_tb__DOT__line));
     if ((std::string{"Weights\n"} == vlSelfRef.systolic_array_tb__DOT__line)) {
         vlSelfRef.systolic_array_tb__DOT__which = 1U;
         vlSelfRef.systolic_array_tb__DOT__get_matrices__Vstatic__unnamedblk1__DOT__iterations = 3U;
@@ -215,232 +207,379 @@ VL_INLINE_OPT VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtim
         vlSelfRef.systolic_array_tb__DOT__which = 2U;
         vlSelfRef.systolic_array_tb__DOT__get_matrices__Vstatic__unnamedblk1__DOT__iterations = 2U;
     }
+    VL_WRITEF_NX("In get matrices task. just read value type. which: \n%11d\n",0,
+                 32,vlSelfRef.systolic_array_tb__DOT__which);
+    vlSelfRef.systolic_array_tb__DOT__k = 0U;
     while (VL_LTS_III(32, vlSelfRef.systolic_array_tb__DOT__k, vlSelfRef.systolic_array_tb__DOT__get_matrices__Vstatic__unnamedblk1__DOT__iterations)) {
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [0U][0U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [0U][0U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [0U][0U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [0U][0U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [0U][0U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [0U][0U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 1U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [0U][1U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [0U][1U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [0U][1U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [0U][1U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [0U][1U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [0U][1U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 2U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [0U][2U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [0U][2U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [0U][2U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [0U][2U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [0U][2U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [0U][2U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 3U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [0U][3U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [0U][3U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [0U][3U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [0U][3U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [0U][3U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [0U][3U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 4U;
         vlSelfRef.systolic_array_tb__DOT__i = 1U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [1U][0U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [1U][0U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [1U][0U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [1U][0U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [1U][0U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [1U][0U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 1U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [1U][1U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [1U][1U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [1U][1U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [1U][1U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [1U][1U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [1U][1U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 2U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [1U][2U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [1U][2U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [1U][2U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [1U][2U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [1U][2U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [1U][2U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 3U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [1U][3U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [1U][3U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [1U][3U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [1U][3U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [1U][3U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [1U][3U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 4U;
         vlSelfRef.systolic_array_tb__DOT__i = 2U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [2U][0U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [2U][0U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [2U][0U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [2U][0U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [2U][0U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [2U][0U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 1U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [2U][1U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [2U][1U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [2U][1U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [2U][1U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [2U][1U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [2U][1U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 2U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [2U][2U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [2U][2U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [2U][2U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [2U][2U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [2U][2U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [2U][2U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 3U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [2U][3U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [2U][3U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [2U][3U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [2U][3U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [2U][3U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [2U][3U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 4U;
         vlSelfRef.systolic_array_tb__DOT__i = 3U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [3U][0U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [3U][0U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [3U][0U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [3U][0U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [3U][0U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [3U][0U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 1U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [3U][1U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [3U][1U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [3U][1U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [3U][1U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [3U][1U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [3U][1U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 2U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [3U][2U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [3U][2U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [3U][2U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [3U][2U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [3U][2U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [3U][2U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 3U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [3U][3U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [3U][3U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [3U][3U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [3U][3U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [3U][3U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [3U][3U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 4U;
         vlSelfRef.systolic_array_tb__DOT__i = 4U;
@@ -777,7 +916,7 @@ VL_INLINE_OPT VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtim
                                                              nullptr, 
                                                              "@(posedge systolic_array_tb.tb_clk)", 
                                                              "src/testbench/systolic_array_tb.sv", 
-                                                             145);
+                                                             153);
         vlSelfRef.__Vm_traceActivity[2U] = 1U;
         __Vtask_systolic_array_tb__DOT__load_in_ps__6__systolic_array_tb__DOT__unnamedblk1_1__DOT____Vrepeat0 
             = (__Vtask_systolic_array_tb__DOT__load_in_ps__6__systolic_array_tb__DOT__unnamedblk1_1__DOT____Vrepeat0 
@@ -830,7 +969,7 @@ VL_INLINE_OPT VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtim
                                                              nullptr, 
                                                              "@(posedge systolic_array_tb.tb_clk)", 
                                                              "src/testbench/systolic_array_tb.sv", 
-                                                             145);
+                                                             153);
         vlSelfRef.__Vm_traceActivity[2U] = 1U;
         __Vtask_systolic_array_tb__DOT__load_in_ps__6__systolic_array_tb__DOT__unnamedblk1_1__DOT____Vrepeat0 
             = (__Vtask_systolic_array_tb__DOT__load_in_ps__6__systolic_array_tb__DOT__unnamedblk1_1__DOT____Vrepeat0 
@@ -883,7 +1022,7 @@ VL_INLINE_OPT VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtim
                                                              nullptr, 
                                                              "@(posedge systolic_array_tb.tb_clk)", 
                                                              "src/testbench/systolic_array_tb.sv", 
-                                                             145);
+                                                             153);
         vlSelfRef.__Vm_traceActivity[2U] = 1U;
         __Vtask_systolic_array_tb__DOT__load_in_ps__6__systolic_array_tb__DOT__unnamedblk1_1__DOT____Vrepeat0 
             = (__Vtask_systolic_array_tb__DOT__load_in_ps__6__systolic_array_tb__DOT__unnamedblk1_1__DOT____Vrepeat0 
@@ -936,7 +1075,7 @@ VL_INLINE_OPT VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtim
                                                              nullptr, 
                                                              "@(posedge systolic_array_tb.tb_clk)", 
                                                              "src/testbench/systolic_array_tb.sv", 
-                                                             145);
+                                                             153);
         vlSelfRef.__Vm_traceActivity[2U] = 1U;
         __Vtask_systolic_array_tb__DOT__load_in_ps__6__systolic_array_tb__DOT__unnamedblk1_1__DOT____Vrepeat0 
             = (__Vtask_systolic_array_tb__DOT__load_in_ps__6__systolic_array_tb__DOT__unnamedblk1_1__DOT____Vrepeat0 
@@ -947,102 +1086,104 @@ VL_INLINE_OPT VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtim
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         206);
+                                                         214);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         206);
+                                                         214);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         206);
+                                                         214);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         206);
+                                                         214);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         206);
+                                                         214);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         206);
+                                                         214);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         206);
+                                                         214);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         206);
+                                                         214);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         206);
+                                                         214);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         206);
+                                                         214);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         206);
+                                                         214);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         206);
+                                                         214);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         206);
+                                                         214);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         206);
+                                                         214);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         206);
+                                                         214);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         206);
+                                                         214);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
+    VL_WRITEF_NX("In get matrices task\n",0);
     __Vtask_systolic_array_tb__DOT__get_matrices__8__weights = 0U;
     vlSelfRef.systolic_array_tb__DOT__which = 0U;
     (void)VL_FGETS_NI(vlSelfRef.systolic_array_tb__DOT__line, vlSelfRef.systolic_array_tb__DOT__file);
-    vlSelfRef.systolic_array_tb__DOT__k = 0U;
+    VL_WRITEF_NX("In get matrices task. just fgets'ed\nLine read in: %@\n",0,
+                 -1,&(vlSelfRef.systolic_array_tb__DOT__line));
     if ((std::string{"Weights\n"} == vlSelfRef.systolic_array_tb__DOT__line)) {
         vlSelfRef.systolic_array_tb__DOT__which = 1U;
         vlSelfRef.systolic_array_tb__DOT__get_matrices__Vstatic__unnamedblk1__DOT__iterations = 3U;
@@ -1051,232 +1192,379 @@ VL_INLINE_OPT VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtim
         vlSelfRef.systolic_array_tb__DOT__which = 2U;
         vlSelfRef.systolic_array_tb__DOT__get_matrices__Vstatic__unnamedblk1__DOT__iterations = 2U;
     }
+    VL_WRITEF_NX("In get matrices task. just read value type. which: \n%11d\n",0,
+                 32,vlSelfRef.systolic_array_tb__DOT__which);
+    vlSelfRef.systolic_array_tb__DOT__k = 0U;
     while (VL_LTS_III(32, vlSelfRef.systolic_array_tb__DOT__k, vlSelfRef.systolic_array_tb__DOT__get_matrices__Vstatic__unnamedblk1__DOT__iterations)) {
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [0U][0U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [0U][0U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [0U][0U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [0U][0U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [0U][0U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [0U][0U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 1U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [0U][1U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [0U][1U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [0U][1U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [0U][1U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [0U][1U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [0U][1U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 2U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [0U][2U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [0U][2U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [0U][2U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [0U][2U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [0U][2U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [0U][2U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 3U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [0U][3U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [0U][3U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [0U][3U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [0U][3U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [0U][3U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [0U][3U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 4U;
         vlSelfRef.systolic_array_tb__DOT__i = 1U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [1U][0U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [1U][0U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [1U][0U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [1U][0U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [1U][0U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [1U][0U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 1U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [1U][1U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [1U][1U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [1U][1U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [1U][1U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [1U][1U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [1U][1U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 2U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [1U][2U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [1U][2U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [1U][2U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [1U][2U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [1U][2U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [1U][2U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 3U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [1U][3U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [1U][3U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [1U][3U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [1U][3U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [1U][3U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [1U][3U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 4U;
         vlSelfRef.systolic_array_tb__DOT__i = 2U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [2U][0U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [2U][0U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [2U][0U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [2U][0U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [2U][0U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [2U][0U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 1U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [2U][1U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [2U][1U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [2U][1U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [2U][1U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [2U][1U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [2U][1U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 2U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [2U][2U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [2U][2U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [2U][2U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [2U][2U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [2U][2U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [2U][2U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 3U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [2U][3U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [2U][3U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [2U][3U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [2U][3U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [2U][3U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [2U][3U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 4U;
         vlSelfRef.systolic_array_tb__DOT__i = 3U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [3U][0U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [3U][0U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [3U][0U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [3U][0U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [3U][0U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [3U][0U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 1U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [3U][1U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [3U][1U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [3U][1U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [3U][1U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [3U][1U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [3U][1U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 2U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [3U][2U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [3U][2U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [3U][2U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [3U][2U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [3U][2U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [3U][2U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 3U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [3U][3U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [3U][3U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [3U][3U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [3U][3U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [3U][3U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [3U][3U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 4U;
         vlSelfRef.systolic_array_tb__DOT__i = 4U;
@@ -1369,7 +1657,7 @@ VL_INLINE_OPT VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtim
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         210);
+                                                         218);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     __Vtask_systolic_array_tb__DOT__row_load__10__rpartial = 0ULL;
     __Vtask_systolic_array_tb__DOT__row_load__10__rinput 
@@ -1412,7 +1700,7 @@ VL_INLINE_OPT VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtim
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         212);
+                                                         220);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     __Vtask_systolic_array_tb__DOT__row_load__11__rpartial = 0ULL;
     __Vtask_systolic_array_tb__DOT__row_load__11__rinput 
@@ -1455,7 +1743,7 @@ VL_INLINE_OPT VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtim
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         214);
+                                                         222);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     __Vtask_systolic_array_tb__DOT__row_load__12__rpartial = 0ULL;
     __Vtask_systolic_array_tb__DOT__row_load__12__rinput 
@@ -1498,7 +1786,7 @@ VL_INLINE_OPT VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtim
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         216);
+                                                         224);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     __Vtask_systolic_array_tb__DOT__row_load__13__rpartial 
         = vlSelfRef.systolic_array_tb__DOT__m_partials
@@ -1541,7 +1829,7 @@ VL_INLINE_OPT VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtim
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         218);
+                                                         226);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     __Vtask_systolic_array_tb__DOT__row_load__14__rpartial 
         = vlSelfRef.systolic_array_tb__DOT__m_partials
@@ -1584,7 +1872,7 @@ VL_INLINE_OPT VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtim
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         220);
+                                                         228);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     __Vtask_systolic_array_tb__DOT__row_load__15__rpartial 
         = vlSelfRef.systolic_array_tb__DOT__m_partials
@@ -1627,7 +1915,7 @@ VL_INLINE_OPT VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtim
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         222);
+                                                         230);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     __Vtask_systolic_array_tb__DOT__row_load__16__rpartial 
         = vlSelfRef.systolic_array_tb__DOT__m_partials
@@ -1670,107 +1958,110 @@ VL_INLINE_OPT VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtim
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         224);
+                                                         232);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         225);
+                                                         233);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         225);
+                                                         233);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         225);
+                                                         233);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         225);
+                                                         233);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         225);
+                                                         233);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         225);
+                                                         233);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         225);
+                                                         233);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         225);
+                                                         233);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         225);
+                                                         233);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         225);
+                                                         233);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         225);
+                                                         233);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         225);
+                                                         233);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         225);
+                                                         233);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         225);
+                                                         233);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         225);
+                                                         233);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         225);
+                                                         233);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
+    VL_WRITEF_NX("In get matrices task\n",0);
     __Vtask_systolic_array_tb__DOT__get_matrices__17__weights = 0U;
     vlSelfRef.systolic_array_tb__DOT__which = 0U;
     (void)VL_FGETS_NI(vlSelfRef.systolic_array_tb__DOT__line, vlSelfRef.systolic_array_tb__DOT__file);
+    VL_WRITEF_NX("In get matrices task. just fgets'ed\nLine read in: %@\n",0,
+                 -1,&(vlSelfRef.systolic_array_tb__DOT__line));
     if ((std::string{"Weights\n"} == vlSelfRef.systolic_array_tb__DOT__line)) {
         vlSelfRef.systolic_array_tb__DOT__which = 1U;
         vlSelfRef.systolic_array_tb__DOT__get_matrices__Vstatic__unnamedblk1__DOT__iterations = 3U;
@@ -1779,233 +2070,379 @@ VL_INLINE_OPT VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtim
         vlSelfRef.systolic_array_tb__DOT__which = 2U;
         vlSelfRef.systolic_array_tb__DOT__get_matrices__Vstatic__unnamedblk1__DOT__iterations = 2U;
     }
+    VL_WRITEF_NX("In get matrices task. just read value type. which: \n%11d\n",0,
+                 32,vlSelfRef.systolic_array_tb__DOT__which);
     vlSelfRef.systolic_array_tb__DOT__k = 0U;
     while (VL_LTS_III(32, vlSelfRef.systolic_array_tb__DOT__k, vlSelfRef.systolic_array_tb__DOT__get_matrices__Vstatic__unnamedblk1__DOT__iterations)) {
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [0U][0U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [0U][0U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [0U][0U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [0U][0U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [0U][0U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [0U][0U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 1U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [0U][1U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [0U][1U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [0U][1U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [0U][1U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [0U][1U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [0U][1U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 2U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [0U][2U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [0U][2U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [0U][2U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [0U][2U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [0U][2U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [0U][2U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 3U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [0U][3U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [0U][3U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [0U][3U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [0U][3U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [0U][3U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [0U][3U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 4U;
         vlSelfRef.systolic_array_tb__DOT__i = 1U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [1U][0U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [1U][0U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [1U][0U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [1U][0U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [1U][0U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [1U][0U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 1U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [1U][1U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [1U][1U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [1U][1U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [1U][1U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [1U][1U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [1U][1U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 2U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [1U][2U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [1U][2U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [1U][2U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [1U][2U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [1U][2U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [1U][2U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 3U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [1U][3U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [1U][3U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [1U][3U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [1U][3U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [1U][3U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [1U][3U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 4U;
         vlSelfRef.systolic_array_tb__DOT__i = 2U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [2U][0U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [2U][0U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [2U][0U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [2U][0U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [2U][0U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [2U][0U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 1U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [2U][1U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [2U][1U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [2U][1U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [2U][1U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [2U][1U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [2U][1U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 2U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [2U][2U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [2U][2U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [2U][2U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [2U][2U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [2U][2U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [2U][2U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 3U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [2U][3U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [2U][3U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [2U][3U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [2U][3U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [2U][3U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [2U][3U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 4U;
         vlSelfRef.systolic_array_tb__DOT__i = 3U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [3U][0U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [3U][0U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [3U][0U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [3U][0U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [3U][0U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [3U][0U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 1U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [3U][1U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [3U][1U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [3U][1U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [3U][1U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [3U][1U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [3U][1U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 2U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [3U][2U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [3U][2U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [3U][2U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [3U][2U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [3U][2U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [3U][2U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 3U;
-        if ((1U == vlSelfRef.systolic_array_tb__DOT__which)) {
+        if (VL_UNLIKELY(((1U == vlSelfRef.systolic_array_tb__DOT__which)))) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_weights
                                      [3U][3U])) ;
+            VL_WRITEF_NX("i just read in weight %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_weights
+                         [3U][3U]);
         } else if ((2U == vlSelfRef.systolic_array_tb__DOT__which)) {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_inputs
                                      [3U][3U])) ;
+            VL_WRITEF_NX("i just read in input %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_inputs
+                         [3U][3U]);
         } else {
             (void)VL_FSCANF_INX(vlSelfRef.systolic_array_tb__DOT__file,"%x ",0,
                                 16,&(vlSelfRef.systolic_array_tb__DOT__temp_partials
                                      [3U][3U])) ;
+            VL_WRITEF_NX("i just read in partial %x\n",0,
+                         16,vlSelfRef.systolic_array_tb__DOT__temp_partials
+                         [3U][3U]);
         }
         vlSelfRef.systolic_array_tb__DOT__j = 4U;
         vlSelfRef.systolic_array_tb__DOT__i = 4U;
@@ -2104,7 +2541,7 @@ VL_INLINE_OPT VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtim
                                                              nullptr, 
                                                              "@(posedge systolic_array_tb.tb_clk)", 
                                                              "src/testbench/systolic_array_tb.sv", 
-                                                             145);
+                                                             153);
         vlSelfRef.__Vm_traceActivity[2U] = 1U;
         __Vtask_systolic_array_tb__DOT__load_in_ps__18__systolic_array_tb__DOT__unnamedblk1_1__DOT____Vrepeat0 
             = (__Vtask_systolic_array_tb__DOT__load_in_ps__18__systolic_array_tb__DOT__unnamedblk1_1__DOT____Vrepeat0 
@@ -2157,7 +2594,7 @@ VL_INLINE_OPT VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtim
                                                              nullptr, 
                                                              "@(posedge systolic_array_tb.tb_clk)", 
                                                              "src/testbench/systolic_array_tb.sv", 
-                                                             145);
+                                                             153);
         vlSelfRef.__Vm_traceActivity[2U] = 1U;
         __Vtask_systolic_array_tb__DOT__load_in_ps__18__systolic_array_tb__DOT__unnamedblk1_1__DOT____Vrepeat0 
             = (__Vtask_systolic_array_tb__DOT__load_in_ps__18__systolic_array_tb__DOT__unnamedblk1_1__DOT____Vrepeat0 
@@ -2210,7 +2647,7 @@ VL_INLINE_OPT VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtim
                                                              nullptr, 
                                                              "@(posedge systolic_array_tb.tb_clk)", 
                                                              "src/testbench/systolic_array_tb.sv", 
-                                                             145);
+                                                             153);
         vlSelfRef.__Vm_traceActivity[2U] = 1U;
         __Vtask_systolic_array_tb__DOT__load_in_ps__18__systolic_array_tb__DOT__unnamedblk1_1__DOT____Vrepeat0 
             = (__Vtask_systolic_array_tb__DOT__load_in_ps__18__systolic_array_tb__DOT__unnamedblk1_1__DOT____Vrepeat0 
@@ -2263,7 +2700,7 @@ VL_INLINE_OPT VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtim
                                                              nullptr, 
                                                              "@(posedge systolic_array_tb.tb_clk)", 
                                                              "src/testbench/systolic_array_tb.sv", 
-                                                             145);
+                                                             153);
         vlSelfRef.__Vm_traceActivity[2U] = 1U;
         __Vtask_systolic_array_tb__DOT__load_in_ps__18__systolic_array_tb__DOT__unnamedblk1_1__DOT____Vrepeat0 
             = (__Vtask_systolic_array_tb__DOT__load_in_ps__18__systolic_array_tb__DOT__unnamedblk1_1__DOT____Vrepeat0 
@@ -2274,361 +2711,361 @@ VL_INLINE_OPT VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtim
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         228);
+                                                         236);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         228);
+                                                         236);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         228);
+                                                         236);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         228);
+                                                         236);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         228);
+                                                         236);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         228);
+                                                         236);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         228);
+                                                         236);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         228);
+                                                         236);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         228);
+                                                         236);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         228);
+                                                         236);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         228);
+                                                         236);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         228);
+                                                         236);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         228);
+                                                         236);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         228);
+                                                         236);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         228);
+                                                         236);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         228);
+                                                         236);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         228);
+                                                         236);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         228);
+                                                         236);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         228);
+                                                         236);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         228);
+                                                         236);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         229);
+                                                         237);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         229);
+                                                         237);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         229);
+                                                         237);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         229);
+                                                         237);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         229);
+                                                         237);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         229);
+                                                         237);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         229);
+                                                         237);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         229);
+                                                         237);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         229);
+                                                         237);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         229);
+                                                         237);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         229);
+                                                         237);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         229);
+                                                         237);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         229);
+                                                         237);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         229);
+                                                         237);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         229);
+                                                         237);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         229);
+                                                         237);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         229);
+                                                         237);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         229);
+                                                         237);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         229);
+                                                         237);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         229);
+                                                         237);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         230);
+                                                         238);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         230);
+                                                         238);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         230);
+                                                         238);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         230);
+                                                         238);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         230);
+                                                         238);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         230);
+                                                         238);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         230);
+                                                         238);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         230);
+                                                         238);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         230);
+                                                         238);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         230);
+                                                         238);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         230);
+                                                         238);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         230);
+                                                         238);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         230);
+                                                         238);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         230);
+                                                         238);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         230);
+                                                         238);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         230);
+                                                         238);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         230);
+                                                         238);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         230);
+                                                         238);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         230);
+                                                         238);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     co_await vlSelfRef.__VtrigSched_h8059f569__0.trigger(0U, 
                                                          nullptr, 
                                                          "@(posedge systolic_array_tb.tb_clk)", 
                                                          "src/testbench/systolic_array_tb.sv", 
-                                                         230);
+                                                         238);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
     VL_WRITEF_NX("array should be drained %1#\nfifos should have space  %1#\n",0,
                  1,vlSymsp->TOP__systolic_array_tb__DOT__memory_if.drained,
@@ -2637,9 +3074,9 @@ VL_INLINE_OPT VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtim
     VL_FCLOSE_I(vlSelfRef.systolic_array_tb__DOT__file); VL_FCLOSE_I(vlSelfRef.systolic_array_tb__DOT__out_file); co_await vlSelfRef.__VdlySched.delay(0xc350ULL, 
                                                                                 nullptr, 
                                                                                 "src/testbench/systolic_array_tb.sv", 
-                                                                                236);
+                                                                                244);
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
-    VL_STOP_MT("src/testbench/systolic_array_tb.sv", 237, "");
+    VL_STOP_MT("src/testbench/systolic_array_tb.sv", 245, "");
     vlSelfRef.__Vm_traceActivity[2U] = 1U;
 }
 
@@ -3946,28 +4383,40 @@ VL_INLINE_OPT void Vsystolic_array_tb___024root___nba_sequent__TOP__0(Vsystolic_
                     = (0x1fU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_outputs
                                 [3U][0U] >> 0xaU));
                 vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__0__KET____DOT__add_inst__DOT__frac_not_shifted_in 
-                    = (0x1000U | (0xffcU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_outputs
-                                            [3U][0U] 
-                                            << 2U)));
+                    = (((0U != (0x1fU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_outputs
+                                         [3U][0U] >> 0xaU))) 
+                        << 0xcU) | (0xffcU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_outputs
+                                              [3U][0U] 
+                                              << 2U)));
                 vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__0__KET____DOT__add_inst__DOT__frac_shifted_in 
-                    = (0x1fffU & ((0x1000U | (0xffcU 
-                                              & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__ps_add_inputs
-                                                 [0U] 
-                                                 << 2U))) 
+                    = (0x1fffU & ((((0U != (0x1fU & 
+                                            (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__ps_add_inputs
+                                             [0U] >> 0xaU))) 
+                                    << 0xcU) | (0xffcU 
+                                                & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__ps_add_inputs
+                                                   [0U] 
+                                                   << 2U))) 
                                   >> (0x1fU & (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__0__KET____DOT__add_inst__DOT__add1__DOT__diff))));
             } else {
                 vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__0__KET____DOT__add_inst__DOT__add_exp_max_in 
                     = (0x1fU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__ps_add_inputs
                                 [0U] >> 0xaU));
                 vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__0__KET____DOT__add_inst__DOT__frac_not_shifted_in 
-                    = (0x1000U | (0xffcU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__ps_add_inputs
-                                            [0U] << 2U)));
+                    = (((0U != (0x1fU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__ps_add_inputs
+                                         [0U] >> 0xaU))) 
+                        << 0xcU) | (0xffcU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__ps_add_inputs
+                                              [0U] 
+                                              << 2U)));
                 vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__0__KET____DOT__add_inst__DOT__frac_shifted_in 
-                    = (0x1fffU & ((0x1000U | (0xffcU 
-                                              & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_outputs
-                                                 [3U]
-                                                 [0U] 
-                                                 << 2U))) 
+                    = (0x1fffU & ((((0U != (0x1fU & 
+                                            (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_outputs
+                                             [3U][0U] 
+                                             >> 0xaU))) 
+                                    << 0xcU) | (0xffcU 
+                                                & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_outputs
+                                                   [3U]
+                                                   [0U] 
+                                                   << 2U))) 
                                   >> (0x1fU & (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__0__KET____DOT__add_inst__DOT__add1__DOT__diff))));
             }
         } else {
@@ -3993,28 +4442,40 @@ VL_INLINE_OPT void Vsystolic_array_tb___024root___nba_sequent__TOP__0(Vsystolic_
                     = (0x1fU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_outputs
                                 [3U][1U] >> 0xaU));
                 vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__1__KET____DOT__add_inst__DOT__frac_not_shifted_in 
-                    = (0x1000U | (0xffcU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_outputs
-                                            [3U][1U] 
-                                            << 2U)));
+                    = (((0U != (0x1fU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_outputs
+                                         [3U][1U] >> 0xaU))) 
+                        << 0xcU) | (0xffcU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_outputs
+                                              [3U][1U] 
+                                              << 2U)));
                 vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__1__KET____DOT__add_inst__DOT__frac_shifted_in 
-                    = (0x1fffU & ((0x1000U | (0xffcU 
-                                              & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__ps_add_inputs
-                                                 [1U] 
-                                                 << 2U))) 
+                    = (0x1fffU & ((((0U != (0x1fU & 
+                                            (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__ps_add_inputs
+                                             [1U] >> 0xaU))) 
+                                    << 0xcU) | (0xffcU 
+                                                & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__ps_add_inputs
+                                                   [1U] 
+                                                   << 2U))) 
                                   >> (0x1fU & (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__1__KET____DOT__add_inst__DOT__add1__DOT__diff))));
             } else {
                 vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__1__KET____DOT__add_inst__DOT__add_exp_max_in 
                     = (0x1fU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__ps_add_inputs
                                 [1U] >> 0xaU));
                 vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__1__KET____DOT__add_inst__DOT__frac_not_shifted_in 
-                    = (0x1000U | (0xffcU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__ps_add_inputs
-                                            [1U] << 2U)));
+                    = (((0U != (0x1fU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__ps_add_inputs
+                                         [1U] >> 0xaU))) 
+                        << 0xcU) | (0xffcU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__ps_add_inputs
+                                              [1U] 
+                                              << 2U)));
                 vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__1__KET____DOT__add_inst__DOT__frac_shifted_in 
-                    = (0x1fffU & ((0x1000U | (0xffcU 
-                                              & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_outputs
-                                                 [3U]
-                                                 [1U] 
-                                                 << 2U))) 
+                    = (0x1fffU & ((((0U != (0x1fU & 
+                                            (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_outputs
+                                             [3U][1U] 
+                                             >> 0xaU))) 
+                                    << 0xcU) | (0xffcU 
+                                                & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_outputs
+                                                   [3U]
+                                                   [1U] 
+                                                   << 2U))) 
                                   >> (0x1fU & (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__1__KET____DOT__add_inst__DOT__add1__DOT__diff))));
             }
         } else {
@@ -4040,28 +4501,40 @@ VL_INLINE_OPT void Vsystolic_array_tb___024root___nba_sequent__TOP__0(Vsystolic_
                     = (0x1fU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_outputs
                                 [3U][2U] >> 0xaU));
                 vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__2__KET____DOT__add_inst__DOT__frac_not_shifted_in 
-                    = (0x1000U | (0xffcU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_outputs
-                                            [3U][2U] 
-                                            << 2U)));
+                    = (((0U != (0x1fU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_outputs
+                                         [3U][2U] >> 0xaU))) 
+                        << 0xcU) | (0xffcU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_outputs
+                                              [3U][2U] 
+                                              << 2U)));
                 vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__2__KET____DOT__add_inst__DOT__frac_shifted_in 
-                    = (0x1fffU & ((0x1000U | (0xffcU 
-                                              & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__ps_add_inputs
-                                                 [2U] 
-                                                 << 2U))) 
+                    = (0x1fffU & ((((0U != (0x1fU & 
+                                            (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__ps_add_inputs
+                                             [2U] >> 0xaU))) 
+                                    << 0xcU) | (0xffcU 
+                                                & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__ps_add_inputs
+                                                   [2U] 
+                                                   << 2U))) 
                                   >> (0x1fU & (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__2__KET____DOT__add_inst__DOT__add1__DOT__diff))));
             } else {
                 vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__2__KET____DOT__add_inst__DOT__add_exp_max_in 
                     = (0x1fU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__ps_add_inputs
                                 [2U] >> 0xaU));
                 vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__2__KET____DOT__add_inst__DOT__frac_not_shifted_in 
-                    = (0x1000U | (0xffcU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__ps_add_inputs
-                                            [2U] << 2U)));
+                    = (((0U != (0x1fU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__ps_add_inputs
+                                         [2U] >> 0xaU))) 
+                        << 0xcU) | (0xffcU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__ps_add_inputs
+                                              [2U] 
+                                              << 2U)));
                 vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__2__KET____DOT__add_inst__DOT__frac_shifted_in 
-                    = (0x1fffU & ((0x1000U | (0xffcU 
-                                              & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_outputs
-                                                 [3U]
-                                                 [2U] 
-                                                 << 2U))) 
+                    = (0x1fffU & ((((0U != (0x1fU & 
+                                            (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_outputs
+                                             [3U][2U] 
+                                             >> 0xaU))) 
+                                    << 0xcU) | (0xffcU 
+                                                & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_outputs
+                                                   [3U]
+                                                   [2U] 
+                                                   << 2U))) 
                                   >> (0x1fU & (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__2__KET____DOT__add_inst__DOT__add1__DOT__diff))));
             }
         } else {
@@ -4087,28 +4560,40 @@ VL_INLINE_OPT void Vsystolic_array_tb___024root___nba_sequent__TOP__0(Vsystolic_
                     = (0x1fU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_outputs
                                 [3U][3U] >> 0xaU));
                 vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__3__KET____DOT__add_inst__DOT__frac_not_shifted_in 
-                    = (0x1000U | (0xffcU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_outputs
-                                            [3U][3U] 
-                                            << 2U)));
+                    = (((0U != (0x1fU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_outputs
+                                         [3U][3U] >> 0xaU))) 
+                        << 0xcU) | (0xffcU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_outputs
+                                              [3U][3U] 
+                                              << 2U)));
                 vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__3__KET____DOT__add_inst__DOT__frac_shifted_in 
-                    = (0x1fffU & ((0x1000U | (0xffcU 
-                                              & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__ps_add_inputs
-                                                 [3U] 
-                                                 << 2U))) 
+                    = (0x1fffU & ((((0U != (0x1fU & 
+                                            (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__ps_add_inputs
+                                             [3U] >> 0xaU))) 
+                                    << 0xcU) | (0xffcU 
+                                                & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__ps_add_inputs
+                                                   [3U] 
+                                                   << 2U))) 
                                   >> (0x1fU & (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__3__KET____DOT__add_inst__DOT__add1__DOT__diff))));
             } else {
                 vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__3__KET____DOT__add_inst__DOT__add_exp_max_in 
                     = (0x1fU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__ps_add_inputs
                                 [3U] >> 0xaU));
                 vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__3__KET____DOT__add_inst__DOT__frac_not_shifted_in 
-                    = (0x1000U | (0xffcU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__ps_add_inputs
-                                            [3U] << 2U)));
+                    = (((0U != (0x1fU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__ps_add_inputs
+                                         [3U] >> 0xaU))) 
+                        << 0xcU) | (0xffcU & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__ps_add_inputs
+                                              [3U] 
+                                              << 2U)));
                 vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__3__KET____DOT__add_inst__DOT__frac_shifted_in 
-                    = (0x1fffU & ((0x1000U | (0xffcU 
-                                              & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_outputs
-                                                 [3U]
-                                                 [3U] 
-                                                 << 2U))) 
+                    = (0x1fffU & ((((0U != (0x1fU & 
+                                            (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_outputs
+                                             [3U][3U] 
+                                             >> 0xaU))) 
+                                    << 0xcU) | (0xffcU 
+                                                & (vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_outputs
+                                                   [3U]
+                                                   [3U] 
+                                                   << 2U))) 
                                   >> (0x1fU & (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__3__KET____DOT__add_inst__DOT__add1__DOT__diff))));
             }
         } else {
@@ -7233,124 +7718,5 @@ VL_INLINE_OPT void Vsystolic_array_tb___024root___nba_comb__TOP__1(Vsystolic_arr
             = __Vtemp_32[2U];
         vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk3__BRA__3__KET____DOT__ps_fifos__DOT__fifo_mem_nxt[3U] 
             = __Vtemp_32[3U];
-    }
-}
-
-VL_INLINE_OPT void Vsystolic_array_tb___024root___nba_sequent__TOP__4(Vsystolic_array_tb___024root* vlSelf) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vsystolic_array_tb___024root___nba_sequent__TOP__4\n"); );
-    Vsystolic_array_tb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
-    auto& vlSelfRef = std::ref(*vlSelf).get();
-    // Body
-    vlSymsp->TOP__systolic_array_tb__DOT__memory_if.out_en = 0U;
-    if (((8U <= vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.iteration
-          [0U]) & (3U == (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.add_count)))) {
-        vlSymsp->TOP__systolic_array_tb__DOT__memory_if.out_en = 1U;
-    }
-    if (((8U <= vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.iteration
-          [1U]) & (3U == (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.add_count)))) {
-        vlSymsp->TOP__systolic_array_tb__DOT__memory_if.out_en = 1U;
-    }
-    vlSymsp->TOP__systolic_array_tb__DOT__memory_if.row_out = 0U;
-    vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out = 0U;
-    vlSymsp->TOP__systolic_array_tb__DOT__memory_if.array_output = 0ULL;
-    if (((8U <= vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.iteration
-          [0U]) & (3U == (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.add_count)))) {
-        vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out 
-            = (3U & vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.iteration
-               [0U]);
-        vlSymsp->TOP__systolic_array_tb__DOT__memory_if.row_out 
-            = vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out;
-        vlSymsp->TOP__systolic_array_tb__DOT__memory_if.array_output 
-            = (((QData)((IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__current_out[
-                                (((IData)(0x3fU) + 
-                                  (0xffU & VL_SHIFTL_III(8,32,32, (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out), 6U))) 
-                                 >> 5U)])) << ((0U 
-                                                == 
-                                                (0x1fU 
-                                                 & VL_SHIFTL_III(8,32,32, (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out), 6U)))
-                                                ? 0x20U
-                                                : ((IData)(0x40U) 
-                                                   - 
-                                                   (0x1fU 
-                                                    & VL_SHIFTL_III(8,32,32, (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out), 6U))))) 
-               | (((0U == (0x1fU & VL_SHIFTL_III(8,32,32, (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out), 6U)))
-                    ? 0ULL : ((QData)((IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__current_out[
-                                              (((IData)(0x1fU) 
-                                                + (0xffU 
-                                                   & VL_SHIFTL_III(8,32,32, (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out), 6U))) 
-                                               >> 5U)])) 
-                              << ((IData)(0x20U) - 
-                                  (0x1fU & VL_SHIFTL_III(8,32,32, (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out), 6U))))) 
-                  | ((QData)((IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__current_out[
-                                     (7U & (VL_SHIFTL_III(8,32,32, (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out), 6U) 
-                                            >> 5U))])) 
-                     >> (0x1fU & VL_SHIFTL_III(8,32,32, (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out), 6U)))));
-    }
-    if (((8U <= vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.iteration
-          [1U]) & (3U == (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.add_count)))) {
-        vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out 
-            = (3U & vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.iteration
-               [1U]);
-        vlSymsp->TOP__systolic_array_tb__DOT__memory_if.row_out 
-            = vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out;
-        vlSymsp->TOP__systolic_array_tb__DOT__memory_if.array_output 
-            = (((QData)((IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__current_out[
-                                (((IData)(0x3fU) + 
-                                  (0xffU & VL_SHIFTL_III(8,32,32, (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out), 6U))) 
-                                 >> 5U)])) << ((0U 
-                                                == 
-                                                (0x1fU 
-                                                 & VL_SHIFTL_III(8,32,32, (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out), 6U)))
-                                                ? 0x20U
-                                                : ((IData)(0x40U) 
-                                                   - 
-                                                   (0x1fU 
-                                                    & VL_SHIFTL_III(8,32,32, (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out), 6U))))) 
-               | (((0U == (0x1fU & VL_SHIFTL_III(8,32,32, (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out), 6U)))
-                    ? 0ULL : ((QData)((IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__current_out[
-                                              (((IData)(0x1fU) 
-                                                + (0xffU 
-                                                   & VL_SHIFTL_III(8,32,32, (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out), 6U))) 
-                                               >> 5U)])) 
-                              << ((IData)(0x20U) - 
-                                  (0x1fU & VL_SHIFTL_III(8,32,32, (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out), 6U))))) 
-                  | ((QData)((IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__current_out[
-                                     (7U & (VL_SHIFTL_III(8,32,32, (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out), 6U) 
-                                            >> 5U))])) 
-                     >> (0x1fU & VL_SHIFTL_III(8,32,32, (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out), 6U)))));
-    }
-    if (((8U <= vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.iteration
-          [2U]) & (3U == (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.add_count)))) {
-        vlSymsp->TOP__systolic_array_tb__DOT__memory_if.out_en = 1U;
-        vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out 
-            = (3U & vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.iteration
-               [2U]);
-        vlSymsp->TOP__systolic_array_tb__DOT__memory_if.row_out 
-            = vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out;
-        vlSymsp->TOP__systolic_array_tb__DOT__memory_if.array_output 
-            = (((QData)((IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__current_out[
-                                (((IData)(0x3fU) + 
-                                  (0xffU & VL_SHIFTL_III(8,32,32, (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out), 6U))) 
-                                 >> 5U)])) << ((0U 
-                                                == 
-                                                (0x1fU 
-                                                 & VL_SHIFTL_III(8,32,32, (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out), 6U)))
-                                                ? 0x20U
-                                                : ((IData)(0x40U) 
-                                                   - 
-                                                   (0x1fU 
-                                                    & VL_SHIFTL_III(8,32,32, (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out), 6U))))) 
-               | (((0U == (0x1fU & VL_SHIFTL_III(8,32,32, (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out), 6U)))
-                    ? 0ULL : ((QData)((IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__current_out[
-                                              (((IData)(0x1fU) 
-                                                + (0xffU 
-                                                   & VL_SHIFTL_III(8,32,32, (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out), 6U))) 
-                                               >> 5U)])) 
-                              << ((IData)(0x20U) - 
-                                  (0x1fU & VL_SHIFTL_III(8,32,32, (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out), 6U))))) 
-                  | ((QData)((IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__current_out[
-                                     (7U & (VL_SHIFTL_III(8,32,32, (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out), 6U) 
-                                            >> 5U))])) 
-                     >> (0x1fU & VL_SHIFTL_III(8,32,32, (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out), 6U)))));
     }
 }

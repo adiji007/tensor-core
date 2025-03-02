@@ -4,6 +4,18 @@
 
 #include "verilated.h"
 
+extern const VlWide<10>/*319:0*/ Vsystolic_array_tb__ConstPool__CONST_h19761995_0 = {{
+    0x2e747874, 0x6f646564, 0x5f656e63, 0x746f7073,
+    0x732f6d61, 0x7574696c, 0x7261795f, 0x635f6172,
+    0x746f6c69, 0x00737973
+}};
+
+extern const VlWide<12>/*383:0*/ Vsystolic_array_tb__ConstPool__CONST_h2d12ea0e_0 = {{
+    0x2e747874, 0x74707574, 0x645f6f75, 0x636f6465,
+    0x735f656e, 0x61746f70, 0x6c732f6d, 0x5f757469,
+    0x72726179, 0x69635f61, 0x73746f6c, 0x00007379
+}};
+
 extern const VlWide<31>/*991:0*/ Vsystolic_array_tb__ConstPool__CONST_hc596c996_0 = {{
     0x6f646564, 0x5f656e63, 0x746f7073, 0x732f6d61,
     0x7574696c, 0x7261795f, 0x635f6172, 0x746f6c69,
