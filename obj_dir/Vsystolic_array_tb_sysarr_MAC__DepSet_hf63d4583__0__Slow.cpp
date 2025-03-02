@@ -27,6 +27,8 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___ctor_var_reset(Vsystolic_array
     vlSelf->__PVT__mul_product_in = VL_RAND_RESET_I(13);
     vlSelf->__PVT__mul_sum_exp = VL_RAND_RESET_I(5);
     vlSelf->__PVT__mul_result = VL_RAND_RESET_I(16);
+    vlSelf->__PVT__mul_significand_product_selected = VL_RAND_RESET_I(10);
+    vlSelf->__PVT__mul_final_exp = VL_RAND_RESET_I(5);
     vlSelf->__PVT__add_sign_shifted_in = VL_RAND_RESET_I(1);
     vlSelf->__PVT__add_sign_not_shifted_in = VL_RAND_RESET_I(1);
     vlSelf->__PVT__frac_shifted_in = VL_RAND_RESET_I(13);

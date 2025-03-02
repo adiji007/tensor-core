@@ -17,9 +17,10 @@ interface systolic_array_MAC_if #(parameter data_w = 16, parameter mul_len = 2, 
   logic [data_w-1:0] weight;                    // Input weight value to be pre-loaded
   logic [data_w-1:0] in_value;                  // Input value to be multiplied
   logic MAC_shift;                              // shift the input to the next array
-  logic [data_w-1:0] in_pass;                  // Input value to be passed to next MAC
+  logic [data_w-1:0] in_pass;                   // Input value to be passed to next MAC
   logic [data_w-1:0] in_accumulate;             // Input accumulate value from above
   logic [data_w-1:0] out_accumulate;            // Output accumulate value
+  logic value_ready;                            // This signal goes high when an operation is *not* in progress, i.e the op is done
 
   // MAC Port for Array
   modport MAC(

@@ -35,9 +35,23 @@ module MUL_step1 (
     assign exp1  = fp1_in[14:10];
     assign exp2  = fp2_in[14:10];
 
+    logic frac_leading_bit_fp1;
+    logic frac_leading_bit_fp2;
+    always_comb begin
+        if(exp1 == 5'b0)
+            frac_leading_bit_fp1 = 1'b0;
+        else
+            frac_leading_bit_fp1 = 1'b1;
+
+        if(exp2 == 5'b0)
+            frac_leading_bit_fp2 = 1'b0;
+        else
+            frac_leading_bit_fp2 = 1'b1;
+    end
+
     mul_13b MUL (
-        .frac_in1({1'b1, fp1_in[9:0], 2'b00}),
-        .frac_in2({1'b1, fp2_in[9:0], 2'b00}),
+        .frac_in1({frac_leading_bit_fp1, fp1_in[9:0], 2'b00}),
+        .frac_in2({frac_leading_bit_fp2, fp2_in[9:0], 2'b00}),
         .frac_out(product),
         .overflow(carry_out)
     );

@@ -61,7 +61,7 @@ module systolic_array #(
         control_unit_if.row_ps_en = memory.row_ps_en;
         memory.fifo_has_space = control_unit_if.fifo_has_space;
     end
-    //Selection Muxes for the input bus
+    //Selection Muxes for the combined inputs/weights loading bus
     always_comb begin : input_bus_identity
         top_input = '0;
         weights_input = '0; //'{default: '0};
@@ -132,7 +132,7 @@ module systolic_array #(
                     MAC_outputs[z][y] <= '0;
                 end
             end
-        end else if (control_unit_if.MAC_count == (3))begin //add params later
+        end else if (mac_ifs[m*N + n].value_ready == 1'b1) begin // Basing FIFO movement on "done" of the top left MAC unit
             MAC_outputs <= nxt_MAC_outputs;
         end 
     end
