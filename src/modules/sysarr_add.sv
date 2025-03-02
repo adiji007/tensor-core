@@ -1,4 +1,8 @@
 `include "systolic_array_add_if.vh"
+`include "sys_arr_pkg.vh"
+/* verilator lint_off IMPORTSTAR */
+import sys_arr_pkg::*;
+/* verilator lint_off IMPORTSTAR */
 
 module sysarr_add (
     /* verilator lint_off UNUSEDSIGNAL */
@@ -96,17 +100,8 @@ module sysarr_add (
     logic [4:0] add_flags;
     // Rounding mode: truncation. Maybe should pick something else?
     ADD_step3 add3(0, 0, 0, 0, 3'b001, add_exp_max_s3_in, add_sign_in, add_sum_in, add_carry_in, accumulate_result, add_flags);
-    assign adder.add_ouput = add_flags[2] ? 16'b0111110000000000 : accumulate_result;   // Overflow handler
+    assign adder.add_output = add_flags[2] ? 16'b0111110000000000 : accumulate_result;   // Overflow handler
 
 
 
 endmodule
-// always_comb begin
-//     adder.add_ouput= '0;
-//     if (adder.count == 2)begin
-//         adder.add_ouput = adder.add_input1 + adder.add_input2;
-//     end
-// end
-   
-   
-// endmodule
