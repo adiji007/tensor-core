@@ -62,7 +62,7 @@ module systolic_array(
         control_unit_if.row_ps_en = memory.row_ps_en;
         memory.fifo_has_space = control_unit_if.fifo_has_space;
     end
-    //Selection Muxes for the combined inputs/weights loading bus
+    //Selection Muxes for the input bus
     always_comb begin : input_bus_identity
         top_input = '0;
         weights_input = '0; //'{default: '0};
@@ -133,7 +133,7 @@ module systolic_array(
                     MAC_outputs[z][y] <= '0;
                 end
             end
-        end else if (mac_ifs[m*N + n].value_ready == 1'b1) begin // Basing FIFO movement on "done" of the top left MAC unit
+        end else if (control_unit_if.MAC_value_ready == 1'b1)begin //add params later
             MAC_outputs <= nxt_MAC_outputs;
         end 
     end
@@ -145,8 +145,10 @@ module systolic_array(
                     .nRST(nRST),
                     .mac_if(mac_ifs[m*N + n].MAC)
                 );
+                if (m==0 && n==0) begin : mac_ready
+                    assign control_unit_if.MAC_value_ready = mac_ifs[m*N + n].value_ready;
+                end
                 assign mac_ifs[m*N + n].start = control_unit_if.MAC_start;
-                assign mac_ifs[m*N + n].count = control_unit_if.MAC_count;
                 assign mac_ifs[m*N + n].weight = weights[n][(N - m) * DW - 1 -: DW];
                 assign mac_ifs[m*N + n].in_value = MAC_inputs[m][n];
                 assign mac_ifs[m*N + n].MAC_shift = control_unit_if.MAC_shift;
@@ -170,6 +172,9 @@ module systolic_array(
                 .nRST(nRST),
                 .adder(add_ifs[o].add)
             );
+            if (o == 0) begin : add_ready
+                assign control_unit_if.add_value_ready = add_ifs[o].value_ready;
+            end
             assign add_ifs[o].start = control_unit_if.add_start;
             assign add_ifs[o].add_input1 = ps_add_inputs[o];
             assign add_ifs[o].add_input2 = MAC_outputs[N-1][o];
@@ -200,7 +205,7 @@ module systolic_array(
         row_out = '0;
         memory.array_output = '0;
         for (q = 0; q < 3; q++)begin
-            if (control_unit_if.iteration[q] >= 2*N && control_unit_if.add_count == ADD_LEN)begin //first output done at 2*N then one for every iteration until it is done
+            if (control_unit_if.iteration[q] >= 2*N && control_unit_if.MAC_value_ready == 1'b1)begin //first output done at 2*N then one for every iteration until it is done
                 /* verilator lint_off WIDTHTRUNC */
                 row_out = control_unit_if.iteration[q] - 2 * N;
                 /* verilator lint_off WIDTHTRUNC */
@@ -214,4 +219,3 @@ module systolic_array(
         end
     end
 endmodule
-

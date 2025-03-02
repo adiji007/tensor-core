@@ -8,6 +8,8 @@
 #include "verilated.h"
 #include "verilated_timing.h"
 class Vsystolic_array_tb_sysarr_MAC;
+class Vsystolic_array_tb_systolic_array_MAC_if;
+class Vsystolic_array_tb_systolic_array_add_if;
 class Vsystolic_array_tb_systolic_array_control_unit_if;
 class Vsystolic_array_tb_systolic_array_if;
 
@@ -19,6 +21,26 @@ class alignas(VL_CACHE_LINE_BYTES) Vsystolic_array_tb___024root final : public V
     // CELLS
     Vsystolic_array_tb_systolic_array_if* __PVT__systolic_array_tb__DOT__memory_if;
     Vsystolic_array_tb_systolic_array_control_unit_if* __PVT__systolic_array_tb__DOT__DUT__DOT__control_unit_if;
+    Vsystolic_array_tb_systolic_array_MAC_if* __PVT__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__15__KET__;
+    Vsystolic_array_tb_systolic_array_MAC_if* __PVT__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__14__KET__;
+    Vsystolic_array_tb_systolic_array_MAC_if* __PVT__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__13__KET__;
+    Vsystolic_array_tb_systolic_array_MAC_if* __PVT__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__12__KET__;
+    Vsystolic_array_tb_systolic_array_MAC_if* __PVT__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__11__KET__;
+    Vsystolic_array_tb_systolic_array_MAC_if* __PVT__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__10__KET__;
+    Vsystolic_array_tb_systolic_array_MAC_if* __PVT__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__9__KET__;
+    Vsystolic_array_tb_systolic_array_MAC_if* __PVT__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__8__KET__;
+    Vsystolic_array_tb_systolic_array_MAC_if* __PVT__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__7__KET__;
+    Vsystolic_array_tb_systolic_array_MAC_if* __PVT__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__6__KET__;
+    Vsystolic_array_tb_systolic_array_MAC_if* __PVT__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__5__KET__;
+    Vsystolic_array_tb_systolic_array_MAC_if* __PVT__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__4__KET__;
+    Vsystolic_array_tb_systolic_array_MAC_if* __PVT__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__3__KET__;
+    Vsystolic_array_tb_systolic_array_MAC_if* __PVT__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__2__KET__;
+    Vsystolic_array_tb_systolic_array_MAC_if* __PVT__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__1__KET__;
+    Vsystolic_array_tb_systolic_array_MAC_if* __PVT__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__0__KET__;
+    Vsystolic_array_tb_systolic_array_add_if* __PVT__systolic_array_tb__DOT__DUT__DOT__add_ifs__BRA__3__KET__;
+    Vsystolic_array_tb_systolic_array_add_if* __PVT__systolic_array_tb__DOT__DUT__DOT__add_ifs__BRA__2__KET__;
+    Vsystolic_array_tb_systolic_array_add_if* __PVT__systolic_array_tb__DOT__DUT__DOT__add_ifs__BRA__1__KET__;
+    Vsystolic_array_tb_systolic_array_add_if* __PVT__systolic_array_tb__DOT__DUT__DOT__add_ifs__BRA__0__KET__;
     Vsystolic_array_tb_sysarr_MAC* __PVT__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst;
     Vsystolic_array_tb_sysarr_MAC* __PVT__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst;
     Vsystolic_array_tb_sysarr_MAC* __PVT__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst;
@@ -46,9 +68,7 @@ class alignas(VL_CACHE_LINE_BYTES) Vsystolic_array_tb___024root final : public V
         CData/*3:0*/ systolic_array_tb__DOT__DUT__DOT__loadps;
         CData/*1:0*/ systolic_array_tb__DOT__DUT__DOT__row_out;
         CData/*0:0*/ systolic_array_tb__DOT__DUT__DOT__cu_inst__DOT__start_flag;
-        CData/*2:0*/ systolic_array_tb__DOT__DUT__DOT__cu_inst__DOT__nxt_MAC_count;
         CData/*0:0*/ systolic_array_tb__DOT__DUT__DOT__cu_inst__DOT__nxt_MAC_start;
-        CData/*1:0*/ systolic_array_tb__DOT__DUT__DOT__cu_inst__DOT__nxt_add_count;
         CData/*0:0*/ systolic_array_tb__DOT__DUT__DOT__cu_inst__DOT__nxt_add_start;
         CData/*2:0*/ systolic_array_tb__DOT__DUT__DOT__cu_inst__DOT__iteration_full;
         CData/*2:0*/ systolic_array_tb__DOT__DUT__DOT__cu_inst__DOT__nxt_iteration_full;
@@ -103,10 +123,10 @@ class alignas(VL_CACHE_LINE_BYTES) Vsystolic_array_tb___024root final : public V
         CData/*4:0*/ systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__0__KET____DOT__add_inst__DOT__add3__DOT__shifted_amount;
         CData/*0:0*/ systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__0__KET____DOT__add_inst__DOT__add3__DOT__ovf;
         CData/*0:0*/ systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__0__KET____DOT__add_inst__DOT__add3__DOT__unf;
-    };
-    struct {
         CData/*5:0*/ systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__0__KET____DOT__add_inst__DOT__add3__DOT__u_exp1;
         CData/*5:0*/ systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__0__KET____DOT__add_inst__DOT__add3__DOT__u_shifted_amount;
+    };
+    struct {
         CData/*5:0*/ systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__0__KET____DOT__add_inst__DOT__add3__DOT__u_result;
         CData/*0:0*/ systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__0__KET____DOT__add_inst__DOT__add3__DOT__round_flag;
         CData/*0:0*/ systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__1__KET____DOT__add_inst__DOT__run_latched;
@@ -169,10 +189,10 @@ class alignas(VL_CACHE_LINE_BYTES) Vsystolic_array_tb___024root final : public V
         CData/*0:0*/ systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__3__KET____DOT__add_inst__DOT__add3__DOT__ovf;
         CData/*0:0*/ systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__3__KET____DOT__add_inst__DOT__add3__DOT__unf;
         CData/*5:0*/ systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__3__KET____DOT__add_inst__DOT__add3__DOT__u_exp1;
-    };
-    struct {
         CData/*5:0*/ systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__3__KET____DOT__add_inst__DOT__add3__DOT__u_shifted_amount;
         CData/*5:0*/ systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__3__KET____DOT__add_inst__DOT__add3__DOT__u_result;
+    };
+    struct {
         CData/*0:0*/ systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__3__KET____DOT__add_inst__DOT__add3__DOT__round_flag;
         CData/*0:0*/ __VdlySet__systolic_array_tb__DOT__DUT__DOT__weights__v0;
         CData/*0:0*/ __VdlySet__systolic_array_tb__DOT__DUT__DOT__weights__v1;
@@ -235,10 +255,10 @@ class alignas(VL_CACHE_LINE_BYTES) Vsystolic_array_tb___024root final : public V
         SData/*15:0*/ __VdlyVal__systolic_array_tb__DOT__DUT__DOT__MAC_outputs__v0;
         SData/*15:0*/ __VdlyVal__systolic_array_tb__DOT__DUT__DOT__MAC_outputs__v1;
         SData/*15:0*/ __VdlyVal__systolic_array_tb__DOT__DUT__DOT__MAC_outputs__v2;
-    };
-    struct {
         SData/*15:0*/ __VdlyVal__systolic_array_tb__DOT__DUT__DOT__MAC_outputs__v3;
         SData/*15:0*/ __VdlyVal__systolic_array_tb__DOT__DUT__DOT__MAC_outputs__v4;
+    };
+    struct {
         SData/*15:0*/ __VdlyVal__systolic_array_tb__DOT__DUT__DOT__MAC_outputs__v5;
         SData/*15:0*/ __VdlyVal__systolic_array_tb__DOT__DUT__DOT__MAC_outputs__v6;
         SData/*15:0*/ __VdlyVal__systolic_array_tb__DOT__DUT__DOT__MAC_outputs__v7;
@@ -301,10 +321,10 @@ class alignas(VL_CACHE_LINE_BYTES) Vsystolic_array_tb___024root final : public V
         QData/*63:0*/ systolic_array_tb__DOT__DUT__DOT__genblk6__BRA__0__KET____DOT__o_fifo__DOT__fifo_mem_next;
         QData/*63:0*/ systolic_array_tb__DOT__DUT__DOT__genblk6__BRA__1__KET____DOT__o_fifo__DOT__fifo_mem;
         QData/*63:0*/ systolic_array_tb__DOT__DUT__DOT__genblk6__BRA__1__KET____DOT__o_fifo__DOT__fifo_mem_next;
-    };
-    struct {
         QData/*63:0*/ systolic_array_tb__DOT__DUT__DOT__genblk6__BRA__2__KET____DOT__o_fifo__DOT__fifo_mem;
         QData/*63:0*/ systolic_array_tb__DOT__DUT__DOT__genblk6__BRA__2__KET____DOT__o_fifo__DOT__fifo_mem_next;
+    };
+    struct {
         QData/*63:0*/ systolic_array_tb__DOT__DUT__DOT__genblk6__BRA__3__KET____DOT__o_fifo__DOT__fifo_mem;
         QData/*63:0*/ systolic_array_tb__DOT__DUT__DOT__genblk6__BRA__3__KET____DOT__o_fifo__DOT__fifo_mem_next;
         QData/*63:0*/ __VdlyVal__systolic_array_tb__DOT__DUT__DOT__weights__v0;

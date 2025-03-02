@@ -20,9 +20,9 @@ interface systolic_array_control_unit_if;
   logic weight_load;      // Load weights into certain row of MACS
   logic partials_load;    // Load partials into certain FIFOs
   logic MAC_start;           // Start signals for all MACs
-  logic [$clog2(MUL_LEN+ADD_LEN):0] MAC_count;     // Count signals for all MACs
+  logic MAC_value_ready;      // done signal for the mac
   logic add_start;           // Start signals for all partial sum adders
-  logic [$clog2(ADD_LEN):0] add_count;            // Count signals for all partial sum adders
+  logic add_value_ready;      // done signal for the adders
   logic [N-1:0] in_fifo_shift;      // Shift signal for partial sum FIFOS
   logic [N-1:0] ps_fifo_shift;      // Shift signal for FIFOS
   logic MAC_shift;                          // Shift signal for MACs
@@ -34,8 +34,8 @@ interface systolic_array_control_unit_if;
 
   // Control Unit Ports
   modport control_unit(
-    input  weight_en, input_en, partial_en, row_in_en, row_ps_en,
-    output fifo_has_space, in_fifo_shift, ps_fifo_shift, MAC_shift, out_fifo_shift, input_type, input_load, input_row, weight_load, weight_row, partials_load, partials_row, iteration, MAC_start, MAC_count, add_start, add_count
+    input  weight_en, input_en, partial_en, row_in_en, row_ps_en, MAC_value_ready, add_value_ready,
+    output fifo_has_space, in_fifo_shift, ps_fifo_shift, MAC_shift, out_fifo_shift, input_type, input_load, input_row, weight_load, weight_row, partials_load, partials_row, iteration, MAC_start, add_start
   );
 endinterface
 

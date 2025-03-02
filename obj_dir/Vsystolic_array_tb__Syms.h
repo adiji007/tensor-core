@@ -16,9 +16,12 @@
 
 // INCLUDE MODULE CLASSES
 #include "Vsystolic_array_tb___024root.h"
+#include "Vsystolic_array_tb___024unit.h"
 #include "Vsystolic_array_tb_systolic_array_if.h"
 #include "Vsystolic_array_tb_sysarr_MAC.h"
 #include "Vsystolic_array_tb_systolic_array_control_unit_if.h"
+#include "Vsystolic_array_tb_systolic_array_MAC_if.h"
+#include "Vsystolic_array_tb_systolic_array_add_if.h"
 
 // SYMS CLASS (contains all model state)
 class alignas(VL_CACHE_LINE_BYTES)Vsystolic_array_tb__Syms final : public VerilatedSyms {
@@ -35,6 +38,10 @@ class alignas(VL_CACHE_LINE_BYTES)Vsystolic_array_tb__Syms final : public Verila
 
     // MODULE INSTANCE STATE
     Vsystolic_array_tb___024root   TOP;
+    Vsystolic_array_tb_systolic_array_add_if TOP__systolic_array_tb__DOT__DUT__DOT__add_ifs__BRA__0__KET__;
+    Vsystolic_array_tb_systolic_array_add_if TOP__systolic_array_tb__DOT__DUT__DOT__add_ifs__BRA__1__KET__;
+    Vsystolic_array_tb_systolic_array_add_if TOP__systolic_array_tb__DOT__DUT__DOT__add_ifs__BRA__2__KET__;
+    Vsystolic_array_tb_systolic_array_add_if TOP__systolic_array_tb__DOT__DUT__DOT__add_ifs__BRA__3__KET__;
     Vsystolic_array_tb_systolic_array_control_unit_if TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if;
     Vsystolic_array_tb_sysarr_MAC  TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst;
     Vsystolic_array_tb_sysarr_MAC  TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst;
@@ -52,6 +59,22 @@ class alignas(VL_CACHE_LINE_BYTES)Vsystolic_array_tb__Syms final : public Verila
     Vsystolic_array_tb_sysarr_MAC  TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__3__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst;
     Vsystolic_array_tb_sysarr_MAC  TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__3__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst;
     Vsystolic_array_tb_sysarr_MAC  TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__3__KET____DOT__genblk1__BRA__3__KET____DOT__mac_inst;
+    Vsystolic_array_tb_systolic_array_MAC_if TOP__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__0__KET__;
+    Vsystolic_array_tb_systolic_array_MAC_if TOP__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__10__KET__;
+    Vsystolic_array_tb_systolic_array_MAC_if TOP__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__11__KET__;
+    Vsystolic_array_tb_systolic_array_MAC_if TOP__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__12__KET__;
+    Vsystolic_array_tb_systolic_array_MAC_if TOP__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__13__KET__;
+    Vsystolic_array_tb_systolic_array_MAC_if TOP__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__14__KET__;
+    Vsystolic_array_tb_systolic_array_MAC_if TOP__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__15__KET__;
+    Vsystolic_array_tb_systolic_array_MAC_if TOP__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__1__KET__;
+    Vsystolic_array_tb_systolic_array_MAC_if TOP__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__2__KET__;
+    Vsystolic_array_tb_systolic_array_MAC_if TOP__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__3__KET__;
+    Vsystolic_array_tb_systolic_array_MAC_if TOP__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__4__KET__;
+    Vsystolic_array_tb_systolic_array_MAC_if TOP__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__5__KET__;
+    Vsystolic_array_tb_systolic_array_MAC_if TOP__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__6__KET__;
+    Vsystolic_array_tb_systolic_array_MAC_if TOP__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__7__KET__;
+    Vsystolic_array_tb_systolic_array_MAC_if TOP__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__8__KET__;
+    Vsystolic_array_tb_systolic_array_MAC_if TOP__systolic_array_tb__DOT__DUT__DOT__mac_ifs__BRA__9__KET__;
     Vsystolic_array_tb_systolic_array_if TOP__systolic_array_tb__DOT__memory_if;
 
     // CONSTRUCTORS

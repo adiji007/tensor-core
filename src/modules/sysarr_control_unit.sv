@@ -11,10 +11,8 @@ module sysarr_control_unit(
 );
     logic start_flag;
     // next MAC signals
-    logic [$clog2(MUL_LEN+ADD_LEN):0] nxt_MAC_count;
     logic nxt_MAC_start;
     // next add signals for adding partial sums
-    logic [$clog2(ADD_LEN):0] nxt_add_count;
     logic nxt_add_start;
     // next signals for iterations
     logic [$clog2(3*N)-1:0] iteration [2:0];    //there can be at most 3 instructions in flight in saturated pipeline
@@ -90,7 +88,7 @@ module sysarr_control_unit(
             end
         end
         // needs to be much more complicated
-        for (j = 0; j < 3; j++)begin // counting logic
+        for (j = 0; j < 3; j++)begin // iteration counting logic
             if (nxt_iteration_full[j] && nxt_MAC_start)begin // if there is an iteration counter in this slot and a mac cycle is about to start
                 nxt_iteration[j] = iteration[j] + 1;
                 if (iteration[j] == 3*N-1) begin // this iteration is done
@@ -125,7 +123,7 @@ module sysarr_control_unit(
         if (|iteration_full)begin
             cu.MAC_shift = cu.MAC_start;
         end
-        if (cu.add_count == ADD_LEN-1) begin
+        if (cu.add_value_ready == 1'b1) begin
             cu.out_fifo_shift = 1'b1;
         end
     end
@@ -133,11 +131,9 @@ module sysarr_control_unit(
     always_ff @(posedge clk, negedge nRST) begin
         if(nRST == 1'b0)begin
             cu.MAC_start <= '0;
-            cu.MAC_count <= '0;
             MAC_done <= 1'b1;
         end else begin
             cu.MAC_start <= nxt_MAC_start;
-            cu.MAC_count <= nxt_MAC_count;
             MAC_done <= nxt_MAC_done;
         end 
     end
@@ -219,20 +215,16 @@ module sysarr_control_unit(
     assign cu.fifo_has_space = input_loading == 1'b0 & partial_loading == 1'b0;
     
     always_comb begin
-        nxt_MAC_count = cu.MAC_count;
         nxt_MAC_done = MAC_done;
         nxt_MAC_start = 1'b0;
-        // MAC is free running counter that starts with mac_start and goes until reset by start logic
-        if (cu.MAC_count > 0 || cu.MAC_start) begin 
-            nxt_MAC_count = cu.MAC_count + 1;
-        end
         // set flag of mac done high if count == max
-        if ((cu.MAC_count >= (ADD_LEN + MUL_LEN - 2)) || ~|iteration_full)begin  
+
+        if ((cu.MAC_value_ready == 1'b1) || ~|iteration_full)begin  
             nxt_MAC_done = 1'b1;
         end
         /*if mac is done then we evaluate if inputs/partials for the next iteration are ready*/
         ready = 0;
-        if (MAC_done)begin
+        if (MAC_done || nxt_MAC_done)begin
             if (input_loading & partial_loading)begin // an input and partial from two gemms are concurrently loading need to wait for both
                 ready = (in_data_loaded[curr_input_row] || input_fully_loaded) && (ps_data_loaded[curr_partial_row] || |partial_fully_loaded);
             end else if (input_loading)begin // input being loaded
@@ -245,7 +237,6 @@ module sysarr_control_unit(
         end
         if(ready)begin 
             nxt_MAC_start = 1'b1;
-            nxt_MAC_count = '0;
             nxt_MAC_done = 1'b0;
         end
 
@@ -254,23 +245,14 @@ module sysarr_control_unit(
     always_ff @(posedge clk, negedge nRST) begin
         if(nRST == 1'b0)begin
             cu.add_start <= '0;
-            cu.add_count <= '0;
         end else begin
             cu.add_start <= nxt_add_start;
-            cu.add_count <= nxt_add_count;
         end 
     end
     always_comb begin
         nxt_add_start = 1'b0;
-        nxt_add_count = cu.add_count;
         if (output_loading && cu.MAC_start)begin
             nxt_add_start = 1'b1;
-        end
-        if (cu.add_start || cu.add_count > 0) begin
-            nxt_add_count = cu.add_count + 1;
-            if (cu.add_count == ADD_LEN)begin
-                nxt_add_count = 0;
-            end
         end
     end
 endmodule

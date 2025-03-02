@@ -13,18 +13,18 @@ VL_INLINE_OPT void Vsystolic_array_tb___024root___nba_sequent__TOP__4(Vsystolic_
     // Body
     vlSymsp->TOP__systolic_array_tb__DOT__memory_if.out_en = 0U;
     if (((8U <= vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.iteration
-          [0U]) & (3U == (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.add_count)))) {
+          [0U]) & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst.__PVT__run)))) {
         vlSymsp->TOP__systolic_array_tb__DOT__memory_if.out_en = 1U;
     }
     if (((8U <= vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.iteration
-          [1U]) & (3U == (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.add_count)))) {
+          [1U]) & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst.__PVT__run)))) {
         vlSymsp->TOP__systolic_array_tb__DOT__memory_if.out_en = 1U;
     }
     vlSymsp->TOP__systolic_array_tb__DOT__memory_if.row_out = 0U;
     vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out = 0U;
     vlSymsp->TOP__systolic_array_tb__DOT__memory_if.array_output = 0ULL;
     if (((8U <= vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.iteration
-          [0U]) & (3U == (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.add_count)))) {
+          [0U]) & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst.__PVT__run)))) {
         vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out 
             = (3U & vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.iteration
                [0U]);
@@ -57,7 +57,7 @@ VL_INLINE_OPT void Vsystolic_array_tb___024root___nba_sequent__TOP__4(Vsystolic_
                      >> (0x1fU & VL_SHIFTL_III(8,32,32, (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out), 6U)))));
     }
     if (((8U <= vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.iteration
-          [1U]) & (3U == (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.add_count)))) {
+          [1U]) & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst.__PVT__run)))) {
         vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out 
             = (3U & vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.iteration
                [1U]);
@@ -90,7 +90,7 @@ VL_INLINE_OPT void Vsystolic_array_tb___024root___nba_sequent__TOP__4(Vsystolic_
                      >> (0x1fU & VL_SHIFTL_III(8,32,32, (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out), 6U)))));
     }
     if (((8U <= vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.iteration
-          [2U]) & (3U == (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.add_count)))) {
+          [2U]) & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst.__PVT__run)))) {
         vlSymsp->TOP__systolic_array_tb__DOT__memory_if.out_en = 1U;
         vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out 
             = (3U & vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.iteration

@@ -50,7 +50,7 @@ VL_ATTR_COLD void Vsystolic_array_tb___024root___eval_settle(Vsystolic_array_tb_
 #ifdef VL_DEBUG
             Vsystolic_array_tb___024root___dump_triggers__stl(vlSelf);
 #endif
-            VL_FATAL_MT("src/testbench/systolic_array_tb.sv", 11, "", "Settle region did not converge.");
+            VL_FATAL_MT("src/testbench/systolic_array_tb.sv", 14, "", "Settle region did not converge.");
         }
         __VstlIterCount = ((IData)(1U) + __VstlIterCount);
         __VstlContinue = 0U;
@@ -240,9 +240,7 @@ VL_ATTR_COLD void Vsystolic_array_tb___024root___ctor_var_reset(Vsystolic_array_
     vlSelf->systolic_array_tb__DOT__DUT__DOT__row_out = VL_RAND_RESET_I(2);
     VL_RAND_RESET_W(256, vlSelf->systolic_array_tb__DOT__DUT__DOT__current_out);
     vlSelf->systolic_array_tb__DOT__DUT__DOT__cu_inst__DOT__start_flag = VL_RAND_RESET_I(1);
-    vlSelf->systolic_array_tb__DOT__DUT__DOT__cu_inst__DOT__nxt_MAC_count = VL_RAND_RESET_I(3);
     vlSelf->systolic_array_tb__DOT__DUT__DOT__cu_inst__DOT__nxt_MAC_start = VL_RAND_RESET_I(1);
-    vlSelf->systolic_array_tb__DOT__DUT__DOT__cu_inst__DOT__nxt_add_count = VL_RAND_RESET_I(2);
     vlSelf->systolic_array_tb__DOT__DUT__DOT__cu_inst__DOT__nxt_add_start = VL_RAND_RESET_I(1);
     for (int __Vi0 = 0; __Vi0 < 3; ++__Vi0) {
         vlSelf->systolic_array_tb__DOT__DUT__DOT__cu_inst__DOT__iteration[__Vi0] = VL_RAND_RESET_I(4);

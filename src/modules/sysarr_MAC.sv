@@ -126,7 +126,7 @@ module sysarr_MAC(input logic clk, input logic nRST, systolic_array_MAC_if.MAC m
     logic [9:0] mul_significand_product_selected;
     assign mul_significand_product_selected = mul_carryout_in ? mul_product_in[12:3] : mul_product_in[11:2];
     logic [4:0] mul_final_exp;
-    assign mul_final_exp = (mul_significand_product_selected == 0) ? 0 : mul_sum_exp;
+    assign mul_final_exp = (mul_product_in == 0) ? 0 : mul_sum_exp;
     assign mul_result = {mul_sign_result, mul_final_exp, mul_significand_product_selected};
 
 
