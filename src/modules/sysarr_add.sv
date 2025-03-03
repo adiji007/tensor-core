@@ -25,7 +25,7 @@ module sysarr_add (
     end
 
     assign run = (run_latched | adder.start);       // This is to avoid a 1 clock cycle delay between receiving the start signal and actually starting the operation
-    assign adder.value_ready = start_passthrough_3; // | start_passthrough_3;
+    assign adder.value_ready = start_passthrough_3; //~run; 
 
     logic add_sign_shifted_in, add_sign_not_shifted_in;
     logic add_sign_shifted_out, add_sign_not_shifted_out;
