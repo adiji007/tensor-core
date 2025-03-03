@@ -12,9 +12,7 @@ interface systolic_array_MAC_if;
   /* verilator lint_off UNUSEDSIGNAL */
   logic start;          // MAC unit start signal
   /* verilator lint_off UNUSEDSIGNAL */
-  /* verilator lint_off UNUSEDSIGNAL */
   logic value_ready;
-  /* verilator lint_off UNUSEDSIGNAL */
   logic [DW-1:0] weight;                    // Input weight value to be pre-loaded
   logic [DW-1:0] in_value;                  // Input value to be multiplied
   logic MAC_shift;                              // shift the input to the next array
