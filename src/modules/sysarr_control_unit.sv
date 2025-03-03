@@ -213,20 +213,12 @@ module sysarr_control_unit(
     // tells the memory subsystem if the input fifo has space for another gemm
     // if any iteration slot is still in the backend of the fifos then there is no space
     assign cu.fifo_has_space = input_loading == 1'b0 & partial_loading == 1'b0;
-    logic input_and_partial /*verilator public*/;
-    logic inputttt /*verilator public*/;
-    logic partialll /*verilator public*/;
-    logic itfull /*verilator public*/; 
     always_comb begin
         nxt_MAC_start = 1'b0;
         nxt_first_mac = first_mac;
         if (cu.weight_en)begin
             nxt_first_mac = 1'b1;
         end
-        input_and_partial = (in_data_loaded[curr_input_row] || input_fully_loaded) && (ps_data_loaded[curr_partial_row] || |partial_fully_loaded);;
-        inputttt = in_data_loaded[curr_input_row] || input_fully_loaded;;
-        partialll = ps_data_loaded[curr_partial_row] || |partial_fully_loaded;
-        itfull = |iteration_full;
         if ((cu.MAC_value_ready == 1'b1))begin
             if (input_loading & partial_loading)begin // an input and partial from two gemms are concurrently loading need to wait for both
                 nxt_MAC_start = (in_data_loaded[curr_input_row] || input_fully_loaded) && (ps_data_loaded[curr_partial_row] || |partial_fully_loaded);
