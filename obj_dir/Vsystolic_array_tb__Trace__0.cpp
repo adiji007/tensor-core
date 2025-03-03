@@ -4472,15 +4472,14 @@ void Vsystolic_array_tb___024root__trace_chg_0_sub_0(Vsystolic_array_tb___024roo
         bufp->chgBit(oldp+1844,(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.MAC_start));
         bufp->chgBit(oldp+1845,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst.__PVT__run)))));
         bufp->chgBit(oldp+1846,(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.add_start));
-        bufp->chgBit(oldp+1847,((1U & (~ (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__0__KET____DOT__add_inst__DOT__run)))));
-        bufp->chgBit(oldp+1848,(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.MAC_shift));
-        bufp->chgBit(oldp+1849,(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.out_fifo_shift));
-        bufp->chgCData(oldp+1850,(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.iteration[0]),4);
-        bufp->chgCData(oldp+1851,(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.iteration[1]),4);
-        bufp->chgCData(oldp+1852,(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.iteration[2]),4);
-        bufp->chgSData(oldp+1853,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
+        bufp->chgBit(oldp+1847,(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.MAC_shift));
+        bufp->chgBit(oldp+1848,(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.out_fifo_shift));
+        bufp->chgCData(oldp+1849,(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.iteration[0]),4);
+        bufp->chgCData(oldp+1850,(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.iteration[1]),4);
+        bufp->chgCData(oldp+1851,(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__control_unit_if.iteration[2]),4);
+        bufp->chgSData(oldp+1852,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
                                   [3U][3U]),16);
-        bufp->chgSData(oldp+1854,(((1U & ((0x3fffffffU 
+        bufp->chgSData(oldp+1853,(((1U & ((0x3fffffffU 
                                            & (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__3__KET____DOT__genblk1__BRA__3__KET____DOT__mac_inst.__PVT__add3__DOT__ovf)) 
                                           | (((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__3__KET____DOT__genblk1__BRA__3__KET____DOT__mac_inst.__PVT__add3__DOT__ovf) 
                                               | ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__3__KET____DOT__genblk1__BRA__3__KET____DOT__mac_inst.__PVT__add3__DOT__round_flag) 
@@ -4504,10 +4503,10 @@ void Vsystolic_array_tb___024root__trace_chg_0_sub_0(Vsystolic_array_tb___024roo
                                                       | (0x3ffU 
                                                          & ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__3__KET____DOT__genblk1__BRA__3__KET____DOT__mac_inst.__PVT__add3__DOT__rounded_fraction) 
                                                             >> 2U)))))))),16);
-        bufp->chgBit(oldp+1855,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__3__KET____DOT__genblk1__BRA__3__KET____DOT__mac_inst.__PVT__run)))));
-        bufp->chgSData(oldp+1856,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
+        bufp->chgBit(oldp+1854,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__3__KET____DOT__genblk1__BRA__3__KET____DOT__mac_inst.__PVT__run)))));
+        bufp->chgSData(oldp+1855,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
                                   [3U][2U]),16);
-        bufp->chgSData(oldp+1857,(((1U & ((0x3fffffffU 
+        bufp->chgSData(oldp+1856,(((1U & ((0x3fffffffU 
                                            & (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__3__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst.__PVT__add3__DOT__ovf)) 
                                           | (((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__3__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst.__PVT__add3__DOT__ovf) 
                                               | ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__3__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst.__PVT__add3__DOT__round_flag) 
@@ -4531,10 +4530,10 @@ void Vsystolic_array_tb___024root__trace_chg_0_sub_0(Vsystolic_array_tb___024roo
                                                       | (0x3ffU 
                                                          & ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__3__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst.__PVT__add3__DOT__rounded_fraction) 
                                                             >> 2U)))))))),16);
-        bufp->chgBit(oldp+1858,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__3__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst.__PVT__run)))));
-        bufp->chgSData(oldp+1859,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
+        bufp->chgBit(oldp+1857,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__3__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst.__PVT__run)))));
+        bufp->chgSData(oldp+1858,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
                                   [3U][1U]),16);
-        bufp->chgSData(oldp+1860,(((1U & ((0x3fffffffU 
+        bufp->chgSData(oldp+1859,(((1U & ((0x3fffffffU 
                                            & (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__3__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst.__PVT__add3__DOT__ovf)) 
                                           | (((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__3__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst.__PVT__add3__DOT__ovf) 
                                               | ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__3__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst.__PVT__add3__DOT__round_flag) 
@@ -4558,10 +4557,10 @@ void Vsystolic_array_tb___024root__trace_chg_0_sub_0(Vsystolic_array_tb___024roo
                                                       | (0x3ffU 
                                                          & ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__3__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst.__PVT__add3__DOT__rounded_fraction) 
                                                             >> 2U)))))))),16);
-        bufp->chgBit(oldp+1861,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__3__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst.__PVT__run)))));
-        bufp->chgSData(oldp+1862,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
+        bufp->chgBit(oldp+1860,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__3__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst.__PVT__run)))));
+        bufp->chgSData(oldp+1861,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
                                   [3U][0U]),16);
-        bufp->chgSData(oldp+1863,(((1U & ((0x3fffffffU 
+        bufp->chgSData(oldp+1862,(((1U & ((0x3fffffffU 
                                            & (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__3__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst.__PVT__add3__DOT__ovf)) 
                                           | (((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__3__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst.__PVT__add3__DOT__ovf) 
                                               | ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__3__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst.__PVT__add3__DOT__round_flag) 
@@ -4585,10 +4584,10 @@ void Vsystolic_array_tb___024root__trace_chg_0_sub_0(Vsystolic_array_tb___024roo
                                                       | (0x3ffU 
                                                          & ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__3__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst.__PVT__add3__DOT__rounded_fraction) 
                                                             >> 2U)))))))),16);
-        bufp->chgBit(oldp+1864,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__3__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst.__PVT__run)))));
-        bufp->chgSData(oldp+1865,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
+        bufp->chgBit(oldp+1863,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__3__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst.__PVT__run)))));
+        bufp->chgSData(oldp+1864,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
                                   [2U][3U]),16);
-        bufp->chgSData(oldp+1866,(((1U & ((0x3fffffffU 
+        bufp->chgSData(oldp+1865,(((1U & ((0x3fffffffU 
                                            & (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__2__KET____DOT__genblk1__BRA__3__KET____DOT__mac_inst.__PVT__add3__DOT__ovf)) 
                                           | (((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__2__KET____DOT__genblk1__BRA__3__KET____DOT__mac_inst.__PVT__add3__DOT__ovf) 
                                               | ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__2__KET____DOT__genblk1__BRA__3__KET____DOT__mac_inst.__PVT__add3__DOT__round_flag) 
@@ -4612,10 +4611,10 @@ void Vsystolic_array_tb___024root__trace_chg_0_sub_0(Vsystolic_array_tb___024roo
                                                       | (0x3ffU 
                                                          & ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__2__KET____DOT__genblk1__BRA__3__KET____DOT__mac_inst.__PVT__add3__DOT__rounded_fraction) 
                                                             >> 2U)))))))),16);
-        bufp->chgBit(oldp+1867,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__2__KET____DOT__genblk1__BRA__3__KET____DOT__mac_inst.__PVT__run)))));
-        bufp->chgSData(oldp+1868,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
+        bufp->chgBit(oldp+1866,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__2__KET____DOT__genblk1__BRA__3__KET____DOT__mac_inst.__PVT__run)))));
+        bufp->chgSData(oldp+1867,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
                                   [2U][2U]),16);
-        bufp->chgSData(oldp+1869,(((1U & ((0x3fffffffU 
+        bufp->chgSData(oldp+1868,(((1U & ((0x3fffffffU 
                                            & (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__2__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst.__PVT__add3__DOT__ovf)) 
                                           | (((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__2__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst.__PVT__add3__DOT__ovf) 
                                               | ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__2__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst.__PVT__add3__DOT__round_flag) 
@@ -4639,10 +4638,10 @@ void Vsystolic_array_tb___024root__trace_chg_0_sub_0(Vsystolic_array_tb___024roo
                                                       | (0x3ffU 
                                                          & ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__2__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst.__PVT__add3__DOT__rounded_fraction) 
                                                             >> 2U)))))))),16);
-        bufp->chgBit(oldp+1870,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__2__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst.__PVT__run)))));
-        bufp->chgSData(oldp+1871,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
+        bufp->chgBit(oldp+1869,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__2__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst.__PVT__run)))));
+        bufp->chgSData(oldp+1870,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
                                   [2U][1U]),16);
-        bufp->chgSData(oldp+1872,(((1U & ((0x3fffffffU 
+        bufp->chgSData(oldp+1871,(((1U & ((0x3fffffffU 
                                            & (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__2__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst.__PVT__add3__DOT__ovf)) 
                                           | (((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__2__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst.__PVT__add3__DOT__ovf) 
                                               | ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__2__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst.__PVT__add3__DOT__round_flag) 
@@ -4666,10 +4665,10 @@ void Vsystolic_array_tb___024root__trace_chg_0_sub_0(Vsystolic_array_tb___024roo
                                                       | (0x3ffU 
                                                          & ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__2__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst.__PVT__add3__DOT__rounded_fraction) 
                                                             >> 2U)))))))),16);
-        bufp->chgBit(oldp+1873,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__2__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst.__PVT__run)))));
-        bufp->chgSData(oldp+1874,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
+        bufp->chgBit(oldp+1872,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__2__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst.__PVT__run)))));
+        bufp->chgSData(oldp+1873,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
                                   [2U][0U]),16);
-        bufp->chgSData(oldp+1875,(((1U & ((0x3fffffffU 
+        bufp->chgSData(oldp+1874,(((1U & ((0x3fffffffU 
                                            & (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__2__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst.__PVT__add3__DOT__ovf)) 
                                           | (((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__2__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst.__PVT__add3__DOT__ovf) 
                                               | ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__2__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst.__PVT__add3__DOT__round_flag) 
@@ -4693,10 +4692,10 @@ void Vsystolic_array_tb___024root__trace_chg_0_sub_0(Vsystolic_array_tb___024roo
                                                       | (0x3ffU 
                                                          & ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__2__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst.__PVT__add3__DOT__rounded_fraction) 
                                                             >> 2U)))))))),16);
-        bufp->chgBit(oldp+1876,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__2__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst.__PVT__run)))));
-        bufp->chgSData(oldp+1877,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
+        bufp->chgBit(oldp+1875,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__2__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst.__PVT__run)))));
+        bufp->chgSData(oldp+1876,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
                                   [1U][3U]),16);
-        bufp->chgSData(oldp+1878,(((1U & ((0x3fffffffU 
+        bufp->chgSData(oldp+1877,(((1U & ((0x3fffffffU 
                                            & (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__1__KET____DOT__genblk1__BRA__3__KET____DOT__mac_inst.__PVT__add3__DOT__ovf)) 
                                           | (((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__1__KET____DOT__genblk1__BRA__3__KET____DOT__mac_inst.__PVT__add3__DOT__ovf) 
                                               | ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__1__KET____DOT__genblk1__BRA__3__KET____DOT__mac_inst.__PVT__add3__DOT__round_flag) 
@@ -4720,10 +4719,10 @@ void Vsystolic_array_tb___024root__trace_chg_0_sub_0(Vsystolic_array_tb___024roo
                                                       | (0x3ffU 
                                                          & ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__1__KET____DOT__genblk1__BRA__3__KET____DOT__mac_inst.__PVT__add3__DOT__rounded_fraction) 
                                                             >> 2U)))))))),16);
-        bufp->chgBit(oldp+1879,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__1__KET____DOT__genblk1__BRA__3__KET____DOT__mac_inst.__PVT__run)))));
-        bufp->chgSData(oldp+1880,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
+        bufp->chgBit(oldp+1878,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__1__KET____DOT__genblk1__BRA__3__KET____DOT__mac_inst.__PVT__run)))));
+        bufp->chgSData(oldp+1879,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
                                   [1U][2U]),16);
-        bufp->chgSData(oldp+1881,(((1U & ((0x3fffffffU 
+        bufp->chgSData(oldp+1880,(((1U & ((0x3fffffffU 
                                            & (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__1__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst.__PVT__add3__DOT__ovf)) 
                                           | (((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__1__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst.__PVT__add3__DOT__ovf) 
                                               | ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__1__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst.__PVT__add3__DOT__round_flag) 
@@ -4747,10 +4746,10 @@ void Vsystolic_array_tb___024root__trace_chg_0_sub_0(Vsystolic_array_tb___024roo
                                                       | (0x3ffU 
                                                          & ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__1__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst.__PVT__add3__DOT__rounded_fraction) 
                                                             >> 2U)))))))),16);
-        bufp->chgBit(oldp+1882,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__1__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst.__PVT__run)))));
-        bufp->chgSData(oldp+1883,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
+        bufp->chgBit(oldp+1881,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__1__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst.__PVT__run)))));
+        bufp->chgSData(oldp+1882,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
                                   [1U][1U]),16);
-        bufp->chgSData(oldp+1884,(((1U & ((0x3fffffffU 
+        bufp->chgSData(oldp+1883,(((1U & ((0x3fffffffU 
                                            & (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__1__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst.__PVT__add3__DOT__ovf)) 
                                           | (((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__1__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst.__PVT__add3__DOT__ovf) 
                                               | ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__1__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst.__PVT__add3__DOT__round_flag) 
@@ -4774,10 +4773,10 @@ void Vsystolic_array_tb___024root__trace_chg_0_sub_0(Vsystolic_array_tb___024roo
                                                       | (0x3ffU 
                                                          & ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__1__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst.__PVT__add3__DOT__rounded_fraction) 
                                                             >> 2U)))))))),16);
-        bufp->chgBit(oldp+1885,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__1__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst.__PVT__run)))));
-        bufp->chgSData(oldp+1886,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
+        bufp->chgBit(oldp+1884,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__1__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst.__PVT__run)))));
+        bufp->chgSData(oldp+1885,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
                                   [1U][0U]),16);
-        bufp->chgSData(oldp+1887,(((1U & ((0x3fffffffU 
+        bufp->chgSData(oldp+1886,(((1U & ((0x3fffffffU 
                                            & (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__1__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst.__PVT__add3__DOT__ovf)) 
                                           | (((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__1__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst.__PVT__add3__DOT__ovf) 
                                               | ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__1__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst.__PVT__add3__DOT__round_flag) 
@@ -4801,10 +4800,10 @@ void Vsystolic_array_tb___024root__trace_chg_0_sub_0(Vsystolic_array_tb___024roo
                                                       | (0x3ffU 
                                                          & ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__1__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst.__PVT__add3__DOT__rounded_fraction) 
                                                             >> 2U)))))))),16);
-        bufp->chgBit(oldp+1888,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__1__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst.__PVT__run)))));
-        bufp->chgSData(oldp+1889,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
+        bufp->chgBit(oldp+1887,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__1__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst.__PVT__run)))));
+        bufp->chgSData(oldp+1888,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
                                   [0U][3U]),16);
-        bufp->chgSData(oldp+1890,(((1U & ((0x3fffffffU 
+        bufp->chgSData(oldp+1889,(((1U & ((0x3fffffffU 
                                            & (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__3__KET____DOT__mac_inst.__PVT__add3__DOT__ovf)) 
                                           | (((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__3__KET____DOT__mac_inst.__PVT__add3__DOT__ovf) 
                                               | ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__3__KET____DOT__mac_inst.__PVT__add3__DOT__round_flag) 
@@ -4828,10 +4827,10 @@ void Vsystolic_array_tb___024root__trace_chg_0_sub_0(Vsystolic_array_tb___024roo
                                                       | (0x3ffU 
                                                          & ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__3__KET____DOT__mac_inst.__PVT__add3__DOT__rounded_fraction) 
                                                             >> 2U)))))))),16);
-        bufp->chgBit(oldp+1891,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__3__KET____DOT__mac_inst.__PVT__run)))));
-        bufp->chgSData(oldp+1892,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
+        bufp->chgBit(oldp+1890,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__3__KET____DOT__mac_inst.__PVT__run)))));
+        bufp->chgSData(oldp+1891,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
                                   [0U][2U]),16);
-        bufp->chgSData(oldp+1893,(((1U & ((0x3fffffffU 
+        bufp->chgSData(oldp+1892,(((1U & ((0x3fffffffU 
                                            & (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst.__PVT__add3__DOT__ovf)) 
                                           | (((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst.__PVT__add3__DOT__ovf) 
                                               | ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst.__PVT__add3__DOT__round_flag) 
@@ -4855,10 +4854,10 @@ void Vsystolic_array_tb___024root__trace_chg_0_sub_0(Vsystolic_array_tb___024roo
                                                       | (0x3ffU 
                                                          & ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst.__PVT__add3__DOT__rounded_fraction) 
                                                             >> 2U)))))))),16);
-        bufp->chgBit(oldp+1894,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst.__PVT__run)))));
-        bufp->chgSData(oldp+1895,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
+        bufp->chgBit(oldp+1893,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst.__PVT__run)))));
+        bufp->chgSData(oldp+1894,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
                                   [0U][1U]),16);
-        bufp->chgSData(oldp+1896,(((1U & ((0x3fffffffU 
+        bufp->chgSData(oldp+1895,(((1U & ((0x3fffffffU 
                                            & (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst.__PVT__add3__DOT__ovf)) 
                                           | (((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst.__PVT__add3__DOT__ovf) 
                                               | ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst.__PVT__add3__DOT__round_flag) 
@@ -4882,10 +4881,10 @@ void Vsystolic_array_tb___024root__trace_chg_0_sub_0(Vsystolic_array_tb___024roo
                                                       | (0x3ffU 
                                                          & ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst.__PVT__add3__DOT__rounded_fraction) 
                                                             >> 2U)))))))),16);
-        bufp->chgBit(oldp+1897,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst.__PVT__run)))));
-        bufp->chgSData(oldp+1898,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
+        bufp->chgBit(oldp+1896,((1U & (~ (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst.__PVT__run)))));
+        bufp->chgSData(oldp+1897,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__MAC_inputs
                                   [0U][0U]),16);
-        bufp->chgSData(oldp+1899,(((1U & ((0x3fffffffU 
+        bufp->chgSData(oldp+1898,(((1U & ((0x3fffffffU 
                                            & (IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst.__PVT__add3__DOT__ovf)) 
                                           | (((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst.__PVT__add3__DOT__ovf) 
                                               | ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst.__PVT__add3__DOT__round_flag) 
@@ -4909,7 +4908,7 @@ void Vsystolic_array_tb___024root__trace_chg_0_sub_0(Vsystolic_array_tb___024roo
                                                       | (0x3ffU 
                                                          & ((IData)(vlSymsp->TOP__systolic_array_tb__DOT__DUT__DOT__genblk4__BRA__0__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst.__PVT__add3__DOT__rounded_fraction) 
                                                             >> 2U)))))))),16);
-        bufp->chgSData(oldp+1900,(((1U & ((0x3fffffffU 
+        bufp->chgSData(oldp+1899,(((1U & ((0x3fffffffU 
                                            & (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__3__KET____DOT__add_inst__DOT__add3__DOT__ovf)) 
                                           | (((IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__3__KET____DOT__add_inst__DOT__add3__DOT__ovf) 
                                               | ((IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__3__KET____DOT__add_inst__DOT__add3__DOT__round_flag) 
@@ -4923,8 +4922,7 @@ void Vsystolic_array_tb___024root__trace_chg_0_sub_0(Vsystolic_array_tb___024roo
                                                     ((IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__3__KET____DOT__add_inst__DOT__add3__DOT__unf)
                                                       ? 0U
                                                       : (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__3__KET____DOT__add_inst__DOT__add3__DOT____VdfgRegularize_h54187199_0_0)))))),16);
-        bufp->chgBit(oldp+1901,((1U & (~ (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__3__KET____DOT__add_inst__DOT__run)))));
-        bufp->chgSData(oldp+1902,(((1U & ((0x3fffffffU 
+        bufp->chgSData(oldp+1900,(((1U & ((0x3fffffffU 
                                            & (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__2__KET____DOT__add_inst__DOT__add3__DOT__ovf)) 
                                           | (((IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__2__KET____DOT__add_inst__DOT__add3__DOT__ovf) 
                                               | ((IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__2__KET____DOT__add_inst__DOT__add3__DOT__round_flag) 
@@ -4938,8 +4936,7 @@ void Vsystolic_array_tb___024root__trace_chg_0_sub_0(Vsystolic_array_tb___024roo
                                                     ((IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__2__KET____DOT__add_inst__DOT__add3__DOT__unf)
                                                       ? 0U
                                                       : (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__2__KET____DOT__add_inst__DOT__add3__DOT____VdfgRegularize_h54187199_0_0)))))),16);
-        bufp->chgBit(oldp+1903,((1U & (~ (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__2__KET____DOT__add_inst__DOT__run)))));
-        bufp->chgSData(oldp+1904,(((1U & ((0x3fffffffU 
+        bufp->chgSData(oldp+1901,(((1U & ((0x3fffffffU 
                                            & (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__1__KET____DOT__add_inst__DOT__add3__DOT__ovf)) 
                                           | (((IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__1__KET____DOT__add_inst__DOT__add3__DOT__ovf) 
                                               | ((IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__1__KET____DOT__add_inst__DOT__add3__DOT__round_flag) 
@@ -4953,8 +4950,7 @@ void Vsystolic_array_tb___024root__trace_chg_0_sub_0(Vsystolic_array_tb___024roo
                                                     ((IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__1__KET____DOT__add_inst__DOT__add3__DOT__unf)
                                                       ? 0U
                                                       : (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__1__KET____DOT__add_inst__DOT__add3__DOT____VdfgRegularize_h54187199_0_0)))))),16);
-        bufp->chgBit(oldp+1905,((1U & (~ (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__1__KET____DOT__add_inst__DOT__run)))));
-        bufp->chgSData(oldp+1906,(((1U & ((0x3fffffffU 
+        bufp->chgSData(oldp+1902,(((1U & ((0x3fffffffU 
                                            & (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__0__KET____DOT__add_inst__DOT__add3__DOT__ovf)) 
                                           | (((IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__0__KET____DOT__add_inst__DOT__add3__DOT__ovf) 
                                               | ((IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__0__KET____DOT__add_inst__DOT__add3__DOT__round_flag) 
@@ -4968,24 +4964,24 @@ void Vsystolic_array_tb___024root__trace_chg_0_sub_0(Vsystolic_array_tb___024roo
                                                     ((IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__0__KET____DOT__add_inst__DOT__add3__DOT__unf)
                                                       ? 0U
                                                       : (IData)(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk5__BRA__0__KET____DOT__add_inst__DOT__add3__DOT____VdfgRegularize_h54187199_0_0)))))),16);
-        bufp->chgSData(oldp+1907,((0xffffU & vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk2__BRA__3__KET____DOT__i_fifo__DOT__fifo_mem[0U])),16);
-        bufp->chgSData(oldp+1908,((0xffffU & vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk2__BRA__2__KET____DOT__i_fifo__DOT__fifo_mem[0U])),16);
-        bufp->chgSData(oldp+1909,((0xffffU & vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk2__BRA__1__KET____DOT__i_fifo__DOT__fifo_mem[0U])),16);
-        bufp->chgSData(oldp+1910,((0xffffU & vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk2__BRA__0__KET____DOT__i_fifo__DOT__fifo_mem[0U])),16);
-        bufp->chgSData(oldp+1911,((0xffffU & vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk3__BRA__3__KET____DOT__ps_fifos__DOT__fifo_mem[0U])),16);
-        bufp->chgSData(oldp+1912,((0xffffU & vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk3__BRA__2__KET____DOT__ps_fifos__DOT__fifo_mem[0U])),16);
-        bufp->chgSData(oldp+1913,((0xffffU & vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk3__BRA__1__KET____DOT__ps_fifos__DOT__fifo_mem[0U])),16);
-        bufp->chgSData(oldp+1914,((0xffffU & vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk3__BRA__0__KET____DOT__ps_fifos__DOT__fifo_mem[0U])),16);
+        bufp->chgSData(oldp+1903,((0xffffU & vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk2__BRA__3__KET____DOT__i_fifo__DOT__fifo_mem[0U])),16);
+        bufp->chgSData(oldp+1904,((0xffffU & vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk2__BRA__2__KET____DOT__i_fifo__DOT__fifo_mem[0U])),16);
+        bufp->chgSData(oldp+1905,((0xffffU & vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk2__BRA__1__KET____DOT__i_fifo__DOT__fifo_mem[0U])),16);
+        bufp->chgSData(oldp+1906,((0xffffU & vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk2__BRA__0__KET____DOT__i_fifo__DOT__fifo_mem[0U])),16);
+        bufp->chgSData(oldp+1907,((0xffffU & vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk3__BRA__3__KET____DOT__ps_fifos__DOT__fifo_mem[0U])),16);
+        bufp->chgSData(oldp+1908,((0xffffU & vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk3__BRA__2__KET____DOT__ps_fifos__DOT__fifo_mem[0U])),16);
+        bufp->chgSData(oldp+1909,((0xffffU & vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk3__BRA__1__KET____DOT__ps_fifos__DOT__fifo_mem[0U])),16);
+        bufp->chgSData(oldp+1910,((0xffffU & vlSelfRef.systolic_array_tb__DOT__DUT__DOT__genblk3__BRA__0__KET____DOT__ps_fifos__DOT__fifo_mem[0U])),16);
     }
     if (VL_UNLIKELY((vlSelfRef.__Vm_traceActivity[8U]))) {
-        bufp->chgCData(oldp+1915,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out),2);
-        bufp->chgBit(oldp+1916,(vlSymsp->TOP__systolic_array_tb__DOT__memory_if.out_en));
-        bufp->chgCData(oldp+1917,(vlSymsp->TOP__systolic_array_tb__DOT__memory_if.row_out),2);
-        bufp->chgQData(oldp+1918,(vlSymsp->TOP__systolic_array_tb__DOT__memory_if.array_output),64);
+        bufp->chgCData(oldp+1911,(vlSelfRef.systolic_array_tb__DOT__DUT__DOT__row_out),2);
+        bufp->chgBit(oldp+1912,(vlSymsp->TOP__systolic_array_tb__DOT__memory_if.out_en));
+        bufp->chgCData(oldp+1913,(vlSymsp->TOP__systolic_array_tb__DOT__memory_if.row_out),2);
+        bufp->chgQData(oldp+1914,(vlSymsp->TOP__systolic_array_tb__DOT__memory_if.array_output),64);
     }
-    bufp->chgBit(oldp+1920,(vlSelfRef.systolic_array_tb__DOT__tb_clk));
-    bufp->chgIData(oldp+1921,(vlSelfRef.systolic_array_tb__DOT__z),32);
-    bufp->chgIData(oldp+1922,(vlSelfRef.systolic_array_tb__DOT__y),32);
+    bufp->chgBit(oldp+1916,(vlSelfRef.systolic_array_tb__DOT__tb_clk));
+    bufp->chgIData(oldp+1917,(vlSelfRef.systolic_array_tb__DOT__z),32);
+    bufp->chgIData(oldp+1918,(vlSelfRef.systolic_array_tb__DOT__y),32);
 }
 
 void Vsystolic_array_tb___024root__trace_cleanup(void* voidSelf, VerilatedFst* /*unused*/) {
