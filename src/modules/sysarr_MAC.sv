@@ -69,6 +69,14 @@ module sysarr_MAC(input logic clk, input logic nRST, systolic_array_MAC_if.MAC m
 
     assign run = run_latched | mac_if.start;       // This is to avoid a 1 clock cycle delay between receiving the start signal and actually starting the operation
     assign mac_if.value_ready = ~run;
+    // always_ff @(posedge clk, negedge nRST) begin
+    //     if(nRST == 1'b0)
+    //         mac_if.value_ready <= 1'b0;
+    //     else
+    //         mac_if.value_ready <= mac_if.value_ready ? 0 : ~run;
+    // end
+
+    // assign mac_if.value_ready = ~run;
 
     // phase 1: multiply
 

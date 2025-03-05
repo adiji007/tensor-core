@@ -5,62 +5,17 @@
 #include "Vsystolic_array_tb__pch.h"
 #include "Vsystolic_array_tb___024root.h"
 
-VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtiming__0(Vsystolic_array_tb___024root* vlSelf);
-VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtiming__1(Vsystolic_array_tb___024root* vlSelf);
-
-void Vsystolic_array_tb___024root___eval_initial(Vsystolic_array_tb___024root* vlSelf) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vsystolic_array_tb___024root___eval_initial\n"); );
-    Vsystolic_array_tb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
-    auto& vlSelfRef = std::ref(*vlSelf).get();
-    // Body
-    vlSelfRef.__Vm_traceActivity[1U] = 1U;
-    Vsystolic_array_tb___024root___eval_initial__TOP__Vtiming__0(vlSelf);
-    Vsystolic_array_tb___024root___eval_initial__TOP__Vtiming__1(vlSelf);
-    vlSelfRef.__Vtrigprevexpr___TOP__systolic_array_tb__DOT__tb_clk__0 
-        = vlSelfRef.systolic_array_tb__DOT__tb_clk;
-    vlSelfRef.__Vtrigprevexpr___TOP__systolic_array_tb__DOT__tb_nRST__0 
-        = vlSelfRef.systolic_array_tb__DOT__tb_nRST;
-}
-
-VL_INLINE_OPT VlCoroutine Vsystolic_array_tb___024root___eval_initial__TOP__Vtiming__1(Vsystolic_array_tb___024root* vlSelf) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vsystolic_array_tb___024root___eval_initial__TOP__Vtiming__1\n"); );
-    Vsystolic_array_tb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
-    auto& vlSelfRef = std::ref(*vlSelf).get();
-    // Body
-    while (1U) {
-        co_await vlSelfRef.__VdlySched.delay(0x1388ULL, 
-                                             nullptr, 
-                                             "src/testbench/systolic_array_tb.sv", 
-                                             24);
-        vlSelfRef.systolic_array_tb__DOT__tb_clk = 
-            (1U & ((IData)(1U) + (IData)(vlSelfRef.systolic_array_tb__DOT__tb_clk)));
-    }
-}
-
-void Vsystolic_array_tb___024root___act_comb__TOP__0(Vsystolic_array_tb___024root* vlSelf);
-
-void Vsystolic_array_tb___024root___eval_act(Vsystolic_array_tb___024root* vlSelf) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vsystolic_array_tb___024root___eval_act\n"); );
-    Vsystolic_array_tb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
-    auto& vlSelfRef = std::ref(*vlSelf).get();
-    // Body
-    if ((0xdULL & vlSelfRef.__VactTriggered.word(0U))) {
-        Vsystolic_array_tb___024root___act_comb__TOP__0(vlSelf);
-        vlSelfRef.__Vm_traceActivity[3U] = 1U;
-    }
-}
-
 void Vsystolic_array_tb___024root___timing_resume(Vsystolic_array_tb___024root* vlSelf) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vsystolic_array_tb___024root___timing_resume\n"); );
     Vsystolic_array_tb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
     if ((1ULL & vlSelfRef.__VactTriggered.word(0U))) {
-        vlSelfRef.__VtrigSched_h8059f569__0.resume(
+        vlSelfRef.__VtrigSched_hbea8d0df__0.resume(
                                                    "@(posedge systolic_array_tb.tb_clk)");
     }
     if ((4ULL & vlSelfRef.__VactTriggered.word(0U))) {
-        vlSelfRef.__VtrigSched_h8059f538__0.resume(
+        vlSelfRef.__VtrigSched_hbea8d09e__0.resume(
                                                    "@(negedge systolic_array_tb.tb_clk)");
     }
     if ((8ULL & vlSelfRef.__VactTriggered.word(0U))) {
@@ -74,16 +29,17 @@ void Vsystolic_array_tb___024root___timing_commit(Vsystolic_array_tb___024root* 
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
     if ((! (1ULL & vlSelfRef.__VactTriggered.word(0U)))) {
-        vlSelfRef.__VtrigSched_h8059f569__0.commit(
+        vlSelfRef.__VtrigSched_hbea8d0df__0.commit(
                                                    "@(posedge systolic_array_tb.tb_clk)");
     }
     if ((! (4ULL & vlSelfRef.__VactTriggered.word(0U)))) {
-        vlSelfRef.__VtrigSched_h8059f538__0.commit(
+        vlSelfRef.__VtrigSched_hbea8d09e__0.commit(
                                                    "@(negedge systolic_array_tb.tb_clk)");
     }
 }
 
 void Vsystolic_array_tb___024root___eval_triggers__act(Vsystolic_array_tb___024root* vlSelf);
+void Vsystolic_array_tb___024root___eval_act(Vsystolic_array_tb___024root* vlSelf);
 
 bool Vsystolic_array_tb___024root___eval_phase__act(Vsystolic_array_tb___024root* vlSelf) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vsystolic_array_tb___024root___eval_phase__act\n"); );

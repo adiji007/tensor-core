@@ -15,20 +15,20 @@ class alignas(VL_CACHE_LINE_BYTES) Vsystolic_array_tb_systolic_array_control_uni
   public:
 
     // DESIGN SPECIFIC STATE
-    CData/*0:0*/ input_type;
-    CData/*0:0*/ input_load;
-    CData/*0:0*/ weight_load;
-    CData/*0:0*/ partials_load;
-    CData/*0:0*/ MAC_start;
-    CData/*0:0*/ add_start;
-    CData/*3:0*/ in_fifo_shift;
-    CData/*3:0*/ ps_fifo_shift;
-    CData/*0:0*/ MAC_shift;
-    CData/*0:0*/ out_fifo_shift;
-    CData/*1:0*/ input_row;
-    CData/*1:0*/ weight_row;
-    CData/*1:0*/ partials_row;
-    VlUnpacked<CData/*3:0*/, 3> iteration;
+    CData/*0:0*/ __PVT__input_type;
+    CData/*0:0*/ __PVT__input_load;
+    CData/*0:0*/ __PVT__weight_load;
+    CData/*0:0*/ __PVT__partials_load;
+    CData/*0:0*/ __PVT__MAC_start;
+    CData/*0:0*/ __PVT__add_start;
+    CData/*3:0*/ __PVT__in_fifo_shift;
+    CData/*3:0*/ __PVT__ps_fifo_shift;
+    CData/*0:0*/ __PVT__MAC_shift;
+    CData/*0:0*/ __PVT__out_fifo_shift;
+    CData/*1:0*/ __PVT__input_row;
+    CData/*1:0*/ __PVT__weight_row;
+    CData/*1:0*/ __PVT__partials_row;
+    VlUnpacked<CData/*3:0*/, 3> __PVT__iteration;
 
     // INTERNAL VARIABLES
     Vsystolic_array_tb__Syms* const vlSymsp;

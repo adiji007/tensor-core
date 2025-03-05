@@ -45,8 +45,8 @@ module MAC_unit_tb;
 
         @(posedge tb_clk);
         mac_if.start = 0;
-        mac_if.in_value = 16'h4B80;
-        mac_if.weight = 16'h4000;
+        mac_if.in_value = 16'h4000;
+        mac_if.weight = 16'h4700;
         mac_if.in_accumulate = 16'h4500;
 
         @(posedge tb_clk);
@@ -71,9 +71,9 @@ module MAC_unit_tb;
         // mac_if.in_accumulate = 16'h58c3;
 
         // then set values
-        mac_if.in_value = 16'h439a;
-        mac_if.weight = 16'h5c96;
-        mac_if.in_accumulate = 16'h58c3;
+        mac_if.in_value = 16'h0000;
+        mac_if.weight = 16'h0000;
+        mac_if.in_accumulate = 16'h4cc0;
 
         // Startup sequence: first turn MAC_shift on for one cycle then start
         mac_if.MAC_shift = 1;

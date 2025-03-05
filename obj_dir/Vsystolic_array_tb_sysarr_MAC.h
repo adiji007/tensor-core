@@ -15,8 +15,8 @@ class alignas(VL_CACHE_LINE_BYTES) Vsystolic_array_tb_sysarr_MAC final : public 
   public:
 
     // DESIGN SPECIFIC STATE
-    VL_IN8(clk,0,0);
-    VL_IN8(nRST,0,0);
+    VL_IN8(__PVT__clk,0,0);
+    VL_IN8(__PVT__nRST,0,0);
     CData/*0:0*/ __PVT__run_latched;
     CData/*0:0*/ __PVT__start_passthrough_1;
     CData/*0:0*/ __PVT__start_passthrough_2;

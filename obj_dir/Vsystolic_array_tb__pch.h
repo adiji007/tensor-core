@@ -19,6 +19,7 @@
 
 
 #include "verilated.h"
+#include "verilated_dpi.h"
 
 #include "Vsystolic_array_tb__Syms.h"
 #include "Vsystolic_array_tb.h"

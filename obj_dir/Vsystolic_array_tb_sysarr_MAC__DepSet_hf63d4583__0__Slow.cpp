@@ -10,8 +10,8 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___ctor_var_reset(Vsystolic_array
     Vsystolic_array_tb__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
-    vlSelf->clk = VL_RAND_RESET_I(1);
-    vlSelf->nRST = VL_RAND_RESET_I(1);
+    vlSelf->__PVT__clk = VL_RAND_RESET_I(1);
+    vlSelf->__PVT__nRST = VL_RAND_RESET_I(1);
     vlSelf->__PVT__input_x = VL_RAND_RESET_I(16);
     vlSelf->__PVT__nxt_input_x = VL_RAND_RESET_I(16);
     vlSelf->__PVT__run_latched = VL_RAND_RESET_I(1);

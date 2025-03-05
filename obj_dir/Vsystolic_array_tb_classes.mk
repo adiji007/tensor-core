@@ -12,7 +12,7 @@ VM_TIMING = 1
 # Coverage output mode?  0/1 (from --coverage)
 VM_COVERAGE = 0
 # Parallel builds?  0/1 (from --output-split)
-VM_PARALLEL_BUILDS = 1
+VM_PARALLEL_BUILDS = 0
 # Tracing output mode?  0/1 (from --trace/--trace-fst)
 VM_TRACE = 1
 # Tracing output mode in VCD format?  0/1 (from --trace)
@@ -25,9 +25,11 @@ VM_TRACE_FST = 1
 VM_CLASSES_FAST += \
 	Vsystolic_array_tb \
 	Vsystolic_array_tb___024root__DepSet_hdbe45c06__0 \
-	Vsystolic_array_tb___024root__DepSet_hdbe45c06__1 \
 	Vsystolic_array_tb___024root__DepSet_h7c5333ca__0 \
+	Vsystolic_array_tb_systolic_array_tb__DepSet_h1d590f5d__0 \
+	Vsystolic_array_tb_systolic_array__DepSet_h062489ee__0 \
 	Vsystolic_array_tb_systolic_array_if__DepSet_h6d5a8c78__0 \
+	Vsystolic_array_tb_sysarr_control_unit__DepSet_h579d6695__0 \
 	Vsystolic_array_tb_sysarr_MAC__DepSet_h5d926e79__0 \
 	Vsystolic_array_tb_systolic_array_control_unit_if__DepSet_h190b6bc7__0 \
 	Vsystolic_array_tb_systolic_array_MAC_if__DepSet_h6d8269e0__0 \
@@ -40,10 +42,18 @@ VM_CLASSES_SLOW += \
 	Vsystolic_array_tb___024root__Slow \
 	Vsystolic_array_tb___024root__DepSet_hdbe45c06__0__Slow \
 	Vsystolic_array_tb___024root__DepSet_h7c5333ca__0__Slow \
+	Vsystolic_array_tb_systolic_array_tb__Slow \
+	Vsystolic_array_tb_systolic_array_tb__DepSet_h36f8649f__0__Slow \
 	Vsystolic_array_tb___024unit__Slow \
 	Vsystolic_array_tb___024unit__DepSet_h8cd2def4__0__Slow \
+	Vsystolic_array_tb_systolic_array__Slow \
+	Vsystolic_array_tb_systolic_array__DepSet_h062489ee__0__Slow \
+	Vsystolic_array_tb_systolic_array__DepSet_h5193def2__0__Slow \
 	Vsystolic_array_tb_systolic_array_if__Slow \
 	Vsystolic_array_tb_systolic_array_if__DepSet_h6d5a8c78__0__Slow \
+	Vsystolic_array_tb_sysarr_control_unit__Slow \
+	Vsystolic_array_tb_sysarr_control_unit__DepSet_h579d6695__0__Slow \
+	Vsystolic_array_tb_sysarr_control_unit__DepSet_h003c3e57__0__Slow \
 	Vsystolic_array_tb_sysarr_MAC__Slow \
 	Vsystolic_array_tb_sysarr_MAC__DepSet_h5d926e79__0__Slow \
 	Vsystolic_array_tb_sysarr_MAC__DepSet_hf63d4583__0__Slow \
@@ -56,6 +66,7 @@ VM_CLASSES_SLOW += \
 
 # Generated support classes, fast-path, compile with highest optimization
 VM_SUPPORT_FAST += \
+	Vsystolic_array_tb__Dpi \
 	Vsystolic_array_tb__Trace__0 \
 
 # Generated support classes, non-fast-path, compile with low/medium optimization
@@ -67,6 +78,7 @@ VM_SUPPORT_SLOW += \
 # Global classes, need linked once per executable, fast-path, compile with highest optimization
 VM_GLOBAL_FAST += \
 	verilated \
+	verilated_dpi \
 	verilated_fst_c \
 	verilated_timing \
 	verilated_threads \
