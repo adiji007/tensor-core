@@ -34,6 +34,10 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
     vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_sum 
         = (0x1fU & ((IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp1) 
                     + (IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp2)));
+    vlSelfRef.__PVT__mul_significand_product_selected 
+        = (0xfffU & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
+                      ? ((IData)(vlSelfRef.__PVT__mul_product_in) 
+                         >> 1U) : (IData)(vlSelfRef.__PVT__mul_product_in)));
     vlSelfRef.__PVT__add2__DOT__frac1_signed = vlSelfRef.__PVT__frac_shifted_in;
     if (vlSelfRef.__PVT__add_sign_shifted_in) {
         vlSelfRef.__PVT__add2__DOT__frac1_signed = 
@@ -354,20 +358,14 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
                                     << 0xfU) | (((IData)(vlSelfRef.__PVT__mul_final_exp) 
                                                  << 0xaU) 
                                                 | (0x3ffU 
-                                                   & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
-                                                       ? 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 3U)
-                                                       : 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 2U)))));
-    vlSelfRef.__PVT__add3__DOT__rounded_fraction = 
-        (0xfffU & ((2U & (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    ? ((IData)(1U) + (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    : (IData)(vlSelfRef.__PVT__add3__DOT__round_this)));
-    vlSelfRef.__PVT__add3__DOT__round_flag = (1U & 
-                                              ((IData)(vlSelfRef.__PVT__add3__DOT__round_this) 
-                                               >> 1U));
+                                                   & (((IData)(vlSelfRef.__PVT__mul_significand_product_selected) 
+                                                       >> 2U) 
+                                                      + 
+                                                      ((3U 
+                                                        == 
+                                                        (3U 
+                                                         & (IData)(vlSelfRef.__PVT__mul_significand_product_selected))) 
+                                                       & (IData)(vlSelfRef.__PVT__mul_round_loss_s2))))));
 }
 
 VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_array_tb__DUT__genblk4__BRA__0__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst__1(Vsystolic_array_tb_sysarr_MAC* vlSelf) {
@@ -412,6 +410,10 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
     vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_sum 
         = (0x1fU & ((IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp1) 
                     + (IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp2)));
+    vlSelfRef.__PVT__mul_significand_product_selected 
+        = (0xfffU & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
+                      ? ((IData)(vlSelfRef.__PVT__mul_product_in) 
+                         >> 1U) : (IData)(vlSelfRef.__PVT__mul_product_in)));
     vlSelfRef.__PVT__add2__DOT__frac1_signed = vlSelfRef.__PVT__frac_shifted_in;
     if (vlSelfRef.__PVT__add_sign_shifted_in) {
         vlSelfRef.__PVT__add2__DOT__frac1_signed = 
@@ -730,20 +732,14 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
                                     << 0xfU) | (((IData)(vlSelfRef.__PVT__mul_final_exp) 
                                                  << 0xaU) 
                                                 | (0x3ffU 
-                                                   & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
-                                                       ? 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 3U)
-                                                       : 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 2U)))));
-    vlSelfRef.__PVT__add3__DOT__rounded_fraction = 
-        (0xfffU & ((2U & (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    ? ((IData)(1U) + (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    : (IData)(vlSelfRef.__PVT__add3__DOT__round_this)));
-    vlSelfRef.__PVT__add3__DOT__round_flag = (1U & 
-                                              ((IData)(vlSelfRef.__PVT__add3__DOT__round_this) 
-                                               >> 1U));
+                                                   & (((IData)(vlSelfRef.__PVT__mul_significand_product_selected) 
+                                                       >> 2U) 
+                                                      + 
+                                                      ((3U 
+                                                        == 
+                                                        (3U 
+                                                         & (IData)(vlSelfRef.__PVT__mul_significand_product_selected))) 
+                                                       & (IData)(vlSelfRef.__PVT__mul_round_loss_s2))))));
 }
 
 VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_array_tb__DUT__genblk4__BRA__0__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst__0(Vsystolic_array_tb_sysarr_MAC* vlSelf) {
@@ -776,6 +772,10 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
     vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_sum 
         = (0x1fU & ((IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp1) 
                     + (IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp2)));
+    vlSelfRef.__PVT__mul_significand_product_selected 
+        = (0xfffU & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
+                      ? ((IData)(vlSelfRef.__PVT__mul_product_in) 
+                         >> 1U) : (IData)(vlSelfRef.__PVT__mul_product_in)));
     vlSelfRef.__PVT__add2__DOT__frac1_signed = vlSelfRef.__PVT__frac_shifted_in;
     if (vlSelfRef.__PVT__add_sign_shifted_in) {
         vlSelfRef.__PVT__add2__DOT__frac1_signed = 
@@ -1094,20 +1094,14 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
                                     << 0xfU) | (((IData)(vlSelfRef.__PVT__mul_final_exp) 
                                                  << 0xaU) 
                                                 | (0x3ffU 
-                                                   & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
-                                                       ? 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 3U)
-                                                       : 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 2U)))));
-    vlSelfRef.__PVT__add3__DOT__rounded_fraction = 
-        (0xfffU & ((2U & (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    ? ((IData)(1U) + (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    : (IData)(vlSelfRef.__PVT__add3__DOT__round_this)));
-    vlSelfRef.__PVT__add3__DOT__round_flag = (1U & 
-                                              ((IData)(vlSelfRef.__PVT__add3__DOT__round_this) 
-                                               >> 1U));
+                                                   & (((IData)(vlSelfRef.__PVT__mul_significand_product_selected) 
+                                                       >> 2U) 
+                                                      + 
+                                                      ((3U 
+                                                        == 
+                                                        (3U 
+                                                         & (IData)(vlSelfRef.__PVT__mul_significand_product_selected))) 
+                                                       & (IData)(vlSelfRef.__PVT__mul_round_loss_s2))))));
 }
 
 VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_array_tb__DUT__genblk4__BRA__0__KET____DOT__genblk1__BRA__3__KET____DOT__mac_inst__0(Vsystolic_array_tb_sysarr_MAC* vlSelf) {
@@ -1140,6 +1134,10 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
     vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_sum 
         = (0x1fU & ((IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp1) 
                     + (IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp2)));
+    vlSelfRef.__PVT__mul_significand_product_selected 
+        = (0xfffU & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
+                      ? ((IData)(vlSelfRef.__PVT__mul_product_in) 
+                         >> 1U) : (IData)(vlSelfRef.__PVT__mul_product_in)));
     vlSelfRef.__PVT__add2__DOT__frac1_signed = vlSelfRef.__PVT__frac_shifted_in;
     if (vlSelfRef.__PVT__add_sign_shifted_in) {
         vlSelfRef.__PVT__add2__DOT__frac1_signed = 
@@ -1458,20 +1456,14 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
                                     << 0xfU) | (((IData)(vlSelfRef.__PVT__mul_final_exp) 
                                                  << 0xaU) 
                                                 | (0x3ffU 
-                                                   & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
-                                                       ? 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 3U)
-                                                       : 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 2U)))));
-    vlSelfRef.__PVT__add3__DOT__rounded_fraction = 
-        (0xfffU & ((2U & (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    ? ((IData)(1U) + (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    : (IData)(vlSelfRef.__PVT__add3__DOT__round_this)));
-    vlSelfRef.__PVT__add3__DOT__round_flag = (1U & 
-                                              ((IData)(vlSelfRef.__PVT__add3__DOT__round_this) 
-                                               >> 1U));
+                                                   & (((IData)(vlSelfRef.__PVT__mul_significand_product_selected) 
+                                                       >> 2U) 
+                                                      + 
+                                                      ((3U 
+                                                        == 
+                                                        (3U 
+                                                         & (IData)(vlSelfRef.__PVT__mul_significand_product_selected))) 
+                                                       & (IData)(vlSelfRef.__PVT__mul_round_loss_s2))))));
 }
 
 VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_array_tb__DUT__genblk4__BRA__1__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst__0(Vsystolic_array_tb_sysarr_MAC* vlSelf) {
@@ -1504,6 +1496,10 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
     vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_sum 
         = (0x1fU & ((IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp1) 
                     + (IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp2)));
+    vlSelfRef.__PVT__mul_significand_product_selected 
+        = (0xfffU & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
+                      ? ((IData)(vlSelfRef.__PVT__mul_product_in) 
+                         >> 1U) : (IData)(vlSelfRef.__PVT__mul_product_in)));
     vlSelfRef.__PVT__add2__DOT__frac1_signed = vlSelfRef.__PVT__frac_shifted_in;
     if (vlSelfRef.__PVT__add_sign_shifted_in) {
         vlSelfRef.__PVT__add2__DOT__frac1_signed = 
@@ -1828,20 +1824,14 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
                                     << 0xfU) | (((IData)(vlSelfRef.__PVT__mul_final_exp) 
                                                  << 0xaU) 
                                                 | (0x3ffU 
-                                                   & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
-                                                       ? 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 3U)
-                                                       : 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 2U)))));
-    vlSelfRef.__PVT__add3__DOT__rounded_fraction = 
-        (0xfffU & ((2U & (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    ? ((IData)(1U) + (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    : (IData)(vlSelfRef.__PVT__add3__DOT__round_this)));
-    vlSelfRef.__PVT__add3__DOT__round_flag = (1U & 
-                                              ((IData)(vlSelfRef.__PVT__add3__DOT__round_this) 
-                                               >> 1U));
+                                                   & (((IData)(vlSelfRef.__PVT__mul_significand_product_selected) 
+                                                       >> 2U) 
+                                                      + 
+                                                      ((3U 
+                                                        == 
+                                                        (3U 
+                                                         & (IData)(vlSelfRef.__PVT__mul_significand_product_selected))) 
+                                                       & (IData)(vlSelfRef.__PVT__mul_round_loss_s2))))));
 }
 
 VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_array_tb__DUT__genblk4__BRA__1__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst__0(Vsystolic_array_tb_sysarr_MAC* vlSelf) {
@@ -1874,6 +1864,10 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
     vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_sum 
         = (0x1fU & ((IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp1) 
                     + (IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp2)));
+    vlSelfRef.__PVT__mul_significand_product_selected 
+        = (0xfffU & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
+                      ? ((IData)(vlSelfRef.__PVT__mul_product_in) 
+                         >> 1U) : (IData)(vlSelfRef.__PVT__mul_product_in)));
     vlSelfRef.__PVT__add2__DOT__frac1_signed = vlSelfRef.__PVT__frac_shifted_in;
     if (vlSelfRef.__PVT__add_sign_shifted_in) {
         vlSelfRef.__PVT__add2__DOT__frac1_signed = 
@@ -2198,20 +2192,14 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
                                     << 0xfU) | (((IData)(vlSelfRef.__PVT__mul_final_exp) 
                                                  << 0xaU) 
                                                 | (0x3ffU 
-                                                   & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
-                                                       ? 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 3U)
-                                                       : 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 2U)))));
-    vlSelfRef.__PVT__add3__DOT__rounded_fraction = 
-        (0xfffU & ((2U & (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    ? ((IData)(1U) + (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    : (IData)(vlSelfRef.__PVT__add3__DOT__round_this)));
-    vlSelfRef.__PVT__add3__DOT__round_flag = (1U & 
-                                              ((IData)(vlSelfRef.__PVT__add3__DOT__round_this) 
-                                               >> 1U));
+                                                   & (((IData)(vlSelfRef.__PVT__mul_significand_product_selected) 
+                                                       >> 2U) 
+                                                      + 
+                                                      ((3U 
+                                                        == 
+                                                        (3U 
+                                                         & (IData)(vlSelfRef.__PVT__mul_significand_product_selected))) 
+                                                       & (IData)(vlSelfRef.__PVT__mul_round_loss_s2))))));
 }
 
 VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_array_tb__DUT__genblk4__BRA__1__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst__0(Vsystolic_array_tb_sysarr_MAC* vlSelf) {
@@ -2244,6 +2232,10 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
     vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_sum 
         = (0x1fU & ((IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp1) 
                     + (IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp2)));
+    vlSelfRef.__PVT__mul_significand_product_selected 
+        = (0xfffU & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
+                      ? ((IData)(vlSelfRef.__PVT__mul_product_in) 
+                         >> 1U) : (IData)(vlSelfRef.__PVT__mul_product_in)));
     vlSelfRef.__PVT__add2__DOT__frac1_signed = vlSelfRef.__PVT__frac_shifted_in;
     if (vlSelfRef.__PVT__add_sign_shifted_in) {
         vlSelfRef.__PVT__add2__DOT__frac1_signed = 
@@ -2568,20 +2560,14 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
                                     << 0xfU) | (((IData)(vlSelfRef.__PVT__mul_final_exp) 
                                                  << 0xaU) 
                                                 | (0x3ffU 
-                                                   & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
-                                                       ? 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 3U)
-                                                       : 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 2U)))));
-    vlSelfRef.__PVT__add3__DOT__rounded_fraction = 
-        (0xfffU & ((2U & (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    ? ((IData)(1U) + (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    : (IData)(vlSelfRef.__PVT__add3__DOT__round_this)));
-    vlSelfRef.__PVT__add3__DOT__round_flag = (1U & 
-                                              ((IData)(vlSelfRef.__PVT__add3__DOT__round_this) 
-                                               >> 1U));
+                                                   & (((IData)(vlSelfRef.__PVT__mul_significand_product_selected) 
+                                                       >> 2U) 
+                                                      + 
+                                                      ((3U 
+                                                        == 
+                                                        (3U 
+                                                         & (IData)(vlSelfRef.__PVT__mul_significand_product_selected))) 
+                                                       & (IData)(vlSelfRef.__PVT__mul_round_loss_s2))))));
 }
 
 VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_array_tb__DUT__genblk4__BRA__1__KET____DOT__genblk1__BRA__3__KET____DOT__mac_inst__0(Vsystolic_array_tb_sysarr_MAC* vlSelf) {
@@ -2614,6 +2600,10 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
     vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_sum 
         = (0x1fU & ((IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp1) 
                     + (IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp2)));
+    vlSelfRef.__PVT__mul_significand_product_selected 
+        = (0xfffU & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
+                      ? ((IData)(vlSelfRef.__PVT__mul_product_in) 
+                         >> 1U) : (IData)(vlSelfRef.__PVT__mul_product_in)));
     vlSelfRef.__PVT__add2__DOT__frac1_signed = vlSelfRef.__PVT__frac_shifted_in;
     if (vlSelfRef.__PVT__add_sign_shifted_in) {
         vlSelfRef.__PVT__add2__DOT__frac1_signed = 
@@ -2938,20 +2928,14 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
                                     << 0xfU) | (((IData)(vlSelfRef.__PVT__mul_final_exp) 
                                                  << 0xaU) 
                                                 | (0x3ffU 
-                                                   & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
-                                                       ? 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 3U)
-                                                       : 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 2U)))));
-    vlSelfRef.__PVT__add3__DOT__rounded_fraction = 
-        (0xfffU & ((2U & (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    ? ((IData)(1U) + (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    : (IData)(vlSelfRef.__PVT__add3__DOT__round_this)));
-    vlSelfRef.__PVT__add3__DOT__round_flag = (1U & 
-                                              ((IData)(vlSelfRef.__PVT__add3__DOT__round_this) 
-                                               >> 1U));
+                                                   & (((IData)(vlSelfRef.__PVT__mul_significand_product_selected) 
+                                                       >> 2U) 
+                                                      + 
+                                                      ((3U 
+                                                        == 
+                                                        (3U 
+                                                         & (IData)(vlSelfRef.__PVT__mul_significand_product_selected))) 
+                                                       & (IData)(vlSelfRef.__PVT__mul_round_loss_s2))))));
 }
 
 VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_array_tb__DUT__genblk4__BRA__2__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst__0(Vsystolic_array_tb_sysarr_MAC* vlSelf) {
@@ -2984,6 +2968,10 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
     vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_sum 
         = (0x1fU & ((IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp1) 
                     + (IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp2)));
+    vlSelfRef.__PVT__mul_significand_product_selected 
+        = (0xfffU & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
+                      ? ((IData)(vlSelfRef.__PVT__mul_product_in) 
+                         >> 1U) : (IData)(vlSelfRef.__PVT__mul_product_in)));
     vlSelfRef.__PVT__add2__DOT__frac1_signed = vlSelfRef.__PVT__frac_shifted_in;
     if (vlSelfRef.__PVT__add_sign_shifted_in) {
         vlSelfRef.__PVT__add2__DOT__frac1_signed = 
@@ -3308,20 +3296,14 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
                                     << 0xfU) | (((IData)(vlSelfRef.__PVT__mul_final_exp) 
                                                  << 0xaU) 
                                                 | (0x3ffU 
-                                                   & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
-                                                       ? 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 3U)
-                                                       : 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 2U)))));
-    vlSelfRef.__PVT__add3__DOT__rounded_fraction = 
-        (0xfffU & ((2U & (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    ? ((IData)(1U) + (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    : (IData)(vlSelfRef.__PVT__add3__DOT__round_this)));
-    vlSelfRef.__PVT__add3__DOT__round_flag = (1U & 
-                                              ((IData)(vlSelfRef.__PVT__add3__DOT__round_this) 
-                                               >> 1U));
+                                                   & (((IData)(vlSelfRef.__PVT__mul_significand_product_selected) 
+                                                       >> 2U) 
+                                                      + 
+                                                      ((3U 
+                                                        == 
+                                                        (3U 
+                                                         & (IData)(vlSelfRef.__PVT__mul_significand_product_selected))) 
+                                                       & (IData)(vlSelfRef.__PVT__mul_round_loss_s2))))));
 }
 
 VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_array_tb__DUT__genblk4__BRA__2__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst__0(Vsystolic_array_tb_sysarr_MAC* vlSelf) {
@@ -3354,6 +3336,10 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
     vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_sum 
         = (0x1fU & ((IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp1) 
                     + (IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp2)));
+    vlSelfRef.__PVT__mul_significand_product_selected 
+        = (0xfffU & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
+                      ? ((IData)(vlSelfRef.__PVT__mul_product_in) 
+                         >> 1U) : (IData)(vlSelfRef.__PVT__mul_product_in)));
     vlSelfRef.__PVT__add2__DOT__frac1_signed = vlSelfRef.__PVT__frac_shifted_in;
     if (vlSelfRef.__PVT__add_sign_shifted_in) {
         vlSelfRef.__PVT__add2__DOT__frac1_signed = 
@@ -3678,20 +3664,14 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
                                     << 0xfU) | (((IData)(vlSelfRef.__PVT__mul_final_exp) 
                                                  << 0xaU) 
                                                 | (0x3ffU 
-                                                   & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
-                                                       ? 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 3U)
-                                                       : 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 2U)))));
-    vlSelfRef.__PVT__add3__DOT__rounded_fraction = 
-        (0xfffU & ((2U & (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    ? ((IData)(1U) + (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    : (IData)(vlSelfRef.__PVT__add3__DOT__round_this)));
-    vlSelfRef.__PVT__add3__DOT__round_flag = (1U & 
-                                              ((IData)(vlSelfRef.__PVT__add3__DOT__round_this) 
-                                               >> 1U));
+                                                   & (((IData)(vlSelfRef.__PVT__mul_significand_product_selected) 
+                                                       >> 2U) 
+                                                      + 
+                                                      ((3U 
+                                                        == 
+                                                        (3U 
+                                                         & (IData)(vlSelfRef.__PVT__mul_significand_product_selected))) 
+                                                       & (IData)(vlSelfRef.__PVT__mul_round_loss_s2))))));
 }
 
 VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_array_tb__DUT__genblk4__BRA__2__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst__0(Vsystolic_array_tb_sysarr_MAC* vlSelf) {
@@ -3724,6 +3704,10 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
     vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_sum 
         = (0x1fU & ((IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp1) 
                     + (IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp2)));
+    vlSelfRef.__PVT__mul_significand_product_selected 
+        = (0xfffU & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
+                      ? ((IData)(vlSelfRef.__PVT__mul_product_in) 
+                         >> 1U) : (IData)(vlSelfRef.__PVT__mul_product_in)));
     vlSelfRef.__PVT__add2__DOT__frac1_signed = vlSelfRef.__PVT__frac_shifted_in;
     if (vlSelfRef.__PVT__add_sign_shifted_in) {
         vlSelfRef.__PVT__add2__DOT__frac1_signed = 
@@ -4048,20 +4032,14 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
                                     << 0xfU) | (((IData)(vlSelfRef.__PVT__mul_final_exp) 
                                                  << 0xaU) 
                                                 | (0x3ffU 
-                                                   & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
-                                                       ? 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 3U)
-                                                       : 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 2U)))));
-    vlSelfRef.__PVT__add3__DOT__rounded_fraction = 
-        (0xfffU & ((2U & (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    ? ((IData)(1U) + (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    : (IData)(vlSelfRef.__PVT__add3__DOT__round_this)));
-    vlSelfRef.__PVT__add3__DOT__round_flag = (1U & 
-                                              ((IData)(vlSelfRef.__PVT__add3__DOT__round_this) 
-                                               >> 1U));
+                                                   & (((IData)(vlSelfRef.__PVT__mul_significand_product_selected) 
+                                                       >> 2U) 
+                                                      + 
+                                                      ((3U 
+                                                        == 
+                                                        (3U 
+                                                         & (IData)(vlSelfRef.__PVT__mul_significand_product_selected))) 
+                                                       & (IData)(vlSelfRef.__PVT__mul_round_loss_s2))))));
 }
 
 VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_array_tb__DUT__genblk4__BRA__2__KET____DOT__genblk1__BRA__3__KET____DOT__mac_inst__0(Vsystolic_array_tb_sysarr_MAC* vlSelf) {
@@ -4094,6 +4072,10 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
     vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_sum 
         = (0x1fU & ((IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp1) 
                     + (IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp2)));
+    vlSelfRef.__PVT__mul_significand_product_selected 
+        = (0xfffU & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
+                      ? ((IData)(vlSelfRef.__PVT__mul_product_in) 
+                         >> 1U) : (IData)(vlSelfRef.__PVT__mul_product_in)));
     vlSelfRef.__PVT__add2__DOT__frac1_signed = vlSelfRef.__PVT__frac_shifted_in;
     if (vlSelfRef.__PVT__add_sign_shifted_in) {
         vlSelfRef.__PVT__add2__DOT__frac1_signed = 
@@ -4418,20 +4400,14 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
                                     << 0xfU) | (((IData)(vlSelfRef.__PVT__mul_final_exp) 
                                                  << 0xaU) 
                                                 | (0x3ffU 
-                                                   & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
-                                                       ? 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 3U)
-                                                       : 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 2U)))));
-    vlSelfRef.__PVT__add3__DOT__rounded_fraction = 
-        (0xfffU & ((2U & (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    ? ((IData)(1U) + (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    : (IData)(vlSelfRef.__PVT__add3__DOT__round_this)));
-    vlSelfRef.__PVT__add3__DOT__round_flag = (1U & 
-                                              ((IData)(vlSelfRef.__PVT__add3__DOT__round_this) 
-                                               >> 1U));
+                                                   & (((IData)(vlSelfRef.__PVT__mul_significand_product_selected) 
+                                                       >> 2U) 
+                                                      + 
+                                                      ((3U 
+                                                        == 
+                                                        (3U 
+                                                         & (IData)(vlSelfRef.__PVT__mul_significand_product_selected))) 
+                                                       & (IData)(vlSelfRef.__PVT__mul_round_loss_s2))))));
 }
 
 VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_array_tb__DUT__genblk4__BRA__3__KET____DOT__genblk1__BRA__0__KET____DOT__mac_inst__0(Vsystolic_array_tb_sysarr_MAC* vlSelf) {
@@ -4463,6 +4439,10 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
     vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_sum 
         = (0x1fU & ((IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp1) 
                     + (IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp2)));
+    vlSelfRef.__PVT__mul_significand_product_selected 
+        = (0xfffU & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
+                      ? ((IData)(vlSelfRef.__PVT__mul_product_in) 
+                         >> 1U) : (IData)(vlSelfRef.__PVT__mul_product_in)));
     vlSelfRef.__PVT__add2__DOT__frac1_signed = vlSelfRef.__PVT__frac_shifted_in;
     if (vlSelfRef.__PVT__add_sign_shifted_in) {
         vlSelfRef.__PVT__add2__DOT__frac1_signed = 
@@ -4787,20 +4767,14 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
                                     << 0xfU) | (((IData)(vlSelfRef.__PVT__mul_final_exp) 
                                                  << 0xaU) 
                                                 | (0x3ffU 
-                                                   & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
-                                                       ? 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 3U)
-                                                       : 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 2U)))));
-    vlSelfRef.__PVT__add3__DOT__rounded_fraction = 
-        (0xfffU & ((2U & (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    ? ((IData)(1U) + (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    : (IData)(vlSelfRef.__PVT__add3__DOT__round_this)));
-    vlSelfRef.__PVT__add3__DOT__round_flag = (1U & 
-                                              ((IData)(vlSelfRef.__PVT__add3__DOT__round_this) 
-                                               >> 1U));
+                                                   & (((IData)(vlSelfRef.__PVT__mul_significand_product_selected) 
+                                                       >> 2U) 
+                                                      + 
+                                                      ((3U 
+                                                        == 
+                                                        (3U 
+                                                         & (IData)(vlSelfRef.__PVT__mul_significand_product_selected))) 
+                                                       & (IData)(vlSelfRef.__PVT__mul_round_loss_s2))))));
 }
 
 VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_array_tb__DUT__genblk4__BRA__3__KET____DOT__genblk1__BRA__1__KET____DOT__mac_inst__0(Vsystolic_array_tb_sysarr_MAC* vlSelf) {
@@ -4832,6 +4806,10 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
     vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_sum 
         = (0x1fU & ((IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp1) 
                     + (IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp2)));
+    vlSelfRef.__PVT__mul_significand_product_selected 
+        = (0xfffU & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
+                      ? ((IData)(vlSelfRef.__PVT__mul_product_in) 
+                         >> 1U) : (IData)(vlSelfRef.__PVT__mul_product_in)));
     vlSelfRef.__PVT__add2__DOT__frac1_signed = vlSelfRef.__PVT__frac_shifted_in;
     if (vlSelfRef.__PVT__add_sign_shifted_in) {
         vlSelfRef.__PVT__add2__DOT__frac1_signed = 
@@ -5156,20 +5134,14 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
                                     << 0xfU) | (((IData)(vlSelfRef.__PVT__mul_final_exp) 
                                                  << 0xaU) 
                                                 | (0x3ffU 
-                                                   & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
-                                                       ? 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 3U)
-                                                       : 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 2U)))));
-    vlSelfRef.__PVT__add3__DOT__rounded_fraction = 
-        (0xfffU & ((2U & (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    ? ((IData)(1U) + (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    : (IData)(vlSelfRef.__PVT__add3__DOT__round_this)));
-    vlSelfRef.__PVT__add3__DOT__round_flag = (1U & 
-                                              ((IData)(vlSelfRef.__PVT__add3__DOT__round_this) 
-                                               >> 1U));
+                                                   & (((IData)(vlSelfRef.__PVT__mul_significand_product_selected) 
+                                                       >> 2U) 
+                                                      + 
+                                                      ((3U 
+                                                        == 
+                                                        (3U 
+                                                         & (IData)(vlSelfRef.__PVT__mul_significand_product_selected))) 
+                                                       & (IData)(vlSelfRef.__PVT__mul_round_loss_s2))))));
 }
 
 VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_array_tb__DUT__genblk4__BRA__3__KET____DOT__genblk1__BRA__2__KET____DOT__mac_inst__0(Vsystolic_array_tb_sysarr_MAC* vlSelf) {
@@ -5201,6 +5173,10 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
     vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_sum 
         = (0x1fU & ((IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp1) 
                     + (IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp2)));
+    vlSelfRef.__PVT__mul_significand_product_selected 
+        = (0xfffU & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
+                      ? ((IData)(vlSelfRef.__PVT__mul_product_in) 
+                         >> 1U) : (IData)(vlSelfRef.__PVT__mul_product_in)));
     vlSelfRef.__PVT__add2__DOT__frac1_signed = vlSelfRef.__PVT__frac_shifted_in;
     if (vlSelfRef.__PVT__add_sign_shifted_in) {
         vlSelfRef.__PVT__add2__DOT__frac1_signed = 
@@ -5525,20 +5501,14 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
                                     << 0xfU) | (((IData)(vlSelfRef.__PVT__mul_final_exp) 
                                                  << 0xaU) 
                                                 | (0x3ffU 
-                                                   & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
-                                                       ? 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 3U)
-                                                       : 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 2U)))));
-    vlSelfRef.__PVT__add3__DOT__rounded_fraction = 
-        (0xfffU & ((2U & (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    ? ((IData)(1U) + (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    : (IData)(vlSelfRef.__PVT__add3__DOT__round_this)));
-    vlSelfRef.__PVT__add3__DOT__round_flag = (1U & 
-                                              ((IData)(vlSelfRef.__PVT__add3__DOT__round_this) 
-                                               >> 1U));
+                                                   & (((IData)(vlSelfRef.__PVT__mul_significand_product_selected) 
+                                                       >> 2U) 
+                                                      + 
+                                                      ((3U 
+                                                        == 
+                                                        (3U 
+                                                         & (IData)(vlSelfRef.__PVT__mul_significand_product_selected))) 
+                                                       & (IData)(vlSelfRef.__PVT__mul_round_loss_s2))))));
 }
 
 VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_array_tb__DUT__genblk4__BRA__3__KET____DOT__genblk1__BRA__3__KET____DOT__mac_inst__0(Vsystolic_array_tb_sysarr_MAC* vlSelf) {
@@ -5570,6 +5540,10 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
     vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_sum 
         = (0x1fU & ((IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp1) 
                     + (IData)(vlSelfRef.__PVT__mul2__DOT__add_EXPs__DOT__r_exp2)));
+    vlSelfRef.__PVT__mul_significand_product_selected 
+        = (0xfffU & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
+                      ? ((IData)(vlSelfRef.__PVT__mul_product_in) 
+                         >> 1U) : (IData)(vlSelfRef.__PVT__mul_product_in)));
     vlSelfRef.__PVT__add2__DOT__frac1_signed = vlSelfRef.__PVT__frac_shifted_in;
     if (vlSelfRef.__PVT__add_sign_shifted_in) {
         vlSelfRef.__PVT__add2__DOT__frac1_signed = 
@@ -5894,18 +5868,12 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___stl_sequent__TOP__systolic_arr
                                     << 0xfU) | (((IData)(vlSelfRef.__PVT__mul_final_exp) 
                                                  << 0xaU) 
                                                 | (0x3ffU 
-                                                   & ((IData)(vlSelfRef.__PVT__mul_carryout_in)
-                                                       ? 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 3U)
-                                                       : 
-                                                      ((IData)(vlSelfRef.__PVT__mul_product_in) 
-                                                       >> 2U)))));
-    vlSelfRef.__PVT__add3__DOT__rounded_fraction = 
-        (0xfffU & ((2U & (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    ? ((IData)(1U) + (IData)(vlSelfRef.__PVT__add3__DOT__round_this))
-                    : (IData)(vlSelfRef.__PVT__add3__DOT__round_this)));
-    vlSelfRef.__PVT__add3__DOT__round_flag = (1U & 
-                                              ((IData)(vlSelfRef.__PVT__add3__DOT__round_this) 
-                                               >> 1U));
+                                                   & (((IData)(vlSelfRef.__PVT__mul_significand_product_selected) 
+                                                       >> 2U) 
+                                                      + 
+                                                      ((3U 
+                                                        == 
+                                                        (3U 
+                                                         & (IData)(vlSelfRef.__PVT__mul_significand_product_selected))) 
+                                                       & (IData)(vlSelfRef.__PVT__mul_round_loss_s2))))));
 }

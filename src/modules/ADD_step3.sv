@@ -23,13 +23,14 @@ module ADD_step3 (
     input unf_in,
     input dz,  // divide by zero flag
     input inv,
-    input [2:0] frm,
+    // input [2:0] frm,
     input [4:0] exponent_max_in,
     input sign_in,
     input [12:0] frac_in,
     input carry_out,
     output [15:0] floating_point_out,
-    output [4:0] flags
+    output [4:0] flags,
+    input round_loss
 );
 
     wire        inexact;
@@ -88,10 +89,14 @@ module ADD_step3 (
     logic round_flag;               // I added this. --Vinay 1/31/2025. Verilator wouldn't compile without it.
 
     //----------------------------------------------------------------------------------------------
-    // Rounding mode used: Round to Nearest, Tie to Max Magnitude (RMM)
+    // Rounding mode used: Round to Nearest, Tie to Even
+    logic G;
+    logic R;
+    assign G = round_this[1];
+    assign R = round_this[0];
     logic [11:0] rounded_fraction;
     always_comb begin
-        if(round_this[1] == 1) begin
+        if(G & R & round_loss) begin
             rounded_fraction = round_this + 1;
             round_flag = 1;
         end

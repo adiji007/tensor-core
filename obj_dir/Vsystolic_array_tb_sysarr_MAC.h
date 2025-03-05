@@ -27,16 +27,19 @@ class alignas(VL_CACHE_LINE_BYTES) Vsystolic_array_tb_sysarr_MAC final : public 
     CData/*0:0*/ __PVT__mul_carryout_in;
     CData/*4:0*/ __PVT__mul_exp1_in;
     CData/*4:0*/ __PVT__mul_exp2_in;
+    CData/*0:0*/ __PVT__mul_round_loss_s2;
     CData/*4:0*/ __PVT__mul_sum_exp;
     CData/*4:0*/ __PVT__mul_final_exp;
     CData/*0:0*/ __PVT__add_sign_shifted_in;
     CData/*0:0*/ __PVT__add_sign_not_shifted_in;
     CData/*4:0*/ __PVT__add_exp_max_in;
+    CData/*0:0*/ __PVT__add_round_loss_s2_in;
     CData/*0:0*/ __PVT__add_sign_out;
     CData/*0:0*/ __PVT__add_sign_in;
     CData/*0:0*/ __PVT__add_carry_out;
     CData/*0:0*/ __PVT__add_carry_in;
     CData/*4:0*/ __PVT__add_exp_max_s3_in;
+    CData/*0:0*/ __PVT__add_round_loss_s3_in;
     CData/*4:0*/ __PVT__mul2__DOT__add_EXPs__DOT__r_exp1;
     CData/*4:0*/ __PVT__mul2__DOT__add_EXPs__DOT__r_exp2;
     CData/*4:0*/ __PVT__mul2__DOT__add_EXPs__DOT__r_sum;
@@ -48,11 +51,11 @@ class alignas(VL_CACHE_LINE_BYTES) Vsystolic_array_tb_sysarr_MAC final : public 
     CData/*5:0*/ __PVT__add3__DOT__u_exp1;
     CData/*5:0*/ __PVT__add3__DOT__u_shifted_amount;
     CData/*5:0*/ __PVT__add3__DOT__u_result;
-    CData/*0:0*/ __PVT__add3__DOT__round_flag;
     SData/*15:0*/ __PVT__input_x;
     SData/*15:0*/ __PVT__nxt_input_x;
     SData/*12:0*/ __PVT__mul_product_in;
     SData/*15:0*/ __PVT__mul_result;
+    SData/*11:0*/ __PVT__mul_significand_product_selected;
     SData/*12:0*/ __PVT__frac_shifted_in;
     SData/*12:0*/ __PVT__frac_not_shifted_in;
     SData/*12:0*/ __PVT__add_sum_in;
@@ -62,7 +65,6 @@ class alignas(VL_CACHE_LINE_BYTES) Vsystolic_array_tb_sysarr_MAC final : public 
     SData/*13:0*/ __PVT__add2__DOT__change_to_unsigned__DOT__rfrac_signed;
     SData/*12:0*/ __PVT__add3__DOT__shifted_frac;
     SData/*11:0*/ __PVT__add3__DOT__round_this;
-    SData/*11:0*/ __PVT__add3__DOT__rounded_fraction;
     IData/*25:0*/ __PVT__mul1__DOT__MUL__DOT__frac_out_26b;
 
     // INTERNAL VARIABLES

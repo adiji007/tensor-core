@@ -32,8 +32,10 @@ module sysarr_add (
     logic [12:0] frac_shifted_out, frac_not_shifted_out;
     logic [12:0] frac_shifted_in, frac_not_shifted_in;
     logic [4:0] add_exp_max_out, add_exp_max_in;
+    // This does not actually go through step 2 but must be latched until step3
+    logic add_round_loss_s1_out, add_round_loss_s2_in;
 
-    ADD_step1 add1 (adder.add_input1, adder.add_input2, add_sign_shifted_out, frac_shifted_out, add_sign_not_shifted_out, frac_not_shifted_out, add_exp_max_out);
+    ADD_step1 add1 (adder.add_input1, adder.add_input2, add_sign_shifted_out, frac_shifted_out, add_sign_not_shifted_out, frac_not_shifted_out, add_exp_max_out, add_round_loss_s1_out);
 
     // flipflop to connect add stage1 and stage2
     always_ff @(posedge clk, negedge nRST) begin
@@ -44,6 +46,7 @@ module sysarr_add (
             frac_not_shifted_in     <= 0;
             add_exp_max_in          <= 0;
             start_passthrough_2 <= 0;
+            add_round_loss_s2_in <= 0;
         end
         else if(run) begin
             add_sign_shifted_in     <= add_sign_shifted_out;
@@ -52,6 +55,7 @@ module sysarr_add (
             frac_not_shifted_in     <= frac_not_shifted_out;
             add_exp_max_in          <= add_exp_max_out;
             start_passthrough_2 <= adder.start;
+            add_round_loss_s2_in <= add_round_loss_s1_out; 
         end
         else begin
             add_sign_shifted_in     <= add_sign_shifted_in;
@@ -60,6 +64,7 @@ module sysarr_add (
             frac_not_shifted_in     <= frac_not_shifted_in;
             add_exp_max_in          <= add_exp_max_in;
             start_passthrough_2 <= start_passthrough_2;
+            add_round_loss_s2_in <= add_round_loss_s2_in; 
         end
     end
 
@@ -68,6 +73,7 @@ module sysarr_add (
     logic [12:0] add_sum_out, add_sum_in;
     logic add_carry_out, add_carry_in;
     logic [4:0] add_exp_max_s2_out, add_exp_max_s3_in;
+    logic add_round_loss_s3_in;
 
     ADD_step2 add2 (frac_shifted_in, add_sign_shifted_in, frac_not_shifted_in, add_sign_not_shifted_in, add_exp_max_in, add_sign_out, add_sum_out, add_carry_out, add_exp_max_s2_out);
 
@@ -78,6 +84,7 @@ module sysarr_add (
             add_carry_in            <= 0;
             add_exp_max_s3_in       <= 0;
             start_passthrough_3 <= 0;
+            add_round_loss_s3_in <= 0;
         end
         else if(run) begin
             add_sign_in             <= add_sign_out;
@@ -85,6 +92,7 @@ module sysarr_add (
             add_carry_in            <= add_carry_out;
             add_exp_max_s3_in       <= add_exp_max_s2_out;
             start_passthrough_3 <= start_passthrough_2;
+            add_round_loss_s3_in <= add_round_loss_s2_in;
         end
         else begin
             add_sign_in             <= add_sign_in;
@@ -92,6 +100,7 @@ module sysarr_add (
             add_carry_in            <= add_carry_in;
             add_exp_max_s3_in       <= add_exp_max_s3_in;
             start_passthrough_3 <= start_passthrough_3;
+            add_round_loss_s3_in <= add_round_loss_s3_in;
         end
     end
 
@@ -99,7 +108,7 @@ module sysarr_add (
     logic [15:0] accumulate_result;
     logic [4:0] add_flags;
     // Rounding mode: truncation. Maybe should pick something else?
-    ADD_step3 add3(0, 0, 0, 0, 3'b001, add_exp_max_s3_in, add_sign_in, add_sum_in, add_carry_in, accumulate_result, add_flags);
+    ADD_step3 add3(0, 0, 0, 0, add_exp_max_s3_in, add_sign_in, add_sum_in, add_carry_in, accumulate_result, add_flags, add_round_loss_s3_in);
     assign adder.add_output = add_flags[2] ? 16'b0111110000000000 : accumulate_result;   // Overflow handler
 
 

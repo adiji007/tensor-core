@@ -18,13 +18,15 @@ module mul_13b (
     input  [12:0] frac_in1,
     input  [12:0] frac_in2,
     output [12:0] frac_out,
-    output        overflow
+    output        overflow,
+    output        round_loss
 );
 
     reg [25:0] frac_out_26b;
 
     assign overflow = frac_out_26b[25];
     assign frac_out = frac_out_26b[24:12];
+    assign round_loss = | frac_out_26b[11:0];
 
     always_comb begin : MULTIPLY
         frac_out_26b = frac_in1 * frac_in2;

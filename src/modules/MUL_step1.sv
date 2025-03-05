@@ -27,7 +27,8 @@ module MUL_step1 (
     output [ 4:0] exp1,
     output [ 4:0] exp2,
     output [12:0] product,
-    output        carry_out
+    output        carry_out,
+    output        round_loss
 );
 
     assign sign1 = fp1_in[15];
@@ -53,7 +54,8 @@ module MUL_step1 (
         .frac_in1({frac_leading_bit_fp1, fp1_in[9:0], 2'b00}),
         .frac_in2({frac_leading_bit_fp2, fp2_in[9:0], 2'b00}),
         .frac_out(product),
-        .overflow(carry_out)
+        .overflow(carry_out),
+        .round_loss(round_loss)
     );
 
 endmodule  // MUL_step1

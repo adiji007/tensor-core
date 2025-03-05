@@ -25,20 +25,24 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___ctor_var_reset(Vsystolic_array
     vlSelf->__PVT__mul_exp1_in = VL_RAND_RESET_I(5);
     vlSelf->__PVT__mul_exp2_in = VL_RAND_RESET_I(5);
     vlSelf->__PVT__mul_product_in = VL_RAND_RESET_I(13);
+    vlSelf->__PVT__mul_round_loss_s2 = VL_RAND_RESET_I(1);
     vlSelf->__PVT__mul_sum_exp = VL_RAND_RESET_I(5);
     vlSelf->__PVT__mul_result = VL_RAND_RESET_I(16);
+    vlSelf->__PVT__mul_significand_product_selected = VL_RAND_RESET_I(12);
     vlSelf->__PVT__mul_final_exp = VL_RAND_RESET_I(5);
     vlSelf->__PVT__add_sign_shifted_in = VL_RAND_RESET_I(1);
     vlSelf->__PVT__add_sign_not_shifted_in = VL_RAND_RESET_I(1);
     vlSelf->__PVT__frac_shifted_in = VL_RAND_RESET_I(13);
     vlSelf->__PVT__frac_not_shifted_in = VL_RAND_RESET_I(13);
     vlSelf->__PVT__add_exp_max_in = VL_RAND_RESET_I(5);
+    vlSelf->__PVT__add_round_loss_s2_in = VL_RAND_RESET_I(1);
     vlSelf->__PVT__add_sign_out = VL_RAND_RESET_I(1);
     vlSelf->__PVT__add_sign_in = VL_RAND_RESET_I(1);
     vlSelf->__PVT__add_sum_in = VL_RAND_RESET_I(13);
     vlSelf->__PVT__add_carry_out = VL_RAND_RESET_I(1);
     vlSelf->__PVT__add_carry_in = VL_RAND_RESET_I(1);
     vlSelf->__PVT__add_exp_max_s3_in = VL_RAND_RESET_I(5);
+    vlSelf->__PVT__add_round_loss_s3_in = VL_RAND_RESET_I(1);
     vlSelf->__PVT__mul1__DOT__MUL__DOT__frac_out_26b = VL_RAND_RESET_I(26);
     vlSelf->__PVT__mul2__DOT__add_EXPs__DOT__r_exp1 = VL_RAND_RESET_I(5);
     vlSelf->__PVT__mul2__DOT__add_EXPs__DOT__r_exp2 = VL_RAND_RESET_I(5);
@@ -57,6 +61,4 @@ VL_ATTR_COLD void Vsystolic_array_tb_sysarr_MAC___ctor_var_reset(Vsystolic_array
     vlSelf->__PVT__add3__DOT__u_shifted_amount = VL_RAND_RESET_I(6);
     vlSelf->__PVT__add3__DOT__u_result = VL_RAND_RESET_I(6);
     vlSelf->__PVT__add3__DOT__round_this = VL_RAND_RESET_I(12);
-    vlSelf->__PVT__add3__DOT__round_flag = VL_RAND_RESET_I(1);
-    vlSelf->__PVT__add3__DOT__rounded_fraction = VL_RAND_RESET_I(12);
 }
