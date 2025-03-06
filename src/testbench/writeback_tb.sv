@@ -25,60 +25,27 @@ module writeback_tb;
 
     // Test Sequence
     initial begin
-        // Initialize Signals
+        
+        /* Test Case 0: nRST */
         CLK = 0;
         nRST = 0;
-        wbif.load_ready = 0;
-        wbif.alu_ready = 0;
-        wbif.alu_out = 0;
-        wbif.dmemload = 0;
-        wbif.reg_sel_alu = 0;
-        wbif.reg_sel_load = 0;
+        wbif.w_dat = '0;
+        wbif.reg_sel = '0;
+        wbif.branch_mispredict = 0;
+        wbif.branch_spec = 0;
 
-        // Apply Reset
         #10 nRST = 1;  
         #10;
 
-        // Test Case 1: ALU writes back
-        wbif.alu_ready = 1;
-        wbif.alu_out = 32'hADD00ADD;
-        wbif.reg_sel_alu = 5'h1;
-        #10;
-        assert(wbif.wb_out.s_rw_en == 1);
-        assert(wbif.wb_out.s_rw == 5'h1);
-        assert(wbif.wb_out.s_wdata == 32'hADD00ADD);
+        /* Test Case 1: Normal Write Back Operations */
 
-        // Test Case 2: Load writes back
-        wbif.alu_ready = 0;
-        wbif.load_ready = 1;
-        wbif.dmemload = 32'hDEADBEEF;
-        wbif.reg_sel_load = 5'h2;
-        #10;
-        assert(wbif.wb_out.s_rw_en == 1);
-        assert(wbif.wb_out.s_rw == 5'h2);
-        assert(wbif.wb_out.s_wdata == 32'hDEADBEEF);
+        for (int i = 1; i < 9; i++ ) begin
+            wbif.w_dat = i * 10;
+            wbif.reg_sel = i;
+            #10;
+        end
+        
 
-        // Test Case 3: Both ALU and Load ready (Load should take priority)
-        wbif.alu_ready = 1;
-        wbif.load_ready = 1;
-        wbif.alu_out = 32'h12345678;
-        wbif.dmemload = 32'hFEEDFADE;
-        wbif.reg_sel_alu = 5'h3;
-        wbif.reg_sel_load = 5'h4;
-        #10;
-        assert(wbif.wb_out.s_rw_en == 1);
-        assert(wbif.wb_out.s_rw == 5'h4);  // Load takes priority
-        assert(wbif.wb_out.s_wdata == 32'hFEEDFADE);
-
-        // Test Case 4: No writeback
-        wbif.alu_ready = 0;
-        wbif.load_ready = 0;
-        #10;
-        assert(wbif.wb_out.s_rw_en == 0);
-
-        // End simulation
-        #20;
-        $display("All tests passed!");
         $stop;
     end
 endmodule

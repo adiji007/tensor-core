@@ -14,6 +14,7 @@ module buffer_module_tb;
     logic [TB_WIDTH-1:0] dout;
     logic full;
     logic empty;
+    logic clear;
 
     // Instantiate the DUT and pass clk/nRST separately
     buffer_module #(TB_WIDTH, TB_DEPTH) dut (
@@ -21,6 +22,7 @@ module buffer_module_tb;
         .nRST(nRST),
         .write_en(write_en),
         .read_en(read_en),
+        .clear(clear),
         .din(din),
         .dout(dout),
         .full(full),
