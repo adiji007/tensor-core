@@ -29,7 +29,7 @@ module sc_datapath
     issue ISSUE (CLK, nrst, isif);
     
     regfile_if rfif();
-    // regfile REGFILE (CLK, nrst, fuif);
+    // // regfile REGFILE (CLK, nrst, fuif);
     regfile REGFILE (CLK, nrst, rfif);
 
     execute_if eif();
@@ -37,6 +37,9 @@ module sc_datapath
 
     writeback_if wbif();
     writeback WRITEBACK (CLK, nrst, wbif);
+
+    // //Scratch Pad 
+    // scratchpad_if spif();
 
 // IMPORT PACKAGE
     import pipeline_pkg::*;
@@ -54,10 +57,28 @@ module sc_datapath
     ew_t ew_execute;
     ew_t ew_writeback;
 
-//  FETCH/DISPATCH CONNECTIONS
-    
+// DATAPATH GENERAL CONNECTIONS
+    assign dcif.imemREN = 1;
+    assign dcif.imemaddr = fif.pc;
+
+    assign dcif.dmemREN = ew_execute.sls_dmemREN;
+    assign dcif.dmemWEN = ew_execute.sls_dmemWEN;
+    assign dcif.halt = ie_issue.halt;
+
+    assign dcif.dmemstore = ew_execute.sls_dmemstore;
+    assign ew_execute.sls_dmemload = dcif.dmemload;
+//Scratchpad Connection
+
+    // assign spif.sStore = '1; 
+    //reason its not working is because of no data request signals
+
     //FETCH CONNECTIONS
     assign fif.imemload = dcif.imemload;
+    assign fif.freeze = sbif.freeze;
+    assign fif.ihit = dcif.ihit;
+    assign fif.flush = ew_execute.bfu_misprediction; //mispredicted branch = flush
+    // assign fif.stall = 
+    
     //assign fif.flush = 
     //assign fif.stall = eif.
     //assign fif.dispatch_free =
@@ -66,12 +87,12 @@ module sc_datapath
     // assign fif.correct_target = eif.branch_target;
     
     //BEFORE LATCH
-    assign fd_fetch.instr = fif.instr;
+    assign fd_fetch.instr = fif.instr; //imemload
     assign fd_fetch.pc = fif.pc;
 
     //AFTER LATCH CONNECTIONS
     assign sbif.fetch = fd_dispatch.instr;
-
+    assign sbif.s_wdata = ew_writeback.s_wdata;
 //  ISSUE/EXECUTE CONNECTIONS
 
     //BEFORE LATCH

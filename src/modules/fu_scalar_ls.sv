@@ -48,6 +48,8 @@ module fu_scalar_ls (
         sls_if.dmemWEN = '0;
         sls_if.dmemstore = '0;
         sls_if.dhit = '0;
+        sls_if.dmemload = '0;
+        sls_if.dmemREN = latched_dmemREN;
         casez (state) 
             idle: begin
                 if (sls_if.mem_type == STORE) begin

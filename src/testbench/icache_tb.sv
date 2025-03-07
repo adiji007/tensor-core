@@ -3,7 +3,7 @@
 //`include "cpu_ram_if.vh"
 `include "caches_if.vh"
 `include "datapath_cache_if.vh"
-`include "cpu_types_pkg.vh"
+`include "caches_pkg.vh"
 // mapped timing needs this. 1ns is too fast
 `timescale 1 ns / 1 ns
 
@@ -25,15 +25,16 @@ module icache_tb;
   // test program
   test PROG (CLK,dcif,cif0,nRST);  
   // DUT
-  icache  DUT_icache(CLK,nRST, dcif, cif0);
+  icache  DUT_icache(.CLK(CLK),.nRST(nRST), .cif(cif0), .dcif(dcif));
 
 
 endmodule
 
-program test(input logic CLK,datapath_cache_if.cache my_dcif, caches_if my_cif0, output logic nrst); 
+program test(input logic CLK, datapath_cache_if.cache my_dcif, caches_if my_cif0, output logic nrst); 
 int test_num;
+parameter PERIOD = 10;
 
-import cpu_types_pkg::*;
+import caches_pkg::*;
 
   task reset_dut;
     begin
@@ -75,47 +76,47 @@ import cpu_types_pkg::*;
     initial begin
       test_num = -1;
       reset_dut;
-      #10
+      #(PERIOD * 5)
       // imemREN, imemaddr, iwait, iload
       
      // first fetch will be a miss, data invalid
       test_num = test_num + 1;   // test case 0
       write('1, 32'b111100, '1, '0);
-      #50
+      #(PERIOD * 5)
 
       write('1, 32'b111100, '0, 32'h8);
-      #50
+      #(PERIOD * 5)
 
       // second fetch will be a ihit, data valid & tag match
       test_num = test_num + 1;   // test case 0
       write('1, 32'b111100, '1, '0);
-      #50
+      #(PERIOD * 5)
 
     // test some other places
      test_num = test_num + 1;   // test case 0
       write('1, 32'b101100, '1, '0);
-      #50
+      #(PERIOD * 5)
        write('1, 32'b101100, '0, 32'hffffffff);
-      #50
+      #(PERIOD * 5)
 
        test_num = test_num + 1;   
      write('1, 32'b101100, '1, '0);
-      #50
+      #(PERIOD * 5)
     
 
     // same index differnt tag
      test_num = test_num + 1;   
       write('1, 32'b10111100, '1, '0);
-      #50
+      #(PERIOD * 5)
       // that is a miss, need to reaplce that row and get data from ram
        test_num = test_num + 1;   
       write('1, 32'b10111100, '0, 32'hFEEDCAFE);
-      #50
+      #(PERIOD * 5)
 
 
-      #1000
-      #1000
-      $stop;
+      #(PERIOD * 10)
+      #(PERIOD * 10)
+      $finish;
       
 
     end

@@ -31,6 +31,7 @@ assign fubif.reg_b = eif.bfu_reg_b;
 assign fubif.current_pc = eif.bfu_current_pc;
 assign fubif.imm = eif.bfu_imm;
 assign fubif.predicted_outcome = eif.bfu_predicted_outcome;
+
 // Outputs: branch_outcome, updated_pc, misprediction, correct_pc, update_btb, update_pc, branch_target
 assign eif.eif_output.bfu_branch_outcome = fubif.branch_outcome;
 assign eif.eif_output.bfu_updated_pc = fubif.updated_pc; 
@@ -38,6 +39,7 @@ assign eif.eif_output.bfu_misprediction = fubif.misprediction;
 assign eif.eif_output.bfu_correct_pc = fubif.correct_pc;
 assign eif.eif_output.bfu_update_pc = fubif.update_pc;
 assign eif.eif_output.bfu_branch_target = fubif.branch_target;
+assign eif.eif_output.bfu_update_btb = fubif.update_btb;
 
 // Scalar ALU FU
 fu_alu SALU(aluif);

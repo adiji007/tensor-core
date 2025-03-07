@@ -9,6 +9,7 @@ package datapath_pkg;
   parameter FU_W   = 3;
   parameter FU_S_W = 2;
   parameter FU_M_W = 2;
+  parameter WORD_W = 32;
 
   typedef logic [FU_W-1:0]   fu_bits_t;
   typedef logic [FU_S_W-1:0] fu_sbits_t;
@@ -218,6 +219,7 @@ package datapath_pkg;
     matbits_t ms1;
     matbits_t ms2;
     matbits_t ms3;
+    logic halt;
   } issue_t;
 
 

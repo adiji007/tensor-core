@@ -4,7 +4,7 @@
 module ram #(
     parameter DATA_WIDTH = 32,   // Data bus width
     parameter ADDR_WIDTH = 10,   // Address bus width
-    parameter INIT_FILE = "meminit.bin", // Memory initialization file
+    parameter INIT_FILE = "out.bin", // Memory initialization file
     parameter LAT = 6
 )(
     input logic CLK, nRST,

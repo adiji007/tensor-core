@@ -24,23 +24,26 @@ interface execute_if;
   import isa_pkg::*;
 
   // Branch FU
-  logic bfu_branch, bfu_branch_gate_sel, bfu_branch_outcome;
-  logic bfu_predicted_outcome, bfu_misprediction, bfu_update_btb;
+  logic bfu_branch, bfu_branch_gate_sel;
+  logic bfu_predicted_outcome;
   logic [1:0] bfu_branch_type;
-  word_t bfu_reg_a, bfu_reg_b, bfu_current_pc, bfu_imm, bfu_updated_pc, bfu_correct_pc, bfu_update_pc, bfu_branch_target;
+  word_t bfu_reg_a, bfu_reg_b, bfu_current_pc, bfu_imm;
+  
   // Scalar ALU FU
    word_t salu_port_a, salu_port_b;
    logic [3:0] salu_aluop;
+  
   // Scalar Load/Store FU
   word_t sls_imm, sls_rs1, sls_rs2, sls_dmem_in;
   logic sls_dhit_in;
   scalar_mem_t sls_mem_type;
+  
   // MLS FU
   logic           mls_mhit, mls_enable;
   logic [1:0]     mls_ls_in;
   logic [3:0]     mls_rd_in, mls_rs_in;
   logic [10:0]    mls_imm_in;
-  word_t          mls_stride_in;
+  word_t          mls_stride_in;  
   // Gemm FU
   logic gemm_enable, gemm_new_weight_in;
   matbits_t gemm_rs1_in, gemm_rs2_in, gemm_rs3_in, gemm_rd_in;
@@ -57,11 +60,13 @@ interface execute_if;
           mls_mhit, mls_enable, mls_ls_in, mls_rd_in, mls_rs_in, mls_stride_in, mls_imm_in,
           // GEMM FU
           gemm_enable, gemm_new_weight_in, gemm_rs1_in, gemm_rs2_in, gemm_rs3_in, gemm_rd_in,
+    
     output eif_output
   );
 
   modport tbif (
     input eif_output,
+
     output// Branch FU
           bfu_branch, bfu_branch_type, bfu_branch_gate_sel, bfu_reg_a, bfu_reg_b, bfu_current_pc, bfu_imm, bfu_predicted_outcome,
           // Scalar ALU FU
