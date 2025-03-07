@@ -8,8 +8,6 @@
 package pipeline_pkg;
     import isa_pkg::*;
     import datapath_pkg::*;
-  parameter WORD_W = 32;
-
 
 // FETCH/DISPATCH LATCH:
     typedef struct packed
@@ -21,7 +19,11 @@ package pipeline_pkg;
     typedef struct packed
     {
         word_t instr, rdat1, rdat2, pc;
-        logic out, fust_s, fust_m, fust_g, halt;
+        logic fust_s, fust_m, fust_g, halt;
+        issue_t out;
+        fust_state_e [4:0] fust_state;
+        dispatch_t d_out;
+        wb_t wb;
     }   ie_t;
 
 //  EXECUTE/WRITEBACK LATCH:

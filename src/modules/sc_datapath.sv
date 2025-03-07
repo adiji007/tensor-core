@@ -1,5 +1,7 @@
 // PIPELINE PACKAGES
 `include "pipeline_types.vh"
+`include "datapath_types.vh"
+`include "isa_types.vh"
 
 // INTERFACES
 `include "fetch_if.vh"
@@ -10,6 +12,7 @@
 `include "execute_if.vh"
 `include "writeback_if.vh"
 `include "datapath_cache_if.vh"
+
 
 module sc_datapath
 (
@@ -155,7 +158,15 @@ module sc_datapath
 //  EXECUTE/WRITEBACK CONNECTIONS
     
     //BEFORE LATCH
-    assign ew_execute.wb_data = wbif.wb_out;
+    // assign ew_execute.wb_data = wbif.wb_out;
+    assign ie_issue.d_out = dif.out;
+
+    //assign ie_excecute signals here to the functional units
+
+    assign eif.bfu_branch_type = ie_execute.d_out.ex_ctr.branch_op;
+    assign eif.salu_aluop = ie_execute.d_out.ex_ctr.alu_op;
+    assign eif.sls_imm = ie_execute.d_out.ex_ctr.imm;
+
 
     //AFTER LATCH
     assign sbif.wb = ew_writeback;
