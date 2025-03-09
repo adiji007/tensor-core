@@ -64,12 +64,12 @@ module sc_datapath
     assign dcif.imemREN = 1;
     assign dcif.imemaddr = fif.pc;
 
-    assign dcif.dmemREN = ew_execute.sls_dmemREN;
-    assign dcif.dmemWEN = ew_execute.sls_dmemWEN;
+    assign dcif.dmemREN = eif.eif_output.sls_dmemREN;
+    assign dcif.dmemWEN = eif.eif_output.sls_dmemWEN;
+    assign dcif.dmemaddr = eif.eif_output.sls_dmemaddr;
     assign dcif.halt = ie_issue.halt;
+    assign dcif.dmemstore = eif.eif_output.sls_dmemstore;
 
-    assign dcif.dmemstore = ew_execute.sls_dmemstore;
-    assign ew_execute.sls_dmemload = dcif.dmemload;
 //Scratchpad Connection
 
     // assign spif.sStore = '1; 
@@ -81,14 +81,7 @@ module sc_datapath
     assign fif.ihit = dcif.ihit;
     assign fif.flush = ew_execute.bfu_misprediction; //mispredicted branch = flush
     // assign fif.stall = 
-    
-    //assign fif.flush = 
-    //assign fif.stall = eif.
-    //assign fif.dispatch_free =
-    // assign fif.pc_prediction = eif.pc_fetch;
-    // assign fif.misprediction = eif.pred_outcome;
-    // assign fif.correct_target = eif.branch_target;
-    
+
     //BEFORE LATCH
     assign fd_fetch.instr = fif.instr; //imemload
     assign fd_fetch.pc = fif.pc;
@@ -106,54 +99,6 @@ module sc_datapath
     assign ie_issue.fust_m = isif.fust_m;
     assign ie_issue.fust_g = isif.fust_g;
     assign ie_issue.pc = fd_dispatch.pc;
-    
-    //BRANCH FU
-    // assign eif.ihit = dcif.ihit; 
-    // // assign eif.bfu_branch_outcome = fubpif.predicted_outcome;
-    // // assign bfu_update_btb =
-    // //this is an output in the functional unit???
-    // // assign eif.bfu_branch_target = fubpif.predicted_targe;
-    // assign eif.bfu_pc = ie_issue.pc;
-    // assign eif.bfu_pc_fetch = fif.pc;
-
-    // //SCALAR ALU
-    // assign eif.salu_aluop = cuif.alu_op;
-    // assign eif.salu_port_a = ie_execute.rdat1;
-    // assign eif.salu_port_b = ie_execute.rdat2;
-    // assign eif.imm = cuif.imm;
-
-    // //SCALAR LOAD/STORE
-    // assign eif.sls_mem_type = cuif.s_mem_type;
-    // assign eif.sls_rs1 = rfif.rdat1; //didnt know where to find rsel signal control unit does not decode it
-    // assign eif.sls_rs2 = rfif.rdat2;
-    // assign eif.sls_dmem_in = cuif.s_reg_write;
-    // assign eif.sls_dhit_in = dcif.dhit;
-
-    //AFTER LATCH CONNECTIONS
-    // assign fuslsif.rs1 = rfif.rdat1;
-    // assign fuslsif.rs2 = rfif.rdat2;
-    // assign fuslsif.imm =
-    // assign fuslsif.mem_type =
-    // assign fuslsif. dmem_in = 
-    // assign fuslsif.dhit_in =
-    // assign fubif.pc = ie_execute.pc;
-    // assign fualuif.port_a = ie_execute.rdat1;
-    // assign fualuif.port_b = ie_execute.rdat2;
-    // assign fualif.aluop =
-
-    // //BRANCH FU TO FETCH CONNECTIONS
-    // assign fubif.pc_fetch = fif.pc; //maybe need this idk
-
-    // //FETCH TO BRANCH FU CONNECTIONS
-    // assign fif.pc_prediction = fubif.pred_outcome;
-    // assign fif.correct_target = fubif.pred_target;
-    
-    //WRITEBACK TO SCALAR ALU FU CONNECTIONS
-    // assign wbif.wb_select = eif.dmemaddr;
-    // assign wbif.store_out = eif.dmemstore;
-    
-    // //WRITEBACK TO SCALAR LOAD/STORE FU CONNECTIONS
-    // assign wbif.alu_out = eif.port_output;
 
 //  EXECUTE/WRITEBACK CONNECTIONS
     
@@ -163,9 +108,55 @@ module sc_datapath
 
     //assign ie_excecute signals here to the functional units
 
+    // EXECUTE BFU FUNCTIONAL UNIT
     assign eif.bfu_branch_type = ie_execute.d_out.ex_ctr.branch_op;
+    //assign eif.bfu_branch
+    //assign eif.bfu_brnach_gate_sel
+    assign eif.bfu_reg_a = ie_execute.rdat1;
+    assign eif.bfu_reg_b = ie_execute.rdat2;
+    assign eif.bfu_current_pc = ie_execute.pc;
+    assign eif.bfu_imm = ie_execute.d_out.ex_ctr.imm;
+    //assign eif.predicted_outcome
+
+    //SCALAR ALU FU
     assign eif.salu_aluop = ie_execute.d_out.ex_ctr.alu_op;
+    assign eif.salu_port_a = ie_execute.rdat1;
+    assign eif.salu_port_b = ie_execute.rdat2;
+
+    //SCALAR LOAD/STORE FU
     assign eif.sls_imm = ie_execute.d_out.ex_ctr.imm;
+    assign eif.sls_rs1 = ie_execute.rdat1;
+    assign eif.sls_rs2 = ie_execute.rdat2;
+    assign eif.sls_dmem_in = dcif.dmemload;
+    assign eif.sls_dhit_in = dcif.dhit;
+    assign eif.sls_mem_type = ie_execute.d_out.ex_ctr.s_mem_type;
+
+    //MLS FU
+
+    //GEMM
+
+    //EXECUTE LATCHES
+
+    assign ew_execute.salu_port_output = eif.eif_output.salu_port_output;
+    assign ew_execute.alu_done = dif.out.wb_ctr.alu_done;
+    assign ew_execute.load_done = dif.out.wb_ctr.load_done;
+    assign ew_execute.sls_dmemload = dcif.dmemload;
+    
+    //WRITE BACK ASSIGNMENTS
+    assign wbif.alu_out = ew_writeback.salu_port_output;
+    assign wbif.load_ready = ew_writeback.load_done;
+    assign wbif.dmemload = ew_writeback.sls_dmemload;
+    assign wbif.alu_ready = ew_writeback.alu_done;
+
+    // assign wbif.wb_out.load_done = 
+    // assign wbif.wb_out.s_rw_en =
+    // assign wbif.wb_out.s_wdata = sbif.s_wdata;
+    // assign wbif.wb_out.alu_done = 
+
+
+
+
+
 
 
     //AFTER LATCH
@@ -180,7 +171,9 @@ module sc_datapath
             ew_writeback <= 0;
         end
         else begin
-            fd_dispatch <= fd_fetch;
+            if(dcif.ihit && !sbif.freeze) begin
+                fd_dispatch <= fd_fetch;
+            end
             ie_execute <= ie_issue;
             ew_writeback <= ew_execute;
         end

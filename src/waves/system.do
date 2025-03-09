@@ -59,6 +59,22 @@ add wave -noupdate -expand -group {MEMORY CONTROLLER} /system_tb/DUT/CPU/ccif/ra
 add wave -noupdate -expand -group {MEMORY CONTROLLER} /system_tb/DUT/CPU/ccif/ramstate
 add wave -noupdate -expand -group {MEMORY CONTROLLER} /system_tb/DUT/CPU/ccif/ramaddr
 add wave -noupdate -expand -group {MEMORY CONTROLLER} /system_tb/DUT/CPU/ccif/ramload
+add wave -noupdate -expand -group EXECUTE -expand /system_tb/DUT/CPU/SC_DP/eif/eif_output
+add wave -noupdate -expand -group EXECUTE /system_tb/DUT/CPU/SC_DP/eif/sls_mem_type
+add wave -noupdate -expand -group EXECUTE /system_tb/DUT/CPU/SC_DP/eif/sls_imm
+add wave -noupdate -expand -group EXECUTE /system_tb/DUT/CPU/SC_DP/eif/sls_rs1
+add wave -noupdate -expand -group EXECUTE /system_tb/DUT/CPU/SC_DP/eif/sls_rs2
+add wave -noupdate -expand -group EXECUTE /system_tb/DUT/CPU/SC_DP/eif/sls_dmem_in
+add wave -noupdate -expand -group EXECUTE /system_tb/DUT/CPU/SC_DP/eif/sls_dhit_in
+add wave -noupdate -expand -group {DATAPATH CACHE} /system_tb/DUT/CPU/dcif/ihit
+add wave -noupdate -expand -group {DATAPATH CACHE} /system_tb/DUT/CPU/dcif/imemREN
+add wave -noupdate -expand -group {DATAPATH CACHE} /system_tb/DUT/CPU/dcif/imemload
+add wave -noupdate -expand -group {DATAPATH CACHE} /system_tb/DUT/CPU/dcif/dhit
+add wave -noupdate -expand -group {DATAPATH CACHE} /system_tb/DUT/CPU/dcif/dmemREN
+add wave -noupdate -expand -group {DATAPATH CACHE} /system_tb/DUT/CPU/dcif/dmemWEN
+add wave -noupdate -expand -group {DATAPATH CACHE} /system_tb/DUT/CPU/dcif/dmemload
+add wave -noupdate -expand -group {DATAPATH CACHE} /system_tb/DUT/CPU/dcif/dmemstore
+add wave -noupdate -expand -group {DATAPATH CACHE} /system_tb/DUT/CPU/dcif/dmemaddr
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {20 ns} 0}
 quietly wave cursor active 1
@@ -76,4 +92,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 ns} {84 ns}
+WaveRestoreZoom {0 ns} {128 ns}

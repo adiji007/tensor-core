@@ -272,6 +272,7 @@ package datapath_pkg;
     // Gemm FU
     logic gemm_new_weight_out;
     fu_gemm_t gemm_matrix_num;
+    
   } eif_output_t;
 
 

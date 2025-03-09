@@ -58,7 +58,7 @@ interface execute_if;
           sls_imm, sls_rs1, sls_rs2, sls_dmem_in, sls_dhit_in, sls_mem_type,
           // MLS FU
           mls_mhit, mls_enable, mls_ls_in, mls_rd_in, mls_rs_in, mls_stride_in, mls_imm_in,
-          // GEMM FU
+          // GEMM FUsadsaf
           gemm_enable, gemm_new_weight_in, gemm_rs1_in, gemm_rs2_in, gemm_rs3_in, gemm_rd_in,
     
     output eif_output
