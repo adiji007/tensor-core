@@ -12,8 +12,6 @@ module sysarr_control_unit(
     logic start_flag;
     // next MAC signals
     logic nxt_MAC_start;
-    // next add signals for adding partial sums
-    logic nxt_add_start;
     // next signals for iterations
     logic [$clog2(3*N)-1:0] iteration [2:0];    //there can be at most 3 instructions in flight in saturated pipeline
     logic [$clog2(3*N)-1:0] nxt_iteration [2:0];
@@ -34,6 +32,8 @@ module sysarr_control_unit(
     logic [1:0] nxt_partial_fully_loaded;
     logic first_mac;
     logic nxt_first_mac;
+    logic MAC_ready;
+    logic nxt_MAC_ready;
     integer a,b,f,i,j,k,l,m,n;
     // we have space for another instruction to start loading in inputs 
     assign cu.iteration = iteration;
@@ -131,9 +131,11 @@ module sysarr_control_unit(
         if(nRST == 1'b0)begin
             cu.MAC_start <= '0;
             first_mac <= '0;
+            MAC_ready <= 1'b1;
         end else begin
             cu.MAC_start <= nxt_MAC_start;
             first_mac <= nxt_first_mac;
+            MAC_ready <= nxt_MAC_ready;
         end 
     end
 
@@ -213,39 +215,48 @@ module sysarr_control_unit(
     // tells the memory subsystem if the input fifo has space for another gemm
     // if any iteration slot is still in the backend of the fifos then there is no space
     assign cu.fifo_has_space = input_loading == 1'b0 & partial_loading == 1'b0;
+    logic fulll /*verilator public*/;
     always_comb begin
         nxt_MAC_start = 1'b0;
         nxt_first_mac = first_mac;
         if (cu.weight_en)begin
             nxt_first_mac = 1'b1;
         end
-        if ((cu.MAC_value_ready == 1'b1))begin
+        nxt_MAC_ready = MAC_ready;
+        if (cu.MAC_value_ready == 1'b1)begin
+            nxt_MAC_ready = 1'b1;
+        end
+        fulll = |iteration_full;
+        if (|iteration_full && (MAC_ready == 1'b1 || cu.MAC_value_ready))begin
             if (input_loading & partial_loading)begin // an input and partial from two gemms are concurrently loading need to wait for both
-                nxt_MAC_start = (in_data_loaded[curr_input_row] || input_fully_loaded) && (ps_data_loaded[curr_partial_row] || |partial_fully_loaded);
+                if ((in_data_loaded[curr_input_row] || input_fully_loaded) && (ps_data_loaded[curr_partial_row] || |partial_fully_loaded))begin
+                    nxt_MAC_start = 1'b1;
+                    nxt_MAC_ready = 1'b0;
+                end
             end else if (input_loading)begin // input being loaded
-                nxt_MAC_start = in_data_loaded[curr_input_row] || input_fully_loaded;
+                if(in_data_loaded[curr_input_row] || input_fully_loaded)begin
+                    nxt_MAC_start = 1'b1;
+                    nxt_MAC_ready = 1'b0;
+                end
             end else if (partial_loading)begin //input loaded but waiting for partials add all loaded signal
-                nxt_MAC_start = ps_data_loaded[curr_partial_row] || |partial_fully_loaded;
+                if(ps_data_loaded[curr_partial_row] || |partial_fully_loaded)begin
+                    nxt_MAC_start = 1'b1;
+                    nxt_MAC_ready = 1'b0;
+                end
             end else begin // output being produced
                 nxt_MAC_start = 1'b1;
+                nxt_MAC_ready = 1'b0;
             end
-        end else if (first_mac == 1'b1)begin
+        end else if (first_mac == 1'b1 && start_flag)begin
             nxt_MAC_start = 1'b1;
             nxt_first_mac = 1'b0;
+            nxt_MAC_ready = 1'b0;
         end
     end
-    // add signals
-    always_ff @(posedge clk, negedge nRST) begin
-        if(nRST == 1'b0)begin
-            cu.add_start <= '0;
-        end else begin
-            cu.add_start <= nxt_add_start;
-        end 
-    end
     always_comb begin
-        nxt_add_start = 1'b0;
+        cu.add_start = 1'b0;
         if (output_loading && cu.MAC_start)begin
-            nxt_add_start = 1'b1;
+            cu.add_start = 1'b1;
         end
     end
 endmodule
