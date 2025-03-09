@@ -18,6 +18,16 @@ add wave -noupdate /system_tb/DUT/CPU/SC_DP/dcif/imemload
 add wave -noupdate /system_tb/DUT/CPU/SC_DP/dcif/imemaddr
 add wave -noupdate /system_tb/DUT/CPU/SC_DP/dcif/ihit
 add wave -noupdate /system_tb/DUT/CPU/SC_DP/dcif/halt
+add wave -noupdate -expand -group {DATAPATH CACHE} /system_tb/DUT/CPU/dcif/ihit
+add wave -noupdate -expand -group {DATAPATH CACHE} /system_tb/DUT/CPU/dcif/imemREN
+add wave -noupdate -expand -group {DATAPATH CACHE} /system_tb/DUT/CPU/dcif/imemload
+add wave -noupdate -expand -group {DATAPATH CACHE} /system_tb/DUT/CPU/dcif/dhit
+add wave -noupdate -expand -group {DATAPATH CACHE} /system_tb/DUT/CPU/dcif/dmemREN
+add wave -noupdate -expand -group {DATAPATH CACHE} /system_tb/DUT/CPU/dcif/dmemWEN
+add wave -noupdate -expand -group {DATAPATH CACHE} /system_tb/DUT/CPU/dcif/dmemload
+add wave -noupdate -expand -group {DATAPATH CACHE} /system_tb/DUT/CPU/dcif/dmemstore
+add wave -noupdate -expand -group {DATAPATH CACHE} /system_tb/DUT/CPU/dcif/dmemaddr
+add wave -noupdate -expand -group FETCH /system_tb/DUT/CPU/SC_DP/fif/pc
 add wave -noupdate -expand -group FETCH /system_tb/DUT/CPU/SC_DP/fif/misprediction
 add wave -noupdate -expand -group FETCH /system_tb/DUT/CPU/SC_DP/fif/pc_prediction
 add wave -noupdate -expand -group FETCH /system_tb/DUT/CPU/SC_DP/FETCH/pc_reg
@@ -66,17 +76,14 @@ add wave -noupdate -expand -group EXECUTE /system_tb/DUT/CPU/SC_DP/eif/sls_rs1
 add wave -noupdate -expand -group EXECUTE /system_tb/DUT/CPU/SC_DP/eif/sls_rs2
 add wave -noupdate -expand -group EXECUTE /system_tb/DUT/CPU/SC_DP/eif/sls_dmem_in
 add wave -noupdate -expand -group EXECUTE /system_tb/DUT/CPU/SC_DP/eif/sls_dhit_in
-add wave -noupdate -expand -group {DATAPATH CACHE} /system_tb/DUT/CPU/dcif/ihit
-add wave -noupdate -expand -group {DATAPATH CACHE} /system_tb/DUT/CPU/dcif/imemREN
-add wave -noupdate -expand -group {DATAPATH CACHE} /system_tb/DUT/CPU/dcif/imemload
-add wave -noupdate -expand -group {DATAPATH CACHE} /system_tb/DUT/CPU/dcif/dhit
-add wave -noupdate -expand -group {DATAPATH CACHE} /system_tb/DUT/CPU/dcif/dmemREN
-add wave -noupdate -expand -group {DATAPATH CACHE} /system_tb/DUT/CPU/dcif/dmemWEN
-add wave -noupdate -expand -group {DATAPATH CACHE} /system_tb/DUT/CPU/dcif/dmemload
-add wave -noupdate -expand -group {DATAPATH CACHE} /system_tb/DUT/CPU/dcif/dmemstore
-add wave -noupdate -expand -group {DATAPATH CACHE} /system_tb/DUT/CPU/dcif/dmemaddr
+add wave -noupdate -expand -group Dcache /system_tb/DUT/CPU/CM/DCACHE/cif/dwait
+add wave -noupdate -expand -group Dcache /system_tb/DUT/CPU/CM/DCACHE/cif/dREN
+add wave -noupdate -expand -group Dcache /system_tb/DUT/CPU/CM/DCACHE/cif/dWEN
+add wave -noupdate -expand -group Dcache /system_tb/DUT/CPU/CM/DCACHE/cif/dload
+add wave -noupdate -expand -group Dcache /system_tb/DUT/CPU/CM/DCACHE/cif/dstore
+add wave -noupdate -expand -group Dcache /system_tb/DUT/CPU/CM/DCACHE/cif/daddr
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {20 ns} 0}
+WaveRestoreCursors {{Cursor 1} {7 ns} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 345
 configure wave -valuecolwidth 100
@@ -92,4 +99,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 ns} {128 ns}
+WaveRestoreZoom {0 ns} {86 ns}

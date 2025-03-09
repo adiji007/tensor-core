@@ -7,7 +7,7 @@
 
 interface ram_if;
   // import types
-  import ram_pkg::*;
+  // import ram_pkg::*;
   import isa_pkg::*;
 
   // ram signals

@@ -44,7 +44,7 @@ module system (input logic CLK, nrst, system_if.sys syif);
   end
 
   // interfaces
-  ram_if                            prif ();
+  cpu_ram_if                            prif ();
 
   // scheduler core processor
   scheduler_core                        CPU (CPUCLK, nrst, halt, prif);

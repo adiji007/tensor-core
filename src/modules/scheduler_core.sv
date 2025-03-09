@@ -12,11 +12,12 @@
 `include "scratchpad_if.vh"
 `include "datapath_cache_if.vh"
 `include "arbiter_caches_if.vh"
+`include "cpu_ram_if.vh"
 
 module scheduler_core (
   input logic CLK, nrst,
   output logic halt,
-  ram_if.cpu scif
+  cpu_ram_if.cpu scif
 );
 
 parameter PC0 = 0;
