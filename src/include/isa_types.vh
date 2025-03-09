@@ -115,12 +115,12 @@ package isa_pkg;
     BT_BGEU
   } branch_t;
 
-  typedef enum logic [1:0] {
-   FREE,
-   BUSY,
-   ACCESS,
-   ERROR
- } ramstate_t; //ramstate
+//   typedef enum logic [1:0] {
+//    FREE,
+//    BUSY,
+//    ACCESS,
+//    ERROR
+//  } ramstate_t; //ramstate
 
 
 endpackage

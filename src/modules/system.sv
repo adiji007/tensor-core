@@ -10,11 +10,12 @@
 //types
 `include "isa_types.vh"
 `include "ram_pkg.vh"
-`include "ram_if.vh"
+// `include "ram_if.vh"
+`include "cpu_ram_if.vh"
 
 module system (input logic CLK, nrst, system_if.sys syif);
 
-  import isa_pkg::*;
+  import ram_pkg::*;
 
   // stopped running
   logic halt;

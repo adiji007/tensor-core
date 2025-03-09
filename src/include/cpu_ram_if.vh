@@ -10,9 +10,11 @@
 
 // typedefs
 `include "isa_types.vh"
+`include "ram_pkg.vh"
 
 interface cpu_ram_if;
   // import types
+  import ram_pkg::*;
   import isa_pkg::*;
 
   // ram signals

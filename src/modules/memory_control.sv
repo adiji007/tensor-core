@@ -2,13 +2,14 @@
 
 `include "isa_types.vh"
 `include "cache_control_if.vh"
+`include "ram_pkg.vh"
 
 module memory_control (
   input CLK, nRST,
   cache_control_if.cc ccif
 );
 
-    import isa_pkg::*;
+    import ram_pkg::*;
   
   // ram outputs
   assign ccif.ramstore = ccif.dstore;
