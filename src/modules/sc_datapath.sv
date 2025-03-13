@@ -148,16 +148,10 @@ module sc_datapath
     assign wbif.dmemload = ew_writeback.sls_dmemload;
     assign wbif.alu_ready = ew_writeback.alu_done;
 
-    // assign wbif.wb_out.load_done = 
+    assign sbif.load_done =  wbif.wb_out.load_done;
     // assign wbif.wb_out.s_rw_en =
-    // assign wbif.wb_out.s_wdata = sbif.s_wdata;
+    assign sbif.s_wdata = wbif.wb_out.s_wdata;
     // assign wbif.wb_out.alu_done = 
-
-
-
-
-
-
 
     //AFTER LATCH
     assign sbif.wb = ew_writeback;
