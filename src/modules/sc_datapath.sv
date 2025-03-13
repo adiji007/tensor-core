@@ -72,6 +72,9 @@ module sc_datapath
 
 //Dispatch Connection 
     assign dif.ihit = dcif.ihit;
+    assign dif.fetch.br_pred = eif.eif_output.bfu_misprediction;
+    assign dif.fetch.br_pc = eif.eif_output.bfu_correct_pc; //want to receive the correct pc
+    assign dif.fetch.imemload = dcif.imemload;
 
 //Issue Connections
     assign isif.wb.load_done = wbif.wb_out.load_done;

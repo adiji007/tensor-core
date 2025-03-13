@@ -294,6 +294,8 @@ package datapath_pkg;
     logic bfu_update_btb;
     word_t bfu_update_pc;
     word_t bfu_branch_target;
+    logic predicted_outcome;
+    word_t predicted_target;
 
     // Scalar ALU FU
     logic salu_negative;
