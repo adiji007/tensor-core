@@ -1,20 +1,20 @@
-/*
-  Chase Johnson
-  cyjohnso@purdue.edu
-
-  System Test Bench for Scheduler Core
-*/
-
-// interface
-`include "system_if.vh"
-
-// types
+`include "pipeline_types.vh"
 `include "datapath_types.vh"
+`include "isa_types.vh"
 
-// mapped timing needs this. 1ns is too fast
+// INTERFACES
+`include "fetch_if.vh"
+`include "scoreboard_if.vh"
+`include "dispatch_if.vh"
+`include "issue_if.vh"
+`include "regfile_if.vh"
+`include "execute_if.vh"
+`include "writeback_if.vh"
+`include "datapath_cache_if.vh"
+
 `timescale 1 ns / 1 ns
 
-module sc_datapath_tb;
+module datapath_tb;
   // clock period
   parameter PERIOD = 10;
 
@@ -25,36 +25,25 @@ module sc_datapath_tb;
   always #(PERIOD/2) CLK++;
 
   // interface
-  datapath_cache_if                           dcif();
+  datapath_cache_if                   dcif ();
 
   // test program
-  test                                PROG (CLK,nRST,dcif);
+  test                                PROG (CLK, nRST, dcif);
 
   // dut
-  sc_datapath                              DUT (CLK,nRST,dcif);
+  datapath                            DUT (CLK, nRST, dcif);
 endmodule
 
-program test(input logic CLK, output logic nRST, datapath_cache_if.cache dcif);
-  
-  parameter PERIOD = 10;
-  
-  // import word type
-  import isa_pkg::word_t;
+program test(input logic CLK, output logic nRST, datapath_cache_if dcif);
 
-  // number of cycles
-  int unsigned cycles = 0;
-
-  initial
-  begin
+intial 
+begin 
     nRST = 0;
-    @(posedge CLK);
-    $display("Starting Scheduler Core:");
-    nRST = 1;
-    
+    dcif.imemaddr = '0;
+    dcif.imemload = '0;
+    dcif.ihit = 0;
+    dcif.dhit = '0;
+    dcif.dmemload = '0;
+    dcif.dmemaddr = '0;
+end
 
-    #(12*PERIOD)
-
-    $finish;
-  end
-
-endprogram

@@ -70,6 +70,12 @@ module sc_datapath
     assign dcif.halt = ie_issue.halt;
     assign dcif.dmemstore = eif.eif_output.sls_dmemstore;
 
+//Dispatch Connection 
+    assign dif.ihit = dcif.ihit;
+
+//Issue Connections
+    assign isif.wb.load_done = wbif.wb_out.load_done;
+
 //Scratchpad Connection
 
     // assign spif.sStore = '1; 
@@ -77,8 +83,7 @@ module sc_datapath
 
     //FETCH CONNECTIONS
     assign fif.imemload = dcif.imemload;
-    assign fif.freeze = sbif.freeze;
-    assign fif.ihit = dcif.ihit;
+    assign fif.freeze = dif.out.freeze;
     assign fif.flush = ew_execute.bfu_misprediction; //mispredicted branch = flush
     // assign fif.stall = 
 
@@ -148,7 +153,6 @@ module sc_datapath
     assign wbif.dmemload = ew_writeback.sls_dmemload;
     assign wbif.alu_ready = ew_writeback.alu_done;
 
-    assign sbif.load_done =  wbif.wb_out.load_done;
     // assign wbif.wb_out.s_rw_en =
     assign sbif.s_wdata = wbif.wb_out.s_wdata;
     // assign wbif.wb_out.alu_done = 
@@ -165,7 +169,7 @@ module sc_datapath
             ew_writeback <= 0;
         end
         else begin
-            if(dcif.ihit && !sbif.freeze) begin
+            if(dcif.ihit && !dif.out.freeze) begin
                 fd_dispatch <= fd_fetch;
             end
             ie_execute <= ie_issue;
