@@ -70,14 +70,19 @@ module sc_datapath
     assign dcif.halt = ie_issue.halt;
     assign dcif.dmemstore = eif.eif_output.sls_dmemstore;
 
-//Dispatch Connection 
-    assign dif.ihit = dcif.ihit;
-    assign dif.fetch.br_pred = eif.eif_output.bfu_misprediction;
-    assign dif.fetch.br_pc = eif.eif_output.bfu_correct_pc; //want to receive the correct pc
-    assign dif.fetch.imemload = dcif.imemload;
+//Scoreboard Connection 
+    assign sbif.fetch.br_pred = eif.eif_output.bfu_misprediction;
+    assign sbif.fetch.br_pc = eif.eif_output.bfu_correct_pc; //want to receive the correct pc
+    assign sbif.fetch.imemload = dcif.imemload;
+    assign sbif.wb.s_wdata = ew_writeback.s_wdata;
+    assign sbif.wb = wbif.wb_out;
+    assign sbif.wb_ctrl.alu_done = wbif.wb_out.alu_done;
+    assign sbif.wb_ctrl.load_done = wbif.wb_out.load_done;
+    assign sbif.wb_ctrl.s_rw_en = wbif.wb_out.s_rw_en;
+    assign sbif.wb_ctrl.s_rw = wbif.wb_out.s_rw;
+    assign sbif.branch_miss = eif.eif_output.bfu_misprediction;
+    assign sbif.branch_resolved = eif.eif_output.resolved;
 
-//Issue Connections
-    assign isif.wb.load_done = wbif.wb_out.load_done;
 
 //Scratchpad Connection
 
@@ -94,9 +99,6 @@ module sc_datapath
     assign fd_fetch.instr = fif.instr; //imemload
     assign fd_fetch.pc = fif.pc;
 
-    //AFTER LATCH CONNECTIONS
-    assign sbif.fetch = fd_dispatch.instr;
-    assign sbif.s_wdata = ew_writeback.s_wdata;
 //  ISSUE/EXECUTE CONNECTIONS
 
     //BEFORE LATCH
