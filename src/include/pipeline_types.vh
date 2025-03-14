@@ -18,13 +18,30 @@ package pipeline_pkg;
 // ISSUE/EXECUTE LATCH:
     typedef struct packed
     {
-        word_t instr, rdat1, rdat2, pc;
-        logic fust_s, fust_m, fust_g, halt;
-        issue_t out;
-        fust_state_e [4:0] fust_state;
-        dispatch_t d_out;
-        wb_t wb;
-    }   ie_t;
+    fu_bits_t fu_en; // 0 - alu, 1 - sls, 2 - br, 3 - mls, 4 - gemm
+    // br, alu, sls, mls
+    word_t rdat1; // mls needs for addr
+    word_t rdat2; // mls usees as stride
+    word_t imm;   // mls needs for addr 
+    // branch
+    branch_t branch_type;
+    word_t branch_pc;
+    logic branch_pred_pc;
+    logic bfu_branch;
+    // alu
+    aluop_t alu_op;
+    // matrix ls
+    matrix_mem_t ls_in;
+    // scalar ls
+    scalar_mem_t mem_type;
+    // gemm
+    matbits_t md;
+    matbits_t ms1; // used for m_ls
+    matbits_t ms2; // used for m_ls
+    matbits_t ms3;
+
+    logic halt;
+    } ie_t;
 
 //  EXECUTE/WRITEBACK LATCH:
     typedef struct packed

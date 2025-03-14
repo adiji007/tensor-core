@@ -83,7 +83,6 @@ module sc_datapath
     assign sbif.branch_miss = eif.eif_output.bfu_misprediction;
     assign sbif.branch_resolved = eif.eif_output.resolved;
 
-
 //Scratchpad Connection
 
     // assign spif.sStore = '1; 
@@ -102,54 +101,57 @@ module sc_datapath
 //  ISSUE/EXECUTE CONNECTIONS
 
     //BEFORE LATCH
-    assign ie_issue.rdat1 = rfif.rdat1;
-    assign ie_issue.rdat2 = rfif.rdat2;
-    assign ie_issue.out = sbif.out;
-    assign ie_issue.fust_s = isif.fust_s;
-    assign ie_issue.fust_m = isif.fust_m;
-    assign ie_issue.fust_g = isif.fust_g;
-    assign ie_issue.pc = fd_dispatch.pc;
-
+    assign ie_issue.rdat1 = sbif.out.rdat1;
+    assign ie_issue.rdat2 = sbif.out.rdat2;
+    assign ie_issue.fu_en = sbif.out.fu_en;
+    assign ie_issue.branch_pc = sbif.out.branch_pc;
+    assign ie_issue.bfu_branch = sbif.out.fu_en;
+    assign ie_issue.branch_type = sbif.out.branch_type;
+    assign ie_issue.imm = sbif.out.imm;
+    assign ie_issue.branch_pred_pc = sbif.out.branch_pred_pc;
 //  EXECUTE/WRITEBACK CONNECTIONS
     
     //BEFORE LATCH
     // assign ew_execute.wb_data = wbif.wb_out;
-    assign ie_issue.d_out = dif.out;
+    // assign ie_issue.d_out = dif.out;
 
     //assign ie_excecute signals here to the functional units
 
     // EXECUTE BFU FUNCTIONAL UNIT
-    assign eif.bfu_branch_type = ie_execute.d_out.ex_ctr.branch_op;
-    //assign eif.bfu_branch
-    //assign eif.bfu_brnach_gate_sel
+    assign eif.bfu_branch_type = ie_execute.branch_type;
     assign eif.bfu_reg_a = ie_execute.rdat1;
     assign eif.bfu_reg_b = ie_execute.rdat2;
-    assign eif.bfu_current_pc = ie_execute.pc;
-    assign eif.bfu_imm = ie_execute.d_out.ex_ctr.imm;
-    //assign eif.predicted_outcome
+    assign eif.bfu_current_pc = ie_execute.branch_pc;
+    assign eif.bfu_branch = ie_execute.bfu_branch;
+    assign eif.bfu_reg_a = ie_execute.rdat1;
+    assign eif.bfu_reg_b = ie_execute.rdat2;
+    assign eif.bfu_imm = ie_execute.imm;
+    assign eif.bfu_predicted_outcome = ie_execute.branch_pred_pc;
+    // assign eif.bfu_branch_gate_sel = '0; //dont have something from scoreboard for this
 
     //SCALAR ALU FU
-    assign eif.salu_aluop = ie_execute.d_out.ex_ctr.alu_op;
+    assign eif.salu_aluop = ie_execute.alu_op;
     assign eif.salu_port_a = ie_execute.rdat1;
     assign eif.salu_port_b = ie_execute.rdat2;
 
     //SCALAR LOAD/STORE FU
-    assign eif.sls_imm = ie_execute.d_out.ex_ctr.imm;
+    assign eif.sls_imm = ie_execute.imm;
     assign eif.sls_rs1 = ie_execute.rdat1;
     assign eif.sls_rs2 = ie_execute.rdat2;
     assign eif.sls_dmem_in = dcif.dmemload;
     assign eif.sls_dhit_in = dcif.dhit;
-    assign eif.sls_mem_type = ie_execute.d_out.ex_ctr.s_mem_type;
+    assign eif.sls_mem_type = ie_execute.mem_type;
 
     //MLS FU
+    //didnt implement yet
 
     //GEMM
 
     //EXECUTE LATCHES
 
     assign ew_execute.salu_port_output = eif.eif_output.salu_port_output;
-    assign ew_execute.alu_done = dif.out.wb_ctr.alu_done;
-    assign ew_execute.load_done = dif.out.wb_ctr.load_done;
+    assign ew_execute.alu_done = eif.eif_output
+    assign ew_execute.load_done = eif.eif_output
     assign ew_execute.sls_dmemload = dcif.dmemload;
     
     //WRITE BACK ASSIGNMENTS

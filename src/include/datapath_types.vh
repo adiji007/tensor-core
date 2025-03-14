@@ -296,6 +296,7 @@ package datapath_pkg;
     word_t bfu_branch_target;
     logic predicted_outcome;
     word_t predicted_target;
+    logic resolved;
 
     // Scalar ALU FU
     logic salu_negative;

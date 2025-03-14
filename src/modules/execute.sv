@@ -40,6 +40,7 @@ assign eif.eif_output.bfu_correct_pc = fubif.correct_pc;
 assign eif.eif_output.bfu_update_pc = fubif.update_pc;
 assign eif.eif_output.bfu_branch_target = fubif.branch_target;
 assign eif.eif_output.bfu_update_btb = fubif.update_btb;
+assign eif.eif_output.bfu_update_btb = fubif.resolved;
 
 // Scalar ALU FU
 fu_alu SALU(aluif);
