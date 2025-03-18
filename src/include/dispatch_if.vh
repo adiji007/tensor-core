@@ -27,7 +27,7 @@ interface dispatch_if;
     // Input from execute
     logic branch_resolved;
     logic branch_miss;
-    fu_done_signals fu_ex;
+    logic [4:0] fu_ex;
     
     // Outputs of stage
     dispatch_t out;

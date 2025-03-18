@@ -53,8 +53,12 @@ interface execute_if;
   // output
   eif_output_t eif_output;
 
+  regbits_t rd;
+
   modport eif (
-    input // Branch FU
+    input // lw and alu destination
+          rd,
+          // Branch FU
           bfu_branch, bfu_enable, bfu_branch_type, bfu_reg_a, bfu_reg_b, bfu_current_pc, bfu_imm, bfu_predicted_outcome,
           // Scalar ALU FU
           salu_aluop, salu_port_a, salu_port_b, salu_enable,
@@ -69,12 +73,14 @@ interface execute_if;
 
   modport tbif (
     input eif_output,
-    output// Branch FU
-          bfu_branch, bfu_branch_type, bfu_reg_a, bfu_reg_b, bfu_current_pc, bfu_imm, bfu_predicted_outcome,
+    output// lw and alu destination
+          rd,
+          // Branch FU
+          bfu_branch, bfu_enable, bfu_branch_type, bfu_reg_a, bfu_reg_b, bfu_current_pc, bfu_imm, bfu_predicted_outcome,
           // Scalar ALU FU
-          salu_aluop, salu_port_a, salu_port_b,
+          salu_aluop, salu_port_a, salu_port_b, salu_enable,
           // Scalar Load/Store FU
-          sls_imm, sls_rs1, sls_rs2, sls_dmem_in, sls_dhit_in, sls_mem_type,
+          sls_enable, sls_imm, sls_rs1, sls_rs2, sls_dmem_in, sls_dhit_in, sls_mem_type,
           // MLS FU
           mls_mhit, mls_enable, mls_ls_in, mls_rd_in, mls_rs_in, mls_stride_in, mls_imm_in,
           // GEMM FU

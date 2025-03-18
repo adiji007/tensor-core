@@ -28,8 +28,8 @@ package datapath_pkg;
 
   typedef enum logic [1:0] {
     matrix_na = 2'd0,
-    M_STORE = 2'd1,
-    M_LOAD = 2'd2
+    M_STORE = 2'd2,
+    M_LOAD = 2'd1
   } matrix_mem_t; // load or store for matrix ld_st fu
 
   typedef enum logic [2:0] {
@@ -78,14 +78,20 @@ package datapath_pkg;
     FU_NONE     = 2'd3
   } fu_scalar_t;
 
-  typedef enum logic [4:0] {
-    NA              = 5'b00000,
-    ALU_DONE        = 5'b00001,
-    SCALAR_LS_DONE  = 5'b00010,
-    BRANCH_DONE     = 5'b00100,
-    MATRIX_LS_DONE  = 5'b01000,
-    GEMM_DONE       = 5'b10000
-  } fu_done_signals; // scalar stuff for now
+  typedef enum logic [1:0] {
+    dhit_na = 2'd0,
+    dhit_load = 2'd1,
+    dhit_store = 2'd2
+  } dhit_t;
+
+  // typedef enum logic [4:0] {
+  //   NA              = 5'b00000,
+  //   ALU_DONE        = 5'b00001,
+  //   SCALAR_LS_DONE  = 5'b00010,
+  //   BRANCH_DONE     = 5'b00100,
+  //   MATRIX_LS_DONE  = 5'b01000,
+  //   GEMM_DONE       = 5'b10000
+  // } fu_done_signals; // scalar stuff for now
 
   typedef enum logic [2:0] {
     matrix_fu_na = 3'd0,
@@ -244,6 +250,8 @@ package datapath_pkg;
   *******/
   typedef struct packed {
     fu_bits_t fu_en; // 0 - alu, 1 - sls, 2 - br, 3 - mls, 4 - gemm
+    // alu and lw
+    regbits_t rd;
     // br, alu, sls, mls
     word_t rdat1; // mls needs for addr
     word_t rdat2; // mls usees as stride
@@ -282,7 +290,7 @@ package datapath_pkg;
     logic           done;       // Done signal to Issue Queue
     matrix_mem_t    ls_out;     // Load or store to Scratchpad [Load, Store]
     matbits_t       rd_out;     // Matrix Reg destination (to Scratchpad)
-    word_t          imm_out;    // Immediate to Scratchpad -> needed?
+    // word_t          imm_out;    // Immediate to Scratchpad -> needed?
     word_t          address;    // Address to Scratchpad   -> rs_in + imm
     word_t          stride_out; // stride value
   } matrix_ls_t;
@@ -303,6 +311,7 @@ package datapath_pkg;
     logic salu_overflow;       // needed?
     word_t salu_port_output;
     logic salu_zero;           // needed?
+    regbits_t salu_rd;
     
     // Scalar Load/Store FU
     word_t sls_dmemaddr;       // to mem
@@ -310,7 +319,8 @@ package datapath_pkg;
     logic sls_dmemWEN;         // to mem
     word_t sls_dmemstore;      // to mem
     word_t sls_dmemload;       // to dp
-    logic sls_dhit;            // to dp
+    dhit_t sls_dhit;            // to dp
+    regbits_t sls_rd;
     
     // MLS FU
     matrix_ls_t fu_matls_out;  
@@ -318,6 +328,8 @@ package datapath_pkg;
     // Gemm FU
     logic gemm_new_weight_out;
     fu_gemm_t gemm_matrix_num;
+
+    logic [4:0] fu_ex;
 
   } eif_output_t;
 

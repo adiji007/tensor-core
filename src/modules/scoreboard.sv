@@ -28,11 +28,11 @@ module scoreboard(
       diif.fust_m = isif.fust_m;
       diif.fust_g = isif.fust_g;
       diif.fust_state = isif.fust_state;
-      diif.wb = sbif.wb_ctrl;
+      diif.wb = sbif.wb_dispatch;
 
       isif.dispatch = diif.out;
       // isif.flush = sbif.flush;
-      isif.wb = sbif.wb;
+      isif.wb = sbif.wb_issue;
 
       isif.n_fust_s = diif.n_fust_s;
       isif.n_fust_m = diif.n_fust_m;

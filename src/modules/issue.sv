@@ -284,14 +284,14 @@ module issue(
             
 
             // TODO fust related wb
-            if (isif.fu_ex == ALU_DONE && (i == 0)) begin 
+            if ((isif.fu_ex[0] == 1'b1) && (i == 0)) begin 
               next_fust_state[i] = incoming_instr[i] ? FUST_WAIT : FUST_EMPTY;
             end
-            else if (isif.fu_ex == SCALAR_LS_DONE && (i == 1)) begin
+            else if ((isif.fu_ex[1] == 1'b1) && (i == 1)) begin
               next_fust_state[i] = incoming_instr[i] ? FUST_WAIT : FUST_EMPTY;
             end
-            else if (isif.fu_ex == BRANCH_DONE && (i==2)) begin
-              next_fust_state[i] = FUST_EMPTY;
+            else if ((isif.fu_ex[2] == 1'b1) && (i == 2)) begin
+              next_fust_state[i] = incoming_instr[i] ? FUST_WAIT : FUST_EMPTY;
             end
 
 
@@ -352,6 +352,7 @@ module issue(
             issue.branch_type = branch_t'(fusif.fust.op[i].op_type);
             issue.branch_pc = isif.dispatch.n_br_pc;
             issue.branch_pred_pc = isif.dispatch.n_br_pred;
+            issue.rd = fusif.fust.op[i].rd;
             // end
           end else if (i == 3) begin // mls
             // TODO: need to figure these out, not sure rn
