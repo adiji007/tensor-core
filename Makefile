@@ -1,4 +1,6 @@
-SCRDIR = /home/asicfab/a/vvaidya/seniordesign/tensor-core/src/scripts
+# SCRDIR = /home/asicfab/a/vvaidya/seniordesign/tensor-core/src/scripts
+SCRDIR = /home/asicfab/a/wong371/memory_subsystem/tensor-core/src/scripts
+
 SIMTIME = 100us             # Default simulation run time
 
 # modelsim viewing options
@@ -48,8 +50,8 @@ icache:
 	vsim -voptargs="+acc" work.$*_tb -do "do $(SCRDIR)/$*.do; run $(SIMTIME);" -suppress 2275
 
 memory_arbiter_basic:
-	vlog -sv +incdir+./include ./include/caches_pkg.vh ./include/types_pkg.vh \
-        ./testbench/memory_arbiter_basic_tb.sv ./modules/memory_arbiter_basic.sv
+	vlog -sv +incdir+./src/include ./src/include/caches_pkg.vh ./src/include/types_pkg.vh \
+        ./src/testbench/memory_arbiter_basic_tb.sv ./src/modules/memory_arbiter_basic.sv
 	vsim $(SIMTERM) -voptargs="+acc" work.memory_arbiter_basic_tb -do $(SIMDO)
 
 clean:

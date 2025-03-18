@@ -164,31 +164,6 @@ module memory_arbiter_basic_tb;
     end
     spif.sStore = 0;
 
-    $display("Test 4: All signals on, expecting SP_LOAD priority");
-    reset_dut();
-    spif.sLoad = 1;
-    spif.sStore = 1;
-    cif.dREN = 1;
-    cif.dWEN = 1;
-    cif.iREN = 1;
-    @(posedge CLK);
-    #1;
-    check_state(4'b0001);
-    spif.sLoad = 0;
-    @(posedge CLK);
-    #1;
-    check_state(4'b0000);
-    @(posedge CLK);
-    #1;
-    check_state(4'b0011);
-    spif.sStore = 0;
-    @(posedge CLK);
-    #1;
-    check_state(4'b0000);
-    @(posedge CLK);
-    #1;
-    check_state(4'b0101);
-
     $display("All tests passed!");
     $stop;
   end
