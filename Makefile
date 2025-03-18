@@ -47,6 +47,11 @@ icache:
 	vlog -sv +incdir+./src/include ./src/testbench/$*_tb.sv ./src/modules/$*.sv
 	vsim -voptargs="+acc" work.$*_tb -do "do $(SCRDIR)/$*.do; run $(SIMTIME);" -suppress 2275
 
+memory_arbiter_basic:
+	vlog -sv +incdir+./include ./include/caches_pkg.vh ./include/types_pkg.vh \
+        ./testbench/memory_arbiter_basic_tb.sv ./modules/memory_arbiter_basic.sv
+	vsim $(SIMTERM) -voptargs="+acc" work.memory_arbiter_basic_tb -do $(SIMDO)
+
 clean:
 	rm -rf work transcript vsim.wlf *.log *.jou *.vstf *.vcd
 #-do "do $(SCRDIR)/$*.do; run $(SIMTIME);"

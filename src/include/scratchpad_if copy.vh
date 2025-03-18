@@ -34,7 +34,16 @@ interface scratchpad_if;
         weight_input_data, partial_sum_data, store_data, weight_input_row_sel, partial_sum_row_sel,
         load_addr, store_addr, gemm_complete, load_complete
     );
+
+    modport arbiter (
+        input store_data, load_addr, store_addr, sLoad, sStore,
+        output load_data, sLoad_hit, sStore_hit, sLoad_row
+    );
     
+    modport testbench (
+            output sLoad, sStore, load_addr, store_addr, store_data,
+            input load_data, sLoad_hit, sStore_hit, sLoad_row
+        );
 
 endinterface
 
