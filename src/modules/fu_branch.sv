@@ -45,13 +45,13 @@ module fu_branch(
     branch_gate_sel = '0; // set it in here based on what type
     case (fubif.branch_type) // should be 6 types, just do based on the 6 types (use branch_t from isa package) 
                              // and can just set branch_gate_sel internally instead of added logic to scoreboard
-      3'd0: zero = fubif.reg_a - fubif.reg_b == 0;                               // 2'd0: BEQ, BNE
-      3'd1: zero = ($signed(fubif.reg_a) < $signed(fubif.reg_b)) ? 1'b0 : 1'b1;  // 2'd1: BLT, BGE
-      3'd2: zero = (fubif.reg_a < fubif.reg_b) ? 1'b0 : 1'b1;                    // 2'd2: BLTU, BGEU
-      3'd3: zero = '0; // whatever logic for below
-      3'd4: zero = '0;
-      3'd5: zero = '0;
-      default: zero = 1'b0;   
+      BT_BEQ:   zero = fubif.reg_a - fubif.reg_b == 0;                               // 2'd0: BEQ, BNE
+      BT_BNE:   zero = ($signed(fubif.reg_a) < $signed(fubif.reg_b)) ? 1'b0 : 1'b1;  // 2'd1: BLT, BGE
+      BT_BLT:   zero = (fubif.reg_a < fubif.reg_b) ? 1'b0 : 1'b1;                    // 2'd2: BLTU, BGEU
+      BT_BGE:   zero = '0; // whatever logic for below
+      BT_BLTU:  zero = '0;
+      BT_BGEU:  zero = '0;
+      default:  zero = 1'b0;   
     endcase
   end
 

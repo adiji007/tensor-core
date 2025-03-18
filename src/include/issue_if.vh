@@ -26,7 +26,7 @@ interface issue_if;
     // ex_t ex; //branch and matrix done signals
     logic branch_miss;
     logic branch_resolved;
-    fu_done_signals fu_ex;
+    logic [4:0] fu_ex;
 
     // Inputs from writeback
     wb_t wb; //alu and ld/st done signals
