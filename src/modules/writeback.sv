@@ -1,8 +1,19 @@
-/* Writeback Module */
+/*  Writeback Module
+    Module Description:
+        This module will be responsible to writeback to the register file. Current implementation will include two circular buffer, one for ALU operations, the other for Loads to the register file.
+
+        Buffers are used in specific situations, either for speculative stores during a branch, when both ALU and Scalar Load is ready at the same time, or if the current buffer has values already into it. 
+
+        An important of the Writeback module would be its ablility to handle speculative writebacks. When speculative w_data come in, it is placed in its respective buffer, the data is written back only when the branch unit confirms that the branch is correct. If the branch is incorrect, the write pointer is reset to the original place in each buffer and the buffer continues normal operations. In order to determine jump state, we have a two state state machine for normal operation and speculative operations. The speculative operation is transitioned into upon a spec bit, the write pointer is saved and handled with upon a branch miss or branch resolved signal. This would transition back to the normal state to resume normal operations.
+
+        Future Directions: 
+*/
 
 `include "datapath_types.vh"
 `include "isa_types.vh"
 `include "writeback_if.vh"
+
+
 
 module writeback
 (
@@ -10,118 +21,459 @@ module writeback
     input logic nRST,
     writeback_if.wb wbif // WRITEBACK IF
 );
-
 // Importing types
 import datapath_pkg::*;
 import isa_pkg::*;
 
-logic bbuff_wen, bbuff_ren;
-wb_t bbuff_out, bbuff_in;
-logic bbuff_full, bbuff_empty;
+localparam BUFFER_DEPTH = 31;
+localparam BUFFER_WIDTH = $bits(wb_t);
 
-logic nbuff_wen, nbuff_ren;
-wb_t nbuff_out, nbuff_in;
-logic nbuff_full, nbuff_empty;
+/* ALU Buffer Module Signals */
 
-buffer_module #(.BUFFER_WIDTH($bits(wb_t)),
-                .BUFFER_DEPTH(31)
-) branch_buff (
-        .CLK(CLK),
-        .nRST(nRST),
-        .write_en(bbuff_wen),  // if spec signal is high
-        .read_en(bbuff_ren),   // Branch Resolved can read data --> Need to Leave on till empty
-        .clear(wbif.branch_mispredict),    // Clear data in Buffer if Branch Mispredict
-        .din(bbuff_in),
-        .dout(bbuff_out),            // Buffer out, in wb_t
-        .full(bbuff_full),
-        .empty(bbuff_empty)
-);
+// ALU Data In Singals
+wb_t alu_din;
+// ALU Data Out Signals
+wb_t alu_dout;
+// ALU write enable and read enable
+logic alu_write, alu_read; 
+// ALU read and write pointers
+integer alu_wptr, alu_rptr, next_alu_wptr, next_alu_rptr;
+// ALU internal counter for data in
+integer alu_count, next_alu_count;
+// Packed array holding the ALU data
+logic [BUFFER_DEPTH - 1: 0][BUFFER_WIDTH - 1: 0] alu_buffer, next_alu_buffer;
+// ALU Buffer Empty and Full Signals
+logic alu_full, alu_empty, next_alu_full, next_alu_empty;
 
-buffer_module #(.BUFFER_WIDTH($bits(wb_t)),
-                .BUFFER_DEPTH(31)
-) norm_buff (
-        .CLK(CLK),
-        .nRST(nRST),
-        .write_en(nbuff_wen),  // if spec signal is high
-        .read_en(nbuff_ren),   // Branch Resolved can read data --> Need to Leave on till empty
-        .clear(0),    // Clear data in Buffer if Branch Mispredict
-        .din(nbuff_in),
-        .dout(nbuff_out),            // Buffer out, in wb_t
-        .full(nbuff_full),
-        .empty(nbuff_empty)
-);
+/* Load Buffer Module Signals */
 
-    // OUTPUTS
-    // logic s_reg_en;  // scalar read write reg enable
-    // regbits_t s_reg; // scalar read write register
-    // logic [WORD_W-1:0] s_wdata; //empty until execute (write data)
+// Load Data In Singals
+wb_t load_din;
+// Load Data Out Signals
+wb_t load_dout;
+// Load write enable and read enable
+logic load_write, load_read; 
+// Load read and write pointers
+integer load_wptr, load_rptr, next_load_wptr, next_load_rptr;
+// Load internal counter for data in
+integer load_count, next_load_count;
+// Packed array holding the Load data
+logic [BUFFER_DEPTH - 1: 0][BUFFER_WIDTH - 1: 0] load_buffer, next_load_buffer;
+// Load Buffer Empty and Full Signals
+logic load_empty, load_full, next_load_empty, next_load_full;
 
-    // INPUTS
-    // input s_wdata, reg_sel, reg_en, buff_clear, buff_w_en, buff_r_en,
+/* Writeback Data signals */
 
-always_comb begin : Writeback
-    // Buffer input signals
-    bbuff_in.s_reg_en        =  0;
-    bbuff_in.s_reg           = '0;
-    bbuff_in.s_wdata         = '0;
-    bbuff_wen = 0;
-    bbuff_ren = 0;
+typedef enum logic {
+    IDLE = 0, 
+    SPEC = 1
+    } state_t;
+state_t state, next_state;
 
-    nbuff_in.s_reg_en        =  0;
-    nbuff_in.s_reg           = '0;
-    nbuff_in.s_wdata         = '0;
-    nbuff_wen = 0;
-    nbuff_ren = 0;
+// Next Writeback out
+wb_t next_wbout;
+// Wb en (For arbitration between load and alu)
+logic wb_sel, next_wb_sel;
 
-    // Writeback output signals
-    wbif.wb_out.s_reg_en    =  0;
-    wbif.wb_out.s_reg       = '0;
-    wbif.wb_out.s_wdata     = '0;
+// Previous Specbit Logic
+logic prev_spec;
+// Writeback Saved Spec Write Pointers
+integer spec_alu_wptr, next_spec_alu_wptr;
+// Writeback Saved Spec Write Counter
+integer spec_write, next_spec_write;
+// Writeback Clean Data Count
+integer clean_count, next_clean_count;
 
-    if (wbif.branch_mispredict) begin
-        bbuff_clear = 1;
-    end
-
-    else if (wbif.branch_spec) begin   // Speculative load into buffer
-        bbuff_wen  = 1;
-        bbuff_in.s_reg_en        =  1;
-        bbuff_in.s_reg           =  wbif.reg_sel;
-        bbuff_in.s_wdata         =  wbif.s_wdata;
-        if (!nbuff_empty) begin
-            nbuff_ren = 1;
-            wbif.wb_out.s_reg_en = 1;
-            wbif.wb_out.s_reg = nbuff_out.s_reg;
-            wbif.wb_out.s_wdata = nbuff_out.s_wdata;
-        end
-    end
-    else if (!wbif.branch_spec && !bbuff_empty) begin  // Branch Buffer resolved but all data not written back
-        nbuff_wen = 1;
-        nbuff_in.s_reg_en        =  1;
-        nbuff_in.s_reg           =  wbif.reg_sel;
-        nbuff_in.s_wdata         =  wbif.s_wdata;
-
-        bbuff_ren = 1;
-        wbif.wb_out.s_reg_en = 1;
-        wbif.wb_out.s_reg = bbuff_out.s_reg;
-        wbif.wb_out.s_wdata = bbuff_out.s_wdata;
-    end
-
-    else if (!nbuff_empty) begin
-        nbuff_wen = 1;
-        nbuff_in.s_reg_en        =  1;
-        nbuff_in.s_reg           =  wbif.reg_sel;
-        nbuff_in.s_wdata         =  wbif.s_wdata;
-
-        nbuff_ren = 1;
-        wbif.wb_out.s_reg_en = 1;
-        wbif.wb_out.s_reg = nbuff_out.s_reg;
-        wbif.wb_out.s_wdata = nbuff_out.s_wdata;
+always_ff @(posedge CLK, negedge nRST) begin : writeback_ff
+    if (!nRST) begin
+        // Writeback Signals
+        state <= IDLE;
+        wb_sel <= 0;
+        prev_spec <= 0;
+        spec_alu_wptr <= 0;
+        clean_count <= 0;
+        spec_write <= 0;
+        // ALU Buffer Signals
+        alu_buffer <= '0;
+        alu_wptr <= 0;
+        alu_rptr <= 0;
+        alu_count <= 0;
+        // Load Buffer Signals
+        load_buffer <= '0;
+        load_wptr <= 0;
+        load_rptr <= 0;
+        load_count <= 0;
+        
+        
     end
     else begin
-        wbif.wb_out.s_reg_en = 1;
-        wbif.wb_out.s_reg = wbif.reg_sel;
-        wbif.wb_out.s_wdata = wbif.s_wdata;
+        state <= next_state;
+        wb_sel <= next_wb_sel;
+        prev_spec <= wbif.branch_spec;
+        spec_alu_wptr = next_spec_alu_wptr;
+        clean_count = next_clean_count;
+        spec_write = next_spec_write;
+        
+        alu_buffer <= next_alu_buffer;
+        alu_wptr <= next_alu_wptr;
+        alu_rptr <= next_alu_rptr;
+        alu_count <= next_alu_count;
+
+        load_buffer <= next_load_buffer;
+        load_wptr <= next_load_wptr;
+        load_rptr <= next_load_rptr;
+        load_count <= next_load_count;
     end
 end
+
+always_comb begin : wb_out_logic
+    next_state = state;
+    next_wb_sel = wb_sel;
+    
+    next_spec_alu_wptr = spec_alu_wptr;
+    next_clean_count = clean_count;
+    next_spec_write = spec_write;
+
+    next_alu_buffer = alu_buffer;
+    next_alu_wptr = alu_wptr;
+    next_alu_rptr = alu_rptr;
+    alu_dout = '0;
+    alu_din.reg_en = 1;
+    alu_din.reg_sel = wbif.alu_reg_sel;
+    alu_din.wdat = wbif.alu_wdat;
+    alu_read = 0;
+    alu_write = 0;
+
+    next_load_buffer = load_buffer;
+    next_load_wptr = load_wptr;
+    next_load_rptr = load_rptr;
+    load_dout = '0;
+    load_din.reg_en = 1;
+    load_din.reg_sel = wbif.load_reg_sel;
+    load_din.wdat = wbif.load_wdat;
+    load_read = 0;
+    load_write = 0;
+
+    wbif.wb_out.reg_en = 0;
+    wbif.wb_out.reg_sel = '0;
+    wbif.wb_out.wdat = '0;
+        /* IDLE Cases:
+            Spec High: Spec just went high so data going into buffer should be accounted for as a speculative writeback. Take record of alu_wptr and alu_count to determine size of and position of buffer when writing back.
+
+            Normal:
+                ALU Done and Load Done and buffers empty: Load wdat gets written back and the alu wdat would be placed in buffer.
+
+                ALU Done and Load Done and buffers not empty: Both values would go to the buffer as there are older values that need to get written back.
+
+                ALU Done only: If either buffer not empty, then send to  ALU buffer. Else bypass buffer and write back.
+
+                Load Done only: If either buffer not empty, the send to Load buffer. Else bypass buffer and writeback.
+
+            SPEC:
+                Keep track of write count and write pointer, if branch mispredict set write pointer to oringinal place. Only can read a value out of buffer for the count of the buffer at the point of spec. If branch correct, continue normal operations. Both scenarios go back to IDLE.
+        */
+    case (state)
+        IDLE: begin
+            if(!prev_spec && wbif.branch_spec) begin // If spec goes high
+                next_state = SPEC;
+                next_spec_alu_wptr = alu_wptr; // Current Wptr is saved as any val onward is spec
+
+                // writing alu data that is speculative
+                alu_write = 1;
+                next_alu_buffer[alu_wptr] = alu_din;
+                next_alu_wptr = ((alu_wptr + 1) == BUFFER_DEPTH ? 0 : alu_wptr + 1);
+                next_spec_write = spec_write + 1;
+
+                // Checking if Anything Can be Written Back
+                if (!alu_empty && !load_empty) begin // Both not empty
+                    next_wb_sel = !wb_sel;
+
+                    if (wb_sel) begin
+                        alu_read = 1;
+                        wbif.wb_out = alu_buffer[alu_rptr];
+                        next_alu_buffer[alu_rptr] = '0;
+                        next_alu_rptr = ((alu_rptr + 1) == BUFFER_DEPTH ? 0 : alu_rptr + 1);
+                        next_clean_count = alu_count - 1; // 1 less clean data value
+                    end
+                    else begin
+                        load_read = 1;
+                        wbif.wb_out = load_buffer[load_rptr];
+                        next_load_buffer[load_rptr] = '0;
+                        next_load_rptr = ((load_rptr + 1) == BUFFER_DEPTH ? 0 : load_rptr + 1);
+                        next_clean_count = alu_count;
+                    end
+                end
+
+                else if (!alu_empty && load_empty) begin // load buffer empty, alu buffer not empty
+                    alu_read = 1;
+                    wbif.wb_out = alu_buffer[alu_rptr];
+                    next_alu_buffer[alu_rptr] = '0;
+                    next_alu_rptr = ((alu_rptr + 1) == BUFFER_DEPTH ? 0 : alu_rptr + 1);
+                    next_clean_count = alu_count - 1; // 1 less clean data value
+                end
+
+                else if (alu_empty && !load_empty) begin // load buffer not empty, alu buffer empty
+                    load_read = 1;
+                    wbif.wb_out = load_buffer[load_rptr];
+                    next_load_buffer[load_rptr] = '0;
+                    next_load_rptr = ((load_rptr + 1) == BUFFER_DEPTH ? 0 : load_rptr + 1);
+                    next_clean_count = alu_count;
+                end
+            end
+
+            else if (wbif.alu_done && wbif.load_done) begin // Both wdat ready
+                
+                if (!alu_empty || !load_empty) begin // At least one buffer has data
+                    alu_write = 1;
+                    next_alu_buffer[alu_wptr] = alu_din;
+                    next_alu_wptr = ((alu_wptr + 1) == BUFFER_DEPTH ? 0 : alu_wptr + 1);
+
+                    load_write = 1;
+                    next_load_buffer[load_wptr] = load_din;
+                    next_load_wptr = ((load_wptr + 1) == BUFFER_DEPTH ? 0 : load_wptr + 1);
+
+                    // Checking if Anything Can be Written Back
+                    if (!alu_empty && !load_empty) begin // Both not empty
+                        next_wb_sel = !wb_sel;
+
+                        if (wb_sel) begin
+                            alu_read = 1;
+                            wbif.wb_out = alu_buffer[alu_rptr];
+                            next_alu_buffer[alu_rptr] = '0;
+                            next_alu_rptr = ((alu_rptr + 1) == BUFFER_DEPTH ? 0 : alu_rptr + 1);
+                        end
+                        else begin
+                            load_read = 1;
+                            wbif.wb_out = load_buffer[load_rptr];
+                            next_load_buffer[load_rptr] = '0;
+                            next_load_rptr = ((load_rptr + 1) == BUFFER_DEPTH ? 0 : load_rptr + 1);
+                        end
+                    end
+
+                    else if (!alu_empty && load_empty) begin // load buffer empty, alu buffer not empty
+                        alu_read = 1;
+                        wbif.wb_out = alu_buffer[alu_rptr];
+                        next_alu_buffer[alu_rptr] = '0;
+                        next_alu_rptr = ((alu_rptr + 1) == BUFFER_DEPTH ? 0 : alu_rptr + 1);
+                    end
+
+                    else if (alu_empty && !load_empty) begin // load buffer not empty, alu buffer empty
+                        load_read = 1;
+                        wbif.wb_out = load_buffer[load_rptr];
+                        next_load_buffer[load_rptr] = '0;
+                        next_load_rptr = ((load_rptr + 1) == BUFFER_DEPTH ? 0 : load_rptr + 1);
+                    end
+                end
+                else begin // Both Buffers are empty
+                    alu_write = 1;
+                    next_alu_buffer[alu_wptr] = alu_din;
+                    next_alu_wptr = ((alu_wptr + 1) == BUFFER_DEPTH ? 0 : alu_wptr + 1);
+
+                    wbif.wb_out = load_din;
+                end
+            end
+
+            else if (wbif.alu_done && !wbif.load_done) begin // ALU Done but not Load Done
+                if (!alu_empty || !load_empty) begin // At least one buffer has data
+                    alu_write = 1;
+                    next_alu_buffer[alu_wptr] = alu_din;
+                    next_alu_wptr = ((alu_wptr + 1) == BUFFER_DEPTH ? 0 : alu_wptr + 1);
+
+                    // Checking if Anything Can be Written Back
+                    if (!alu_empty && !load_empty) begin // Both not empty
+                        next_wb_sel = !wb_sel;
+
+                        if (wb_sel) begin
+                            alu_read = 1;
+                            wbif.wb_out = alu_buffer[alu_rptr];
+                            next_alu_buffer[alu_rptr] = '0;
+                            next_alu_rptr = ((alu_rptr + 1) == BUFFER_DEPTH ? 0 : alu_rptr + 1);
+                        end
+                        else begin
+                            load_read = 1;
+                            wbif.wb_out = load_buffer[load_rptr];
+                            next_load_buffer[load_rptr] = '0;
+                            next_load_rptr = ((load_rptr + 1) == BUFFER_DEPTH ? 0 : load_rptr + 1);
+                        end
+                    end
+
+                    else if (!alu_empty && load_empty) begin // load buffer empty, alu buffer not empty
+                        alu_read = 1;
+                        wbif.wb_out = alu_buffer[alu_rptr];
+                        next_alu_buffer[alu_rptr] = '0;
+                        next_alu_rptr = ((alu_rptr + 1) == BUFFER_DEPTH ? 0 : alu_rptr + 1);
+                    end
+
+                    else if (alu_empty && !load_empty) begin // load buffer not empty, alu buffer empty
+                        load_read = 1;
+                        wbif.wb_out = load_buffer[load_rptr];
+                        next_load_buffer[load_rptr] = '0;
+                        next_load_rptr = ((load_rptr + 1) == BUFFER_DEPTH ? 0 : load_rptr + 1);
+                    end
+                end
+                else begin // Both Buffers are empty
+                    wbif.wb_out = alu_din;
+                end
+            end
+
+            else if (!wbif.alu_done && wbif.load_done) begin // ALU not Done but Load Done
+                if (!alu_empty || !load_empty) begin // At least one buffer has data
+                    load_write = 1;
+                    next_load_buffer[load_wptr] = load_din;
+                    next_load_wptr = ((load_wptr + 1) == BUFFER_DEPTH ? 0 : load_wptr + 1);
+
+                    // Checking if Anything Can be Written Back
+                    if (!alu_empty && !load_empty) begin // Both not empty
+                        next_wb_sel = !wb_sel;
+
+                        if (wb_sel) begin
+                            alu_read = 1;
+                            wbif.wb_out = alu_buffer[alu_rptr];
+                            next_alu_buffer[alu_rptr] = '0;
+                            next_alu_rptr = ((alu_rptr + 1) == BUFFER_DEPTH ? 0 : alu_rptr + 1);
+                        end
+                        else begin
+                            load_read = 1;
+                            wbif.wb_out = load_buffer[load_rptr];
+                            next_load_buffer[load_rptr] = '0;
+                            next_load_rptr = ((load_rptr + 1) == BUFFER_DEPTH ? 0 : load_rptr + 1);
+                        end
+                    end
+
+                    else if (!alu_empty && load_empty) begin // load buffer empty, alu buffer not empty
+                        alu_read = 1;
+                        wbif.wb_out = alu_buffer[alu_rptr];
+                        next_alu_buffer[alu_rptr] = '0;
+                        next_alu_rptr = ((alu_rptr + 1) == BUFFER_DEPTH ? 0 : alu_rptr + 1);
+                    end
+
+                    else if (alu_empty && !load_empty) begin // load buffer not empty, alu buffer empty
+                        load_read = 1;
+                        wbif.wb_out = load_buffer[load_rptr];
+                        next_load_buffer[load_rptr] = '0;
+                        next_load_rptr = ((load_rptr + 1) == BUFFER_DEPTH ? 0 : load_rptr + 1);
+                    end
+                end
+                else begin // Both Buffers are empty
+                    wbif.wb_out = load_din;
+                end
+            end
+
+            else begin // Both not done
+                // Checking if Anything Can be Written Back
+                if (!alu_empty && !load_empty) begin // Both not empty
+                    next_wb_sel = !wb_sel;
+
+                    if (wb_sel) begin
+                        alu_read = 1;
+                        wbif.wb_out = alu_buffer[alu_rptr];
+                        next_alu_buffer[alu_rptr] = '0;
+                        next_alu_rptr = ((alu_rptr + 1) == BUFFER_DEPTH ? 0 : alu_rptr + 1);
+                    end
+                    else begin
+                        load_read = 1;
+                        wbif.wb_out = load_buffer[load_rptr];
+                        next_load_buffer[load_rptr] = '0;
+                        next_load_rptr = ((load_rptr + 1) == BUFFER_DEPTH ? 0 : load_rptr + 1);
+                    end
+                end
+
+                else if (!alu_empty && load_empty) begin // load buffer empty, alu buffer not empty
+                    alu_read = 1;
+                    wbif.wb_out = alu_buffer[alu_rptr];
+                    next_alu_buffer[alu_rptr] = '0;
+                    next_alu_rptr = ((alu_rptr + 1) == BUFFER_DEPTH ? 0 : alu_rptr + 1);
+                end
+
+                else if (alu_empty && !load_empty) begin // load buffer not empty, alu buffer empty
+                    load_read = 1;
+                    wbif.wb_out = load_buffer[load_rptr];
+                    next_load_buffer[load_rptr] = '0;
+                    next_load_rptr = ((load_rptr + 1) == BUFFER_DEPTH ? 0 : load_rptr + 1);
+                end
+            end
+        end
+
+        SPEC: begin
+            if (wbif.alu_done && wbif.branch_spec) begin // ALU done while spec
+                alu_write = 1;
+                next_spec_write = spec_write + 1;
+                next_alu_buffer[alu_wptr] = alu_din;
+                next_alu_wptr = ((alu_wptr + 1) == BUFFER_DEPTH ? 0 : alu_wptr + 1);
+                // Checking if Anything Can be Written Back
+                if (!alu_empty && !load_empty && (clean_count > 0)) begin // Both not empty
+                    next_wb_sel = !wb_sel;
+
+                    if (wb_sel) begin
+                        alu_read = 1;
+                        wbif.wb_out = alu_buffer[alu_rptr];
+                        next_alu_buffer[alu_rptr] = '0;
+                        next_alu_rptr = ((alu_rptr + 1) == BUFFER_DEPTH ? 0 : alu_rptr + 1);
+                        next_clean_count = clean_count - 1;
+                    end
+                    else begin
+                        load_read = 1;
+                        wbif.wb_out = load_buffer[load_rptr];
+                        next_load_buffer[load_rptr] = '0;
+                        next_load_rptr = ((load_rptr + 1) == BUFFER_DEPTH ? 0 : load_rptr + 1);
+                    end
+                end
+
+                else if (!alu_empty && load_empty && (clean_count > 0)) begin // load buffer empty, alu buffer not empty
+                    alu_read = 1;
+                    wbif.wb_out = alu_buffer[alu_rptr];
+                    next_alu_buffer[alu_rptr] = '0;
+                    next_alu_rptr = ((alu_rptr + 1) == BUFFER_DEPTH ? 0 : alu_rptr + 1);
+                    next_clean_count = clean_count - 1;
+                end
+
+                else if (alu_empty && !load_empty) begin // load buffer not empty, alu buffer empty
+                    load_read = 1;
+                    wbif.wb_out = load_buffer[load_rptr];
+                    next_load_buffer[load_rptr] = '0;
+                    next_load_rptr = ((load_rptr + 1) == BUFFER_DEPTH ? 0 : load_rptr + 1);
+                end
+            end
+
+            if (wbif.branch_correct || wbif.branch_mispredict) begin // Branch Outcome
+                next_state = IDLE;
+                if (wbif.branch_mispredict) begin
+                    next_alu_wptr = spec_alu_wptr; // set alu wptr to where spec data started
+                end
+                next_spec_alu_wptr = 0;
+                next_clean_count = 0;
+                next_spec_write = 0;                
+            end
+        end
+    endcase  
+end
+
+always_comb begin : Count
+    next_alu_count = alu_count;
+    next_load_count = load_count;
+
+    if (wbif.branch_mispredict) begin
+        next_alu_count = alu_count - spec_write;
+    end
+    else if (alu_read && !alu_write) begin
+        next_alu_count = alu_count - 1; 
+    end
+    else if (!alu_read && alu_write) begin
+        next_alu_count = alu_count + 1;
+    end
+
+    if (load_read && !load_write) begin
+        next_load_count = load_count - 1;
+    end
+    else if (!load_read && load_write) begin
+        next_load_count = load_count + 1;
+    end
+end
+
+// Full Empty Signals
+assign alu_full = (alu_count == BUFFER_DEPTH);
+assign alu_empty = (alu_count == 0);
+assign load_full = (load_count == BUFFER_DEPTH);
+assign load_empty = (load_count == 0);
 
 endmodule
