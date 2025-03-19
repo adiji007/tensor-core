@@ -5,7 +5,6 @@ module memory_arbiter_basic(
   arbiter_caches_if.cc acif,
   scratchpad_if.arbiter spif
 );
-
   import caches_pkg::*;
 
   logic [31:0] global_stride = 32'd8;
