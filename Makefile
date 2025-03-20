@@ -82,7 +82,7 @@ source:
 
 %.wav:
 	vlog -sv +incdir+./src/include ./src/testbench/$*_tb.sv ./src/modules/$*.sv
-	vsim -voptargs="+acc" work.$*_tb -do "view objects; do ./src/waves/$*.do; run -all;" -onfinish stop
+	vsim -voptargs="+acc" work.$*_tb -do "do $(abspath $(SCRDIR)/$*.do); run $(SIMTIME);" -suppress 2275
 
 %_vlint:
 	verilator --lint-only src/modules/$*.sv -Isrc/include -Isrc/modules
