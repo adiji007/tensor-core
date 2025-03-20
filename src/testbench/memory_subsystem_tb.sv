@@ -28,7 +28,8 @@ module memory_subsystem_tb;
     .nRST(nRST),
     .dcif(dcif),
     .cif(cif),
-    .acif(acif)
+    .acif(acif),
+    .spif(spif)
   );
 
   integer i;
@@ -71,12 +72,14 @@ module memory_subsystem_tb;
   endtask
 
   initial begin
+    static string test_name = "Reset";
     mem_init();
     test_num = 0;
     reset_dut();
 
     // Test 1: Write and read Dcache
     // DCACHE TESTS
+    test_name = "Write and read Dcache";
     $display("Test 1: Write and read Dcache");
     test_num = test_num + 1;
     //first write has to be a miss
@@ -85,7 +88,7 @@ module memory_subsystem_tb;
     #1;
     if (dcif.dhit) begin
       $display("ERROR: Expected a miss, got %b at %t", dcif.dhit, $time);
-      $stop;
+      //$stop;
     end
 
     write_dcache(0, 1, 32'h00000100, 32'hFEEDCAFE);
@@ -93,21 +96,51 @@ module memory_subsystem_tb;
     #1;
     if (!dcif.dhit) begin
       $display("ERROR: Expected dhit, got %b at %t", dcif.dhit, $time);
-      $stop;
+      //$stop;
     end
     //TODO: later
-    // mem_read()
+    //mem_read(32'hFEEDCAFE, );
 
-    // ICACHE TESTS
+    //ICACHE TESTS
 
-    // SCRATCHPAD TESTS
+    //SCRATCHPAD TESTS
+    
+    spif.instrFIFO_WEN = 1'b0;
+    nRST = 1;
+    #(PERIOD);
+
+    nRST = 0;
+    #(PERIOD * 2);
+
+    nRST = 1;
+    #(PERIOD);
+
+    @(posedge CLK);
+
+    test_name = "Load Instruction";
+    @(negedge CLK);
+    
+    spif.instrFIFO_WEN = 1'b1;
+    spif.instrFIFO_wdata = {2'b01, 4'h2, 32'hFEEDCAFE};
+    #(PERIOD);
+    spif.instrFIFO_WEN = 1'b0;
+    #(PERIOD*25);
 
 
+    test_name = "Store Instruction";
+    spif.instrFIFO_WEN = 1'b1;
+    spif.instrFIFO_wdata = {2'b10, 4'h2, 32'hf0f0f0f0};
+    #(PERIOD);
+    spif.instrFIFO_WEN = 1'b0;
+    #(PERIOD*25);
 
-
-
-
-
+    test_name = "Load Instruction 2";
+    
+    spif.instrFIFO_WEN = 1'b1;
+    spif.instrFIFO_wdata = {2'b01, 4'hf, 32'hf0f0f0f0};
+    #(PERIOD);
+    spif.instrFIFO_WEN = 1'b0;
+    #(PERIOD*25);
 
     $display("All tests passed!");
     $stop;

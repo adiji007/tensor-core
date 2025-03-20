@@ -7,11 +7,11 @@ module memory_subsystem (
     input logic CLK, nRST,
     datapath_cache_if dcif,
     caches_if cif,
-    arbiter_caches_if acif
+    arbiter_caches_if acif,
+    scratchpad_if spif
 );
 
     // Internal interface for scratchpad
-    scratchpad_if spif();
 
     // Arbiter
     memory_arbiter_basic ARB (
