@@ -6,7 +6,7 @@
 package datapath_pkg;
   import isa_pkg::*;
 
-  parameter FU_W   = 3;
+  parameter FU_W   = 5;
   parameter FU_S_W = 2;
   parameter FU_M_W = 2;
 
@@ -16,8 +16,8 @@ package datapath_pkg;
  
   typedef enum logic [1:0] {
     scalar_na = 2'd0,
-    STORE = 2'd2,
-    LOAD = 2'd3
+    STORE = 2'd1,
+    LOAD = 2'd2
   } scalar_mem_t;
 
   typedef enum logic [1:0] {
@@ -26,9 +26,10 @@ package datapath_pkg;
     FU_G_T
   } fu_type;
 
-  typedef enum logic {
-    M_STORE,
-    M_LOAD
+  typedef enum logic [1:0] {
+    matrix_na = 2'd0,
+    M_STORE = 2'd2,
+    M_LOAD = 2'd1
   } matrix_mem_t; // load or store for matrix ld_st fu
 
   typedef enum logic [2:0] {
@@ -43,24 +44,31 @@ package datapath_pkg;
   **************/
   typedef struct packed {
     aluop_t alu_op;  
+    // fu enable from issue
   } fu_alu_ctr_t;
 
   typedef struct packed {
     branch_t branch_op;  
+    // fu enable from issue
   } fu_branch_ctr_t;
 
   typedef struct packed {  
     word_t imm;
     scalar_mem_t mem_type;
+    // fu enable from issue
   } fu_ldst_ctr_t;
   
-  //typedef struct packed {  
-    // future double-buffer signals here probably
-  //} fu_gemm_ctr_t;
+  // typedef struct packed {  
+  //   // future double-buffer signals here probably
+  //   // whatever gemm fu needs
+  //   // fu_gemm_t the registers (rename to be accurate)
+  //   // enable
+  // } fu_gemm_ctr_t;
 
   typedef struct packed {  
     word_t imm;
     matrix_mem_t mem_type;
+    // fu enable from issue;
   } fu_ldst_m_ctr_t;
 
   typedef enum logic [1:0] {
@@ -70,8 +78,23 @@ package datapath_pkg;
     FU_NONE     = 2'd3
   } fu_scalar_t;
 
+  typedef enum logic [1:0] {
+    dhit_na = 2'd0,
+    dhit_load = 2'd1,
+    dhit_store = 2'd2
+  } dhit_t;
+
+  // typedef enum logic [4:0] {
+  //   NA              = 5'b00000,
+  //   ALU_DONE        = 5'b00001,
+  //   SCALAR_LS_DONE  = 5'b00010,
+  //   BRANCH_DONE     = 5'b00100,
+  //   MATRIX_LS_DONE  = 5'b01000,
+  //   GEMM_DONE       = 5'b10000
+  // } fu_done_signals; // scalar stuff for now
+
   typedef enum logic [2:0] {
-    matrix_na = 3'd0,
+    matrix_fu_na = 3'd0,
     FU_M_LD_ST  = 3'd3,
     FU_M_GEMM   = 3'd4
   } fu_matrix_t;
@@ -82,7 +105,11 @@ package datapath_pkg;
     regbits_t rs2;
     word_t imm; //instr[31:7] TODO: double check this is right 
     logic spec;
+    logic [3:0] op_type;
+    scalar_mem_t mem_type;
   } fust_s_row_t;
+
+
 
   typedef struct packed {
     logic [2:0] busy;
@@ -94,10 +121,11 @@ package datapath_pkg;
   typedef struct packed {
     matbits_t rd;
     regbits_t rs1;
-    regbits_t rs2;
-    logic [10:0] imm;
+    regbits_t rs2; // stride
+    word_t imm;
     fu_mbits_t t1;
     fu_mbits_t t2;
+    matrix_mem_t mem_type;
     // fu_sbits_t t3;
   } fust_m_row_t;
 
@@ -107,7 +135,7 @@ package datapath_pkg;
   } fust_m_t;
 
   typedef struct packed {
-    matbits_t rd;
+    matbits_t md;
     matbits_t ms1;
     matbits_t ms2;
     matbits_t ms3;
@@ -148,6 +176,8 @@ package datapath_pkg;
   *******/
   typedef struct packed {
     word_t imemload;
+    word_t br_pc;
+    logic br_pred;
   } fetch_t;
 
   /******************
@@ -204,37 +234,62 @@ package datapath_pkg;
 
     ex_ctr_t ex_ctr;
     wb_ctr_t wb_ctr;
+
+    word_t n_br_pc;
+    logic n_br_pred;
+
+    logic freeze;
+
+    logic halt;
   } dispatch_t;
 
   /*******
     ISSUE
   *******/
   typedef struct packed {
-    fu_bits_t fu_en;
-    word_t rdat1;
-    word_t rdat2;
-    matbits_t ms1;
-    matbits_t ms2;
+    fu_bits_t fu_en; // 0 - alu, 1 - sls, 2 - br, 3 - mls, 4 - gemm
+    // alu and lw
+    regbits_t rd;
+    // br, alu, sls, mls
+    word_t rdat1; // mls needs for addr
+    word_t rdat2; // mls usees as stride
+    word_t imm;   // mls needs for addr 
+    // branch
+    branch_t branch_type;
+    word_t branch_pc;
+    logic branch_pred_pc;
+    // alu
+    aluop_t alu_op;
+    // matrix ls
+    matrix_mem_t ls_in;
+    // scalar ls
+    scalar_mem_t mem_type;
+    // gemm
+    matbits_t md;  // used for m_ls
+    matbits_t ms1; 
+    matbits_t ms2; 
     matbits_t ms3;
+
+    logic halt;
   } issue_t;
 
 
   
   typedef struct packed {
-    logic [3:0] rs1;
-    logic [3:0] rs2;
-    logic [3:0] rs3;
-    logic [3:0] rd;
+    matbits_t rs1;
+    matbits_t rs2;
+    matbits_t rs3;
+    matbits_t rd;
   } fu_gemm_t;
 
 
 
   typedef struct packed {
     logic           done;       // Done signal to Issue Queue
-    logic [1:0]     ls_out;     // Load or store to Scratchpad [Load, Store]
-    logic [3:0]     rd_out;     // Matrix Reg destination (to Scratchpad)
-    logic [10:0]    imm_out;    // Immediate to Scratchpad
-    word_t          address;    // Address to Scratchpad
+    matrix_mem_t    ls_out;     // Load or store to Scratchpad [Load, Store]
+    matbits_t       rd_out;     // Matrix Reg destination (to Scratchpad)
+    // word_t          imm_out;    // Immediate to Scratchpad -> needed?
+    word_t          address;    // Address to Scratchpad   -> rs_in + imm
     word_t          stride_out; // stride value
   } matrix_ls_t;
 
@@ -242,32 +297,38 @@ package datapath_pkg;
     // Branch FU
     logic bfu_branch_outcome;
     word_t bfu_updated_pc;
-    logic bfu_misprediction;
     word_t bfu_correct_pc;
     logic bfu_update_btb;
     word_t bfu_update_pc;
-    word_t bfu_branch_target;
+    word_t bfu_branch_target;  
+    logic bfu_resolved;        // to dp
+    logic bfu_misprediction;   // to dp
 
     // Scalar ALU FU
-    logic salu_negative;
-    logic salu_overflow;
+    logic salu_negative;       // needed?
+    logic salu_overflow;       // needed?
     word_t salu_port_output;
-    logic salu_zero;
+    logic salu_zero;           // needed?
+    regbits_t salu_rd;
     
     // Scalar Load/Store FU
-    word_t sls_dmemaddr;
-    logic sls_dmemREN;
-    logic sls_dmemWEN;
-    word_t sls_dmemstore;
-    word_t sls_dmemload;
-    logic sls_dhit;
+    word_t sls_dmemaddr;       // to mem
+    logic sls_dmemREN;         // to mem
+    logic sls_dmemWEN;         // to mem
+    word_t sls_dmemstore;      // to mem
+    word_t sls_dmemload;       // to dp
+    dhit_t sls_dhit;            // to dp
+    regbits_t sls_rd;
     
     // MLS FU
-    matrix_ls_t fu_matls_out;
+    matrix_ls_t fu_matls_out;  
     
     // Gemm FU
     logic gemm_new_weight_out;
     fu_gemm_t gemm_matrix_num;
+
+    logic [4:0] fu_ex;
+
   } eif_output_t;
 
 
