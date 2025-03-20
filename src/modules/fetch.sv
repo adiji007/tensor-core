@@ -28,6 +28,8 @@ module fetch(
         end else begin
             if (ihit && !fif.freeze) begin
                 pc_reg <= next_pc;
+            end else begin
+                pc_reg <= '0;
             end
         end
     end
