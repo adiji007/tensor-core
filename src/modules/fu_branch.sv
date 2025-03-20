@@ -13,7 +13,6 @@ module fu_branch(
   // Track if BTB has been updated for current branch instr
   logic btb_updated;
   logic [31:0] last_branch_pc;
-  logic branch_gate_sel;
 
   always_ff @(posedge CLK, negedge nRST) begin
     if (!nRST) begin
@@ -42,15 +41,14 @@ module fu_branch(
 
   always_comb begin : ZERO_LOGIC
     zero = '0;
-    branch_gate_sel = '0; // set it in here based on what type
-    case (fubif.branch_type) // should be 6 types, just do based on the 6 types (use branch_t from isa package) 
-                             // and can just set branch_gate_sel internally instead of added logic to scoreboard
-      BT_BEQ:   zero = fubif.reg_a - fubif.reg_b == 0;                               // 2'd0: BEQ, BNE
-      BT_BNE:   zero = ($signed(fubif.reg_a) < $signed(fubif.reg_b)) ? 1'b0 : 1'b1;  // 2'd1: BLT, BGE
-      BT_BLT:   zero = (fubif.reg_a < fubif.reg_b) ? 1'b0 : 1'b1;                    // 2'd2: BLTU, BGEU
-      BT_BGE:   zero = '0; // whatever logic for below
-      BT_BLTU:  zero = '0;
-      BT_BGEU:  zero = '0;
+
+    casez (fubif.branch_type)
+      BT_BEQ: zero = fubif.reg_a - fubif.reg_b == 0;
+      BT_BNE: zero = fubif.reg_a - fubif.reg_b == 0;
+      BT_BLT: zero = ($signed(fubif.reg_a) < $signed(fubif.reg_b));
+      BT_BGE: zero = ($signed(fubif.reg_a) < $signed(fubif.reg_b));
+      BT_BLTU: zero = (fubif.reg_a < fubif.reg_b);  
+      BT_BGEU: zero = (fubif.reg_a < fubif.reg_b);
       default:  zero = 1'b0;   
     endcase
   end
@@ -69,7 +67,16 @@ module fu_branch(
     actual_outcome = '0;
 
     if (fubif.branch) begin
-      actual_outcome = branch_gate_sel ? ~zero : zero;
+      casez (fubif.branch_type)
+        BT_BEQ: actual_outcome = zero;
+        BT_BNE: actual_outcome = ~zero;
+        BT_BLT: actual_outcome = zero;
+        BT_BGE: actual_outcome = ~zero;
+        BT_BLTU: actual_outcome = zero;
+        BT_BGEU: actual_outcome = ~zero;
+        default: actual_outcome = 1'b0;
+      endcase
+
       fubif.branch_outcome = actual_outcome;
       fubif.updated_pc = actual_outcome ? (fubif.current_pc + fubif.imm) : (fubif.current_pc + 32'd4);
 
