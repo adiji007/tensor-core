@@ -34,7 +34,7 @@ SOURCE_FILES = \
 	./src/modules/fetch_tbp.sv \
 
 
-SCRDIR = ./tensor-core/src/scripts
+SCRDIR = ./tensor-core/src/waves
 SIMTIME = 100us             # Default simulation run time
 
 # modelsim viewing options
@@ -67,17 +67,17 @@ mls:
 	vsim -voptargs="+acc" work.fu_matrix_ls_tb
 
 wb:
+	pwd
+	ls ./src/waves/
 	vlog -sv +incdir+./src/include ./src/testbench/writeback_tb.sv ./src/modules/writeback.sv
-	vsim -voptargs="+acc" work.writeback_tb -do "do ./src/waves/writeback.do; run -all"
-
+	vsim -voptargs="+acc" work.writeback_tb -do "do $(abspath ./src/waves/writeback.do); run -all"
 
 source:
 	vlog -sv $(SOURCE_FILES) +incdir+./src/include/ 
 
-%:
-	vlog -sv $(SOURCE_FILES) +incdir+./src/include/ 
-	vlog -sv ./src/testbench/$*_tb.sv +incdir+./src/include/
-	vsim -voptargs="+acc" work.$*_tb -do "view objects; do ./src/waves/$*.do; run -all;" -onfinish stop
+%.wav:
+	vlog -sv +incdir+./src/include ./src/testbench/$*_tb.sv ./src/modules/$*.sv
+	vsim -voptargs="+acc" work.$*_tb -do "do $(abspath $(SCRDIR)/$*.do); run $(SIMTIME);" -suppress 2275
 
 %_vlint:
 	verilator --lint-only src/modules/$*.sv -Isrc/include -Isrc/modules

@@ -216,11 +216,9 @@ package datapath_pkg;
   } wb_ctr_t;
 
   typedef struct packed {
-    logic s_rw_en;  // scalar read write reg enable
-    regbits_t s_rw; // scalar read write register
-    word_t s_wdata; //empty until execute (write data)
-    logic load_done;  // Load Done Signal for Score Board
-    logic alu_done;   // Alu Done Signal for Score Board
+    logic reg_en;  // scalar read write reg enable
+    regbits_t reg_sel; // scalar read write register
+    logic [WORD_W-1:0] wdat; //empty until execute (write data)
   } wb_t;
 
   /**********

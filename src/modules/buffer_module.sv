@@ -9,6 +9,7 @@ module buffer_module #(
     input logic CLK, nRST,
     input logic write_en,                   // Write Enable
     input logic read_en,                    // Read Enable
+    input logic clear,                      // Clear Signal
     input logic [BUFFER_WIDTH-1:0] din,     // "Data in" into buffer upon write enable
     output logic [BUFFER_WIDTH-1:0] dout,   // "Data out" out of buffer upon read enable
     output logic full,                      // Full signal indicating buffer is at capacity
@@ -32,10 +33,10 @@ module buffer_module #(
 
         if (!nRST) begin
             shift_reg   <= '0;    
-            write_idx   <= 1;   // Write pointer indicates next write index
-            read_idx    <= 0;   // Read pointer indicates current read index
+            write_idx   <=  1;   // Write pointer indicates next write index
+            read_idx    <=  0;   // Read pointer indicates current read index
             dout        <= '0;
-            count       <= 0;
+            count       <=  0;
         end
         else begin
             shift_reg   <= next_shift_reg;
@@ -52,15 +53,21 @@ module buffer_module #(
         next_read_idx   = read_idx;
         next_dout       = '0;
 
-        if (write_en && !full) begin
+        if (write_en && !full && !clear) begin
             next_shift_reg[write_idx - 1] = din;
             next_write_idx = (write_idx == BUFFER_DEPTH) ? 1 : write_idx + 1;
         end
 
-        if (read_en && !empty) begin
+        if (read_en && !empty && !clear) begin
             next_dout = shift_reg[read_idx];
             next_shift_reg[read_idx] = '0;
             next_read_idx = ((read_idx + 1) == BUFFER_DEPTH) ? 0 : read_idx + 1;
+        end
+
+        if (clear) begin
+            next_shift_reg = '0;
+            next_write_idx =  1;
+            next_read_idx =   0;
         end
     end
 
@@ -71,6 +78,9 @@ module buffer_module #(
         end
         else if (write_en && !full && !read_en) begin
             next_count = count + 1;
+        end
+        else if (clear) begin
+            next_count = 0;
         end
     end
 
