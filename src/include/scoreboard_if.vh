@@ -22,13 +22,13 @@ interface scoreboard_if;
     issue_t out;
     
     modport SB (
-        input fetch, wb_issue, s_wdata, wb_dispatch, branch_miss, branch_resolved, fu_ex,
+        input fetch, wb_issue, wb_dispatch, branch_miss, branch_resolved, fu_ex,
         output out
     );
 
     modport tb (
         input out,
-        output fetch, wb_issue, s_wdata, wb_dispatch, branch_miss, branch_resolved, fu_ex
+        output fetch, wb_issue, wb_dispatch, branch_miss, branch_resolved, fu_ex
     );
     
 

@@ -169,26 +169,26 @@ program test (
         // sbif.wb.alu_done = '1;
         // sbif.wb_ctrl.alu_done = '1;
 
-        sbif.wb_issue.s_wdata = 32'd124;
+        sbif.wb_issue.wdat = 32'd124;
 
         sbif.wb_dispatch.s_rw_en = '1;
         sbif.wb_dispatch.s_rw = 5'd5;
 
-        sbif.wb_issue.s_rw_en = '1;
-        sbif.wb_issue.s_rw = 5'd5;
+        sbif.wb_issue.reg_en = '1;
+        sbif.wb_issue.reg_sel = 5'd5;
 
         @(posedge CLK);
 
         itype_instr(ITYPE_LW, 5'd12, 5'd15, funct3_i_t'(3'h2), 12'd16);
         sbif.fetch = '0;
 
-        sbif.wb_issue.s_wdata = '0;
+        sbif.wb_issue.wdat = '0;
 
         sbif.wb_dispatch.s_rw_en = '0;
         sbif.wb_dispatch.s_rw = '0;
 
-        sbif.wb_issue.s_rw_en = '0;
-        sbif.wb_issue.s_rw = '0;
+        sbif.wb_issue.reg_en = '0;
+        sbif.wb_issue.reg_sel = '0;
         @(posedge CLK);
         @(posedge CLK);
         @(posedge CLK);
@@ -196,7 +196,7 @@ program test (
 
         sbif.fu_ex[2] = 1'b1;
         sbif.fu_ex[1] = 1'b1;
-        sbif.branch_miss = 1;
+        sbif.branch_miss = 1'b1;
 
         @(posedge CLK);
 
@@ -217,6 +217,17 @@ program test (
         sbif.fetch = '1;
 
         repeat (10) @(posedge CLK);
+
+        sbif.fu_ex[2] = 1'b1;
+        sbif.branch_miss = 0;
+
+        @(posedge CLK);
+
+        sbif.fu_ex[2] = 1'b0;
+
+        repeat (10) @(posedge CLK);
+
+
 
         // @(posedge CLK);
         // rtype_instr(RTYPE, 5'd10, 5'd11, 5'd12, ADD_SUB, ADD);
@@ -324,7 +335,7 @@ program test (
         // sbif.fu_ex = BRANCH_DONE;
         // sbif.branch_miss = 1;
 
-        @(posedge CLK);
+        // @(posedge CLK);
 
         // sbif.fu_ex = fu_done_signals'('0);
         // sbif.branch_miss = 0;

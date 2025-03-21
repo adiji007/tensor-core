@@ -53,6 +53,8 @@ interface execute_if;
   // output
   eif_output_t eif_output;
 
+  logic halt;
+  logic spec;
   regbits_t rd;
 
   modport eif (
@@ -68,6 +70,10 @@ interface execute_if;
           mls_mhit, mls_enable, mls_ls_in, mls_rd_in, mls_rs_in, mls_stride_in, mls_imm_in,
           // GEMM FU
           gemm_enable, gemm_new_weight_in, gemm_rs1_in, gemm_rs2_in, gemm_rs3_in, gemm_rd_in,
+          // halt
+          halt,
+          // spec 
+          spec,
     output eif_output
   );
 
@@ -84,7 +90,11 @@ interface execute_if;
           // MLS FU
           mls_mhit, mls_enable, mls_ls_in, mls_rd_in, mls_rs_in, mls_stride_in, mls_imm_in,
           // GEMM FU
-          gemm_enable, gemm_new_weight_in, gemm_rs1_in, gemm_rs2_in, gemm_rs3_in, gemm_rd_in
+          gemm_enable, gemm_new_weight_in, gemm_rs1_in, gemm_rs2_in, gemm_rs3_in, gemm_rd_in,
+          // halt
+          halt,
+          // spec
+          spec
   );
 
 endinterface

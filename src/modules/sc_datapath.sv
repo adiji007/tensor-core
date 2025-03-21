@@ -1,5 +1,5 @@
 // PIPELINE PACKAGES
-`include "pipeline_types.vh"
+`include "datapath_types.vh"
 
 // INTERFACES
 `include "fetch_if.vh"
@@ -17,20 +17,10 @@ module sc_datapath
     datapath_cache_if.dp dcif
 );
     fetch_if fif();
-    fetch FETCH (CLK, nrst, dcif.ihit, fif);
+    fetch FETCH (CLK, nrst, fif);
 
     scoreboard_if sbif();
     scoreboard SCOREBOARD (CLK, nrst, sbif);
-
-    dispatch_if dif();
-    dispatch DISPATCH (CLK, nrst, dif);
-    
-    issue_if isif();
-    issue ISSUE (CLK, nrst, isif);
-    
-    regfile_if rfif();
-    // regfile REGFILE (CLK, nrst, fuif);
-    regfile REGFILE (CLK, nrst, rfif);
 
     execute_if eif();
     execute EXECUTE (CLK, nrst, eif);
@@ -38,119 +28,133 @@ module sc_datapath
     writeback_if wbif();
     writeback WRITEBACK (CLK, nrst, wbif);
 
-// IMPORT PACKAGE
-    import pipeline_pkg::*;
+    // total dp inputs and outputs
+    // input   ihit, imemload, dhit, dmemload
+    // output  halt, imemREN, imemaddr, dmemREN, dmemWEN, dmemstore, dmemaddr
+
+    // IMPORT PACKAGE
     import isa_pkg::*;
     import datapath_pkg::*;
 
-// LATCH INSTANTIATIONS
+    // LATCH INSTANTIATIONS
+    fetch_t fetch_out;
+    fetch_t sb_in;
 
-    fd_t fd_fetch;
-    fd_t fd_dispatch;
+    // issue_t sbif.out;
+    // issue_t sbif.out;
 
-    ie_t ie_issue;
-    ie_t ie_execute;
+    execute_t ex_out;
+    execute_t wb_in;
 
-    ew_t ew_execute;
-    ew_t ew_writeback;
+    assign dcif.halt = eif.eif_output.halt;
 
-//  FETCH/DISPATCH CONNECTIONS
-    
-    //FETCH CONNECTIONS
-    assign fif.imemload = dcif.imemload;
-    //assign fif.flush = 
-    //assign fif.stall = eif.
-    //assign fif.dispatch_free =
-    // assign fif.pc_prediction = eif.pc_fetch;
-    // assign fif.misprediction = eif.pred_outcome;
-    // assign fif.correct_target = eif.branch_target;
-    
-    //BEFORE LATCH
-    assign fd_fetch.instr = fif.instr;
-    assign fd_fetch.pc = fif.pc;
+    // fetch signals
+    // TODO 
+    // - all the input signals from execute to fetch combinationally
+    // - check the mem signals are correct to fetch
+    // - the outputs of fetch should be set to the inputs of the fetch -> sb latch
 
-    //AFTER LATCH CONNECTIONS
-    assign sbif.fetch = fd_dispatch.instr;
+    // input
+    assign fif.ihit      = dcif.ihit;      // from mem
+    assign fif.imemload  = dcif.imemload;  // from mem
 
-//  ISSUE/EXECUTE CONNECTIONS
+    // output to fetch -> sb latch (fetch_out)
+    assign fetch_out.imemload  = fif.instr;
+    assign fetch_out.br_pc     = fif.pc;
+    assign fetch_out.br_pred   = fif.branch_pred;
 
-    //BEFORE LATCH
-    assign ie_issue.rdat1 = rfif.rdat1;
-    assign ie_issue.rdat2 = rfif.rdat2;
-    assign ie_issue.out = sbif.out;
-    assign ie_issue.fust_s = isif.fust_s;
-    assign ie_issue.fust_m = isif.fust_m;
-    assign ie_issue.fust_g = isif.fust_g;
-    assign ie_issue.pc = fd_dispatch.pc;
-    
-    //BRANCH FU
-    // assign eif.ihit = dcif.ihit; 
-    // // assign eif.bfu_branch_outcome = fubpif.predicted_outcome;
-    // // assign bfu_update_btb =
-    // //this is an output in the functional unit???
-    // // assign eif.bfu_branch_target = fubpif.predicted_targe;
-    // assign eif.bfu_pc = ie_issue.pc;
-    // assign eif.bfu_pc_fetch = fif.pc;
 
-    // //SCALAR ALU
-    // assign eif.salu_aluop = cuif.alu_op;
-    // assign eif.salu_port_a = ie_execute.rdat1;
-    // assign eif.salu_port_b = ie_execute.rdat2;
-    // assign eif.imm = cuif.imm;
+    // sb signals
 
-    // //SCALAR LOAD/STORE
-    // assign eif.sls_mem_type = cuif.s_mem_type;
-    // assign eif.sls_rs1 = rfif.rdat1; //didnt know where to find rsel signal control unit does not decode it
-    // assign eif.sls_rs2 = rfif.rdat2;
-    // assign eif.sls_dmem_in = cuif.s_reg_write;
-    // assign eif.sls_dhit_in = dcif.dhit;
+    // inputs
+    assign sbif.fetch                 = sb_in;
+    assign sbif.wb_issue              = wbif.wb_out;
+    assign sbif.wb_dispatch.s_rw_en   = wbif.wb_out.reg_en;
+    assign sbif.wb_dispatch.s_rw      = wbif.wb_out.reg_sel;
+    assign sbif.branch_miss           = eif.eif_output.bfu_miss;
+    assign sbif.branch_resolved       = eif.eif_output.bfu_resolved;
+    assign sbif.fu_ex                 = eif.eif_output.fu_ex;
 
-    //AFTER LATCH CONNECTIONS
-    // assign fuslsif.rs1 = rfif.rdat1;
-    // assign fuslsif.rs2 = rfif.rdat2;
-    // assign fuslsif.imm =
-    // assign fuslsif.mem_type =
-    // assign fuslsif. dmem_in = 
-    // assign fuslsif.dhit_in =
-    // assign fubif.pc = ie_execute.pc;
-    // assign fualuif.port_a = ie_execute.rdat1;
-    // assign fualuif.port_b = ie_execute.rdat2;
-    // assign fualif.aluop =
+    // outputs
+    // assign sb_out = sbif.out;
 
-    // //BRANCH FU TO FETCH CONNECTIONS
-    // assign fubif.pc_fetch = fif.pc; //maybe need this idk
 
-    // //FETCH TO BRANCH FU CONNECTIONS
-    // assign fif.pc_prediction = fubif.pred_outcome;
-    // assign fif.correct_target = fubif.pred_target;
-    
-    //WRITEBACK TO SCALAR ALU FU CONNECTIONS
-    // assign wbif.wb_select = eif.dmemaddr;
-    // assign wbif.store_out = eif.dmemstore;
-    
-    // //WRITEBACK TO SCALAR LOAD/STORE FU CONNECTIONS
-    // assign wbif.alu_out = eif.port_output;
+    // execute signals
 
-//  EXECUTE/WRITEBACK CONNECTIONS
-    
-    //BEFORE LATCH
-    assign ew_execute.wb_data = wbif.wb_out;
+    // inputs
+    assign eif.rd = sbif.out.rd;
+    // branch
+    // assign eif.bfu_branch = ? not sure what this is and where it should be coming from
+    assign eif.bfu_enable              = sbif.out.fu_en[2];
+    assign eif.bfu_branch_type         = sbif.out.branch_type;
+    assign eif.bfu_reg_a               = sbif.out.rdat1;
+    assign eif.bfu_reg_b               = sbif.out.rdat2;
+    assign eif.bfu_current_pc          = sbif.out.branch_pc;
+    assign eif.bfu_imm                 = sbif.out.imm;
+    assign eif.bfu_predicted_outcome   = sbif.out.branch_pred_pc;
+    // alu
+    assign eif.salu_aluop   = sbif.out.alu_op;
+    assign eif.salu_port_a  = sbif.out.rdat1;
+    assign eif.salu_port_b  = sbif.out.rdat2;
+    assign eif.salu_enable  = sbif.out.fu_en[0];
+    // scalar ls
+    assign eif.sls_enable    = sbif.out.fu_en[1];
+    assign eif.sls_imm       = sbif.out.imm;
+    assign eif.sls_rs1       = sbif.out.rdat1;
+    assign eif.sls_rs2       = sbif.out.rdat2;
+    assign eif.sls_mem_type  = sbif.out.mem_type;
+    assign eif.sls_dmem_in   = dcif.dmemload; // from mem
+    assign eif.sls_dhit_in   = dcif.dhit;     // from mem
+    // matrix ls
+    assign eif.mls_enable     = sbif.out.fu_en[3];
+    assign eif.mls_mhit       = dcif.mhit;
+    assign eif.mls_ls_in      = sbif.out.ls_in;
+    assign eif.mls_rd_in      = sbif.out.md;
+    assign eif.mls_rs_in      = sbif.out.rdat1;
+    assign eif.mls_stride_in  = sbif.out.rdat2;
+    assign eif.mls_imm_in     = sbif.out.imm;
+    // gemm
+    assign eif.gemm_enable         = sbif.out.fu_en[4];
+    assign eif.gemm_new_weight_in  = sbif.out.gemm_new_weight;
+    assign eif.gemm_rd_in          = sbif.out.md;
+    assign eif.gemm_rs1_in         = sbif.out.ms1;
+    assign eif.gemm_rs2_in         = sbif.out.ms2;
+    assign eif.gemm_rs3_in         = sbif.out.ms3;
 
-    //AFTER LATCH
-    assign sbif.wb = ew_writeback;
+    // ouputs
+    assign ex_out.alu_done      = eif.eif_output.fu_ex[0];
+    assign ex_out.alu_wdat      = eif.eif_output.salu_port_output;
+    assign ex_out.alu_reg_sel   = eif.eif_output.salu_rd;
+    assign ex_out.load_done     = (eif.eif_output.sls_dhit == dhit_load);
+    assign ex_out.load_wdat     = eif.eif_output.sls_dmemload;
+    assign ex_out.load_reg_sel  = eif.eif_output.sls_rd;
+    assign ex_out.spec          = eif.eif_output.spec;
 
-// FLIP-FLOP FOR LATCHES
 
+    // wb signals
+
+    // inputs
+    assign wbif.alu_wdat           = wb_in.alu_wdat;
+    assign wbif.load_wdat          = wb_in.load_wdat;
+    assign wbif.branch_mispredict  = eif.eif_output.bfu_miss;
+    assign wbif.branch_spec        = wb_in.spec;
+    assign wbif.branch_correct     = eif.eif_output.bfu_resolved;
+    assign wbif.alu_done           = wb_in.alu_done;
+    assign wbif.load_done          = wb_in.load_done;
+    assign wbif.alu_reg_sel        = wb_in.alu_reg_sel;
+    assign wbif.load_reg_sel       = wb_in.load_reg_sel;
+
+    // FLIP-FLOP FOR LATCHES
     always_ff @(posedge CLK, negedge nrst) begin
-        if (nrst == 0) begin
-            fd_dispatch <= 0;
-            ie_execute <= 0;
-            ew_writeback <= 0;
+        if (!nrst) begin
+            sb_in <= '0;
+            // ex_in <= '0;
+            wb_in <= '0;
         end
         else begin
-            fd_dispatch <= fd_fetch;
-            ie_execute <= ie_issue;
-            ew_writeback <= ew_execute;
+            sb_in <= fetch_out;
+            // ex_in <= sb_out;
+            wb_in <= ex_out;
         end
     end
 
