@@ -2,7 +2,7 @@
 `include "isa_types.vh"
 
 module fetch(
-    input logic CLK, nRST,
+    input logic CLK, nRST, ihit,
     fetch_if.ft fif
 );
     import isa_pkg::*;
@@ -28,7 +28,7 @@ module fetch(
             pc_reg <= PC_INIT;
             fif.instr <= '0;
         end else begin
-            if (fif.ihit && !fif.freeze) begin
+            if (ihit && !fif.freeze) begin
                 pc_reg <= next_pc;
                 fif.instr <= fif.imemload;
             end else begin
