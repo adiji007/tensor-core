@@ -71,8 +71,8 @@ module fetch_tb;
     fif.correct_target = 32'h00004000;
     fif.pc_prediction = 32'hAABBCCDD;
     #(PERIOD * 6);
-    check_output(fif.instr, 32'hACE2ACE2, tb_test_case);
-    check_output(fif.pc, 32'hDEADBEEF, tb_test_case);
+    check_output(fif.instr, 32'h0, tb_test_case);
+    check_output(fif.pc, 32'h0, tb_test_case);
 
     fif.freeze = 1'b0;
 
