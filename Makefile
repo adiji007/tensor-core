@@ -9,6 +9,7 @@ SOURCE_FILES = \
 	./src/modules/dcache.sv \
 	./src/modules/scoreboard.sv \
 	./src/modules/fetch.sv \
+	./src/modules/fetch_stage.sv \
 	./src/modules/execute.sv \
 	./src/modules/fetch_branch.sv \
 	./src/modules/dispatch.sv \
