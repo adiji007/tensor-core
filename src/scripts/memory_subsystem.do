@@ -14,6 +14,17 @@ add wave -noupdate -expand -group Arb /memory_subsystem_tb/spif/sLoad_hit
 add wave -noupdate -expand -group Arb /memory_subsystem_tb/spif/sStore_hit
 add wave -noupdate -expand -group Arb /memory_subsystem_tb/spif/sLoad_row
 add wave -noupdate -expand -group Arb /memory_subsystem_tb/spif/load_data
+add wave -noupdate -expand -group Arb -divider {Internal Arbiter}
+add wave -noupdate -expand -group Arb -expand -group Arb-Internal /memory_subsystem_tb/DUT/ARB/load_count
+add wave -noupdate -expand -group Arb -expand -group Arb-Internal /memory_subsystem_tb/DUT/ARB/next_load_count
+add wave -noupdate -expand -group Arb -expand -group Arb-Internal /memory_subsystem_tb/DUT/ARB/store_count
+add wave -noupdate -expand -group Arb -expand -group Arb-Internal /memory_subsystem_tb/DUT/ARB/next_store_count
+add wave -noupdate -expand -group Arb -expand -group Arb-Internal /memory_subsystem_tb/DUT/ARB/sLoad_row_reg
+add wave -noupdate -expand -group Arb -expand -group Arb-Internal /memory_subsystem_tb/DUT/ARB/next_sLoad_row_reg
+add wave -noupdate -expand -group Arb -expand -group Arb-Internal /memory_subsystem_tb/DUT/ARB/sp_wait
+add wave -noupdate -expand -group Arb -expand -group Arb-Internal /memory_subsystem_tb/DUT/ARB/arbiter_state
+add wave -noupdate -expand -group Arb -expand -group Arb-Internal /memory_subsystem_tb/DUT/ARB/next_arbiter_state
+add wave -noupdate -expand -group Arb -expand -group Arb-Internal /memory_subsystem_tb/DUT/ARB/load_data_reg
 add wave -noupdate -expand -group Arb -divider Outputs
 add wave -noupdate -expand -group {Scheduler Out} /memory_subsystem_tb/spif/instrFIFO_full
 add wave -noupdate -expand -group {Scheduler Out} /memory_subsystem_tb/spif/gemm_complete
@@ -31,7 +42,7 @@ add wave -noupdate -expand -group {Arb Out} /memory_subsystem_tb/spif/store_data
 add wave -noupdate -expand -group {Arb Out} /memory_subsystem_tb/spif/load_addr
 add wave -noupdate -expand -group {Arb Out} /memory_subsystem_tb/spif/store_addr
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {649 ns} 0}
+WaveRestoreCursors {{Cursor 1} {79 ns} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 191
 configure wave -valuecolwidth 100
@@ -47,4 +58,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 ns} {1691 ns}
+WaveRestoreZoom {0 ns} {1120 ns}

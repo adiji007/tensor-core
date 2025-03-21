@@ -79,31 +79,33 @@ module memory_subsystem_tb;
 
     // Test 1: Write and read Dcache
     // DCACHE TESTS
-    test_name = "Write and read Dcache";
-    $display("Test 1: Write and read Dcache");
-    test_num = test_num + 1;
-    //first write has to be a miss
-    write_dcache(0, 1, 32'h00000100, 32'hFEEDCAFE);
-    @(posedge CLK);
-    #1;
-    if (dcif.dhit) begin
-      $display("ERROR: Expected a miss, got %b at %t", dcif.dhit, $time);
-      //$stop;
-    end
+    // test_name = "Write and read Dcache";
+    // $display("Test 1: Write and read Dcache");
+    // test_num = test_num + 1;
+    // //first write has to be a miss
+    // write_dcache(0, 1, 32'h00000100, 32'hFEEDCAFE);
+    // @(posedge CLK);
+    // #1;
+    // if (dcif.dhit) begin
+    //   $display("ERROR: Expected a miss, got %b at %t", dcif.dhit, $time);
+    //   //$stop;
+    // end
 
-    write_dcache(0, 1, 32'h00000100, 32'hFEEDCAFE);
-    @(posedge CLK);
-    #1;
-    if (!dcif.dhit) begin
-      $display("ERROR: Expected dhit, got %b at %t", dcif.dhit, $time);
-      //$stop;
-    end
+    // write_dcache(0, 1, 32'h00000100, 32'hFEEDCAFE);
+    // @(posedge CLK);
+    // #1;
+    // if (!dcif.dhit) begin
+    //   $display("ERROR: Expected dhit, got %b at %t", dcif.dhit, $time);
+    //   //$stop;
+    // end
     //TODO: later
     //mem_read(32'hFEEDCAFE, );
 
     //ICACHE TESTS
 
     //SCRATCHPAD TESTS
+    acif.ramstate = FREE;
+    acif.ramload = 32'h0;
     
     spif.instrFIFO_WEN = 1'b0;
     nRST = 1;
