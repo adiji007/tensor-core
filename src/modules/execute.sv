@@ -24,7 +24,7 @@ module execute (
     assign eif.eif_output.halt = eif.halt; // to mem 
 
     // spec needs to get passed to wb
-    assign eif.eif_output.spec = eif.spec;
+    assign eif.eif_output.spec = eif.spec; // to wb
 
     // Branch FU
     fu_branch BFU(CLK, nRST, fubif);

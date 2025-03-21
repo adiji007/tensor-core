@@ -26,14 +26,16 @@ interface datapath_cache_if;
   word_t              dmemload, dmemstore, dmemaddr;
 
 // Scratchpad signals
+  logic mhit;
   matrix_ls_t         matrix_ls;
 
+  // logic gemm_done;
   logic               gemm_new_weight; 
   fu_gemm_t           gemm_matrices; 
 
   // datapath ports
   modport dp (
-    input   ihit, imemload, dhit, dmemload,
+    input   ihit, imemload, dhit, dmemload, mhit, // some sort of gemm done/ready needed
     output  halt, imemREN, imemaddr, dmemREN, dmemWEN, datomic,
             dmemstore, dmemaddr, matrix_ls, gemm_new_weight,
             gemm_matrices

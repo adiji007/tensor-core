@@ -196,7 +196,7 @@ program test (
 
         sbif.fu_ex[2] = 1'b1;
         sbif.fu_ex[1] = 1'b1;
-        sbif.branch_miss = 1;
+        sbif.branch_miss = 1'b1;
 
         @(posedge CLK);
 
@@ -217,6 +217,17 @@ program test (
         sbif.fetch = '1;
 
         repeat (10) @(posedge CLK);
+
+        sbif.fu_ex[2] = 1'b1;
+        sbif.branch_miss = 0;
+
+        @(posedge CLK);
+
+        sbif.fu_ex[2] = 1'b0;
+
+        repeat (10) @(posedge CLK);
+
+
 
         // @(posedge CLK);
         // rtype_instr(RTYPE, 5'd10, 5'd11, 5'd12, ADD_SUB, ADD);
@@ -324,7 +335,7 @@ program test (
         // sbif.fu_ex = BRANCH_DONE;
         // sbif.branch_miss = 1;
 
-        @(posedge CLK);
+        // @(posedge CLK);
 
         // sbif.fu_ex = fu_done_signals'('0);
         // sbif.branch_miss = 0;

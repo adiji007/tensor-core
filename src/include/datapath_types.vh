@@ -338,6 +338,7 @@ package datapath_pkg;
   } eif_output_t;
 
   typedef struct packed {
+    logic spec;
     // alu wb
     logic alu_done;
     word_t alu_wdat;
