@@ -253,20 +253,24 @@ module dispatch(
       // halt
       dispatch.halt = cuif.halt;
 
+      // spec
+      dispatch.spec = spec;
+
       // To Fetch
       dispatch.freeze = hazard;
 
-      dispatch.ex_ctr.imm = cuif.imm;
-      dispatch.ex_ctr.alu_op = cuif.alu_op;
-      dispatch.ex_ctr.branch_op = cuif.branch_op;
-      dispatch.ex_ctr.s_mem_type = cuif.s_mem_type;
-      dispatch.ex_ctr.m_mem_type = cuif.m_mem_type;
-      dispatch.ex_ctr.m_rw = cuif.matrix_rd;
-      dispatch.ex_ctr.m_rw_en = cuif.m_reg_write;
+      // is any of this needed?
+      // dispatch.ex_ctr.imm = cuif.imm;
+      // dispatch.ex_ctr.alu_op = cuif.alu_op;
+      // dispatch.ex_ctr.branch_op = cuif.branch_op;
+      // dispatch.ex_ctr.s_mem_type = cuif.s_mem_type;
+      // dispatch.ex_ctr.m_mem_type = cuif.m_mem_type;
+      // dispatch.ex_ctr.m_rw = cuif.matrix_rd;
+      // dispatch.ex_ctr.m_rw_en = cuif.m_reg_write;
 
       // To Writeback
-      dispatch.wb_ctr.s_rw_en = cuif.s_reg_write;
-      dispatch.wb_ctr.s_rw = s_rd;
+      // dispatch.wb_ctr.s_rw_en = cuif.s_reg_write;
+      // dispatch.wb_ctr.s_rw = s_rd;
 
       // Branch 
       dispatch.n_br_pc = fetch_br_pc;

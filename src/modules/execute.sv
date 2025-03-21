@@ -20,10 +20,15 @@ module execute (
     fu_scalar_ls_if slsif();
     fu_gemm_if fugif();
 
+    // halt needs to get passed into memory
+    assign eif.eif_output.halt = eif.halt; // to mem 
+
+    // spec needs to get passed to wb
+    assign eif.eif_output.spec = eif.spec;
 
     // Branch FU
     fu_branch BFU(CLK, nRST, fubif);
-    assign fubif.branch = eif.bfu_branch; // is this enable? coming from btb or dp?
+    assign fubif.branch = eif.bfu_branch; // is this enable? coming from btb or sb?
     assign fubif.enable = eif.bfu_enable; // from sb
     assign fubif.branch_type = eif.bfu_branch_type; // from sb
     // assign fubif.branch_gate_sel = eif.bfu_branch_gate_sel; // have this just done in the branch fu
@@ -32,17 +37,17 @@ module execute (
     assign fubif.current_pc = eif.bfu_current_pc; // from sb
     assign fubif.imm = eif.bfu_imm; // from sb
     assign fubif.predicted_outcome = eif.bfu_predicted_outcome; // from sb
-    // Outputs: branch_outcome, updated_pc, misprediction, correct_pc, update_btb, update_pc, branch_target
+    // Outputs: branch_outcome, updated_pc, miss, correct_pc, update_btb, update_pc, branch_target
     // lines 37 to 42, can you (argha) say where these go to, like how outputs are labeled in other functional units
-    assign eif.eif_output.bfu_branch_outcome = fubif.branch_outcome; 
-    assign eif.eif_output.bfu_updated_pc = fubif.updated_pc; 
-    assign eif.eif_output.bfu_correct_pc = fubif.correct_pc;
-    assign eif.eif_output.bfu_update_btb = fubif.update_btb; 
-    assign eif.eif_output.bfu_update_pc = fubif.update_pc;
-    assign eif.eif_output.bfu_branch_target = fubif.branch_target;
+    assign eif.eif_output.bfu_branch_outcome = fubif.branch_outcome; // to fetch 
+    assign eif.eif_output.bfu_updated_pc = fubif.updated_pc; // to fetch
+    assign eif.eif_output.bfu_correct_pc = fubif.correct_pc; // to fetch
+    assign eif.eif_output.bfu_update_btb = fubif.update_btb; // to fetch
+    assign eif.eif_output.bfu_update_pc = fubif.update_pc; // to fetch
+    assign eif.eif_output.bfu_branch_target = fubif.branch_target; // to fetch
     assign eif.eif_output.bfu_resolved = fubif.resolved; // to sb and wb
-    assign eif.eif_output.bfu_misprediction = fubif.misprediction; // to fetch, sb, wb
-    assign eif.eif_output.fu_ex[2] = (fubif.resolved || fubif.misprediction); // to sb
+    assign eif.eif_output.bfu_miss = fubif.miss; // to fetch, sb, wb
+    assign eif.eif_output.fu_ex[2] = (fubif.resolved || fubif.miss); // to sb
 
     // Scalar ALU FU
     fu_alu SALU(aluif);
@@ -53,8 +58,8 @@ module execute (
     // Outputs 
     assign eif.eif_output.salu_negative = aluif.negative;       // needed?
     assign eif.eif_output.salu_overflow = aluif.overflow;       // needed?
-    assign eif.eif_output.salu_port_output = aluif.port_output; // to wb
     assign eif.eif_output.salu_zero = aluif.zero;               // needed?
+    assign eif.eif_output.salu_port_output = aluif.port_output; // to wb
     assign eif.eif_output.fu_ex[0] = eif.salu_enable; // to sb and wb
     assign eif.eif_output.salu_rd = eif.rd; // to wb
 
@@ -100,7 +105,7 @@ module execute (
     // GEMM FU
     fu_gemm GEMM(CLK, nRST, fugif);
     assign fugif.gemm_enable = eif.gemm_enable; // from sb
-    assign fugif.new_weight_in = eif.gemm_new_weight_in; // from sb -> TODO: needs to be added
+    assign fugif.new_weight_in = eif.gemm_new_weight_in; // from sb -> TODO: needs to be added, need a bit of clarification
     assign fugif.rs1_in = eif.gemm_rs1_in;  // from sb
     assign fugif.rs2_in = eif.gemm_rs2_in;  // from sb
     assign fugif.rs3_in = eif.gemm_rs3_in;  // from sb

@@ -1,30 +1,26 @@
-/* PIPELINE TYPES INTERFACE */
+// /* PIPELINE TYPES INTERFACE */
 
-`ifndef PIPELINE_PKG_VH
-`define PIPELINE_PKG_VH
-`include "isa_types.vh"
+// `ifndef PIPELINE_PKG_VH
+// `define PIPELINE_PKG_VH
+// `include "isa_types.vh"
 
-package pipeline_pkg;
-    import isa_pkg::*;
+// package pipeline_pkg;
+//     import isa_pkg::*;
 
-// FETCH/DISPATCH LATCH:
-    typedef struct packed
-    {
-        word_t instr, pc;
-    }   fd_t;
+//     // FETCH -> SB LATCH:
+//     typedef struct packed {
+//         fetch_t fetch_out;
+//     } fd_t;
 
-// ISSUE/EXECUTE LATCH:
-    typedef struct packed
-    {
-        word_t instr, rdat1, rdat2, pc;
-        logic out, fust_s, fust_m, fust_g;
-    }   ie_t;
+//     // SB -> EXECUTE LATCH:
+//     typedef struct packed {
+//         issue_t sb_out;
+//     } 
 
-//  EXECUTE/WRITEBACK LATCH:
-    typedef struct packed
-    {
-        word_t wb_data;
-    }   ew_t;
+//     //  EXECUTE -> WRITEBACK LATCH:
+//     typedef struct packed {
+//         eif_output_t execute_out;
+//     }  ew_t;
 
-endpackage;
-`endif
+// endpackage;
+// `endif

@@ -169,26 +169,26 @@ program test (
         // sbif.wb.alu_done = '1;
         // sbif.wb_ctrl.alu_done = '1;
 
-        sbif.wb_issue.s_wdata = 32'd124;
+        sbif.wb_issue.wdat = 32'd124;
 
         sbif.wb_dispatch.s_rw_en = '1;
         sbif.wb_dispatch.s_rw = 5'd5;
 
-        sbif.wb_issue.s_rw_en = '1;
-        sbif.wb_issue.s_rw = 5'd5;
+        sbif.wb_issue.reg_en = '1;
+        sbif.wb_issue.reg_sel = 5'd5;
 
         @(posedge CLK);
 
         itype_instr(ITYPE_LW, 5'd12, 5'd15, funct3_i_t'(3'h2), 12'd16);
         sbif.fetch = '0;
 
-        sbif.wb_issue.s_wdata = '0;
+        sbif.wb_issue.wdat = '0;
 
         sbif.wb_dispatch.s_rw_en = '0;
         sbif.wb_dispatch.s_rw = '0;
 
-        sbif.wb_issue.s_rw_en = '0;
-        sbif.wb_issue.s_rw = '0;
+        sbif.wb_issue.reg_en = '0;
+        sbif.wb_issue.reg_sel = '0;
         @(posedge CLK);
         @(posedge CLK);
         @(posedge CLK);

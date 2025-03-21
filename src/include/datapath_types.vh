@@ -211,15 +211,15 @@ package datapath_pkg;
     regbits_t s_rw;
     logic m_rw_en;
     matbits_t m_rw; // still need m_rw in wb for dispatch loopback to clear RST
-    logic load_done;  // Load Done Signal for Score Board
-    logic alu_done;   // Alu Done Signal for Score Board
-  } wb_ctr_t;
+    // logic load_done;  // Load Done Signal for Score Board
+    // logic alu_done;   // Alu Done Signal for Score Board
+  } wb_ctr_t; // dispatch
 
   typedef struct packed {
     logic reg_en;  // scalar read write reg enable
     regbits_t reg_sel; // scalar read write register
     logic [WORD_W-1:0] wdat; //empty until execute (write data)
-  } wb_t;
+  } wb_t; // issue
 
   /**********
     DISPATCH
@@ -232,13 +232,15 @@ package datapath_pkg;
     fust_g_t fust_g;
     fust_s_t fust_s;
 
-    ex_ctr_t ex_ctr;
-    wb_ctr_t wb_ctr;
+    // ex_ctr_t ex_ctr;
+    // wb_ctr_t wb_ctr;
 
     word_t n_br_pc;
     logic n_br_pred;
 
     logic freeze;
+
+    logic spec;
 
     logic halt;
   } dispatch_t;
@@ -269,7 +271,9 @@ package datapath_pkg;
     matbits_t ms1; 
     matbits_t ms2; 
     matbits_t ms3;
-
+    logic gemm_new_weight;
+    
+    logic spec;
     logic halt;
   } issue_t;
 
@@ -295,41 +299,55 @@ package datapath_pkg;
 
   typedef struct packed {
     // Branch FU
-    logic bfu_branch_outcome;
-    word_t bfu_updated_pc;
-    word_t bfu_correct_pc;
-    logic bfu_update_btb;
-    word_t bfu_update_pc;
-    word_t bfu_branch_target;  
-    logic bfu_resolved;        // to dp
-    logic bfu_misprediction;   // to dp
+    logic bfu_branch_outcome;  // to fetch, combinationally
+    word_t bfu_updated_pc;     // to fetch, combinationally
+    word_t bfu_correct_pc;     // to fetch, combinationally
+    logic bfu_update_btb;      // to fetch, combinationally
+    word_t bfu_update_pc;      // to fetch, combinationally
+    word_t bfu_branch_target;  // to fetch, combinationally
+    logic bfu_resolved;        // to sb and wb, combinationally - correct
+    logic bfu_miss;            // to sb and wb, combinationally - mispredict
 
     // Scalar ALU FU
     logic salu_negative;       // needed?
     logic salu_overflow;       // needed?
-    word_t salu_port_output;
     logic salu_zero;           // needed?
-    regbits_t salu_rd;
+    word_t salu_port_output;   // (alu_wdat) to wb thru latch ***
+    regbits_t salu_rd;         // (alu_reg_sel) to wb thru latch *** 
     
     // Scalar Load/Store FU
     word_t sls_dmemaddr;       // to mem
     logic sls_dmemREN;         // to mem
     logic sls_dmemWEN;         // to mem
     word_t sls_dmemstore;      // to mem
-    word_t sls_dmemload;       // to dp
-    dhit_t sls_dhit;            // to dp
-    regbits_t sls_rd;
+    word_t sls_dmemload;       // to wb thru latch ***
+    dhit_t sls_dhit;           // to sb as done, sls_dhit[0] (load_done) to wb thru latch ***
+    regbits_t sls_rd;          // (load_reg_sel) to wb thru latch ***
     
     // MLS FU
-    matrix_ls_t fu_matls_out;  
+    matrix_ls_t fu_matls_out;  // to mem
     
     // Gemm FU
-    logic gemm_new_weight_out;
-    fu_gemm_t gemm_matrix_num;
+    logic gemm_new_weight_out; // to mem
+    fu_gemm_t gemm_matrix_num; // to mem
 
-    logic [4:0] fu_ex;
+    logic [4:0] fu_ex; // to sb, fu_ex[0] (alu_done) to wb thru latch ***
+    logic spec;
+    logic halt;
 
   } eif_output_t;
+
+  typedef struct packed {
+    // alu wb
+    logic alu_done;
+    word_t alu_wdat;
+    regbits_t alu_reg_sel;
+
+    // lw wb 
+    logic load_done;
+    word_t load_wdat;
+    regbits_t load_reg_sel;
+  } execute_t;
 
 
 endpackage

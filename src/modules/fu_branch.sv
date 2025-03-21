@@ -57,7 +57,7 @@ module fu_branch(
     // updated_pc is corrected PC after branch resolution (ignore during correct prediction)
     // update_pc is original PC of branch instr being resolved (used to update the BTB)
     fubif.branch_outcome = 1'b0;
-    fubif.misprediction = 1'b0;
+    fubif.miss = 1'b0;
     fubif.updated_pc = fubif.current_pc + 32'd4;
     fubif.correct_pc = fubif.current_pc + 32'd4;
     fubif.branch_target = '0;
@@ -80,7 +80,7 @@ module fu_branch(
       fubif.branch_outcome = actual_outcome;
       fubif.updated_pc = actual_outcome ? (fubif.current_pc + fubif.imm) : (fubif.current_pc + 32'd4);
 
-      fubif.misprediction = (actual_outcome != fubif.predicted_outcome);
+      fubif.miss = (actual_outcome != fubif.predicted_outcome);
       fubif.correct_pc = fubif.updated_pc;
 
       // enable will control when the BTB can update

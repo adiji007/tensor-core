@@ -83,9 +83,9 @@ module issue(
     end
 
     always_comb begin : Regfile
-      rfif.WEN   = isif.wb.s_rw_en;
-      rfif.wsel  = isif.wb.s_rw;
-      rfif.wdata = isif.wb.s_wdata;
+      rfif.WEN   = isif.wb.reg_en;
+      rfif.wsel  = isif.wb.reg_sel;
+      rfif.wdata = isif.wb.wdat;
       rfif.rsel1 = s_rs1;
       rfif.rsel2 = s_rs2;
     end
@@ -334,6 +334,7 @@ module issue(
       imm = '0;
       for (int i = 0; i < 5; i++) begin
         issue.halt = isif.dispatch.halt;
+        // issue.spec = isif.dispatch.spec; // pretty sure only on alu instr
         if (isif.fu_ex[i]) begin
           issue.fu_en[i] = 1'b0;
         end
@@ -353,6 +354,7 @@ module issue(
             issue.branch_pc = isif.dispatch.n_br_pc;
             issue.branch_pred_pc = isif.dispatch.n_br_pred;
             issue.rd = fusif.fust.op[i].rd;
+            issue.spec = (i==0) ? isif.dispatch.spec : '0; // pretty sure only on alu instr
             // end
           end else if (i == 3) begin // mls
             // TODO: need to figure these out, not sure rn
@@ -365,6 +367,7 @@ module issue(
             issue.ms1 = fugif.fust.op.ms1;
             issue.ms2 = fugif.fust.op.ms2;
             issue.ms3 = fugif.fust.op.ms3;
+            issue.gemm_new_weight = '0; // TODO: logic for when new weight check, need clarification
             issue.fu_en[i] = 1'b1;
           end
           issue.rdat1 = rfif.rdat1;
