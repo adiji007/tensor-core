@@ -49,7 +49,7 @@ module scoreboard(
       isif.n_fust_m_en = diif.n_fust_m_en;
       isif.n_fust_g_en = diif.n_fust_g_en;
 
-      isif.s_wdata = sbif.s_wdata;
+      // isif.s_wdata = sbif.s_wdata;
 
       isif.fu_ex = sbif.fu_ex;
       diif.fu_ex = sbif.fu_ex;
