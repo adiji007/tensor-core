@@ -4,15 +4,14 @@ add wave -noupdate /fetch_tb/tb_test_case
 add wave -noupdate /fetch_tb/fif/flush
 add wave -noupdate /fetch_tb/fif/freeze
 add wave -noupdate /fetch_tb/fif/misprediction
-add wave -noupdate /fetch_tb/fif/ihit
 add wave -noupdate /fetch_tb/fif/imemload
 add wave -noupdate /fetch_tb/fif/pc_prediction
 add wave -noupdate /fetch_tb/fif/instr
 add wave -noupdate /fetch_tb/fif/pc
-add wave -noupdate /fetch_tb/fif/correct_target
 add wave -noupdate /fetch_tb/fif/correct_pc
+add wave -noupdate /fetch_tb/fif/imemREN
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {129 ns} 0}
+WaveRestoreCursors {{Cursor 1} {151 ns} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 150
 configure wave -valuecolwidth 100

@@ -13,6 +13,7 @@ localparam CLK_PERIOD = 1;
 // Testbench Signals
 logic tb_clk;
 logic tb_nrst;
+logic tb_ihit;
 logic tb_enable;
 logic [0:15] tb_count;
 
@@ -25,13 +26,13 @@ begin
 end
 
 fetch_stage_if fsif ();
-fetch_stage DUT (.CLK(tb_clk), .nRST(tb_nrst), .fsif(fsif));
+fetch_stage DUT (.CLK(tb_clk), .nRST(tb_nrst), .ihit(tb_ihit), .fsif(fsif));
 
 string tb_test_case = "";
 
 initial begin
     tb_nrst = 1'b1;
-    fsif.ihit = '0;
+    tb_ihit = '0;
     fsif.imemload = '0;
     fsif.freeze = '0;
     fsif.misprediction = '0;
@@ -49,7 +50,7 @@ initial begin
     #(CLK_PERIOD * 2);
 
     tb_test_case = "Basic Fetch";
-    fsif.ihit = 1'b1;
+    tb_ihit = 1'b1;
     fsif.imemload = 32'h00000080;
     #(4);
     assert(fsif.pc == 32'h00000010);

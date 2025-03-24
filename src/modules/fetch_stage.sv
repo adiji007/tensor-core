@@ -4,7 +4,7 @@
 `include "isa_types.vh"
 
 module fetch_stage(
-  input logic CLK, nRST,
+  input logic CLK, nRST, ihit,
   fetch_stage_if.fs fsif
 );
   import isa_pkg::*;
@@ -33,7 +33,7 @@ module fetch_stage(
   fetch fetch_unit (
     .CLK(CLK),
     .nRST(nRST),
-    .ihit(fsif.ihit),
+    .ihit(ihit),
     .fif(fif.ft)
   );
 
