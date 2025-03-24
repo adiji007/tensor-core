@@ -6,16 +6,16 @@
 interface fetch_if;
   import isa_pkg::*;
 
-  logic flush, freeze, misprediction, ihit;
+  logic flush, freeze, misprediction, ihit, br_predicted, imemREN;
   word_t imemaddr, imemload, pc_prediction, instr, pc, correct_pc;
 
   modport ft (
     input imemload, flush, freeze, pc_prediction, misprediction, correct_pc, ihit,
-    output imemaddr, instr, pc
+    output imemREN, imemaddr, instr, pc, br_predicted
   );
 
   modport tb (
-    input imemaddr, instr, pc,
+    input imemREN, imemaddr, instr, pc, br_predicted,
     output imemload, flush, freeze, pc_prediction, misprediction, correct_pc, ihit
   );
 
