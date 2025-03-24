@@ -40,13 +40,13 @@ module execute (
     // Outputs: branch_outcome, updated_pc, miss, correct_pc, update_btb, update_pc, branch_target
     // lines 37 to 42, can you (argha) say where these go to, like how outputs are labeled in other functional units
     assign eif.eif_output.bfu_branch_outcome = fubif.branch_outcome; // to fetch 
-    assign eif.eif_output.bfu_updated_pc = fubif.updated_pc; // to fetch
+    // assign eif.eif_output.bfu_updated_pc = fubif.updated_pc; // to fetch
     assign eif.eif_output.bfu_correct_pc = fubif.correct_pc; // to fetch
     assign eif.eif_output.bfu_update_btb = fubif.update_btb; // to fetch
     assign eif.eif_output.bfu_update_pc = fubif.update_pc; // to fetch
     assign eif.eif_output.bfu_branch_target = fubif.branch_target; // to fetch
-    assign eif.eif_output.bfu_resolved = fubif.resolved; // to sb and wb
     assign eif.eif_output.bfu_miss = fubif.miss; // to fetch, sb, wb
+    assign eif.eif_output.bfu_resolved = fubif.resolved; // to sb and wb
     assign eif.eif_output.fu_ex[2] = (fubif.resolved || fubif.miss); // to sb
 
     // Scalar ALU FU

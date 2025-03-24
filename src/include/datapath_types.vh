@@ -301,13 +301,13 @@ package datapath_pkg;
   typedef struct packed {
     // Branch FU
     logic bfu_branch_outcome;  // to fetch, combinationally
-    word_t bfu_updated_pc;     // to fetch, combinationally
+    // word_t bfu_updated_pc;     // to fetch, combinationally
     word_t bfu_correct_pc;     // to fetch, combinationally
     logic bfu_update_btb;      // to fetch, combinationally
     word_t bfu_update_pc;      // to fetch, combinationally
     word_t bfu_branch_target;  // to fetch, combinationally
     logic bfu_resolved;        // to sb and wb, combinationally - correct
-    logic bfu_miss;            // to sb and wb, combinationally - mispredict
+    logic bfu_miss;            // to fetch, sb, and wb, combinationally - mispredict
 
     // Scalar ALU FU
     logic salu_negative;       // needed?

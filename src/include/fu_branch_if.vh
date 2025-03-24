@@ -16,12 +16,12 @@ interface fu_branch_if;
 
   modport br (
     input enable, branch, branch_type, reg_a, reg_b, current_pc, imm, predicted_outcome,
-    output branch_outcome, updated_pc, miss, correct_pc, update_btb, update_pc, branch_target, resolved
+    output branch_outcome, miss, correct_pc, update_btb, update_pc, branch_target, resolved
   );
 
   modport tb (
     output enable, branch, branch_type, reg_a, reg_b, current_pc, imm, predicted_outcome,
-    input branch_outcome, updated_pc, miss, correct_pc, update_btb, update_pc, branch_target, resolved
+    input branch_outcome, miss, correct_pc, update_btb, update_pc, branch_target, resolved
   );
 endinterface
 
