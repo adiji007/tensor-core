@@ -300,18 +300,6 @@ package datapath_pkg;
 
   typedef struct packed {
     // Branch FU
-<<<<<<< HEAD
-    logic bfu_branch_outcome;
-    word_t bfu_updated_pc;
-    logic bfu_misprediction;
-    word_t bfu_correct_pc;
-    logic bfu_update_btb;
-    word_t bfu_update_pc;
-    word_t bfu_branch_target;
-    logic predicted_outcome;
-    word_t predicted_target;
-    logic resolved;
-=======
     logic bfu_branch_outcome;  // to fetch, combinationally
     word_t bfu_updated_pc;     // to fetch, combinationally
     word_t bfu_correct_pc;     // to fetch, combinationally
@@ -320,7 +308,6 @@ package datapath_pkg;
     word_t bfu_branch_target;  // to fetch, combinationally
     logic bfu_resolved;        // to sb and wb, combinationally - correct
     logic bfu_miss;            // to sb and wb, combinationally - mispredict
->>>>>>> a6b10951552d9fd3d930dad76289145c4f071981
 
     // Scalar ALU FU
     logic salu_negative;       // needed?
@@ -342,11 +329,6 @@ package datapath_pkg;
     matrix_ls_t fu_matls_out;  // to mem
     
     // Gemm FU
-<<<<<<< HEAD
-    logic gemm_new_weight_out;
-    fu_gemm_t gemm_matrix_num;
-    
-=======
     logic gemm_new_weight_out; // to mem
     fu_gemm_t gemm_matrix_num; // to mem
 
@@ -354,7 +336,6 @@ package datapath_pkg;
     logic spec;
     logic halt;
 
->>>>>>> a6b10951552d9fd3d930dad76289145c4f071981
   } eif_output_t;
 
   typedef struct packed {
