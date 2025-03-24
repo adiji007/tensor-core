@@ -83,9 +83,9 @@ module issue(
     end
 
     always_comb begin : Regfile
-      rfif.WEN   = isif.wb.s_rw_en;
-      rfif.wsel  = isif.wb.s_rw;
-      rfif.wdata = isif.wb.s_wdata;
+      rfif.WEN   = isif.wb.reg_en;
+      rfif.wsel  = isif.wb.reg_sel;
+      rfif.wdata = isif.wb.wdat;
       rfif.rsel1 = s_rs1;
       rfif.rsel2 = s_rs2;
     end
@@ -284,14 +284,14 @@ module issue(
             
 
             // TODO fust related wb
-            if (isif.fu_ex == ALU_DONE && (i == 0)) begin 
+            if ((isif.fu_ex[0] == 1'b1) && (i == 0)) begin 
               next_fust_state[i] = incoming_instr[i] ? FUST_WAIT : FUST_EMPTY;
             end
-            else if (isif.fu_ex == SCALAR_LS_DONE && (i == 1)) begin
+            else if ((isif.fu_ex[1] == 1'b1) && (i == 1)) begin
               next_fust_state[i] = incoming_instr[i] ? FUST_WAIT : FUST_EMPTY;
             end
-            else if (isif.fu_ex == BRANCH_DONE && (i==2)) begin
-              next_fust_state[i] = FUST_EMPTY;
+            else if ((isif.fu_ex[2] == 1'b1) && (i == 2)) begin
+              next_fust_state[i] = incoming_instr[i] ? FUST_WAIT : FUST_EMPTY;
             end
 
 
@@ -332,8 +332,13 @@ module issue(
       s_rs1 = '0;
       s_rs2 = '0;
       imm = '0;
-      for (int i = 0; i < 5; i++) begin
+      issue.halt = '0;
+      if (!(|isif.fust_s.busy || isif.fust_m.busy || isif.fust_g.busy || isif.branch_miss)) begin
         issue.halt = isif.dispatch.halt;
+      end
+      // issue.halt = (|fust_s.busy || fust_m.busy || fust_g.busy || isif.branch_miss) ? '0 : isif.dispatch.halt;
+      for (int i = 0; i < 5; i++) begin
+        // issue.spec = isif.dispatch.spec; // pretty sure only on alu instr
         if (isif.fu_ex[i]) begin
           issue.fu_en[i] = 1'b0;
         end
@@ -353,6 +358,8 @@ module issue(
             issue.branch_pc = isif.dispatch.n_br_pc;
             issue.branch_pred_pc = isif.dispatch.n_br_pred;
             // end
+            issue.rd = fusif.fust.op[i].rd;
+            issue.spec = (i==0 && !isif.branch_miss) ? isif.dispatch.spec : '0; // pretty sure only on alu instr
           end else if (i == 3) begin // mls
             // TODO: need to figure these out, not sure rn
             s_rs1 = fumif.fust.op.rs1;
@@ -364,6 +371,7 @@ module issue(
             issue.ms1 = fugif.fust.op.ms1;
             issue.ms2 = fugif.fust.op.ms2;
             issue.ms3 = fugif.fust.op.ms3;
+            issue.gemm_new_weight = '0; // TODO: logic for when new weight check, need clarification
             issue.fu_en[i] = 1'b1;
           end
           issue.rdat1 = rfif.rdat1;

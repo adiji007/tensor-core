@@ -83,13 +83,13 @@ module dispatch(
 
     always_comb begin : Hazard_Logic
       case (cuif.fu_s)
-        FU_S_ALU:     s_busy = diif.fust_s.busy[FU_S_ALU];
-        FU_S_LD_ST:   s_busy = diif.fust_s.busy[FU_S_LD_ST];
-        FU_S_BRANCH:  s_busy = diif.fust_s.busy[FU_S_BRANCH];
+        FU_S_ALU:     s_busy = (isif.fu_ex[0] == 1'b1) ? diif.fust_s.busy[FU_S_ALU] : '0;
+        FU_S_LD_ST:   s_busy = (isif.fu_ex[1] == 1'b1) ? diif.fust_s.busy[FU_S_LD_ST] : '0;
+        FU_S_BRANCH:  s_busy = (isif.fu_ex[2] == 1'b1) ? diif.fust_s.busy[FU_S_BRANCH] : '0;
         default: s_busy = 1'b0;
       endcase
       case (cuif.fu_m)
-        FU_M_LD_ST: m_busy = diif.fust_m.busy;
+        FU_M_LD_ST:   m_busy = diif.fust_m.busy;
         FU_M_GEMM:    m_busy = diif.fust_g.busy;
         default: m_busy = 1'b0;
       endcase
@@ -162,13 +162,13 @@ module dispatch(
 
       // tag updates on WB
       // if (diif.wb.s_rw_en & diif.wb.alu_done & diif.fust_state[0] == FUST_EX) begin // TODO fust related wb
-      if (diif.fu_ex == ALU_DONE && diif.fust_state[0] == FUST_EX) begin // TODO fust related wb
+      if ((isif.fu_ex[0] == 1'b1) && diif.fust_state[0] == FUST_EX) begin // TODO fust related wb
         diif.n_t1[FU_S_LD_ST] = (diif.fust_s.t1[FU_S_LD_ST] == 2'd1) && diif.fust_s.busy[FU_S_LD_ST] ? '0 : diif.fust_s.t1[FU_S_LD_ST];
         diif.n_t2[FU_S_LD_ST] = (diif.fust_s.t2[FU_S_LD_ST] == 2'd1) && diif.fust_s.busy[FU_S_LD_ST] ? '0 : diif.fust_s.t2[FU_S_LD_ST];
         diif.n_t1[FU_S_BRANCH] = (diif.fust_s.t1[FU_S_BRANCH] == 2'd1) && diif.fust_s.busy[FU_S_BRANCH] ? '0 : diif.fust_s.t1[FU_S_BRANCH];
         diif.n_t2[FU_S_BRANCH] = (diif.fust_s.t2[FU_S_BRANCH] == 2'd1) && diif.fust_s.busy[FU_S_BRANCH] ? '0 : diif.fust_s.t2[FU_S_BRANCH];
       // end else if (diif.wb.s_rw_en & diif.wb.load_done & diif.fust_state[1] == FUST_EX) begin
-      end else if (diif.fu_ex == SCALAR_LS_DONE && diif.fust_state[1] == FUST_EX) begin
+      end else if ((isif.fu_ex[1] == 1'b1) && diif.fust_state[1] == FUST_EX) begin
         diif.n_t1[FU_S_ALU] = (diif.fust_s.t1[FU_S_ALU] == 2'd2) && diif.fust_s.busy[FU_S_ALU] ? '0 : diif.fust_s.t1[FU_S_ALU];
         diif.n_t2[FU_S_ALU] = (diif.fust_s.t2[FU_S_ALU] == 2'd2) && diif.fust_s.busy[FU_S_ALU] ? '0 : diif.fust_s.t2[FU_S_ALU];
         diif.n_t1[FU_S_BRANCH] = (diif.fust_s.t1[FU_S_BRANCH] == 2'd2) && diif.fust_s.busy[FU_S_BRANCH] ? '0 : diif.fust_s.t1[FU_S_BRANCH];
@@ -253,20 +253,24 @@ module dispatch(
       // halt
       dispatch.halt = cuif.halt;
 
+      // spec
+      dispatch.spec = spec;
+
       // To Fetch
       dispatch.freeze = hazard;
 
-      dispatch.ex_ctr.imm = cuif.imm;
-      dispatch.ex_ctr.alu_op = cuif.alu_op;
-      dispatch.ex_ctr.branch_op = cuif.branch_op;
-      dispatch.ex_ctr.s_mem_type = cuif.s_mem_type;
-      dispatch.ex_ctr.m_mem_type = cuif.m_mem_type;
-      dispatch.ex_ctr.m_rw = cuif.matrix_rd;
-      dispatch.ex_ctr.m_rw_en = cuif.m_reg_write;
+      // is any of this needed?
+      // dispatch.ex_ctr.imm = cuif.imm;
+      // dispatch.ex_ctr.alu_op = cuif.alu_op;
+      // dispatch.ex_ctr.branch_op = cuif.branch_op;
+      // dispatch.ex_ctr.s_mem_type = cuif.s_mem_type;
+      // dispatch.ex_ctr.m_mem_type = cuif.m_mem_type;
+      // dispatch.ex_ctr.m_rw = cuif.matrix_rd;
+      // dispatch.ex_ctr.m_rw_en = cuif.m_reg_write;
 
       // To Writeback
-      dispatch.wb_ctr.s_rw_en = cuif.s_reg_write;
-      dispatch.wb_ctr.s_rw = s_rd;
+      // dispatch.wb_ctr.s_rw_en = cuif.s_reg_write;
+      // dispatch.wb_ctr.s_rw = s_rd;
 
       // Branch 
       dispatch.n_br_pc = fetch_br_pc;

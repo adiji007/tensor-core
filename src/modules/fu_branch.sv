@@ -42,11 +42,14 @@ module fu_branch(
   always_comb begin : ZERO_LOGIC
     zero = '0;
 
-    case (fubif.branch_type)
-      2'd0: zero = fubif.reg_a - fubif.reg_b == 0;                               // 2'd0: BEQ, BNE
-      2'd1: zero = ($signed(fubif.reg_a) < $signed(fubif.reg_b)) ? 1'b0 : 1'b1;  // 2'd1: BLT, BGE
-      2'd2: zero = (fubif.reg_a < fubif.reg_b) ? 1'b0 : 1'b1;                    // 2'd2: BLTU, BGEU
-      default: zero = 1'b0;   
+    casez (fubif.branch_type)
+      BT_BEQ: zero = fubif.reg_a - fubif.reg_b == 0;
+      BT_BNE: zero = fubif.reg_a - fubif.reg_b == 0;
+      BT_BLT: zero = ($signed(fubif.reg_a) < $signed(fubif.reg_b));
+      BT_BGE: zero = ($signed(fubif.reg_a) < $signed(fubif.reg_b));
+      BT_BLTU: zero = (fubif.reg_a < fubif.reg_b);  
+      BT_BGEU: zero = (fubif.reg_a < fubif.reg_b);
+      default:  zero = 1'b0;   
     endcase
   end
 
@@ -54,7 +57,7 @@ module fu_branch(
     // updated_pc is corrected PC after branch resolution (ignore during correct prediction)
     // update_pc is original PC of branch instr being resolved (used to update the BTB)
     fubif.branch_outcome = 1'b0;
-    fubif.misprediction = 1'b0;
+    fubif.miss = 1'b0;
     fubif.updated_pc = fubif.current_pc + 32'd4;
     fubif.correct_pc = fubif.current_pc + 32'd4;
     fubif.branch_target = '0;
@@ -64,11 +67,20 @@ module fu_branch(
     actual_outcome = '0;
 
     if (fubif.branch) begin
-      actual_outcome = fubif.branch_gate_sel ? ~zero : zero;
+      casez (fubif.branch_type)
+        BT_BEQ: actual_outcome = zero;
+        BT_BNE: actual_outcome = ~zero;
+        BT_BLT: actual_outcome = zero;
+        BT_BGE: actual_outcome = ~zero;
+        BT_BLTU: actual_outcome = zero;
+        BT_BGEU: actual_outcome = ~zero;
+        default: actual_outcome = 1'b0;
+      endcase
+
       fubif.branch_outcome = actual_outcome;
       fubif.updated_pc = actual_outcome ? (fubif.current_pc + fubif.imm) : (fubif.current_pc + 32'd4);
 
-      fubif.misprediction = (actual_outcome != fubif.predicted_outcome);
+      fubif.miss = (actual_outcome != fubif.predicted_outcome);
       fubif.correct_pc = fubif.updated_pc;
 
       // enable will control when the BTB can update

@@ -17,8 +17,8 @@ package datapath_pkg;
  
   typedef enum logic [1:0] {
     scalar_na = 2'd0,
-    STORE = 2'd2,
-    LOAD = 2'd3
+    STORE = 2'd1,
+    LOAD = 2'd2
   } scalar_mem_t;
 
   typedef enum logic [1:0] {
@@ -27,9 +27,10 @@ package datapath_pkg;
     FU_G_T
   } fu_type;
 
-  typedef enum logic {
-    M_STORE,
-    M_LOAD
+  typedef enum logic [1:0] {
+    matrix_na = 2'd0,
+    M_STORE = 2'd2,
+    M_LOAD = 2'd1
   } matrix_mem_t; // load or store for matrix ld_st fu
 
   typedef enum logic [2:0] {
@@ -78,15 +79,23 @@ package datapath_pkg;
     FU_NONE     = 2'd3
   } fu_scalar_t;
 
-  typedef enum logic [2:0] {
-    NA               = 3'b000,
-    ALU_DONE         = 3'b001,
-    SCALAR_LS_DONE   = 3'b010,
-    BRANCH_DONE      = 3'b100
-  } fu_done_signals; // scalar stuff for now
+  typedef enum logic [1:0] {
+    dhit_na = 2'd0,
+    dhit_load = 2'd1,
+    dhit_store = 2'd2
+  } dhit_t;
+
+  // typedef enum logic [4:0] {
+  //   NA              = 5'b00000,
+  //   ALU_DONE        = 5'b00001,
+  //   SCALAR_LS_DONE  = 5'b00010,
+  //   BRANCH_DONE     = 5'b00100,
+  //   MATRIX_LS_DONE  = 5'b01000,
+  //   GEMM_DONE       = 5'b10000
+  // } fu_done_signals; // scalar stuff for now
 
   typedef enum logic [2:0] {
-    matrix_na = 3'd0,
+    matrix_fu_na = 3'd0,
     FU_M_LD_ST  = 3'd3,
     FU_M_GEMM   = 3'd4
   } fu_matrix_t;
@@ -113,7 +122,7 @@ package datapath_pkg;
   typedef struct packed {
     matbits_t rd;
     regbits_t rs1;
-    regbits_t rs2;
+    regbits_t rs2; // stride
     word_t imm;
     fu_mbits_t t1;
     fu_mbits_t t2;
@@ -203,17 +212,15 @@ package datapath_pkg;
     regbits_t s_rw;
     logic m_rw_en;
     matbits_t m_rw; // still need m_rw in wb for dispatch loopback to clear RST
-    logic load_done;  // Load Done Signal for Score Board
-    logic alu_done;   // Alu Done Signal for Score Board
-  } wb_ctr_t;
+    // logic load_done;  // Load Done Signal for Score Board
+    // logic alu_done;   // Alu Done Signal for Score Board
+  } wb_ctr_t; // dispatch
 
   typedef struct packed {
-    logic s_rw_en;  // scalar read write reg enable
-    regbits_t s_rw; // scalar read write register
-    word_t s_wdata; //empty until execute (write data)
-    logic load_done;  // Load Done Signal for Score Board
-    logic alu_done;   // Alu Done Signal for Score Board
-  } wb_t;
+    logic reg_en;  // scalar read write reg enable
+    regbits_t reg_sel; // scalar read write register
+    logic [WORD_W-1:0] wdat; //empty until execute (write data)
+  } wb_t; // issue
 
   /**********
     DISPATCH
@@ -226,13 +233,15 @@ package datapath_pkg;
     fust_g_t fust_g;
     fust_s_t fust_s;
 
-    ex_ctr_t ex_ctr;
-    wb_ctr_t wb_ctr;
+    // ex_ctr_t ex_ctr;
+    // wb_ctr_t wb_ctr;
 
     word_t n_br_pc;
     logic n_br_pred;
 
     logic freeze;
+
+    logic spec;
 
     logic halt;
   } dispatch_t;
@@ -242,6 +251,8 @@ package datapath_pkg;
   *******/
   typedef struct packed {
     fu_bits_t fu_en; // 0 - alu, 1 - sls, 2 - br, 3 - mls, 4 - gemm
+    // alu and lw
+    regbits_t rd;
     // br, alu, sls, mls
     word_t rdat1; // mls needs for addr
     word_t rdat2; // mls usees as stride
@@ -257,36 +268,39 @@ package datapath_pkg;
     // scalar ls
     scalar_mem_t mem_type;
     // gemm
-    matbits_t md;
-    matbits_t ms1; // used for m_ls
-    matbits_t ms2; // used for m_ls
+    matbits_t md;  // used for m_ls
+    matbits_t ms1; 
+    matbits_t ms2; 
     matbits_t ms3;
-
+    logic gemm_new_weight;
+    
+    logic spec;
     logic halt;
   } issue_t;
 
 
   
   typedef struct packed {
-    logic [3:0] rs1;
-    logic [3:0] rs2;
-    logic [3:0] rs3;
-    logic [3:0] rd;
+    matbits_t rs1;
+    matbits_t rs2;
+    matbits_t rs3;
+    matbits_t rd;
   } fu_gemm_t;
 
 
 
   typedef struct packed {
     logic           done;       // Done signal to Issue Queue
-    logic [1:0]     ls_out;     // Load or store to Scratchpad [Load, Store]
-    logic [3:0]     rd_out;     // Matrix Reg destination (to Scratchpad)
-    logic [10:0]    imm_out;    // Immediate to Scratchpad
-    word_t          address;    // Address to Scratchpad
+    matrix_mem_t    ls_out;     // Load or store to Scratchpad [Load, Store]
+    matbits_t       rd_out;     // Matrix Reg destination (to Scratchpad)
+    // word_t          imm_out;    // Immediate to Scratchpad -> needed?
+    word_t          address;    // Address to Scratchpad   -> rs_in + imm
     word_t          stride_out; // stride value
   } matrix_ls_t;
 
   typedef struct packed {
     // Branch FU
+<<<<<<< HEAD
     logic bfu_branch_outcome;
     word_t bfu_updated_pc;
     logic bfu_misprediction;
@@ -297,29 +311,64 @@ package datapath_pkg;
     logic predicted_outcome;
     word_t predicted_target;
     logic resolved;
+=======
+    logic bfu_branch_outcome;  // to fetch, combinationally
+    word_t bfu_updated_pc;     // to fetch, combinationally
+    word_t bfu_correct_pc;     // to fetch, combinationally
+    logic bfu_update_btb;      // to fetch, combinationally
+    word_t bfu_update_pc;      // to fetch, combinationally
+    word_t bfu_branch_target;  // to fetch, combinationally
+    logic bfu_resolved;        // to sb and wb, combinationally - correct
+    logic bfu_miss;            // to sb and wb, combinationally - mispredict
+>>>>>>> a6b10951552d9fd3d930dad76289145c4f071981
 
     // Scalar ALU FU
-    logic salu_negative;
-    logic salu_overflow;
-    word_t salu_port_output;
-    logic salu_zero;
+    logic salu_negative;       // needed?
+    logic salu_overflow;       // needed?
+    logic salu_zero;           // needed?
+    word_t salu_port_output;   // (alu_wdat) to wb thru latch ***
+    regbits_t salu_rd;         // (alu_reg_sel) to wb thru latch *** 
     
     // Scalar Load/Store FU
-    word_t sls_dmemaddr;
-    logic sls_dmemREN;
-    logic sls_dmemWEN;
-    word_t sls_dmemstore;
-    word_t sls_dmemload;
-    logic sls_dhit;
+    word_t sls_dmemaddr;       // to mem
+    logic sls_dmemREN;         // to mem
+    logic sls_dmemWEN;         // to mem
+    word_t sls_dmemstore;      // to mem
+    word_t sls_dmemload;       // to wb thru latch ***
+    dhit_t sls_dhit;           // to sb as done, sls_dhit[0] (load_done) to wb thru latch ***
+    regbits_t sls_rd;          // (load_reg_sel) to wb thru latch ***
     
     // MLS FU
-    matrix_ls_t fu_matls_out;
+    matrix_ls_t fu_matls_out;  // to mem
     
     // Gemm FU
+<<<<<<< HEAD
     logic gemm_new_weight_out;
     fu_gemm_t gemm_matrix_num;
     
+=======
+    logic gemm_new_weight_out; // to mem
+    fu_gemm_t gemm_matrix_num; // to mem
+
+    logic [4:0] fu_ex; // to sb, fu_ex[0] (alu_done) to wb thru latch ***
+    logic spec;
+    logic halt;
+
+>>>>>>> a6b10951552d9fd3d930dad76289145c4f071981
   } eif_output_t;
+
+  typedef struct packed {
+    logic spec;
+    // alu wb
+    logic alu_done;
+    word_t alu_wdat;
+    regbits_t alu_reg_sel;
+
+    // lw wb 
+    logic load_done;
+    word_t load_wdat;
+    regbits_t load_reg_sel;
+  } execute_t;
 
 
 endpackage
