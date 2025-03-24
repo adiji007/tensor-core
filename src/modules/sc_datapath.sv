@@ -70,7 +70,7 @@ module sc_datapath
     // output to fetch -> sb latch (fetch_out)
     assign fetch_out.imemload  = fif.instr;
     assign fetch_out.br_pc     = fif.pc;
-    // assign fetch_out.br_pred   = fif.pc_prediction;
+    assign fetch_out.br_pred   = fif.br_predicted;
 
 
     // sb signals
