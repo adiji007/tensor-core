@@ -40,7 +40,7 @@ module sc_datapath
     // LATCH INSTANTIATIONS
     fetch_t fetch_out;
     fetch_t sb_in;
-
+ 
     // issue_t sbif.out;
     // issue_t sbif.out;
 
@@ -94,6 +94,8 @@ module sc_datapath
 
     // inputs
     assign eif.rd = sbif.out.rd;
+    assign eif.spec = sbif.out.spec;
+    assign eif.halt = sbif.out.halt;
     // branch
     // assign eif.bfu_branch = ? not sure what this is and where it should be coming from
     assign eif.bfu_enable              = sbif.out.fu_en[2];
@@ -141,6 +143,10 @@ module sc_datapath
     assign ex_out.load_reg_sel  = eif.eif_output.sls_rd;
     assign ex_out.spec          = eif.eif_output.spec;
 
+    assign dcif.dmemWEN    = eif.eif_output.sls_dmemWEN;
+    assign dcif.dmemREN    = eif.eif_output.sls_dmemREN;
+    assign dcif.dmemstore  = eif.eif_output.sls_dmemstore;
+    assign dcif.dmemaddr   = eif.eif_output.sls_dmemaddr;
 
     // wb signals
 

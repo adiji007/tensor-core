@@ -13,7 +13,7 @@ interface scoreboard_if;
 
     wb_t wb_issue;
     wb_ctr_t wb_dispatch;
-    word_t s_wdata;
+    // word_t s_wdata;
 
     // execute signals
     logic branch_miss, branch_resolved;

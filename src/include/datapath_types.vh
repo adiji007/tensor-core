@@ -106,6 +106,7 @@ package datapath_pkg;
     regbits_t rs2;
     word_t imm; //instr[31:7] TODO: double check this is right 
     logic spec;
+    logic i_type;
     logic [3:0] op_type;
     scalar_mem_t mem_type;
   } fust_s_row_t;
@@ -238,6 +239,8 @@ package datapath_pkg;
 
     word_t n_br_pc;
     logic n_br_pred;
+
+    logic i_type;
 
     logic freeze;
 

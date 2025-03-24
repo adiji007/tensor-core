@@ -176,12 +176,13 @@ module dispatch(
       end
 
       // To Issue **Combinationally**
-      diif.n_fust_s_en   = (cuif.fu_t == FU_S_T & ~flush & ~hazard);
-      diif.n_fu_s        = cuif.fu_s;
-      diif.n_fust_s.rd   = s_rd;
-      diif.n_fust_s.rs1  = s_rs1;
-      diif.n_fust_s.rs2  = s_rs2;
-      diif.n_fust_s.imm  = cuif.imm;
+      diif.n_fust_s_en     = (cuif.fu_t == FU_S_T & ~flush & ~hazard);
+      diif.n_fu_s          = cuif.fu_s;
+      diif.n_fust_s.rd     = s_rd;
+      diif.n_fust_s.rs1    = s_rs1;
+      diif.n_fust_s.rs2    = s_rs2;
+      diif.n_fust_s.imm    = cuif.imm;
+      diif.n_fust_s.i_type = cuif.i_flag;
 
       diif.n_fust_s.spec = spec; // sets spec bit in FUST on new instructions
 
@@ -258,6 +259,8 @@ module dispatch(
 
       // To Fetch
       dispatch.freeze = hazard;
+
+      // dispatch.i_type = cuif.i_flag;
 
       // is any of this needed?
       // dispatch.ex_ctr.imm = cuif.imm;

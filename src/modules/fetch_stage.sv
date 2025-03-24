@@ -20,6 +20,8 @@ module fetch_stage(
   assign fif.correct_pc = fsif.correct_pc;
   assign fsif.pc = fif.pc;
   assign fsif.instr = fif.instr;
+  assign fsif.imemREN = fif.imemREN; 
+  assign fsif.imemaddr = fif.imemaddr;
 
   // Branch predictor connections
   assign fubpif.pc = fif.pc;

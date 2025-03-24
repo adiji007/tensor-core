@@ -36,14 +36,14 @@ interface datapath_cache_if;
   // datapath ports
   modport dp (
     input   ihit, imemload, dhit, dmemload, mhit, // some sort of gemm done/ready needed
-    output  halt, imemREN, imemaddr, dmemREN, dmemWEN, datomic,
+    output  halt, imemREN, imemaddr, dmemREN, dmemWEN,
             dmemstore, dmemaddr, matrix_ls, gemm_new_weight,
             gemm_matrices
   );
 
   modport tb (
     output   ihit, imemload, dhit, dmemload, mhit, // some sort of gemm done/ready needed
-    input  halt, imemREN, imemaddr, dmemREN, dmemWEN, datomic,
+    input  halt, imemREN, imemaddr, dmemREN, dmemWEN,
             dmemstore, dmemaddr, matrix_ls, gemm_new_weight,
             gemm_matrices
   );
