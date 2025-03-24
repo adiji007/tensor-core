@@ -3,7 +3,6 @@ quietly WaveActivateNextPane {} 0
 add wave -noupdate /fetch_stage_tb/tb_test_case
 add wave -noupdate /fetch_stage_tb/tb_clk
 add wave -noupdate /fetch_stage_tb/tb_nrst
-add wave -noupdate -expand -group FSIF /fetch_stage_tb/fsif/ihit
 add wave -noupdate -expand -group FSIF /fetch_stage_tb/fsif/imemload
 add wave -noupdate -expand -group FSIF /fetch_stage_tb/fsif/update_btb
 add wave -noupdate -expand -group FSIF /fetch_stage_tb/fsif/branch_outcome
@@ -14,7 +13,7 @@ add wave -noupdate -expand -group FSIF /fetch_stage_tb/fsif/misprediction
 add wave -noupdate -expand -group FSIF /fetch_stage_tb/fsif/correct_pc
 add wave -noupdate -expand -group FSIF /fetch_stage_tb/fsif/pc
 add wave -noupdate -expand -group FSIF /fetch_stage_tb/fsif/instr
-add wave -noupdate -expand -group FSIF /fetch_stage_tb/fsif/predicted_pc
+add wave -noupdate /fetch_stage_tb/fsif/predicted_outcome
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {170 ps} 0}
 quietly wave cursor active 1
