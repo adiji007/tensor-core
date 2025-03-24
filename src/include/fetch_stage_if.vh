@@ -11,7 +11,7 @@ interface fetch_stage_if;
   
   // Branch Resolution Interface
   logic update_btb;
-  logic branch_outcome;
+  logic branch_outcome, predicted_outcome;
   word_t update_pc;
   word_t branch_target;
   
@@ -28,13 +28,13 @@ interface fetch_stage_if;
   modport fs (
     input imemload, freeze, misprediction, correct_pc,
     input update_btb, branch_outcome, update_pc, branch_target,
-    output imemaddr, pc, instr, predicted_pc, imemREN
+    output imemaddr, pc, instr, imemREN, predicted_outcome
   );
 
   modport tb (
     output imemload, freeze, misprediction, correct_pc,
     output update_btb, branch_outcome, update_pc, branch_target,
-    input imemaddr, pc, instr, predicted_pc, imemREN
+    input imemaddr, pc, instr, imemREN, predicted_outcome
   );
 endinterface
 

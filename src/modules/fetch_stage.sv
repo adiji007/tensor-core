@@ -27,7 +27,7 @@ module fetch_stage(
   assign fubpif.branch_outcome = fsif.branch_outcome;
   assign fubpif.update_pc = fsif.update_pc;
   assign fubpif.branch_target = fsif.branch_target;
-  assign fsif.predicted_pc = fubpif.predicted_target;
+  assign fsif.predicted_outcome = fubpif.predicted_outcome;
 
   // Module instances
   fetch fetch_unit (
