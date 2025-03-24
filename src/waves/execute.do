@@ -1,5 +1,47 @@
 onerror {resume}
 quietly WaveActivateNextPane {} 0
+<<<<<<< HEAD
+add wave -noupdate /execute_tb/eif/bfu_branch
+add wave -noupdate /execute_tb/eif/bfu_branch_gate_sel
+add wave -noupdate /execute_tb/eif/bfu_branch_outcome
+add wave -noupdate /execute_tb/eif/bfu_predicted_outcome
+add wave -noupdate /execute_tb/eif/bfu_misprediction
+add wave -noupdate /execute_tb/eif/bfu_update_btb
+add wave -noupdate /execute_tb/eif/bfu_branch_type
+add wave -noupdate /execute_tb/eif/bfu_reg_a
+add wave -noupdate /execute_tb/eif/bfu_reg_b
+add wave -noupdate /execute_tb/eif/bfu_current_pc
+add wave -noupdate /execute_tb/eif/bfu_imm
+add wave -noupdate /execute_tb/eif/bfu_updated_pc
+add wave -noupdate /execute_tb/eif/bfu_correct_pc
+add wave -noupdate /execute_tb/eif/bfu_update_pc
+add wave -noupdate /execute_tb/eif/bfu_branch_target
+add wave -noupdate /execute_tb/eif/salu_port_a
+add wave -noupdate /execute_tb/eif/salu_port_b
+add wave -noupdate /execute_tb/eif/salu_aluop
+add wave -noupdate /execute_tb/eif/sls_imm
+add wave -noupdate /execute_tb/eif/sls_rs1
+add wave -noupdate /execute_tb/eif/sls_rs2
+add wave -noupdate /execute_tb/eif/sls_dmem_in
+add wave -noupdate /execute_tb/eif/sls_dhit_in
+add wave -noupdate /execute_tb/eif/sls_mem_type
+add wave -noupdate /execute_tb/eif/mls_mhit
+add wave -noupdate /execute_tb/eif/mls_enable
+add wave -noupdate /execute_tb/eif/mls_ls_in
+add wave -noupdate /execute_tb/eif/mls_rd_in
+add wave -noupdate /execute_tb/eif/mls_rs_in
+add wave -noupdate /execute_tb/eif/mls_imm_in
+add wave -noupdate /execute_tb/eif/mls_stride_in
+add wave -noupdate /execute_tb/eif/gemm_enable
+add wave -noupdate /execute_tb/eif/gemm_new_weight_in
+add wave -noupdate /execute_tb/eif/gemm_rs1_in
+add wave -noupdate /execute_tb/eif/gemm_rs2_in
+add wave -noupdate /execute_tb/eif/gemm_rs3_in
+add wave -noupdate /execute_tb/eif/gemm_rd_in
+add wave -noupdate /execute_tb/eif/eif_output
+TreeUpdate [SetDefaultTree]
+WaveRestoreCursors {{Cursor 1} {229080 ps} 0}
+=======
 add wave -noupdate /execute_tb/PROG/#ublk#502948#92/tb_test_case
 add wave -noupdate -expand -group {Matrix LS} /execute_tb/DUT/mlsif/mhit
 add wave -noupdate -expand -group {Matrix LS} /execute_tb/DUT/mlsif/enable
@@ -59,6 +101,7 @@ add wave -noupdate -expand -group GEMM /execute_tb/DUT/fugif/gemm_matrix_num
 add wave -noupdate -expand -subitemconfig {/execute_tb/DUT/eif/eif_output.fu_ex -expand} /execute_tb/DUT/eif/eif_output
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {524130 ps} 0}
+>>>>>>> a6b10951552d9fd3d930dad76289145c4f071981
 quietly wave cursor active 1
 configure wave -namecolwidth 150
 configure wave -valuecolwidth 100
@@ -72,6 +115,12 @@ configure wave -gridoffset 0
 configure wave -gridperiod 1
 configure wave -griddelta 40
 configure wave -timeline 0
+<<<<<<< HEAD
+configure wave -timelineunits ns
+update
+WaveRestoreZoom {0 ps} {229010 ps}
+=======
 configure wave -timelineunits ps
 update
 WaveRestoreZoom {1510 ps} {636760 ps}
+>>>>>>> a6b10951552d9fd3d930dad76289145c4f071981

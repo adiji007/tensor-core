@@ -6,12 +6,12 @@ this block holds the i and d cache
 module caches (
 input logic CLK, nRST,
 datapath_cache_if dcif,
-cache_control_if cif
+caches_if cif
 );
 // icache
-icache ICACHE(CLK, nRST, dcif, cif);
+icache ICACHE(CLK, nRST, cif, dcif);
 // dcache
-dcache DCACHE(CLK, nRST, dcif, cif);
+dcache DCACHE(CLK, nRST, cif, dcif);
 // dcache invalidate before halt handled by dcache when exists
 // assign dcif.flushed = dcif.halt;
 // //singlecycle

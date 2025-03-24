@@ -1,9 +1,11 @@
 `include "fetch_if.vh"
 `include "arbiter_caches_if.vh"
 `include "caches_pkg.vh"
+`include "datapath_cache_if.vh"
 
 //TODO: In progress with Scheduler.
 //Need imemREN and imemAddr from Scheduler
+//DONE pretty sure
 
 // Parametric cache design
 module icache #(

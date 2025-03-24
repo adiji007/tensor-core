@@ -41,7 +41,7 @@ module memory_arbiter_basic(
         else if(acif.dREN || acif.dWEN) next_arbiter_state = DCACHE;
         else if(acif.iREN) next_arbiter_state = ICACHE;
       end
-
+      
       SP_LOAD: begin
         next_arbiter_state = IDLE;
       end
