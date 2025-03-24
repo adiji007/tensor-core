@@ -61,10 +61,10 @@ module sc_datapath
     assign fif.ihit          = dcif.ihit;      // from mem
     assign fif.imemaddr      = fif.pc;         // from mem
     assign fif.imemload      = dcif.imemload;  // from mem
-    assign fif.flush         = eif.eif_output.bfu_miss;
-    assign fif.correct_pc    = eif.eif_output.bfu_updated_pc;
-    assign fif.pc_prediction = eif.eif_output.bfu_update_pc;
-    assign fif.misprediction = eif.eif_output.bfu_miss;
+    // assign fif.flush         = eif.eif_output.bfu_miss;
+    // assign fif.correct_pc    = eif.eif_output.bfu_updated_pc;
+    // assign fif.pc_prediction = eif.eif_output.bfu_update_pc;
+    // assign fif.misprediction = eif.eif_output.bfu_miss;
 
 
     // output to fetch -> sb latch (fetch_out)
