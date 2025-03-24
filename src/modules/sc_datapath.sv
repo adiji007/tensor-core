@@ -2,7 +2,7 @@
 `include "datapath_types.vh"
 
 // INTERFACES
-`include "fetch_if.vh"
+`include "fetch_stage_if.vh"
 `include "scoreboard_if.vh"
 `include "dispatch_if.vh"
 `include "issue_if.vh"
@@ -17,8 +17,8 @@ module sc_datapath
     input logic CLK, nrst,
     datapath_cache_if.dp dcif
 );
-    fetch_if fif();
-    fetch FETCH (CLK, nrst, fif);
+    fetch_stage_if fif();
+    fetch_stage FETCH (CLK, nrst, dcif.ihit, fif);
 
     scoreboard_if sbif();
     scoreboard SCOREBOARD (CLK, nrst, sbif);
@@ -48,8 +48,8 @@ module sc_datapath
     execute_t wb_in;
 
     assign dcif.halt = eif.eif_output.halt;
-    assign dcif.imemREN = 1;
-    assign dcif.imemaddr = fif.pc;
+    // assign dcif.imemREN = 1;
+    // assign dcif.imemaddr = fif.pc;
 
     // fetch signals
     // TODO 
@@ -58,19 +58,21 @@ module sc_datapath
     // - the outputs of fetch should be set to the inputs of the fetch -> sb latch
 
     // input
-    assign fif.ihit          = dcif.ihit;      // from mem
-    assign fif.imemaddr      = fif.pc;         // from mem
-    assign fif.imemload      = dcif.imemload;  // from mem
-    // assign fif.flush         = eif.eif_output.bfu_miss;
-    // assign fif.correct_pc    = eif.eif_output.bfu_updated_pc;
-    // assign fif.pc_prediction = eif.eif_output.bfu_update_pc;
-    // assign fif.misprediction = eif.eif_output.bfu_miss;
+    assign fif.imemload        = dcif.imemload;  // from mem
+    assign fif.freeze          = sbif.freeze;
+    assign fif.misprediction   = eif.eif_output.bfu_miss;
+    assign fif.correct_pc      = eif.eif_output.bfu_correct_pc;
+    assign fif.update_btb      = eif.eif_output.bfu_update_btb;
+    assign fif.branch_outcome  = eif.eif_output.bfu_branch_outcome;
+    assign fif.update_pc       = eif.eif_output.bfu_update_pc;
+    assign fif.branch_target   = eif.eif_output.bfu_branch_target;
 
-
-    // output to fetch -> sb latch (fetch_out)
+    // output 
     assign fetch_out.imemload  = fif.instr;
     assign fetch_out.br_pc     = fif.pc;
-    assign fetch_out.br_pred   = fif.br_predicted;
+    assign fetch_out.br_pred   = fif.predicted_outcome;
+    assign dcif.imemaddr       = fif.imemaddr;    // to mem
+    assign dcif.imemREN        = fif.imemREN;     // to mem
 
 
     // sb signals

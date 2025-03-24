@@ -19,7 +19,7 @@ module sc_datapath_tb;
   parameter PERIOD = 10;
 
   // signals
-  logic CLK = 1, nRST;
+  logic CLK = 1, nrst;
 
   // clock
   always #(PERIOD/2) CLK++;
@@ -28,20 +28,20 @@ module sc_datapath_tb;
   datapath_cache_if                   dcif ();
 
   // dut
-  datapath                            DUT (.CLK(CLK), .nRST(nRST), .dcif(dcif));
+  sc_datapath                         DUT (.CLK(CLK), .nrst(nrst), .dcif(dcif));
 
-  test                                PROG (.CLK(CLK), .nRST(nRST), .dcif(dcif));
+  test                                PROG (.CLK(CLK), .nrst(nrst), .dcif(dcif));
 
 endmodule
 
-program test(input logic CLK, output logic nRST, datapath_cache_if dcif);
+program test(input logic CLK, output logic nrst, datapath_cache_if.tb dcif);
 
-  intial begin 
-      nRST = 0;
-      dcif.imemaddr = '0;
+  initial begin 
+      nrst = 0;
       dcif.imemload = '0;
       dcif.ihit = 0;
       dcif.dhit = '0;
+      dcif.mhit = '0;
       dcif.dmemload = '0;
       dcif.dmemaddr = '0;
 
