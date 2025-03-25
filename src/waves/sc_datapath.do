@@ -92,7 +92,7 @@ add wave -noupdate -expand -group ALU /sc_datapath_tb/DUT/EXECUTE/SALU/aluif/por
 add wave -noupdate -expand -group ALU /sc_datapath_tb/DUT/EXECUTE/SALU/aluif/port_b
 add wave -noupdate -expand -group ALU /sc_datapath_tb/DUT/EXECUTE/SALU/aluif/port_output
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {48700 ps} 0}
+WaveRestoreCursors {{Cursor 1} {171160 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 150
 configure wave -valuecolwidth 100
@@ -108,4 +108,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ps
 update
-WaveRestoreZoom {0 ps} {182320 ps}
+WaveRestoreZoom {0 ps} {367500 ps}
