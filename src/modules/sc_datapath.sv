@@ -71,8 +71,8 @@ module sc_datapath
     assign fetch_out.imemload  = fif.instr;
     assign fetch_out.br_pc     = fif.pc;
     assign fetch_out.br_pred   = fif.predicted_outcome;
-    assign dcif.imemaddr       = fif.imemaddr;    // to mem
-    assign dcif.imemREN        = fif.imemREN;     // to mem
+    assign dcif.imemaddr       = fif.imemaddr;  // to mem
+    assign dcif.imemREN        = fif.imemREN;   // to mem
 
 
     // sb signals
@@ -82,6 +82,8 @@ module sc_datapath
     assign sbif.wb_issue              = wbif.wb_out;
     assign sbif.wb_dispatch.s_rw_en   = wbif.wb_out.reg_en;
     assign sbif.wb_dispatch.s_rw      = wbif.wb_out.reg_sel;
+    assign sbif.wb_dispatch.m_rw_en   = '0; // these need logc from memory, saying m_reg can be cleared from rsts
+    assign sbif.wb_dispatch.m_rw      = '0; // these need logc from memory, saying which m_reg can be cleared from rsts
     assign sbif.branch_miss           = eif.eif_output.bfu_miss;
     assign sbif.branch_resolved       = eif.eif_output.bfu_resolved;
     assign sbif.fu_ex                 = eif.eif_output.fu_ex;

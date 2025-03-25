@@ -40,53 +40,92 @@ endmodule
 program test(input logic CLK, output logic nrst, datapath_cache_if.tb dcif);
 
   task rtype_instr;
-        input opcode_t opcode;
         input regbits_t rd;
         input regbits_t rs1;
         input regbits_t rs2;
         input funct3_r_t funct3;
         input funct7_r_t funct7;
         begin
-            dcif.imemload = {funct7, rs2, rs1, funct3, rd, opcode};
-            dcif.ihit = 1'b1;
-            @(posedge CLK);
+            if (dcif.imemREN == 1'b1) begin
+                @(posedge CLK);
+                dcif.imemload = {funct7, rs2, rs1, funct3, rd, RTYPE};
+                dcif.ihit = 1'b1;
+                @(posedge CLK);
+                dcif.imemload = '0;
+                dcif.ihit = 1'b0;
+                @(posedge CLK);
+            end
         end
     endtask
 
     task itype_instr;
-        input opcode_t opcode;
         input regbits_t rd;
         input regbits_t rs1;
+        input logic [11:0] imm;
         input funct3_i_t funct3;
+        begin
+            if (dcif.imemREN == 1'b1) begin
+                @(posedge CLK);
+                dcif.imemload = {imm, rs1, funct3, rd, ITYPE};
+                dcif.ihit = 1'b1;
+                @(posedge CLK);
+                dcif.imemload = '0;
+                dcif.ihit = 1'b0;
+                @(posedge CLK);
+            end
+        end
+    endtask
+
+    task itype_lw_instr;
+        input regbits_t rd;
+        input regbits_t rs1;
         input logic [11:0] imm;
         begin
-            dcif.imemload = {imm, rs1, funct3, rd, opcode};
-            dcif.ihit = 1'b1;
-            @(posedge CLK);
+            if (dcif.imemREN == 1'b1) begin
+                @(posedge CLK);
+                dcif.imemload = {imm, rs1, funct3_i_t'(3'h2), rd, ITYPE_LW};
+                dcif.ihit = 1'b1;
+                @(posedge CLK);
+                dcif.imemload = '0;
+                dcif.ihit = 1'b0;
+                @(posedge CLK);
+            end
         end
     endtask
 
     task stype_instr;
-        input opcode_t opcode;
         input regbits_t rs1;
         input regbits_t rs2;
         input logic [2:0] funct3;
         input logic [11:0] imm;
         begin
-            dcif.imemload = {imm[11:5], rs2, rs1, funct3, imm[4:0], opcode};
-            @(posedge CLK);
+            if (dcif.imemREN == 1'b1) begin
+                @(posedge CLK);
+                dcif.imemload = {imm[11:5], rs2, rs1, funct3, imm[4:0], STYPE};
+                dcif.ihit = 1'b1;
+                @(posedge CLK);
+                dcif.imemload = '0;
+                dcif.ihit = 1'b0;
+                @(posedge CLK);
+            end
         end
     endtask
 
     task btype_instr;
-        input opcode_t opcode;
         input regbits_t rs1;
         input regbits_t rs2;
         input funct3_b_t funct3;
         input logic [12:0] imm;
         begin
-            dcif.imemload = {imm[12], imm[10:5], rs2, rs1, funct3, imm[4:1], imm[11], opcode};
-            @(posedge CLK);
+            if (dcif.imemREN == 1'b1) begin
+                @(posedge CLK);
+                dcif.imemload = {imm[12], imm[10:5], rs2, rs1, funct3, imm[4:1], imm[11], BTYPE};
+                dcif.ihit = 1'b1;
+                @(posedge CLK);
+                dcif.imemload = '0;
+                dcif.ihit = 1'b0;
+                @(posedge CLK);
+            end
         end
     endtask
 
@@ -124,53 +163,50 @@ program test(input logic CLK, output logic nrst, datapath_cache_if.tb dcif);
         end
     endtask
 
-  initial begin 
-      nrst = 0;
-      dcif.imemload = '0;
-      dcif.ihit = 0;
-      dcif.dhit = '0;
-      dcif.mhit = '0;
-      dcif.dmemload = '0;
+    task halt;
+        begin
+            if (dcif.imemREN == 1'b1) begin
+                @(posedge CLK);
+                dcif.imemload = '1; // halt
+                dcif.ihit = 1'b1;
+                @(posedge CLK);
+                dcif.imemload = '0;
+                dcif.ihit = 1'b0;
+                @(posedge CLK);
+            end
+        end
+    endtask
 
-      @(posedge CLK);
-      nrst = 1'b1;
+    initial begin 
+        nrst = 0;
+        dcif.imemload = '0;
+        dcif.ihit = 0;
+        dcif.dhit = '0;
+        dcif.mhit = '0;
+        dcif.dmemload = '0;
 
-      @(posedge CLK);
-      if (dcif.imemREN == 1'b1) begin
-        repeat (5) @(posedge CLK);
-        itype_instr(ITYPE_LW, 5'd12, 5'd15, funct3_i_t'(3'h2), 12'd16);
-        dcif.ihit = 1'b0;
         @(posedge CLK);
-      end
+        nrst = 1'b1;
 
-      if (dcif.imemREN == 1'b1) begin
         @(posedge CLK);
-        itype_instr(ITYPE, 5'd11, 5'd13, ADDI, 'd125);
-        dcif.ihit = 1'b0;
+        itype_lw_instr(5'd12, 5'd15, 12'd16);
+        itype_instr(5'd11, 5'd13, 'd125, ADDI);
+
+        repeat (7) @(posedge CLK);
+        dcif.dhit = 1'b1;
+        dcif.dmemload = 'd135;
         @(posedge CLK);
-      end
 
-      repeat (7) @(posedge CLK);
-      dcif.dhit = 1'b1;
-      dcif.dmemload = 'd135;
-      @(posedge CLK);
-
-      dcif.dhit = 1'b0;
-      dcif.dmemload = '0;
-      @(posedge CLK);
-
-      if (dcif.imemREN == 1'b1) begin
-        repeat (5) @(posedge CLK);
-        dcif.imemload = '1; // halt
-        dcif.ihit = 1'b1;
+        dcif.dhit = 1'b0;
+        dcif.dmemload = '0;
         @(posedge CLK);
-        dcif.ihit = 1'b0;
-      end
-      
-      repeat (15) @(posedge CLK);
 
-      $finish;
-  end
+        halt();
+        
+        repeat (15) @(posedge CLK);
+
+        $finish;
+    end
 
 endprogram
 

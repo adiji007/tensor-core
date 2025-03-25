@@ -28,7 +28,7 @@ module execute (
 
     // Branch FU
     fu_branch BFU(CLK, nRST, fubif);
-    assign fubif.branch = eif.bfu_branch; // is this enable? coming from btb or sb?
+    // assign fubif.branch = eif.bfu_branch; // is this enable? coming from btb or sb?
     assign fubif.enable = eif.bfu_enable; // from sb
     assign fubif.branch_type = eif.bfu_branch_type; // from sb
     // assign fubif.branch_gate_sel = eif.bfu_branch_gate_sel; // have this just done in the branch fu
