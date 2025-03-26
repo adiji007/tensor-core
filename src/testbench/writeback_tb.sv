@@ -38,13 +38,19 @@ module writeback_tb;
         nRST = 0;
         wbif.alu_wdat = '0;
         wbif.load_wdat = '0;
+        wbif.jump_wdat = 0;
+
         wbif.branch_mispredict = 0;
         wbif.branch_spec = 0;
         wbif.branch_correct = 0;
+
         wbif.alu_done = 0;
         wbif.load_done = 0;
+        wbif.jump_done = 0;
+
         wbif.alu_reg_sel = '0;
         wbif.load_reg_sel = '0;
+        wbif.jump_reg_sel = '0;
 
         @(posedge CLK);
         nRST = 1;  
@@ -224,7 +230,85 @@ module writeback_tb;
         wbif.branch_mispredict = 1;
         @(posedge CLK);
         wbif.branch_mispredict = 0;
-        repeat (12) @(posedge CLK);
+        repeat (15) @(posedge CLK);
+
+        /* Test Case 13: Jump data with nothing in buffers */
+        test_num = test_num + 1;
+
+        wbif.jump_wdat = 32'hB00BB00B;
+        wbif.jump_done = 1;
+        wbif.jump_reg_sel = 12;
+        @(posedge CLK);
+
+        wbif.jump_wdat = '0;
+        wbif.jump_done = 0;
+        wbif.jump_reg_sel = '0;
+        @(posedge CLK);
+
+        /* Test Case 14: Jump done with Load done Tie */
+        test_num = test_num + 1;
+
+        wbif.jump_wdat = 32'hB00BB00B;
+        wbif.jump_done = 1;
+        wbif.jump_reg_sel = 12;
+
+        wbif.load_wdat = 32'hCAFEBABE;
+        wbif.load_done = 1;
+        wbif.load_reg_sel = 3;
+        @(posedge CLK);
+
+
+        wbif.jump_wdat = '0;
+        wbif.jump_done = 0;
+        wbif.jump_reg_sel = 0; 
+
+        wbif.load_wdat = '0;
+        wbif.load_done = 0;
+        wbif.load_reg_sel = 0;
+        @(posedge CLK);
+
+        /* Test Case 15: Jump with data in Buffer */
+        test_num = test_num + 1;
+
+        wbif.branch_spec = 1;
+        for (integer i = 1; i < 5; i++) begin
+            wbif.alu_wdat = 32'hDEADBEEF;
+            wbif.alu_done = 1;
+            wbif.alu_reg_sel = i;
+            @(posedge CLK);
+        end
+        wbif.branch_spec = 0;
+        wbif.branch_correct = 1;
+        @(posedge CLK);
+        wbif.branch_correct = 0;
+        // Fill up Both Buffers
+        for (integer i = 1; i < 8; i++) begin
+            wbif.load_wdat = 32'hCAFEBABE;
+            wbif.load_done = 1;
+            wbif.load_reg_sel = i;
+            wbif.alu_wdat = 32'hADDADD0;
+            wbif.alu_done = 1;
+            wbif.alu_reg_sel = i;
+            @(posedge CLK);
+        end
+
+        wbif.load_wdat = 32'd0;
+        wbif.load_done = 0;
+        wbif.load_reg_sel = 0;
+
+        wbif.alu_wdat = 32'd0;
+        wbif.alu_done = 0;
+        wbif.alu_reg_sel = 0;
+
+        wbif.jump_wdat = 32'hB00BB00B;
+        wbif.jump_done = 1;
+        wbif.jump_reg_sel = 12;
+        @(posedge CLK);
+
+        wbif.jump_wdat = '0;
+        wbif.jump_done = 0;
+        wbif.jump_reg_sel = '0;
+        @(posedge CLK);
 
         $stop;
     end

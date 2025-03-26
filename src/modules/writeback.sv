@@ -62,6 +62,9 @@ logic [BUFFER_DEPTH - 1: 0][BUFFER_WIDTH - 1: 0] load_buffer, next_load_buffer;
 // Load Buffer Empty and Full Signals
 logic load_empty, load_full, next_load_empty, next_load_full;
 
+/* Jump Data Signals */
+wb_t jump_din;
+
 /* Writeback Data signals */
 
 typedef enum logic {
@@ -154,6 +157,10 @@ always_comb begin : wb_out_logic
     load_read = 0;
     load_write = 0;
 
+    jump_din.reg_en = 1;
+    jump_din.reg_sel = wbif.jump_reg_sel;
+    jump_din.wdat = wbif.jump_wdat;
+
     wbif.wb_out.reg_en = 0;
     wbif.wb_out.reg_sel = '0;
     wbif.wb_out.wdat = '0;
@@ -221,8 +228,30 @@ always_comb begin : wb_out_logic
                 end
             end
 
-            else if (wbif.alu_done && wbif.load_done) begin // Both wdat ready
-                
+            else if (wbif.jump_done && wbif.alu_done && wbif.load_done) begin // jump alu load done
+                /* If a jump is high, it takes immediate priority over all done signals */
+
+                // This specific case would not happen cause alu and jump would never happen be done at the same time as the are issued one clock cycle at a time
+            end
+
+            else if (wbif.jump_done && wbif.alu_done && !wbif.load_done) begin // jump alu done
+                // This specific case would not happen cause alu and jump would never happen be done at the same time as the are issued one clock cycle at a time
+            end
+
+            else if (wbif.jump_done && !wbif.alu_done && wbif.load_done) begin // jump load done
+                load_write = 1;
+                next_load_buffer[load_wptr] = load_din;
+                next_load_wptr = ((load_wptr + 1) == BUFFER_DEPTH ? 0 : load_wptr + 1);
+
+                wbif.wb_out = jump_din;
+            end
+
+            else if (wbif.jump_done && !wbif.alu_done && !wbif.load_done) begin // jump done
+                // Bypass all buffers and immediately write data in reg file
+                wbif.wb_out = jump_din;
+            end
+
+            else if (!wbif.jump_done && wbif.alu_done && wbif.load_done) begin // alu load done
                 if (!alu_empty || !load_empty) begin // At least one buffer has data
                     alu_write = 1;
                     next_alu_buffer[alu_wptr] = alu_din;
@@ -273,7 +302,7 @@ always_comb begin : wb_out_logic
                 end
             end
 
-            else if (wbif.alu_done && !wbif.load_done) begin // ALU Done but not Load Done
+            else if (!wbif.jump_done && wbif.alu_done && !wbif.load_done) begin // alu done
                 if (!alu_empty || !load_empty) begin // At least one buffer has data
                     alu_write = 1;
                     next_alu_buffer[alu_wptr] = alu_din;
@@ -316,7 +345,7 @@ always_comb begin : wb_out_logic
                 end
             end
 
-            else if (!wbif.alu_done && wbif.load_done) begin // ALU not Done but Load Done
+            else if (!wbif.jump_done && !wbif.alu_done && wbif.load_done) begin // load done
                 if (!alu_empty || !load_empty) begin // At least one buffer has data
                     load_write = 1;
                     next_load_buffer[load_wptr] = load_din;
@@ -359,7 +388,7 @@ always_comb begin : wb_out_logic
                 end
             end
 
-            else begin // Both not done
+            else begin                                                          // nothing done
                 // Checking if Anything Can be Written Back
                 if (!alu_empty && !load_empty) begin // Both not empty
                     next_wb_sel = !wb_sel;

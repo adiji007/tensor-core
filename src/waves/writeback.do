@@ -37,6 +37,10 @@ add wave -noupdate -expand -group Speculative -radix unsigned /writeback_tb/DUT/
 add wave -noupdate -expand -group Speculative -radix unsigned /writeback_tb/DUT/spec_alu_wptr
 add wave -noupdate -expand -group Speculative /writeback_tb/DUT/spec_write
 add wave -noupdate -expand -group Speculative /writeback_tb/DUT/clean_count
+add wave -noupdate -expand -group Jump /writeback_tb/DUT/jump_din
+add wave -noupdate -expand -group Jump /writeback_tb/wbif/jump_wdat
+add wave -noupdate -expand -group Jump /writeback_tb/wbif/jump_done
+add wave -noupdate -expand -group Jump /writeback_tb/wbif/jump_reg_sel
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {848179 ps} 0}
 quietly wave cursor active 1
@@ -54,4 +58,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {843432 ps} {860714 ps}
+WaveRestoreZoom {1328583 ps} {1345865 ps}
