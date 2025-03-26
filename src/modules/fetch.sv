@@ -8,8 +8,7 @@ module fetch(
     import isa_pkg::*;
 
     parameter PC_INIT = 32'd0;
-    word_t pc_reg;
-    word_t next_pc;
+    word_t pc_reg, next_pc, imemaddr;
 
     always_comb begin
         next_pc = fif.pc_prediction;
@@ -27,7 +26,11 @@ module fetch(
         if (!nRST) begin
             pc_reg <= PC_INIT;
             fif.instr <= '0;
+            imemaddr <= '0;
         end else begin
+            if (ihit) begin
+                imemaddr <= next_pc;
+            end 
             if (ihit && !fif.freeze) begin
                 pc_reg <= next_pc;
                 fif.instr <= fif.imemload;
@@ -38,7 +41,7 @@ module fetch(
         end
     end
 
-    assign fif.imemaddr = next_pc;
+    assign fif.imemaddr = imemaddr;
     assign fif.pc = pc_reg;
     assign fif.imemREN = !fif.freeze;
 endmodule

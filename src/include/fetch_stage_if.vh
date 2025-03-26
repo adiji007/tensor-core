@@ -7,7 +7,8 @@ interface fetch_stage_if;
   import isa_pkg::*;
 
   logic imemREN;
-  word_t imemaddr, imemload;
+  word_t imemload;
+  word_t imemaddr;
   
   // Branch Resolution Interface
   logic update_btb;
@@ -28,13 +29,13 @@ interface fetch_stage_if;
   modport fs (
     input imemload, freeze, misprediction, correct_pc,
     input update_btb, branch_outcome, update_pc, branch_target,
-    output imemaddr, pc, instr, imemREN, predicted_outcome
+    output pc, instr, imemREN, predicted_outcome, imemaddr
   );
 
   modport tb (
-    output imemload, freeze, misprediction, correct_pc,
+    output imemload, freeze, misprediction, correct_pc, 
     output update_btb, branch_outcome, update_pc, branch_target,
-    input imemaddr, pc, instr, imemREN, predicted_outcome
+    input pc, instr, imemREN, predicted_outcome, imemaddr
   );
 endinterface
 

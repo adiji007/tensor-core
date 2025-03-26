@@ -14,10 +14,10 @@ interface writeback_if;
     // Inputs from Functional Units
     // ALU_out, alu_done
     // Scalar_load, L/S done
-    word_t alu_wdat, load_wdat;
+    word_t alu_wdat, load_wdat, jump_wdat;
     logic  branch_mispredict, branch_spec, branch_correct;
-    logic alu_done, load_done;
-    regbits_t alu_reg_sel, load_reg_sel;
+    logic alu_done, load_done, jump_done;
+    regbits_t alu_reg_sel, load_reg_sel, jump_reg_sel;
 
     // Possible other done flags? 
     // Outputs of stage
@@ -25,7 +25,7 @@ interface writeback_if;
     
     modport wb (
         input alu_wdat, load_wdat, branch_mispredict, branch_spec, branch_correct, alu_done, 
-        load_done, alu_reg_sel, load_reg_sel,
+        load_done, alu_reg_sel, load_reg_sel, jump_wdat, jump_done, jump_reg_sel,
         output wb_out
     );
 

@@ -21,13 +21,13 @@ module fu_branch(
       btb_updated <= 1'b0;
       last_branch_pc <= 32'h0;
     end else begin
-      if (fubif.branch) begin
+      if (fubif.enable ) begin
         if (fubif.current_pc != last_branch_pc) begin
           // New branch instruction arrived so reset btb_updated
           btb_updated <= 1'b0;
         end
 
-        if (fubif.enable && !btb_updated) begin
+        if (!btb_updated) begin
           btb_updated <= 1'b1;
         end
 
@@ -68,7 +68,7 @@ module fu_branch(
     fubif.resolved = 1'b0;
     actual_outcome = '0;
 
-    if (fubif.branch) begin
+    if (fubif.enable) begin
       casez (fubif.branch_type)
         BT_BEQ: actual_outcome = zero;
         BT_BNE: actual_outcome = ~zero;

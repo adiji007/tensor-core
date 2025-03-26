@@ -24,11 +24,12 @@ interface execute_if;
   import isa_pkg::*;
 
   // Branch FU
-  logic bfu_branch, bfu_branch_outcome, bfu_enable;
+  logic bfu_enable;
   // logic bfu_branch_gate_sel;
-  logic bfu_predicted_outcome, bfu_misprediction, bfu_update_btb, resolved;
+  logic [1:0] bfu_j_type;
+  logic bfu_predicted_outcome;
   branch_t bfu_branch_type;
-  word_t bfu_reg_a, bfu_reg_b, bfu_current_pc, bfu_imm, bfu_updated_pc, bfu_correct_pc, bfu_update_pc, bfu_branch_target;
+  word_t bfu_reg_a, bfu_reg_b, bfu_current_pc, bfu_imm;
 
   // Scalar ALU FU
   word_t salu_port_a, salu_port_b;
@@ -61,7 +62,7 @@ interface execute_if;
     input // lw and alu destination
           rd,
           // Branch FU
-          bfu_branch, bfu_enable, bfu_branch_type, bfu_reg_a, bfu_reg_b, bfu_current_pc, bfu_imm, bfu_predicted_outcome,
+          bfu_enable, bfu_branch_type, bfu_reg_a, bfu_reg_b, bfu_current_pc, bfu_imm, bfu_predicted_outcome, bfu_j_type,
           // Scalar ALU FU
           salu_aluop, salu_port_a, salu_port_b, salu_enable,
           // Scalar Load/Store FU
@@ -82,7 +83,7 @@ interface execute_if;
     output// lw and alu destination
           rd,
           // Branch FU
-          bfu_branch, bfu_enable, bfu_branch_type, bfu_reg_a, bfu_reg_b, bfu_current_pc, bfu_imm, bfu_predicted_outcome,
+          bfu_enable, bfu_branch_type, bfu_reg_a, bfu_reg_b, bfu_current_pc, bfu_imm, bfu_predicted_outcome,
           // Scalar ALU FU
           salu_aluop, salu_port_a, salu_port_b, salu_enable,
           // Scalar Load/Store FU

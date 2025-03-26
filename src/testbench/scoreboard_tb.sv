@@ -196,7 +196,7 @@ program test (
 
         sbif.fu_ex[2] = 1'b1;
         sbif.fu_ex[1] = 1'b1;
-        sbif.branch_miss = 1'b1;
+        // sbif.branch_miss = 1'b1;
 
         @(posedge CLK);
 
@@ -209,22 +209,48 @@ program test (
 
         sbif.fetch.br_pc = 32'd240;
         sbif.fetch.br_pred = 1'b0;
-        btype_instr(BTYPE, 5'd15, 5'd5, BEQ, 13'd0);
+        btype_instr(BTYPE, 5'd15, 5'd5, BNE, 13'd0);
         sbif.fetch = '0;
 
         repeat (10) @(posedge CLK);
 
-        sbif.fetch = '1;
-
-        repeat (10) @(posedge CLK);
-
         sbif.fu_ex[2] = 1'b1;
-        sbif.branch_miss = 0;
+        sbif.branch_resolved = 1'b1;
 
         @(posedge CLK);
 
         sbif.fu_ex[2] = 1'b0;
+        sbif.branch_resolved = 1'b0;
 
+        rtype_instr(RTYPE, 5'd15, 5'd22, 5'd23, ADD_SUB, ADD);
+        sbif.fetch = '0;
+
+        @(posedge CLK);
+
+        sbif.fetch.br_pc = 32'd241;
+        itype_instr(JALR, 5'd20, 5'd5, funct3_i_t'(3'h0), 12'd16); // JALR
+        // jtype_instr(JAL, 5'd20, 12'd16); // JAL
+        sbif.fetch = '0;
+        sbif.fetch.br_pc = '0;
+
+        repeat (3) @(posedge CLK);
+
+        sbif.fu_ex[0] = 1'b1;
+        @(posedge CLK);
+        sbif.fu_ex[0] = 1'b0;
+
+        repeat (4) @(posedge CLK);
+
+        sbif.fu_ex[2] = 1'b1;
+        sbif.branch_resolved = 1'b1;
+        @(posedge CLK);
+        sbif.fu_ex[2] = 1'b0;
+        sbif.branch_resolved = 1'b0;
+
+        repeat (10) @(posedge CLK);
+
+        sbif.fetch = '1;
+        
         repeat (10) @(posedge CLK);
 
 

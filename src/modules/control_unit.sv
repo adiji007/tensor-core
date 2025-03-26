@@ -85,15 +85,6 @@ module control_unit(
                     cu_if.fu_s = FU_S_LD_ST;
                 end
             end
-        JALR:
-            begin 
-                cu_if.imm = {{20{instr[31]}},instr[31:20]};
-                cu_if.s_reg_write = '1;
-                cu_if.jalr = '1;
-                cu_if.alu_op = ALU_ADD;
-                cu_if.i_flag = '1;
-                cu_if.fu_s = FU_S_ALU;
-            end
         STYPE:
             begin
                 if (instr[14:12] == 3'h2) begin 
@@ -154,9 +145,18 @@ module control_unit(
                 cu_if.imm = {{11{instr[31]}},instr[31],instr[19:12],instr[20],instr[30:21],1'b0};
                 cu_if.jal = '1;
                 cu_if.s_reg_write = '1;
-                cu_if.alu_op = ALU_ADD;
+                // cu_if.alu_op = ALU_ADD;
                 cu_if.i_flag = '1;
-                cu_if.fu_s = FU_S_ALU;
+                cu_if.fu_s = FU_S_BRANCH;
+            end
+        JALR:
+            begin 
+                cu_if.imm = {{20{instr[31]}},instr[31:20]};
+                cu_if.s_reg_write = '1;
+                cu_if.jalr = '1;
+                // cu_if.alu_op = ALU_ADD;
+                cu_if.i_flag = '1;
+                cu_if.fu_s = FU_S_BRANCH;
             end
         // LUI:
         //     begin
