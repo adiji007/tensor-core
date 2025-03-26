@@ -59,7 +59,7 @@ module sc_datapath
 
     // input
     assign fif.imemload        = dcif.imemload;  // from mem
-    assign fif.freeze          = sbif.freeze;
+    assign fif.freeze          = sbif.freeze || sbif.jump;
     assign fif.misprediction   = eif.eif_output.bfu_miss;
     assign fif.correct_pc      = eif.eif_output.bfu_correct_pc;
     assign fif.update_btb      = eif.eif_output.bfu_update_btb;
@@ -107,6 +107,7 @@ module sc_datapath
     assign eif.bfu_current_pc          = sbif.out.branch_pc;
     assign eif.bfu_imm                 = sbif.out.imm;
     assign eif.bfu_predicted_outcome   = sbif.out.branch_pred_pc;
+    assign eif.bfu_j_type              = sbif.out.j_type;
     // alu
     assign eif.salu_aluop   = sbif.out.alu_op;
     assign eif.salu_port_a  = sbif.out.rdat1;
@@ -144,6 +145,9 @@ module sc_datapath
     assign ex_out.load_wdat     = eif.eif_output.sls_dmemload;
     assign ex_out.load_reg_sel  = eif.eif_output.sls_rd;
     assign ex_out.spec          = eif.eif_output.spec;
+    assign ex_out.jump_done     = eif.eif_output.fu_ex[2];
+    assign ex_out.jump_wdat     = eif.eif_output.jump_wdat;
+    assign ex_out.jump_reg_sel  = eif.eif_output.jump_rd;
 
     assign dcif.dmemWEN    = eif.eif_output.sls_dmemWEN;
     assign dcif.dmemREN    = eif.eif_output.sls_dmemREN;
@@ -155,13 +159,17 @@ module sc_datapath
     // inputs
     assign wbif.alu_wdat           = wb_in.alu_wdat;
     assign wbif.load_wdat          = wb_in.load_wdat;
+    assign wbif.jump_wdat          = wb_in.jump_wdat;
     assign wbif.branch_mispredict  = eif.eif_output.bfu_miss;
     assign wbif.branch_spec        = wb_in.spec;
     assign wbif.branch_correct     = eif.eif_output.bfu_resolved;
     assign wbif.alu_done           = wb_in.alu_done;
     assign wbif.load_done          = wb_in.load_done;
+    assign wbif.jump_done          = wb_in.jump_done;
     assign wbif.alu_reg_sel        = wb_in.alu_reg_sel;
     assign wbif.load_reg_sel       = wb_in.load_reg_sel;
+    assign wbif.jump_reg_sel       = wb_in.jump_reg_sel;
+
 
     // FLIP-FLOP FOR LATCHES
     always_ff @(posedge CLK, negedge nrst) begin

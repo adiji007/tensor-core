@@ -33,7 +33,7 @@ add wave -noupdate -expand -group SB /sc_datapath_tb/DUT/SCOREBOARD/sbif/branch_
 add wave -noupdate -expand -group SB /sc_datapath_tb/DUT/SCOREBOARD/sbif/branch_resolved
 add wave -noupdate -expand -group SB /sc_datapath_tb/DUT/SCOREBOARD/sbif/fu_ex
 add wave -noupdate -expand -group SB /sc_datapath_tb/DUT/SCOREBOARD/sbif/freeze
-add wave -noupdate -expand -group SB -childformat {{/sc_datapath_tb/DUT/SCOREBOARD/sbif/out.rd -radix unsigned} {/sc_datapath_tb/DUT/SCOREBOARD/sbif/out.imm -radix unsigned}} -expand -subitemconfig {/sc_datapath_tb/DUT/SCOREBOARD/sbif/out.rd {-height 16 -radix unsigned} /sc_datapath_tb/DUT/SCOREBOARD/sbif/out.imm {-height 16 -radix unsigned}} /sc_datapath_tb/DUT/SCOREBOARD/sbif/out
+add wave -noupdate -expand -group SB -childformat {{/sc_datapath_tb/DUT/SCOREBOARD/sbif/out.rd -radix unsigned} {/sc_datapath_tb/DUT/SCOREBOARD/sbif/out.rdat1 -radix decimal} {/sc_datapath_tb/DUT/SCOREBOARD/sbif/out.rdat2 -radix decimal} {/sc_datapath_tb/DUT/SCOREBOARD/sbif/out.imm -radix unsigned}} -expand -subitemconfig {/sc_datapath_tb/DUT/SCOREBOARD/sbif/out.fu_en -expand /sc_datapath_tb/DUT/SCOREBOARD/sbif/out.rd {-height 16 -radix unsigned} /sc_datapath_tb/DUT/SCOREBOARD/sbif/out.rdat1 {-height 16 -radix decimal} /sc_datapath_tb/DUT/SCOREBOARD/sbif/out.rdat2 {-height 16 -radix decimal} /sc_datapath_tb/DUT/SCOREBOARD/sbif/out.imm {-height 16 -radix unsigned}} /sc_datapath_tb/DUT/SCOREBOARD/sbif/out
 add wave -noupdate -expand -group EX /sc_datapath_tb/DUT/EXECUTE/eif/bfu_enable
 add wave -noupdate -expand -group EX /sc_datapath_tb/DUT/EXECUTE/eif/bfu_predicted_outcome
 add wave -noupdate -expand -group EX /sc_datapath_tb/DUT/EXECUTE/eif/bfu_branch_type
@@ -70,6 +70,9 @@ add wave -noupdate -expand -group EX /sc_datapath_tb/DUT/EXECUTE/eif/halt
 add wave -noupdate -expand -group EX /sc_datapath_tb/DUT/EXECUTE/eif/spec
 add wave -noupdate -expand -group EX /sc_datapath_tb/DUT/EXECUTE/eif/rd
 add wave -noupdate -expand -group WB /sc_datapath_tb/DUT/WRITEBACK/wbif/alu_wdat
+add wave -noupdate -expand -group WB /sc_datapath_tb/DUT/wbif/jump_done
+add wave -noupdate -expand -group WB /sc_datapath_tb/DUT/wbif/jump_reg_sel
+add wave -noupdate -expand -group WB /sc_datapath_tb/DUT/wbif/jump_wdat
 add wave -noupdate -expand -group WB /sc_datapath_tb/DUT/WRITEBACK/wbif/load_wdat
 add wave -noupdate -expand -group WB /sc_datapath_tb/DUT/WRITEBACK/wbif/branch_mispredict
 add wave -noupdate -expand -group WB /sc_datapath_tb/DUT/WRITEBACK/wbif/branch_spec
@@ -92,7 +95,7 @@ add wave -noupdate -expand -group ALU /sc_datapath_tb/DUT/EXECUTE/SALU/aluif/por
 add wave -noupdate -expand -group ALU /sc_datapath_tb/DUT/EXECUTE/SALU/aluif/port_b
 add wave -noupdate -expand -group ALU /sc_datapath_tb/DUT/EXECUTE/SALU/aluif/port_output
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {171160 ps} 0}
+WaveRestoreCursors {{Cursor 1} {261650 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 150
 configure wave -valuecolwidth 100
@@ -108,4 +111,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ps
 update
-WaveRestoreZoom {0 ps} {367500 ps}
+WaveRestoreZoom {30870 ps} {398370 ps}

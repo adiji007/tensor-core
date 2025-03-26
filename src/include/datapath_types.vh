@@ -109,6 +109,7 @@ package datapath_pkg;
     logic i_type;
     logic [3:0] op_type;
     scalar_mem_t mem_type;
+    logic [1:0] j_type; // 0(branch) 1(jal) 2(jalr)
   } fust_s_row_t;
 
 
@@ -241,11 +242,8 @@ package datapath_pkg;
     logic n_br_pred;
 
     logic i_type;
-
     logic freeze;
-
     logic spec;
-
     logic halt;
   } dispatch_t;
 
@@ -264,6 +262,8 @@ package datapath_pkg;
     branch_t branch_type;
     word_t branch_pc;
     logic branch_pred_pc;
+    // jump
+    logic [1:0] j_type; // 0(branch) 1(jal) 2(jalr)
     // alu
     aluop_t alu_op;
     // matrix ls
@@ -311,6 +311,9 @@ package datapath_pkg;
     word_t bfu_branch_target;  // to fetch, combinationally
     logic bfu_resolved;        // to sb and wb, combinationally - correct
     logic bfu_miss;            // to fetch, sb, and wb, combinationally - mispredict
+    regbits_t jump_rd;
+    word_t jump_dest;
+    word_t jump_wdat;
 
     // Scalar ALU FU
     logic salu_negative;       // needed?
@@ -352,6 +355,12 @@ package datapath_pkg;
     logic load_done;
     word_t load_wdat;
     regbits_t load_reg_sel;
+
+    // jump wb
+    logic jump_done;
+    word_t jump_wdat;
+    regbits_t jump_reg_sel;
+
   } execute_t;
 
 

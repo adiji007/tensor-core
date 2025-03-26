@@ -26,6 +26,7 @@ interface execute_if;
   // Branch FU
   logic bfu_enable;
   // logic bfu_branch_gate_sel;
+  logic [1:0] bfu_j_type;
   logic bfu_predicted_outcome;
   branch_t bfu_branch_type;
   word_t bfu_reg_a, bfu_reg_b, bfu_current_pc, bfu_imm;
@@ -61,7 +62,7 @@ interface execute_if;
     input // lw and alu destination
           rd,
           // Branch FU
-          bfu_enable, bfu_branch_type, bfu_reg_a, bfu_reg_b, bfu_current_pc, bfu_imm, bfu_predicted_outcome,
+          bfu_enable, bfu_branch_type, bfu_reg_a, bfu_reg_b, bfu_current_pc, bfu_imm, bfu_predicted_outcome, bfu_j_type,
           // Scalar ALU FU
           salu_aluop, salu_port_a, salu_port_b, salu_enable,
           // Scalar Load/Store FU

@@ -6,8 +6,8 @@
 interface fetch_if;
   import isa_pkg::*;
 
-  logic freeze, misprediction, imemREN, imemaddr;
-  word_t imemload, pc_prediction, instr, pc, correct_pc;
+  logic freeze, misprediction, imemREN;
+  word_t imemload, pc_prediction, instr, pc, correct_pc, imemaddr;
 
   modport ft (
     input imemload, freeze, pc_prediction, misprediction, correct_pc,

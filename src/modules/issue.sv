@@ -363,6 +363,7 @@ module issue(
             // end
             issue.rd = fusif.fust.op[i].rd;
             issue.spec = (i==0 && !isif.branch_miss) ? isif.dispatch.spec : '0; // pretty sure only on alu instr
+            issue.j_type = fusif.fust.op[i].j_type;
           end else if (i == 3) begin // mls
             // TODO: need to figure these out, not sure rn
             s_rs1 = fumif.fust.op.rs1;

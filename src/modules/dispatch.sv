@@ -37,6 +37,8 @@ module dispatch(
     dispatch_t dispatch;
     logic spec;
     logic n_spec;
+    logic jump;
+    logic n_jump;
     word_t fetch_br_pc;
     logic fetch_br_pred;
 
@@ -83,9 +85,9 @@ module dispatch(
 
     always_comb begin : Hazard_Logic
       case (cuif.fu_s)
-        FU_S_ALU:     s_busy = (isif.fu_ex[0] == 1'b1) ? diif.fust_s.busy[FU_S_ALU] : '0;
-        FU_S_LD_ST:   s_busy = (isif.fu_ex[1] == 1'b1) ? diif.fust_s.busy[FU_S_LD_ST] : '0;
-        FU_S_BRANCH:  s_busy = (isif.fu_ex[2] == 1'b1) ? diif.fust_s.busy[FU_S_BRANCH] : '0;
+        FU_S_ALU:     s_busy = (diif.fu_ex[0] == 1'b1) ? diif.fust_s.busy[FU_S_ALU] : '0;
+        FU_S_LD_ST:   s_busy = (diif.fu_ex[1] == 1'b1) ? diif.fust_s.busy[FU_S_LD_ST] : '0;
+        FU_S_BRANCH:  s_busy = (diif.fu_ex[2] == 1'b1) ? diif.fust_s.busy[FU_S_BRANCH] : '0;
         default: s_busy = 1'b0;
       endcase
       case (cuif.fu_m)
@@ -109,10 +111,25 @@ module dispatch(
 
     always_comb begin : Speculation_State
       n_spec = spec;
-      if (cuif.fu_s == FU_S_BRANCH)
+      if (cuif.fu_s == FU_S_BRANCH && !(cuif.jal || cuif.jalr))
         n_spec = 1'b1;
       else if (diif.branch_resolved || diif.branch_miss)
         n_spec = 1'b0;
+    end
+
+    always_ff @ (posedge CLK, negedge nRST) begin: Jump_State_Latch
+      if (~nRST)
+        jump <= '0;
+      else
+        jump <= n_jump;
+    end
+
+    always_comb begin : Jump_State
+      n_jump = jump;
+      if (cuif.jal || cuif.jalr)
+        n_jump = 1'b1;
+      else if (diif.branch_resolved || diif.branch_miss)
+        n_jump = 1'b0;
     end
 
     always_comb begin : Reg_Status_Tables
@@ -162,13 +179,13 @@ module dispatch(
 
       // tag updates on WB
       // if (diif.wb.s_rw_en & diif.wb.alu_done & diif.fust_state[0] == FUST_EX) begin // TODO fust related wb
-      if ((isif.fu_ex[0] == 1'b1) && diif.fust_state[0] == FUST_EX) begin // TODO fust related wb
+      if ((diif.fu_ex[0] == 1'b1) && diif.fust_state[0] == FUST_EX) begin // TODO fust related wb
         diif.n_t1[FU_S_LD_ST] = (diif.fust_s.t1[FU_S_LD_ST] == 2'd1) && diif.fust_s.busy[FU_S_LD_ST] ? '0 : diif.fust_s.t1[FU_S_LD_ST];
         diif.n_t2[FU_S_LD_ST] = (diif.fust_s.t2[FU_S_LD_ST] == 2'd1) && diif.fust_s.busy[FU_S_LD_ST] ? '0 : diif.fust_s.t2[FU_S_LD_ST];
         diif.n_t1[FU_S_BRANCH] = (diif.fust_s.t1[FU_S_BRANCH] == 2'd1) && diif.fust_s.busy[FU_S_BRANCH] ? '0 : diif.fust_s.t1[FU_S_BRANCH];
         diif.n_t2[FU_S_BRANCH] = (diif.fust_s.t2[FU_S_BRANCH] == 2'd1) && diif.fust_s.busy[FU_S_BRANCH] ? '0 : diif.fust_s.t2[FU_S_BRANCH];
       // end else if (diif.wb.s_rw_en & diif.wb.load_done & diif.fust_state[1] == FUST_EX) begin
-      end else if ((isif.fu_ex[1] == 1'b1) && diif.fust_state[1] == FUST_EX) begin
+      end else if ((diif.fu_ex[1] == 1'b1) && diif.fust_state[1] == FUST_EX) begin
         diif.n_t1[FU_S_ALU] = (diif.fust_s.t1[FU_S_ALU] == 2'd2) && diif.fust_s.busy[FU_S_ALU] ? '0 : diif.fust_s.t1[FU_S_ALU];
         diif.n_t2[FU_S_ALU] = (diif.fust_s.t2[FU_S_ALU] == 2'd2) && diif.fust_s.busy[FU_S_ALU] ? '0 : diif.fust_s.t2[FU_S_ALU];
         diif.n_t1[FU_S_BRANCH] = (diif.fust_s.t1[FU_S_BRANCH] == 2'd2) && diif.fust_s.busy[FU_S_BRANCH] ? '0 : diif.fust_s.t1[FU_S_BRANCH];
@@ -183,8 +200,8 @@ module dispatch(
       diif.n_fust_s.rs2    = s_rs2;
       diif.n_fust_s.imm    = cuif.imm;
       diif.n_fust_s.i_type = cuif.i_flag;
-
-      diif.n_fust_s.spec = spec; // sets spec bit in FUST on new instructions
+      diif.n_fust_s.j_type = (cuif.jal) ? 2'd1 : (cuif.jalr) ? 2'd2 : 2'd0;
+      diif.n_fust_s.spec   = spec; // sets spec bit in FUST on new instructions
 
       diif.n_fust_s.op_type = '0;
       diif.n_fust_s.mem_type = scalar_mem_t'('0);
@@ -258,7 +275,8 @@ module dispatch(
       dispatch.spec = spec;
 
       // To Fetch
-      dispatch.freeze = hazard;
+      diif.freeze = hazard;
+      diif.jump = (n_jump || jump) && !(diif.fu_ex[2] == 1'b1);
 
       // dispatch.i_type = cuif.i_flag;
 

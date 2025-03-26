@@ -130,12 +130,35 @@ program test(input logic CLK, output logic nrst, datapath_cache_if.tb dcif);
     endtask
 
     task jtype_instr;
-        input opcode_t opcode;
         input regbits_t rd;
         input logic [20:0] imm;
         begin
-            dcif.imemload = {imm[20], imm[10:1], imm[11], imm[19:12], rd, opcode};
-            @(posedge CLK);
+            if (dcif.imemREN == 1'b1) begin
+                @(posedge CLK);
+                dcif.imemload = {imm[20], imm[10:1], imm[11], imm[19:12], rd, JAL};
+                dcif.ihit = 1'b1;
+                @(posedge CLK);
+                dcif.imemload = '0;
+                dcif.ihit = 1'b0;
+                @(posedge CLK);
+            end
+        end
+    endtask
+
+    task itype_jalr_instr;
+        input regbits_t rd;
+        input regbits_t rs1;
+        input logic [11:0] imm;
+        begin
+            if (dcif.imemREN == 1'b1) begin
+                @(posedge CLK);
+                dcif.imemload = {imm, rs1, funct3_i_t'(3'h0), rd, JALR};
+                dcif.ihit = 1'b1;
+                @(posedge CLK);
+                dcif.imemload = '0;
+                dcif.ihit = 1'b0;
+                @(posedge CLK);
+            end
         end
     endtask
 
@@ -200,6 +223,8 @@ program test(input logic CLK, output logic nrst, datapath_cache_if.tb dcif);
         dcif.dhit = 1'b0;
         dcif.dmemload = '0;
         @(posedge CLK);
+
+        jtype_instr(5'd20, 'd110);
 
         halt();
         
