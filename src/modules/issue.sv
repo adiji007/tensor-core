@@ -50,6 +50,7 @@ module issue(
     logic [4:0] oldest_rdy;
     logic [4:0] next_oldest_rdy;
     logic i_type;
+    logic lui_type;
     // logic [2:0] oldest_age;
     // logic [2:0] next_oldest_age;
 
@@ -334,6 +335,7 @@ module issue(
       s_rs2 = '0;
       imm = '0;
       i_type = '0;
+      lui_type = '0;
       issue.halt = '0;
       if (!(|isif.fust_s.busy || isif.fust_m.busy || isif.fust_g.busy || isif.branch_miss)) begin
         issue.halt = isif.dispatch.halt;
@@ -352,6 +354,7 @@ module issue(
             s_rs1 = fusif.fust.op[i].rs1;
             s_rs2 = fusif.fust.op[i].rs2;
             i_type = fusif.fust.op[i].i_type;
+            lui_type = fusif.fust.op[i].lui;
             issue.fu_en[i] = 1'b1;
             imm = fusif.fust.op[i].imm;
             issue.alu_op = aluop_t'(fusif.fust.op[i].op_type);
@@ -378,7 +381,7 @@ module issue(
             issue.gemm_new_weight = '0; // TODO: logic for when new weight check, need clarification
             issue.fu_en[i] = 1'b1;
           end
-          issue.rdat1 = rfif.rdat1;
+          issue.rdat1 = (lui_type) ? '0 : rfif.rdat1;
           issue.rdat2 = (i_type) ? imm : rfif.rdat2;
           issue.imm = imm;
         end

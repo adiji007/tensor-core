@@ -109,6 +109,7 @@ package datapath_pkg;
     logic i_type;
     logic [3:0] op_type;
     scalar_mem_t mem_type;
+    logic lui;
     logic [1:0] j_type; // 0(branch) 1(jal) 2(jalr)
   } fust_s_row_t;
 

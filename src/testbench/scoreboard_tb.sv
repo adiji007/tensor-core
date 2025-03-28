@@ -117,6 +117,15 @@ program test (
         end
     endtask
 
+    task utype_instr;
+        input regbits_t rd;
+        input logic [20:0] imm;
+        begin
+            sbif.fetch.imemload = {imm, rd, LUI};
+            @(posedge CLK);
+        end
+    endtask
+
     task m_ls_instr;
         input opcode_t opcode;
         input matbits_t rd;
@@ -147,6 +156,15 @@ program test (
         reset_dut();
 
         @(posedge CLK);
+        utype_instr(5'd27, 'h44);
+        sbif.fetch = '0;
+        @(posedge CLK);
+        @(posedge CLK);
+        @(posedge CLK);
+        sbif.fu_ex[0] = 1'b1;
+        @(posedge CLK);
+        sbif.fu_ex[0] = 1'b0;
+        repeat (10) @(posedge CLK);
         rtype_instr(RTYPE, 5'd5, 5'd12, 5'd13, ADD_SUB, ADD);
 
         sbif.fetch.br_pc = 32'd200;
