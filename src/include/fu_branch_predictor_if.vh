@@ -7,16 +7,16 @@ interface fu_branch_predictor_if;
   import isa_pkg::*;
 
   logic branch_outcome, update_btb, predicted_outcome;
-  word_t pc, update_pc, branch_target, predicted_target;
+  word_t pc, update_pc, branch_target, predicted_target, imemaddr;
 
   modport btb (
-    input pc, update_pc, update_btb, branch_outcome, branch_target,
+    input pc, update_pc, update_btb, branch_outcome, branch_target, imemaddr,
     output  predicted_outcome, predicted_target
   );
 
   modport tb (
     input  predicted_outcome, predicted_target,
-    output pc, update_pc, update_btb, branch_outcome, branch_target
+    output pc, update_pc, update_btb, branch_outcome, branch_target, imemaddr
   );
 endinterface
 

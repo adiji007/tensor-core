@@ -61,7 +61,7 @@ module fu_branch_predictor(
 
   always_comb begin : OUTPUT_LOGIC
     fubpif.predicted_outcome = 1'b0;
-    fubpif.predicted_target = fubpif.pc + 4;
+    fubpif.predicted_target = fubpif.imemaddr + 32'd4;
 
     if (btb_hit) begin
       fubpif.predicted_outcome = (btb_target < fubpif.pc);
