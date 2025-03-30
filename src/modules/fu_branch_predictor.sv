@@ -2,7 +2,7 @@
 `include "isa_types.vh"
 
 module fu_branch_predictor(
-  input logic CLK, nRST,
+  input logic CLK, nRST, ihit,
   fu_branch_predictor_if.btb fubpif
 );
   import isa_pkg::*;
@@ -42,7 +42,7 @@ module fu_branch_predictor(
       buffer <= '0;
     end else begin
       // update_btb should be high when branch instruction is processed
-      if (fubpif.update_btb) begin
+      if (fubpif.update_btb && ihit) begin
         // Update BTB for taken branches only
         if (fubpif.branch_outcome) begin
           buffer[update_pc_idx].valid <= 1'b1;

@@ -33,7 +33,6 @@ module fetch_tb;
     // Reset
     nRST = 1'b1;
     tb_ihit = 1'b1;
-    fif.flush = 1'b0;
     fif.freeze = 1'b0;
     fif.misprediction = 1'b0;
     fif.pc_prediction = 32'd0;

@@ -34,6 +34,7 @@ initial begin
     tb_nrst = 1'b1;
     tb_enable = 1'b0;
     fubif.branch_type = BT_BEQ;
+    fubif.j_type = 2'd0;
     fubif.reg_a = '0;
     fubif.reg_b = '0;
     fubif.enable = '0;
@@ -190,6 +191,20 @@ initial begin
     fubif.reg_a = 32'd10;
     fubif.reg_b = 32'hFFFFFFFF;
     fubif.current_pc = 32'd72;
+    #(CLK_PERIOD*10);
+
+    // JAL: Case 1
+    tb_test_case = "JAL 1";
+    fubif.j_type = 2'd1;
+    fubif.current_pc = 32'd76;
+    fubif.imm = 32'h0000_0100;
+    #(CLK_PERIOD*10);
+
+    // JALR: Case 1
+    tb_test_case = "JALR 1";
+    fubif.j_type = 2'd2;
+    fubif.reg_a = 32'h0000_0020;
+    fubif.imm = 32'h0000_0100;
     #(CLK_PERIOD*10);
 
     tb_enable = 1'b0;
