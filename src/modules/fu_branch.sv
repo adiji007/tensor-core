@@ -21,7 +21,7 @@ module fu_branch(
       btb_updated <= 1'b0;
       last_branch_pc <= 32'h0;
     end else begin
-      if (fubif.enable ) begin
+      if (fubif.enable) begin
         if (fubif.current_pc != last_branch_pc) begin
           // New branch instruction arrived so reset btb_updated
           btb_updated <= 1'b0;
@@ -55,6 +55,7 @@ module fu_branch(
     endcase
   end
 
+  // All logic assumes the immediate is that is passed in is already decoded
   always_comb begin : BRANCH_LOGIC
     // updated_pc is corrected PC after branch resolution (ignore during correct prediction)
     // update_pc is original PC of branch instr being resolved (used to update the BTB)
@@ -67,33 +68,46 @@ module fu_branch(
     fubif.update_pc = '0;
     fubif.resolved = 1'b0;
     actual_outcome = '0;
+    fubif.jump_dest = '0;
 
     if (fubif.enable) begin
-      casez (fubif.branch_type)
-        BT_BEQ: actual_outcome = zero;
-        BT_BNE: actual_outcome = ~zero;
-        BT_BLT: actual_outcome = zero;
-        BT_BGE: actual_outcome = ~zero;
-        BT_BLTU: actual_outcome = zero;
-        BT_BGEU: actual_outcome = ~zero;
-        default: actual_outcome = 1'b0;
-      endcase
+      if (fubif.j_type != 2'd0) begin
+        actual_outcome = 1'b1;
 
-      fubif.branch_outcome = actual_outcome;
-      updated_pc = actual_outcome ? (fubif.current_pc + fubif.imm) : (fubif.current_pc + 32'd4);
+        casez (fubif.j_type)
+          // JAL
+          2'd1: updated_pc = fubif.current_pc + fubif.imm;
+          // JALR
+          2'd2: updated_pc = (fubif.reg_a + fubif.imm) & 32'hFFFF_FFFE;  // Set LSB to 0
+          default: updated_pc = fubif.current_pc + 32'd4;
+        endcase
 
-      fubif.miss = (actual_outcome != fubif.predicted_outcome);
-      fubif.correct_pc = updated_pc;
-
-      // enable will control when the BTB can update
-      // btb_updated will only allow one update per branch instruction
-      if (fubif.enable) begin
+        fubif.correct_pc = updated_pc;
         fubif.resolved = 1'b1;
+      end else begin
+        casez (fubif.branch_type)
+          BT_BEQ: actual_outcome = zero;
+          BT_BNE: actual_outcome = ~zero;
+          BT_BLT: actual_outcome = zero;
+          BT_BGE: actual_outcome = ~zero;
+          BT_BLTU: actual_outcome = zero;
+          BT_BGEU: actual_outcome = ~zero;
+          default: actual_outcome = 1'b0;
+        endcase
+
+        updated_pc = actual_outcome ? (fubif.current_pc + fubif.imm) : (fubif.current_pc + 32'd4);
+        fubif.branch_target = fubif.current_pc + fubif.imm;
+        fubif.correct_pc = updated_pc;
+        fubif.branch_outcome = actual_outcome;
+        fubif.miss = (actual_outcome != fubif.predicted_outcome);
+
+        // enable will control when the BTB can update
+        // btb_updated will only allow one update per branch instruction
         if (!btb_updated) fubif.update_btb = 1'b1;
+        fubif.resolved = 1'b1;
+        
+        fubif.update_pc = fubif.current_pc;
       end
-      
-      fubif.update_pc = fubif.current_pc;
-      fubif.branch_target = fubif.current_pc + fubif.imm;
     end 
   end
 endmodule
