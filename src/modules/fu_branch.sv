@@ -21,7 +21,7 @@ module fu_branch(
       btb_updated <= 1'b0;
       last_branch_pc <= 32'h0;
     end else begin
-      if (fubif.enable) begin
+      if (fubif.enable && fubif.j_type == 2'd0) begin
         if (fubif.current_pc != last_branch_pc) begin
           // New branch instruction arrived so reset btb_updated
           btb_updated <= 1'b0;
