@@ -200,6 +200,7 @@ module dispatch(
       diif.n_fust_s.rs2    = s_rs2;
       diif.n_fust_s.imm    = cuif.imm;
       diif.n_fust_s.i_type = cuif.i_flag;
+      diif.n_fust_s.lui    = (cuif.u_type == UT_LOAD);
       diif.n_fust_s.j_type = (cuif.jal) ? 2'd1 : (cuif.jalr) ? 2'd2 : 2'd0;
       diif.n_fust_s.spec   = spec; // sets spec bit in FUST on new instructions
 

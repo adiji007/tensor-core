@@ -158,12 +158,15 @@ module control_unit(
                 cu_if.i_flag = '1;
                 cu_if.fu_s = FU_S_BRANCH;
             end
-        // LUI:
-        //     begin
-        //         cu_if.imm = {instr[31:12], 12'b0};
-        //         cu_if.u_type = UT_LOAD;
-        //         cu_if.s_reg_write = '1;
-        //     end
+        LUI:
+            begin
+                cu_if.imm = {instr[31:12], 12'b0};
+                cu_if.u_type = UT_LOAD;
+                cu_if.alu_op = ALU_ADD;
+                cu_if.fu_s = FU_S_ALU;
+                cu_if.i_flag = 1'b1;
+                cu_if.s_reg_write = '1;
+            end
         // AUIPC:
         //     begin 
         //         cu_if.u_type = ADD;
