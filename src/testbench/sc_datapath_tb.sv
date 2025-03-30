@@ -200,6 +200,8 @@ program test(input logic CLK, output logic nrst, datapath_cache_if.tb dcif);
         end
     endtask
 
+    string tb_test_case = "INIT";
+
     initial begin 
         nrst = 0;
         dcif.imemload = '0;
@@ -212,7 +214,9 @@ program test(input logic CLK, output logic nrst, datapath_cache_if.tb dcif);
         nrst = 1'b1;
 
         @(posedge CLK);
+        tb_test_case = "LW";
         itype_lw_instr(5'd12, 5'd15, 12'd16);
+        tb_test_case = "ADDI";
         itype_instr(5'd11, 5'd13, 'd125, ADDI);
 
         repeat (7) @(posedge CLK);
@@ -223,9 +227,11 @@ program test(input logic CLK, output logic nrst, datapath_cache_if.tb dcif);
         dcif.dhit = 1'b0;
         dcif.dmemload = '0;
         @(posedge CLK);
-
+        
+        tb_test_case = "JTYPE";
         jtype_instr(5'd20, 'd110);
-
+        repeat (3) @(posedge CLK);
+        tb_test_case = "HALT";
         halt();
         
         repeat (15) @(posedge CLK);
