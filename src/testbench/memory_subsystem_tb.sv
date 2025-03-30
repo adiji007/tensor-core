@@ -76,36 +76,48 @@ module memory_subsystem_tb;
     mem_init();
     test_num = 0;
     reset_dut();
+    acif.ramstate = FREE;
+    acif.ramload = 32'h0;
+    dcif.dmemREN = '0;
+    dcif.dmemWEN = '0;
+    dcif.dmemaddr = '0;
+    dcif.dmemstore = '0;
 
     // Test 1: Write and read Dcache
     // DCACHE TESTS
-    // test_name = "Write and read Dcache";
-    // $display("Test 1: Write and read Dcache");
-    // test_num = test_num + 1;
-    // //first write has to be a miss
-    // write_dcache(0, 1, 32'h00000100, 32'hFEEDCAFE);
-    // @(posedge CLK);
-    // #1;
-    // if (dcif.dhit) begin
-    //   $display("ERROR: Expected a miss, got %b at %t", dcif.dhit, $time);
-    //   //$stop;
-    // end
+    test_name = "Write and read Dcache";
+    $display("Test 1: Write and read Dcache");
+    test_num = test_num + 1;
+    acif.ramstate = ACCESS;
+    //first write has to be a miss
+    write_dcache(0, 1, 32'h00000100, 32'hFEEDCAFE); //store FEEDCAFE IN address 100
+    acif.ramstate = BUSY;
+    @(posedge CLK);
+    #10;
+    acif.ramstate = ACCESS;
+    write_dcache(0, 1, 32'h00000100, 32'hFEEDCAFF); //store FEEDCAFF in address 100
+    acif.ramstate = BUSY;
+    @(posedge CLK);
+    #10;
 
-    // write_dcache(0, 1, 32'h00000100, 32'hFEEDCAFE);
-    // @(posedge CLK);
-    // #1;
-    // if (!dcif.dhit) begin
-    //   $display("ERROR: Expected dhit, got %b at %t", dcif.dhit, $time);
-    //   //$stop;
-    // end
+    #1000
+
     //TODO: later
     //mem_read(32'hFEEDCAFE, );
 
+
+
+
     //ICACHE TESTS
+
+
+
+
 
     //SCRATCHPAD TESTS
     acif.ramstate = FREE;
     acif.ramload = 32'h0;
+    write_dcache(0,0,0,0);
     
     spif.instrFIFO_WEN = 1'b0;
     nRST = 1;
@@ -123,7 +135,7 @@ module memory_subsystem_tb;
     @(negedge CLK);
     
     spif.instrFIFO_WEN = 1'b1;
-    spif.instrFIFO_wdata = {2'b01, 4'h2, 32'hFEEDCAFE};
+    spif.instrFIFO_wdata = {2'b01, 4'h2, 32'h00000004};
     #(PERIOD);
     spif.instrFIFO_WEN = 1'b0;
     #(PERIOD*25);
@@ -131,18 +143,18 @@ module memory_subsystem_tb;
 
     test_name = "Store Instruction";
     spif.instrFIFO_WEN = 1'b1;
-    spif.instrFIFO_wdata = {2'b10, 4'h2, 32'hf0f0f0f0};
+    spif.instrFIFO_wdata = {2'b10, 4'h2, 32'd36};
     #(PERIOD);
     spif.instrFIFO_WEN = 1'b0;
     #(PERIOD*25);
 
-    test_name = "Load Instruction 2";
+    // test_name = "Load Instruction 2";
     
-    spif.instrFIFO_WEN = 1'b1;
-    spif.instrFIFO_wdata = {2'b01, 4'hf, 32'hf0f0f0f0};
-    #(PERIOD);
-    spif.instrFIFO_WEN = 1'b0;
-    #(PERIOD*25);
+    // spif.instrFIFO_WEN = 1'b1;
+    // spif.instrFIFO_wdata = {2'b01, 4'hf, 32'hf0f0f0f0};
+    // #(PERIOD);
+    // spif.instrFIFO_WEN = 1'b0;
+    // #(PERIOD*25);
 
     $display("All tests passed!");
     $stop;

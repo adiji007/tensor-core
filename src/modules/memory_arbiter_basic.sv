@@ -6,10 +6,15 @@ module memory_arbiter_basic(
   scratchpad_if.arbiter spif
 );
   import caches_pkg::*;
+  import "DPI-C" function void mem_init();
+  import "DPI-C" function void mem_read(input bit [31:0] address, output bit [31:0] data);
+  import "DPI-C" function void mem_write(input bit [31:0] address, input bit [31:0] data);
+  import "DPI-C" function void mem_save();
 
-  logic [31:0] global_stride = 32'd8;
+  logic [31:0] local_addr_inc1 = 32'd8;
+  logic [31:0] local_addr_inc2 = 32'd4;
   logic [1:0] load_count, next_load_count;
-  logic [1:0] store_count, next_store_count;
+  // logic [1:0] store_count, next_store_count;
   logic [2:0] sLoad_row_reg, next_sLoad_row_reg;
   logic sp_wait;
 
@@ -29,13 +34,13 @@ module memory_arbiter_basic(
     if (!nRST) begin
       arbiter_state <= IDLE;
       load_count <= '0;
-      store_count <= '0;
+      // store_count <= '0;
       sLoad_row_reg <= 3'd0;
     end
     else begin
       arbiter_state <= next_arbiter_state;
       load_count <= next_load_count;
-      store_count <= next_store_count;
+      // store_count <= next_store_count;
       sLoad_row_reg <= next_sLoad_row_reg;
     end
   end
@@ -43,7 +48,7 @@ module memory_arbiter_basic(
   always_comb begin
     next_arbiter_state = arbiter_state;
     next_load_count = load_count;
-    next_store_count = store_count;
+    // next_store_count = store_count;
     next_sLoad_row_reg = sLoad_row_reg;
     case (arbiter_state)
       IDLE: begin
@@ -54,7 +59,7 @@ module memory_arbiter_basic(
         end
         else if (spif.sStore) begin
           next_arbiter_state = SP_STORE1;
-          next_store_count = '0;
+          // next_store_count = '0;
         end
         else if (acif.dREN || acif.dWEN) begin
           next_arbiter_state = DCACHE;
@@ -100,14 +105,15 @@ module memory_arbiter_basic(
           next_arbiter_state = IDLE;
         end
         else if (!sp_wait) begin
-          if (store_count < 2'd3) begin
-            next_arbiter_state = SP_STORE1;
-            next_store_count = store_count + 1;
-          end
-          else begin
-            next_arbiter_state = IDLE;
-            next_store_count = '0;
-          end
+          next_arbiter_state = IDLE;
+          // if (store_count < 2'd3) begin
+          //   next_arbiter_state = SP_STORE1;
+          //   next_store_count = store_count + 1;
+          // end
+          // else begin
+          //   next_arbiter_state = IDLE;
+          //   next_store_count = '0;
+          // end
         end
       end
       DCACHE: begin
@@ -125,15 +131,31 @@ module memory_arbiter_basic(
   end
 
   logic [63:0] load_data_reg;
+  logic [31:0] sp_load_addr;
+  logic [31:0] sp_load_data;
+  logic sp_hit;
+  always_ff @(posedge CLK, negedge nRST) begin
+    if (!nRST) begin
+      spif.sLoad_hit <= '0;
+    end
+    else begin
+      spif.sLoad_hit <= sp_hit;
+    end
+  end
   always_ff @(posedge CLK, negedge nRST) begin
     if (!nRST) begin
       load_data_reg <= '0;
+      sp_load_data <= '0;
     end
     else if (arbiter_state == SP_LOAD1 && !sp_wait) begin
-      load_data_reg[31:0] <= acif.ramload;
+      // load_data_reg[31:0] <= acif.ramload;
+      mem_read(sp_load_addr, sp_load_data);
+      load_data_reg[31:0] <= sp_load_data;
     end
     else if (arbiter_state == SP_LOAD2 && !sp_wait) begin
-      load_data_reg[63:32] <= acif.ramload;
+      // load_data_reg[63:32] <= acif.ramload;
+      mem_read(sp_load_addr, sp_load_data);
+      load_data_reg[63:32] <= sp_load_data;
     end
   end
   assign spif.load_data = load_data_reg;
@@ -148,32 +170,40 @@ module memory_arbiter_basic(
     acif.dload = '0;
     acif.iwait = '0;
     acif.iload = '0;
-    spif.sLoad_hit = '0;
+    // spif.sLoad_hit = '0;
     spif.sStore_hit = '0;
     sp_wait = 1'b0;
+    sp_load_addr = '0;
+    sp_hit = '0;
 
     case (arbiter_state)
       SP_LOAD1: begin
         sp_wait = acif.ramstate == BUSY;
-        acif.ramaddr = spif.load_addr + (load_count * global_stride * 2);
+        // acif.ramaddr = spif.load_addr + (load_count * local_addr_inc1);
+        sp_load_addr = spif.load_addr + (load_count * local_addr_inc1);
         acif.ramREN = 1'b1;
       end
       SP_LOAD2: begin
         sp_wait = acif.ramstate == BUSY;
-        acif.ramaddr = spif.load_addr + (load_count * global_stride * 2) + global_stride;
+        // acif.ramaddr = spif.load_addr + (load_count * local_addr_inc1) + local_addr_inc2;
+        sp_load_addr = spif.load_addr + (load_count * local_addr_inc1) + local_addr_inc2;
         acif.ramREN = 1'b1;
-        if (!sp_wait) spif.sLoad_hit = 1'b1;
+        if (!sp_wait) sp_hit = 1'b1;
       end
       SP_STORE1: begin
         sp_wait = acif.ramstate == BUSY;
-        acif.ramstore = spif.store_data[31:0];
-        acif.ramaddr = spif.store_addr + (store_count * global_stride * 2);
+        // acif.ramstore = spif.store_data[31:0];
+        // acif.ramaddr = spif.store_addr;
+        mem_write(spif.store_addr, spif.store_data[31:0]);
+        mem_save();
         acif.ramWEN = 1'b1;
       end
       SP_STORE2: begin
         sp_wait = acif.ramstate == BUSY;
-        acif.ramstore = spif.store_data[63:32];
-        acif.ramaddr = spif.store_addr + (store_count * global_stride * 2) + global_stride;
+        // acif.ramstore = spif.store_data[63:32];
+        // acif.ramaddr = spif.store_addr + local_addr_inc;
+        mem_write(spif.store_addr + local_addr_inc2, spif.store_data[63:32]);
+        mem_save();
         acif.ramWEN = 1'b1;
         if (!sp_wait) spif.sStore_hit = 1'b1;
       end
