@@ -131,6 +131,7 @@ module sc_datapath
     assign eif.mls_imm_in     = sbif.out.imm;
     // gemm
     assign eif.gemm_enable         = sbif.out.fu_en[4];
+    assign eif.gemm_done           = dcif.gemm_done;
     assign eif.gemm_new_weight_in  = sbif.out.gemm_new_weight;
     assign eif.gemm_rd_in          = sbif.out.md;
     assign eif.gemm_rs1_in         = sbif.out.ms1;
