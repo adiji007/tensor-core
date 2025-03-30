@@ -15,6 +15,17 @@ module systolic_array_tb();
   // clk/reset
   logic tb_nRST;
 
+  string testcase = "fp4";
+  string path_to_files = "/home/vinay/tensorcore/tensor-core/";
+  string input_filename = {"systolic_array_utils/matops_", testcase, "_encoded.txt"};
+  string output_filename = {"systolic_array_utils/matops_", testcase, "_encoded_result.txt"};
+  string python_output_filename = {"systolic_array_utils/matops_", testcase, "_encoded_output.txt"};
+  string python_command = {"/bin/python3 ", path_to_files, "systolic_array_utils/matrix_mul_fp.py systolic_array_utils/matops_", testcase, "_encoded"};
+  string comparison_command = {"/bin/python3 ", path_to_files, "systolic_array_utils/compare_sysarr_output.py systolic_array_utils/matops_", testcase, "_encoded_result.txt systolic_array_utils/matops_", testcase, "_encoded_output.txt systolic_array_utils/matops_", testcase, "_comp.txt"};
+
+
+
+
   // Memory interface instance
   systolic_array_if memory_if();
 
@@ -24,6 +35,7 @@ module systolic_array_tb();
   always #(PERIOD/2) tb_clk++;
   // FILE I/O
   int out_file, file, k, i, j, z, y, r, in, which;
+  int sysarr_dump_file;
   /* verilator lint_off UNUSEDSIGNAL */
   string line;
   /* verilator lint_off UNUSEDSIGNAL */
@@ -159,6 +171,7 @@ module systolic_array_tb();
     .nRST   (tb_nRST),
     .memory (memory_if.memory_array)
   );
+
   always @(posedge tb_clk) begin
     if (memory_if.out_en == 1'b1)begin
       $display("output row is %d", memory_if.row_out);
@@ -170,9 +183,14 @@ module systolic_array_tb();
         end
         $display("");
       end
+      for (y = 0; y < N-1; y++)begin
+          $fwrite(sysarr_dump_file, "%x ", memory_if.array_output[(y+1)*DW-1-:DW]);
+      end
+      $fwrite(sysarr_dump_file, "%x\n", memory_if.array_output[(N)*DW-1-:DW]);
+      // $fwrite(sysarr_dump_file, "\n");
       $display("Correct Output is");
       for (z = 0; z < N; z++)begin
-          $write("%x, ", m_outputs[memory_if.row_out][(z+1)*DW-1-:DW]);
+          $write("%x ", m_outputs[memory_if.row_out][(z+1)*DW-1-:DW]);
       end
       $display("");
       /* verilator lint_off WIDTHEXPAND */
@@ -197,9 +215,11 @@ module systolic_array_tb();
     
     // any file
 
-    file = $fopen("systolic_array_utils/matops_fp_encoded.txt", "r");
-    $system("/bin/python3 /home/vinay/tensorcore/tensor-core/systolic_array_utils/matrix_mul_fp.py systolic_array_utils/matops_fp_encoded");
-    out_file = $fopen("systolic_array_utils/matops_fp_encoded_output.txt", "r");
+    file = $fopen(input_filename, "r");
+    $system(python_command);
+    out_file = $fopen(python_output_filename, "r");
+    sysarr_dump_file = $fopen(output_filename, "w");
+
     reset();
     get_matrices(.weights(loaded_weights));
     get_m_output();
@@ -238,6 +258,9 @@ module systolic_array_tb();
     $display("fifos should have space  %d", memory_if.fifo_has_space);
     $fclose(file);
     $fclose(out_file);
+    $fclose(sysarr_dump_file);
+    $system(comparison_command);
+
     #50;
     $stop;
   end

@@ -14,7 +14,6 @@
 #include "Vsystolic_array_tb__main.cpp"
 #include "Vsystolic_array_tb__Dpi.cpp"
 #include "Vsystolic_array_tb__Trace__0.cpp"
-#include "Vsystolic_array_tb__ConstPool_0.cpp"
 #include "Vsystolic_array_tb___024root__Slow.cpp"
 #include "Vsystolic_array_tb___024root__DepSet_hdbe45c06__0__Slow.cpp"
 #include "Vsystolic_array_tb___024root__DepSet_h7c5333ca__0__Slow.cpp"

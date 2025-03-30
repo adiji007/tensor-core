@@ -135,16 +135,16 @@ module sysarr_MAC(input logic clk, input logic nRST, systolic_array_MAC_if.MAC m
 
     //final multiplication result
     logic [15:0] mul_result;
-    logic [11:0] mul_significand_product_selected;
-    assign mul_significand_product_selected = mul_carryout_in ? mul_product_in[12:1] : mul_product_in[11:0];
+    logic [11:0] mul_frac_product;
+    assign mul_frac_product = mul_carryout_in ? mul_product_in[12:1] : mul_product_in[11:0];
 
     // this could potentially result in an edge case where if the mul significand is all 1's, rounding will cause it to become 0
     logic [9:0] mul_significand_rounded;
     always_comb begin
-        if(&mul_significand_product_selected[1:0] & mul_round_loss_s2)
-            mul_significand_rounded = mul_significand_product_selected[11:2] + 1;
+        if(mul_frac_product[1] & (mul_frac_product[0] | mul_round_loss_s2 | mul_frac_product[2]))
+            mul_significand_rounded = mul_frac_product[11:2] + 1;
         else
-            mul_significand_rounded = mul_significand_product_selected[11:2];
+            mul_significand_rounded = mul_frac_product[11:2];
     end
 
     logic [4:0] mul_final_exp;

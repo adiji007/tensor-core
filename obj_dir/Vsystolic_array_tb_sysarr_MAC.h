@@ -55,7 +55,7 @@ class alignas(VL_CACHE_LINE_BYTES) Vsystolic_array_tb_sysarr_MAC final : public 
     SData/*15:0*/ __PVT__nxt_input_x;
     SData/*12:0*/ __PVT__mul_product_in;
     SData/*15:0*/ __PVT__mul_result;
-    SData/*11:0*/ __PVT__mul_significand_product_selected;
+    SData/*11:0*/ __PVT__mul_frac_product;
     SData/*12:0*/ __PVT__frac_shifted_in;
     SData/*12:0*/ __PVT__frac_not_shifted_in;
     SData/*12:0*/ __PVT__add_sum_in;

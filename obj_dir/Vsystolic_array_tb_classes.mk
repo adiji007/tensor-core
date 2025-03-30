@@ -38,7 +38,6 @@ VM_CLASSES_FAST += \
 
 # Generated module classes, non-fast-path, compile with low/medium optimization
 VM_CLASSES_SLOW += \
-	Vsystolic_array_tb__ConstPool_0 \
 	Vsystolic_array_tb___024root__Slow \
 	Vsystolic_array_tb___024root__DepSet_hdbe45c06__0__Slow \
 	Vsystolic_array_tb___024root__DepSet_h7c5333ca__0__Slow \
