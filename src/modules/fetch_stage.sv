@@ -11,25 +11,27 @@ module fetch_stage(
 
   // Instantiation interfaces
   fetch_if fif();
-  fu_branch_predictor_if fubpif();
+  fu_branch_predictor_if btbif();
 
   // Fetch unit connections
-  assign fif.imemload = fsif.imemload;
-  assign fif.freeze = fsif.freeze;
-  assign fif.misprediction = fsif.misprediction;
-  assign fif.correct_pc = fsif.correct_pc;
-  assign fsif.pc = fif.pc;
-  assign fsif.instr = fif.instr;
-  assign fsif.imemREN = fif.imemREN; 
-  assign fsif.imemaddr = fif.imemaddr;
+  assign fif.imemload = fsif.imemload;           // Input from memory
+  assign fif.freeze = fsif.freeze;               // Input from scoreboard
+  assign fif.misprediction = fsif.misprediction; // Input from branch predictor
+  assign fif.correct_pc = fsif.correct_pc;       // Input from branch predictor
+  assign fsif.pc = fif.pc;                       // Output to scoreboard, branch predictor
+  assign fsif.instr = fif.instr;                 // Output to scoreboard
+  assign fsif.imemREN = fif.imemREN;             // Output to memory
+  assign fsif.imemaddr = fif.imemaddr;           // Output to memory
 
   // Branch predictor connections
-  assign fubpif.pc = fif.pc;
-  assign fubpif.update_btb = fsif.update_btb;
-  assign fubpif.branch_outcome = fsif.branch_outcome;
-  assign fubpif.update_pc = fsif.update_pc;
-  assign fubpif.branch_target = fsif.branch_target;
-  assign fsif.predicted_outcome = fubpif.predicted_outcome;
+  assign btbif.pc = fif.pc;
+  assign btbif.update_btb = fsif.update_btb;
+  assign btbif.branch_outcome = fsif.branch_outcome;
+  assign btbif.update_pc = fsif.update_pc;
+  assign btbif.branch_target = fsif.branch_target;
+  assign btbif.imemaddr = fif.imemaddr;
+
+  assign fsif.predicted_outcome = btbif.predicted_outcome;
 
   // Module instances
   fetch fetch_unit (
@@ -42,9 +44,10 @@ module fetch_stage(
   fu_branch_predictor predictor (
     .CLK(CLK),
     .nRST(nRST),
-    .fubpif(fubpif.btb)
+    .ihit(ihit),
+    .fubpif(btbif.btb)
   );
 
-  assign fif.pc_prediction = fubpif.predicted_target;
+  assign fif.pc_prediction = btbif.predicted_target;
 
 endmodule

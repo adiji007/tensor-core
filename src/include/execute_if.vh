@@ -50,6 +50,7 @@ interface execute_if;
   // Gemm FU
   logic gemm_enable, gemm_new_weight_in;
   matbits_t gemm_rs1_in, gemm_rs2_in, gemm_rs3_in, gemm_rd_in;
+  logic gemm_done;
   
   // output
   eif_output_t eif_output;
@@ -70,7 +71,7 @@ interface execute_if;
           // Matrix Load/Store FU
           mls_mhit, mls_enable, mls_ls_in, mls_rd_in, mls_rs_in, mls_stride_in, mls_imm_in,
           // GEMM FUsadsaf
-          gemm_enable, gemm_new_weight_in, gemm_rs1_in, gemm_rs2_in, gemm_rs3_in, gemm_rd_in,
+          gemm_enable, gemm_new_weight_in, gemm_rs1_in, gemm_rs2_in, gemm_rs3_in, gemm_rd_in, gemm_done,
           // halt
           halt,
           // spec 
@@ -91,7 +92,7 @@ interface execute_if;
           // MLS FU
           mls_mhit, mls_enable, mls_ls_in, mls_rd_in, mls_rs_in, mls_stride_in, mls_imm_in,
           // GEMM FU
-          gemm_enable, gemm_new_weight_in, gemm_rs1_in, gemm_rs2_in, gemm_rs3_in, gemm_rd_in,
+          gemm_enable, gemm_new_weight_in, gemm_rs1_in, gemm_rs2_in, gemm_rs3_in, gemm_rd_in, gemm_done,
           // halt
           halt,
           // spec

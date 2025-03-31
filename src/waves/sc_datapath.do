@@ -2,6 +2,7 @@ onerror {resume}
 quietly WaveActivateNextPane {} 0
 add wave -noupdate /sc_datapath_tb/CLK
 add wave -noupdate /sc_datapath_tb/nrst
+add wave -noupdate /sc_datapath_tb/PROG/tb_test_case
 add wave -noupdate -expand -group dcif /sc_datapath_tb/DUT/dcif/halt
 add wave -noupdate -expand -group dcif /sc_datapath_tb/DUT/dcif/ihit
 add wave -noupdate -expand -group dcif /sc_datapath_tb/DUT/dcif/imemREN
