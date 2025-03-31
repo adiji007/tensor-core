@@ -1,5 +1,5 @@
-# SCRDIR = /home/asicfab/a/vvaidya/seniordesign/tensor-core/src/scripts
-SCRDIR = /home/asicfab/a/wong371/memory_subsystem/tensor-core/src/scripts
+SCRDIR = /home/asicfab/a/vvaidya/seniordesign/tensor-core/src/scripts
+#SCRDIR = /home/asicfab/a/wong371/memory_subsystem/tensor-core/src/scripts
 
 SIMTIME = 100us             # Default simulation run time
 

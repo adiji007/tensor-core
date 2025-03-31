@@ -73,6 +73,8 @@ module memory_subsystem_tb;
 
   initial begin
     static string test_name = "Reset";
+    static string major_test_name = "Reset";
+    spif.drained = 1'b0;
     mem_init();
     test_num = 0;
     reset_dut();
@@ -130,8 +132,10 @@ module memory_subsystem_tb;
     #(PERIOD);
 
     @(posedge CLK);
+    
+    major_test_name = "No bank conflicts";
 
-    test_name = "Load Instruction";
+    test_name = "Load Instruction 1";
     @(negedge CLK);
     
     spif.instrFIFO_WEN = 1'b1;
@@ -140,13 +144,41 @@ module memory_subsystem_tb;
     spif.instrFIFO_WEN = 1'b0;
     #(PERIOD*25);
 
-
-    test_name = "Store Instruction";
+    test_name = "Load Instruction 2";
+    @(negedge CLK);
+    
     spif.instrFIFO_WEN = 1'b1;
-    spif.instrFIFO_wdata = {2'b10, 4'h2, 32'd36};
+    spif.instrFIFO_wdata = {2'b01, 4'h6, 32'd36};
     #(PERIOD);
     spif.instrFIFO_WEN = 1'b0;
     #(PERIOD*25);
+    spif.drained = 1'b1;
+
+    test_name = "Load Instruction 3";
+    @(negedge CLK);
+    
+    spif.instrFIFO_WEN = 1'b1;
+    spif.instrFIFO_wdata = {2'b01, 4'ha, 32'd68};
+    #(PERIOD);
+    spif.instrFIFO_WEN = 1'b0;
+    #(PERIOD*25);
+
+    test_name = "GEMM";
+    @(negedge CLK);
+    
+    spif.instrFIFO_WEN = 1'b1;
+    spif.instrFIFO_wdata = {2'b11, 4'b1000, 32'h0000ea62};
+    #(PERIOD);
+    spif.instrFIFO_WEN = 1'b0;
+    #(PERIOD*25);
+
+
+    // test_name = "Store Instruction";
+    // spif.instrFIFO_WEN = 1'b1;
+    // spif.instrFIFO_wdata = {2'b10, 4'h2, 32'd36};
+    // #(PERIOD);
+    // spif.instrFIFO_WEN = 1'b0;
+    // #(PERIOD*25);
 
     // test_name = "Load Instruction 2";
     
