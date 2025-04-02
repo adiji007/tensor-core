@@ -1,10 +1,11 @@
 `ifndef  SCRATCHPAD_IF_VH
 `define SCRATCHPAD_IF_VH
+
 `include "types_pkg.vh"
-import types_pkg::*;
+
 
 interface scratchpad_if;
-    
+    import types_pkg::*;
     
     
     logic instrFIFO_WEN, psumout_en, drained, fifo_has_space, sLoad_hit, sStore_hit;
