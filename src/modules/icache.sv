@@ -12,14 +12,23 @@ module icache #(
 //   parameter IBLK_W = 0;
      parameter IIDX_W = 4           // Instruction cache index width
 //   parameter IBYT_W = 2        // Instruction cache byte offset width
+//   parameter WORD_W = 32,      // Word width
+//   parameter ITAG_W = 26,      // Instruction cache tag width
+//   parameter IBLK_W = 0;
+     parameter IIDX_W = 4           // Instruction cache index width
+//   parameter IBYT_W = 2        // Instruction cache byte offset width
 )(
   input logic CLK, nRST,
   caches_if.icache cif,
   datapath_cache_if.icache dcif
+  caches_if.icache cif,
+  datapath_cache_if.icache dcif
 );
+  import caches_pkg::*;
   import caches_pkg::*;
 
   icachef_t icache_format;
+  icache_frame [(1 << IIDX_W) - 1:0] icache, nxt_icache;
   icache_frame [(1 << IIDX_W) - 1:0] icache, nxt_icache;
 
   typedef enum logic {
