@@ -144,24 +144,29 @@ module memory_arbiter_basic(
       spif.sLoad_hit <= sp_hit;
     end
   end
+
   always_ff @(posedge CLK, negedge nRST) begin
     if (!nRST) begin
       load_data_reg <= '0;
-      sp_load_data <= '0;
+      // sp_load_data <= '0;
     end
     else if (arbiter_state == SP_LOAD1 && !sp_wait) begin
       // load_data_reg[31:0] <= acif.ramload;
-      mem_read(sp_load_addr, sp_load_data);
+      // mem_read(sp_load_addr, sp_load_data);
       load_data_reg[31:0] <= sp_load_data;
     end
     else if (arbiter_state == SP_LOAD2 && !sp_wait) begin
       // load_data_reg[63:32] <= acif.ramload;
-      mem_read(sp_load_addr, sp_load_data);
+      // mem_read(sp_load_addr, sp_load_data);
       load_data_reg[63:32] <= sp_load_data;
     end
   end
   assign spif.load_data = load_data_reg;
   assign spif.sLoad_row = sLoad_row_reg;
+  always_comb begin
+    if (((arbiter_state == SP_LOAD1) || (arbiter_state == SP_LOAD2)) && !sp_wait)
+      mem_read(sp_load_addr, sp_load_data);
+  end
 
   always_comb begin
     acif.ramstore = '0;

@@ -1,4 +1,4 @@
-SCRDIR = /home/asicfab/a/wong371/memory_subsystem/tensor-core/src/scripts
+SCRDIR = /home/asicfab/a/rrbathin/socet/amp/tensor-core/src/scripts
 
 SOURCE_FILES = \
 	./src/modules/system.sv \
@@ -35,9 +35,11 @@ SOURCE_FILES = \
 	./src/modules/btb.sv \
 	./src/modules/nbit_stp_shiftreg.sv \
 	./src/modules/fetch_tbp.sv \
+	./src/modules/memory_subsystem.sv \
+	./src/modules/scratchpad.sv \
 
 
-SCRDIR = ./tensor-core/src/waves
+# SCRDIR = ./tensor-core/src/waves
 SIMTIME = 100us             # Default simulation run time
 
 # modelsim viewing options
@@ -79,7 +81,7 @@ source:
 	vlog -sv $(SOURCE_FILES) +incdir+./src/include/ 
 
 %:
-	vlog -sv $(SOURCE_FILES) +incdir+./src/include/ 
+	vlog -sv ./src/modules/*.sv +incdir+./src/include/ 
 	vlog -sv ./src/testbench/$*_tb.sv +incdir+./src/include/
 	vsim -voptargs="+acc" work.$*_tb -do "view objects; do ./src/waves/$*.do; run -all;" -onfinish stop
 

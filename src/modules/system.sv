@@ -9,16 +9,26 @@
 `include "system_if.vh"
 //types
 `include "isa_types.vh"
+`include "datapath_types.vh"
 `include "ram_pkg.vh"
+`include "types_pkg.vh"
 // `include "ram_if.vh"
 `include "cpu_ram_if.vh"
+`include "datapath_cache_if.vh"
+`include "caches_if.vh"
+`include "arbiter_caches_if.vh"
+`include "scratchpad_if.vh"
+
 
 module system (input logic CLK, nrst, system_if.sys syif);
 
   import ram_pkg::*;
+  import isa_pkg::*;
+  import types_pkg::*;
+  import datapath_pkg::*;
 
   // stopped running
-  logic halt;
+  // logic halt;
 
   // clock division
   parameter CLKDIV = 2;
@@ -44,23 +54,34 @@ module system (input logic CLK, nrst, system_if.sys syif);
     end
   end
 
-  // interfaces
-  cpu_ram_if                            prif ();
+  datapath_cache_if dpif();
+  sc_datapath DP (CLK, nrst, dpif);
 
-  // scheduler core processor
-  scheduler_core                        CPU (CPUCLK, nrst, halt, prif);
+  caches_if cif();
+  arbiter_caches_if acif(cif);
+  scratchpad_if spif();
+  memory_subsystem MS (CLK, nrst, dpif, cif, acif, spif);
 
-  // memory
-  ram                                   RAM (CLK, nrst, prif);
 
-  // interface connections
-  assign syif.halt = halt;
-  assign syif.load = prif.ramload;
+  // // interfaces
+  // cpu_ram_if                            prif ();
 
-  // who has ram control
-  assign prif.ramWEN = (syif.tbCTRL) ? syif.WEN : prif.memWEN;
-  assign prif.ramREN = (syif.tbCTRL) ? syif.REN : prif.memREN;
-  assign prif.ramaddr = (syif.tbCTRL) ? syif.addr : prif.memaddr;
-  assign prif.ramstore = (syif.tbCTRL) ? syif.store : prif.memstore;
+  // // scheduler core processor
+  // scheduler_core                        CPU (CPUCLK, nrst, halt, prif);
+
+  // // memory
+  // ram                                   RAM (CLK, nrst, prif);
+
+  // // interface connections
+  // assign syif.halt = halt;
+  // assign syif.load = prif.ramload;
+
+  // // who has ram control
+  // assign prif.ramWEN = (syif.tbCTRL) ? syif.WEN : prif.memWEN;
+  // assign prif.ramREN = (syif.tbCTRL) ? syif.REN : prif.memREN;
+  // assign prif.ramaddr = (syif.tbCTRL) ? syif.addr : prif.memaddr;
+  // assign prif.ramstore = (syif.tbCTRL) ? syif.store : prif.memstore;
+
+
 
 endmodule
