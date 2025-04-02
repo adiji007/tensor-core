@@ -21,7 +21,7 @@ interface fu_branch_if;
   );
 
   modport tb (
-    output enable, branch, branch_type, reg_a, reg_b, current_pc, imm, predicted_outcome, j_type, jump_wdat
+    output enable, branch, branch_type, reg_a, reg_b, current_pc, imm, predicted_outcome, j_type, jump_wdat,
     input branch_outcome, miss, correct_pc, update_btb, update_pc, branch_target, resolved
   );
 endinterface
