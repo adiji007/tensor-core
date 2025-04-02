@@ -107,21 +107,13 @@ package isa_pkg;
   } utype_t;
 
   typedef enum logic [2:0] {
-    BT_BEQ,  // 0
-    BT_BNE,  // 1
-    BT_BLT,  // 2
-    BT_BGE,  // 3
-    BT_BLTU, // 4
-    BT_BGEU  // 5
+    BT_BEQ, 
+    BT_BNE, 
+    BT_BLT,
+    BT_BGE,
+    BT_BLTU,
+    BT_BGEU
   } branch_t;
-
-//   typedef enum logic [1:0] {
-//    FREE,
-//    BUSY,
-//    ACCESS,
-//    ERROR
-//  } ramstate_t; //ramstate
-
 
 endpackage
 `endif
