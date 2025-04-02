@@ -2,6 +2,7 @@
 `define DATAPATH_CACHE_IF_VH
 
 // types
+`include "isa_types.vh"
 `include "datapath_types.vh"
 
 interface datapath_cache_if;

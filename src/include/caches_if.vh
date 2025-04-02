@@ -11,7 +11,7 @@ interface caches_if;
 
   // arbitration
   logic          iwait, dwait, iREN, dREN, dWEN;
-  logic[63:0]         iload, dload, dstore;
+  logic[31:0]    iload, dload, dstore;
   word_t         iaddr, daddr;
 
   // icache ports to controller
