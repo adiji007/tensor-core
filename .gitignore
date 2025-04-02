@@ -1,3 +1,5 @@
 transcript
 work/
+.venv
 vsim.*
+.vscode/
