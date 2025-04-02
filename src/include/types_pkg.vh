@@ -7,6 +7,14 @@ package types_pkg;
   parameter REG_W  = 5;
   parameter MATRIX_W = 4;
   parameter VALUE_BITS = 16;
+  parameter BITS_PER_ROW = 64;
+
+  parameter MAT_S_W = 2;
+  parameter ROW_S_W = 2;
+  parameter STRIDE = 8;
+
+
+  parameter VALUE_BITS = 16;
   parameter BITS_PER_ROW = MATRIX_W * VALUE_BITS;
 
   parameter FU_S_W = 2;
