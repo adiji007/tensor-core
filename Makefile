@@ -1,3 +1,5 @@
+SCRDIR = /home/asicfab/a/wong371/memory_subsystem/tensor-core/src/scripts
+
 SOURCE_FILES = \
 	./src/modules/system.sv \
 	./src/modules/ram.sv \
@@ -99,7 +101,20 @@ vlog:
 
 %.sim:
 	vlog -sv +incdir+./src/include ./src/modules/$*.sv
+	
+memory_arbiter_basic:
+	vlog -sv +incdir+./src/include ./src/include/caches_pkg.vh ./src/include/types_pkg.vh \
+	./src/testbench/memory_arbiter_basic_tb.sv ./src/modules/memory_arbiter_basic.sv
+	vsim $(SIMTERM) -voptargs="+acc" work.memory_arbiter_basic_tb -do $(SIMDO)
 
+memory_subsystem:
+	vlog -sv +incdir+./src/include ./src/include/*.vh \
+	./src/testbench/memory_subsystem_tb.sv ./src/modules/*.sv
+	vsim -c -voptargs="+acc" work.memory_subsystem_tb -sv_lib memory -do $(SIMDO)
+
+memory_subsystem.wav:
+	vlog -sv +incdir+./src/include ./src/include/*.vh ./src/testbench/memory_subsystem_tb.sv ./src/modules/*.sv
+	vsim -voptargs="+acc" work.memory_subsystem_tb -sv_lib memory -do "do $(SCRDIR)/memory_subsystem.do; run $(SIMTIME);" -suppress 2275
 
 clean:
 	rm -rf work transcript vsim.wlf *.log *.jou *.vstf *.vcd
