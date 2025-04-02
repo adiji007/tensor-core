@@ -147,7 +147,7 @@ module memory_arbiter_basic(
   always_ff @(posedge CLK, negedge nRST) begin
     if (!nRST) begin
       load_data_reg <= '0;
-      sp_load_data <= '0;
+      sp_load_data <= '0; //verilator issue -> with memread c++ functions in always_ff
     end
     else if (arbiter_state == SP_LOAD1 && !sp_wait) begin
       // load_data_reg[31:0] <= acif.ramload;

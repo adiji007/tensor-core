@@ -1,4 +1,4 @@
-SCRDIR = /home/asicfab/a/wong371/memory_subsystem/tensor-core/src/scripts
+# SCRDIR = /home/asicfab/a/wong371/william_pr/tensor-core/src/scripts
 
 SOURCE_FILES = \
 	./src/modules/system.sv \
@@ -79,7 +79,7 @@ source:
 	vlog -sv $(SOURCE_FILES) +incdir+./src/include/ 
 
 %:
-	vlog -sv $(SOURCE_FILES) +incdir+./src/include/ 
+	vlog -sv ./src/modules/*.sv +incdir+./src/include/ 
 	vlog -sv ./src/testbench/$*_tb.sv +incdir+./src/include/
 	vsim -voptargs="+acc" work.$*_tb -do "view objects; do ./src/waves/$*.do; run -all;" -onfinish stop
 
