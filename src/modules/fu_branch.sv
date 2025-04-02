@@ -69,6 +69,7 @@ module fu_branch(
     fubif.resolved = 1'b0;
     actual_outcome = '0;
     fubif.jump_dest = '0;
+    fubif.jump_wdat = '0;
 
     if (fubif.enable) begin
       if (fubif.j_type != 2'd0) begin
