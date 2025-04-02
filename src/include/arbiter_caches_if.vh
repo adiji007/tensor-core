@@ -1,4 +1,3 @@
-
 `ifndef ARBITER_CACHES_IF_VH
 `define ARBITER_CACHES_IF_VH
 
@@ -22,30 +21,30 @@ interface arbiter_caches_if(
   ramstate_t              ramstate;
   word_t                  ramaddr, ramstore, ramload;
 
-  always_comb begin
-      iREN = cif.iREN;
-      dREN = cif.dREN;
-      dWEN = cif.dWEN;
-      dstore = cif.dstore;
-      iaddr = cif.iaddr;
-      daddr = cif.daddr;
+  // Connect cache inputs to cif signals
+  assign iREN = cif.iREN;
+  assign dREN = cif.dREN;
+  assign dWEN = cif.dWEN;
+  assign dstore = cif.dstore;
+  assign iaddr = cif.iaddr;
+  assign daddr = cif.daddr;
 
-      cif.iwait = iwait;
-      cif.dwait = dwait;
-      cif.iload = iload;
-      cif.dload = dload;
-  end
+  // Connect cache outputs to cif signals
+  assign cif.iwait = iwait;
+  assign cif.dwait = dwait;
+  assign cif.iload = iload;
+  assign cif.dload = dload;
 
   // controller ports to ram and caches
   modport cc (
-            // cache inputs
-    input   iREN, dREN, dWEN, dstore, iaddr, daddr,
-            // ram inputs
-            ramload, ramstate,
-            // cache outputs
-    output  iwait, dwait, iload, dload,
-            // ram outputs
-            ramstore, ramaddr, ramWEN, ramREN
+      // cache inputs
+      input   iREN, dREN, dWEN, dstore, iaddr, daddr,
+      // ram inputs
+      input   ramload, ramstate,
+      // cache outputs
+      output  iwait, dwait, iload, dload,
+      // ram outputs
+      output  ramstore, ramaddr, ramWEN, ramREN
   );
 
 endinterface
