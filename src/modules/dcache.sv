@@ -1,10 +1,7 @@
 `include "caches_pkg.vh"
-`include "caches_pkg.vh"
 
 module dcache (
   input logic CLK, nRST,
-  caches_if.dcache cif,
-  datapath_cache_if.dcache dcif                               
   caches_if.dcache cif,
   datapath_cache_if.dcache dcif                               
 );
@@ -14,7 +11,6 @@ import "DPI-C" function void mem_write(input bit [31:0] address, input bit [31:0
 import "DPI-C" function void mem_save(); 
 
 // Cache configuration parameters
-parameter CS = 1024;        // Cache size in bits Currently: 1KB dcache
 parameter CS = 1024;        // Cache size in bits Currently: 1KB dcache
 parameter BS = 2;           // Block size in words
 parameter A = 2;            // Associativity
@@ -40,7 +36,6 @@ typedef struct packed {
 
 // Internal signals
 word_t hit_count, next_hit_count, latched_dmemaddr;
-logic miss, finish_flush;
 logic miss, finish_flush;
 logic [NUM_SETS-1:0] lru, next_lru;
 logic [INDEX_BITS-1:0] flush_idx, next_flush_idx;
@@ -245,17 +240,11 @@ always_comb begin
     //   cif.daddr = 32'h3100;
     //   cif.dstore = hit_count;
     // end
-    // COUNT: begin
-    //   cif.dWEN = 1'b1;
-    //   cif.daddr = 32'h3100;
-    //   cif.dstore = hit_count;
-    // end
 
-    // HALT: begin
-    //   dcif.flushed = 1'b1;
-    // end
+    HALT: begin
+      dcif.flushed = 1'b1;
+    end
   endcase
 end
 
 endmodule
-
