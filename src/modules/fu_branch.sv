@@ -78,13 +78,13 @@ module fu_branch(
         casez (fubif.j_type)
           // JAL
           2'd1: begin
-            fubif.jump_wdat = fubif.current_pc + fubif.imm;
-            updated_pc = fubif.jump_wdat;
+            updated_pc = fubif.current_pc + fubif.imm;
+            fubif.jump_wdat = updated_pc + 32'd4;
           end
           // JALR
           2'd2: begin
-            fubif.jump_wdat = (fubif.reg_a + fubif.imm) & 32'hFFFF_FFFE;  // Set LSB to 0
-            updated_pc = fubif.jump_wdat;
+            updated_pc = fubif.reg_a + fubif.imm;
+            fubif.jump_wdat = updated_pc + 32'd4;
           end
           default: updated_pc = fubif.current_pc + 32'd4;
         endcase
