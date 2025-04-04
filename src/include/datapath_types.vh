@@ -1,5 +1,5 @@
-`ifndef TYPES_PKG_VH
-`define TYPES_PKG_VH
+`ifndef DP_TYPES_PKG_VH
+`define DP_TYPES_PKG_VH
 
 `include "isa_types.vh"
 

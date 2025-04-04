@@ -69,6 +69,7 @@ module fu_branch(
     fubif.resolved = 1'b0;
     actual_outcome = '0;
     fubif.jump_dest = '0;
+    fubif.jump_wdat = '0;
 
     if (fubif.enable) begin
       if (fubif.j_type != 2'd0) begin
@@ -76,9 +77,15 @@ module fu_branch(
 
         casez (fubif.j_type)
           // JAL
-          2'd1: updated_pc = fubif.current_pc + fubif.imm;
+          2'd1: begin
+            updated_pc = fubif.current_pc + fubif.imm;
+            fubif.jump_wdat = updated_pc + 32'd4;
+          end
           // JALR
-          2'd2: updated_pc = (fubif.reg_a + fubif.imm) & 32'hFFFF_FFFE;  // Set LSB to 0
+          2'd2: begin
+            updated_pc = fubif.reg_a + fubif.imm;
+            fubif.jump_wdat = updated_pc + 32'd4;
+          end
           default: updated_pc = fubif.current_pc + 32'd4;
         endcase
 

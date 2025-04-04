@@ -139,7 +139,7 @@ module sc_datapath
     assign eif.gemm_rs3_in         = sbif.out.ms3;
 
     // ouputs
-    assign ex_out.alu_done      = eif.eif_output.fu_ex[0];
+    assign ex_out.alu_done      = eif.eif_output.fu_ex[0] && !eif.eif_output.bfu_miss;
     assign ex_out.alu_wdat      = eif.eif_output.salu_port_output;
     assign ex_out.alu_reg_sel   = eif.eif_output.salu_rd;
     assign ex_out.load_done     = (eif.eif_output.sls_dhit == dhit_load);

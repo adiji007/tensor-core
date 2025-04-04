@@ -1,3 +1,5 @@
+SCRDIR = /home/asicfab/a/rrbathin/socet/amp/tensor-core/src/scripts
+
 SOURCE_FILES = \
 	./src/modules/system.sv \
 	./src/modules/ram.sv \
@@ -33,9 +35,11 @@ SOURCE_FILES = \
 	./src/modules/btb.sv \
 	./src/modules/nbit_stp_shiftreg.sv \
 	./src/modules/fetch_tbp.sv \
+	./src/modules/memory_subsystem.sv \
+	./src/modules/scratchpad.sv \
 
 
-SCRDIR = ./tensor-core/src/waves
+# SCRDIR = ./tensor-core/src/waves
 SIMTIME = 100us             # Default simulation run time
 
 # modelsim viewing options
@@ -77,7 +81,7 @@ source:
 	vlog -sv $(SOURCE_FILES) +incdir+./src/include/ 
 
 %:
-	vlog -sv $(SOURCE_FILES) +incdir+./src/include/ 
+	vlog -sv ./src/modules/*.sv +incdir+./src/include/ 
 	vlog -sv ./src/testbench/$*_tb.sv +incdir+./src/include/
 	vsim -voptargs="+acc" work.$*_tb -do "view objects; do ./src/waves/$*.do; run -all;" -onfinish stop
 
@@ -99,7 +103,20 @@ vlog:
 
 %.sim:
 	vlog -sv +incdir+./src/include ./src/modules/$*.sv
+	
+memory_arbiter_basic:
+	vlog -sv +incdir+./src/include ./src/include/caches_pkg.vh ./src/include/types_pkg.vh \
+	./src/testbench/memory_arbiter_basic_tb.sv ./src/modules/memory_arbiter_basic.sv
+	vsim $(SIMTERM) -voptargs="+acc" work.memory_arbiter_basic_tb -do $(SIMDO)
 
+memory_subsystem:
+	vlog -sv +incdir+./src/include ./src/include/*.vh \
+	./src/testbench/memory_subsystem_tb.sv ./src/modules/*.sv
+	vsim -c -voptargs="+acc" work.memory_subsystem_tb -sv_lib memory -do $(SIMDO)
+
+memory_subsystem.wav:
+	vlog -sv +incdir+./src/include ./src/include/*.vh ./src/testbench/memory_subsystem_tb.sv ./src/modules/*.sv
+	vsim -voptargs="+acc" work.memory_subsystem_tb -sv_lib memory -do "do $(SCRDIR)/memory_subsystem.do; run $(SIMTIME);" -suppress 2275
 
 clean:
 	rm -rf work transcript vsim.wlf *.log *.jou *.vstf *.vcd

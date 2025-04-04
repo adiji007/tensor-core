@@ -113,9 +113,9 @@ always_ff @(posedge CLK, negedge nRST) begin : writeback_ff
         state <= next_state;
         wb_sel <= next_wb_sel;
         prev_spec <= wbif.branch_spec;
-        spec_alu_wptr = next_spec_alu_wptr;
-        clean_count = next_clean_count;
-        spec_write = next_spec_write;
+        spec_alu_wptr <= next_spec_alu_wptr;
+        clean_count <= next_clean_count;
+        spec_write <= next_spec_write;
         
         alu_buffer <= next_alu_buffer;
         alu_wptr <= next_alu_wptr;

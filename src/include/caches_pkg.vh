@@ -2,9 +2,6 @@
 `define CACHES_PKG_VH
 
 
-// CHANGE: Size of Data changed from 32bits to 64bits
-
-
 
 
 package caches_pkg;
@@ -61,14 +58,14 @@ package caches_pkg;
 	logic valid;
 	logic dirty;
 	logic [DTAG_W - 1:0] tag;
-	logic [63:0] [1:0] data;
+	logic [31:0] [1:0] data;
   } dcache_frame;
 
   //icache frame  
   typedef struct packed {
 	logic valid;
 	logic [ITAG_W - 1:0] tag;
-	logic [63:0] data;
+	logic [31:0] data;
   } icache_frame;
 
 endpackage
