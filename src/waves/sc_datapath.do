@@ -83,6 +83,29 @@ add wave -noupdate -expand -group WB /sc_datapath_tb/DUT/WRITEBACK/wbif/load_don
 add wave -noupdate -expand -group WB /sc_datapath_tb/DUT/WRITEBACK/wbif/alu_reg_sel
 add wave -noupdate -expand -group WB /sc_datapath_tb/DUT/WRITEBACK/wbif/load_reg_sel
 add wave -noupdate -expand -group WB -expand /sc_datapath_tb/DUT/WRITEBACK/wbif/wb_out
+add wave -noupdate /sc_datapath_tb/DUT/WRITEBACK/alu_buffer
+add wave -noupdate /sc_datapath_tb/DUT/WRITEBACK/next_alu_buffer
+add wave -noupdate /sc_datapath_tb/DUT/WRITEBACK/alu_full
+add wave -noupdate /sc_datapath_tb/DUT/WRITEBACK/alu_empty
+add wave -noupdate /sc_datapath_tb/DUT/WRITEBACK/next_alu_full
+add wave -noupdate /sc_datapath_tb/DUT/WRITEBACK/next_alu_empty
+add wave -noupdate /sc_datapath_tb/DUT/WRITEBACK/load_din
+add wave -noupdate /sc_datapath_tb/DUT/WRITEBACK/load_dout
+add wave -noupdate /sc_datapath_tb/DUT/WRITEBACK/load_write
+add wave -noupdate /sc_datapath_tb/DUT/WRITEBACK/load_read
+add wave -noupdate /sc_datapath_tb/DUT/WRITEBACK/load_wptr
+add wave -noupdate /sc_datapath_tb/DUT/WRITEBACK/load_rptr
+add wave -noupdate /sc_datapath_tb/DUT/WRITEBACK/next_load_wptr
+add wave -noupdate /sc_datapath_tb/DUT/WRITEBACK/next_load_rptr
+add wave -noupdate /sc_datapath_tb/DUT/WRITEBACK/load_count
+add wave -noupdate /sc_datapath_tb/DUT/WRITEBACK/next_load_count
+add wave -noupdate /sc_datapath_tb/DUT/WRITEBACK/load_buffer
+add wave -noupdate /sc_datapath_tb/DUT/WRITEBACK/next_load_buffer
+add wave -noupdate /sc_datapath_tb/DUT/WRITEBACK/load_empty
+add wave -noupdate /sc_datapath_tb/DUT/WRITEBACK/load_full
+add wave -noupdate /sc_datapath_tb/DUT/WRITEBACK/next_load_empty
+add wave -noupdate /sc_datapath_tb/DUT/WRITEBACK/next_load_full
+add wave -noupdate /sc_datapath_tb/DUT/WRITEBACK/wb_sel
 add wave -noupdate -expand -group register /sc_datapath_tb/DUT/SCOREBOARD/IS/RF/CLK
 add wave -noupdate -expand -group register /sc_datapath_tb/DUT/SCOREBOARD/IS/RF/nRST
 add wave -noupdate -expand -group register /sc_datapath_tb/DUT/SCOREBOARD/IS/RF/register
@@ -96,7 +119,7 @@ add wave -noupdate -expand -group ALU /sc_datapath_tb/DUT/EXECUTE/SALU/aluif/por
 add wave -noupdate -expand -group ALU /sc_datapath_tb/DUT/EXECUTE/SALU/aluif/port_b
 add wave -noupdate -expand -group ALU /sc_datapath_tb/DUT/EXECUTE/SALU/aluif/port_output
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {261650 ps} 0}
+WaveRestoreCursors {{Cursor 1} {680000 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 150
 configure wave -valuecolwidth 100
@@ -112,4 +135,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ps
 update
-WaveRestoreZoom {30870 ps} {398370 ps}
+WaveRestoreZoom {440830 ps} {808330 ps}
