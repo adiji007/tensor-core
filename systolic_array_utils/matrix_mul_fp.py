@@ -2,6 +2,9 @@ import numpy as np
 import sys
 import struct
 filename = sys.argv[1]
+
+mat_size = 4
+
 # Read matrices from input.txt
 with open(f"{filename}.txt", "r") as f:
     lines = f.readlines()
@@ -42,7 +45,7 @@ for line in lines:
         print(PS)
         # Perform matrix multiplication0.
 
-        result_matrix = [[0 for _ in range(4)] for _ in range(4)]
+        result_matrix = [[0 for _ in range(mat_size)] for _ in range(mat_size)]
         # Perform matrix multiplication
         for i in range(len(result_matrix)):  # Iterate over rows of A
             for j in range(len(result_matrix[i])):  # Iterate over columns of B

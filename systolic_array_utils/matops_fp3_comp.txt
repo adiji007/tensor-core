@@ -1,0 +1,10 @@
+matrix 0 row 0 col 0: sysarr output 5763 (118.1875), python output 5762 (118.125). error: 0.052928924560546875%
+matrix 0 row 0 col 2: sysarr output 57c4 (124.25), python output 57c5 (124.3125). error: 0.050258636474609375%
+matrix 0 row 1 col 1: sysarr output 599e (179.75), python output 599d (179.625). error: 0.06957054138183594%
+matrix 0 row 2 col 0: sysarr output 57e2 (126.125), python output 57e1 (126.0625). error: 0.049591064453125%
+matrix 0 row 2 col 2: sysarr output 57d1 (125.0625), python output 57d2 (125.125). error: 0.0499725341796875%
+matrix 0 row 3 col 1: sysarr output 57a9 (122.5625), python output 57aa (122.625). error: 0.05097389221191406%
+matrix 1 row 0 col 2: sysarr output 56d6 (109.375), python output 56d7 (109.4375). error: 0.057125091552734375%
+matrix 1 row 1 col 2: sysarr output 5794 (121.25), python output 5792 (121.125). error: 0.10318756103515625%
+matrix 1 row 2 col 1: sysarr output 58ba (151.25), python output 58bb (151.375). error: 0.08258819580078125%
+matrix 1 row 3 col 3: sysarr output 5794 (121.25), python output 5795 (121.3125). error: 0.0514984130859375%

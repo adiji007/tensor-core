@@ -81,6 +81,10 @@ module sysarr_MAC(input logic clk, input logic nRST, systolic_array_MAC_if.MAC m
     // phase 1: multiply
 
     // signals connecting mul stage1 with stage2. these are registered, so need 2 signals (one coming out of stage1 going into register, the other coming out of register going into stage2)
+    // Latching the sign and exponent bits of both input values for stage2 of multiplication
+    logic [5:0] mul_fp1_head_s1_out, mul_fp1_head_s2_in;
+    logic [5:0] mul_fp2_head_s1_out, mul_fp2_head_s2_in;
+
     logic mul_sign1_out, mul_sign2_out, mul_carryout_out;
     logic mul_sign1_in, mul_sign2_in, mul_carryout_in;
     logic [4:0] mul_exp1_out, mul_exp2_out;
@@ -90,35 +94,47 @@ module sysarr_MAC(input logic clk, input logic nRST, systolic_array_MAC_if.MAC m
     logic mul_round_loss_s1_out, mul_round_loss_s2;
 
     // MUL takes in latched input_x from above
-    MUL_step1 mul1 (input_x, mac_if.weight, mul_sign1_out, mul_sign2_out, mul_exp1_out, mul_exp2_out, mul_product_out, mul_carryout_out, mul_round_loss_s1_out);
+    // MUL_step1 is special in that contains a sequential multiplier. This means that other operations need to wait until it finishes, the MAC unit must not move to the next stage after just one clock cycle.
+    // It also means that it needs an enable signal. This can be on for one or more clock cycles, I dont think it matters.
+    // Since it is the very first thing in the MAC chain, i'm using mac_if.start as this enable signal.
+    // The flipflop after this should hold its values, and NOT allow the start passthrough signal to advance until the the multiply finishes (mul_stall goes low)
+    logic mul_stall;
+    MUL_step1 mul1 (clk, nRST, mac_if.start, input_x, mac_if.weight, mul_product_out, mul_carryout_out, mul_round_loss_s1_out, mul_stall);
     
+    // latching the run signal an extra time to fix a timing issue with mul_stall and mac_if.start
+    logic start_passthrough_0;
+    always_ff @(posedge clk, negedge nRST) begin
+        if(nRST == 1'b0)
+            start_passthrough_0 <= 0;
+        else
+            start_passthrough_0 <= mac_if.start | (start_passthrough_0 & mul_stall);
+    end
+
     // flipflop to connect mul stage1 and stage 2
     always_ff @(posedge clk, negedge nRST) begin
         if(nRST == 1'b0) begin
-            mul_sign1_in <= 0;
-            mul_sign2_in <= 0;
-            mul_exp1_in <= 0;
-            mul_exp2_in <= 0;
+            mul_fp1_head_s2_in <= 0;
+            mul_fp2_head_s2_in <= 0;
             mul_carryout_in <= 0;
             mul_product_in <= 0;
             start_passthrough_1 <= 0;
             mul_round_loss_s2 <= 0;
         end
         else if(run) begin
-            mul_sign1_in    <= mul_sign1_out;
-            mul_sign2_in    <= mul_sign2_out;
-            mul_exp1_in     <= mul_exp1_out;
-            mul_exp2_in     <= mul_exp2_out;
+            if(mul_stall)
+                start_passthrough_1 <= 0;
+            else
+                start_passthrough_1 <= start_passthrough_0;
+            mul_fp1_head_s2_in <= input_x[15:10];
+            mul_fp2_head_s2_in <= mac_if.weight[15:10];
             mul_carryout_in <= mul_carryout_out;
             mul_product_in  <= mul_product_out;
-            start_passthrough_1 <= mac_if.start;
+            // start_passthrough_1 <= mac_if.start;
             mul_round_loss_s2 <= mul_round_loss_s1_out;
         end
         else begin
-            mul_sign1_in    <= mul_sign1_in;
-            mul_sign2_in    <= mul_sign2_in;
-            mul_exp1_in     <= mul_exp1_in;
-            mul_exp2_in     <= mul_exp2_in;
+            mul_fp1_head_s2_in <= mul_fp1_head_s2_in;
+            mul_fp2_head_s2_in <= mul_fp2_head_s2_in;
             mul_carryout_in <= mul_carryout_in;
             mul_product_in  <= mul_product_in;
             start_passthrough_1 <= start_passthrough_1;
@@ -131,7 +147,19 @@ module sysarr_MAC(input logic clk, input logic nRST, systolic_array_MAC_if.MAC m
     logic [4:0] mul_sum_exp;
     logic mul_ovf, mul_unf;
 
-    MUL_step2 mul2 (mul_sign1_in, mul_sign2_in, mul_exp1_in, mul_exp2_in, mul_sign_result, mul_sum_exp, mul_ovf, mul_unf, mul_carryout_in);
+    // step2 of FP multiply: Add exponents. 
+    adder_5b add_EXPs (
+        .carry(mul_carryout_in),
+        .exp1 (mul_fp1_head_s2_in[4:0]),
+        .exp2 (mul_fp2_head_s2_in[4:0]),
+        .sum  (mul_sum_exp),
+        .ovf  (mul_ovf),
+        .unf  (mul_unf)
+    );
+    assign mul_sign_result = mul_fp1_head_s2_in[5] ^ mul_fp2_head_s2_in[5];
+
+    // goodbye stupid module that just called an adder
+    // MUL_step2 mul2 (mul_sign1_in, mul_sign2_in, mul_exp1_in, mul_exp2_in, mul_sign_result, mul_sum_exp, mul_ovf, mul_unf, mul_carryout_in);
 
     //final multiplication result
     logic [15:0] mul_result;

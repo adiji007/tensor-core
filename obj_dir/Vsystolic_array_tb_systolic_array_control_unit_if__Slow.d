@@ -1,4 +1,0 @@
-Vsystolic_array_tb_systolic_array_control_unit_if__Slow.o: \
- Vsystolic_array_tb_systolic_array_control_unit_if__Slow.cpp \
- Vsystolic_array_tb__pch.h Vsystolic_array_tb__Syms.h \
- Vsystolic_array_tb_systolic_array_control_unit_if.h

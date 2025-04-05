@@ -7,6 +7,8 @@ print(sysarr_values_file)
 print(python_values_file)
 output_log_file = open(sys.argv[3], "w")
 
+mat_size = 4
+
 # Read matrices from input.txt
 with open(sysarr_values_file, "r") as f:
     sysarr_lines = f.readlines()
@@ -31,8 +33,8 @@ for i in range(0, len(sysarr_lines)):
     sysarr_line_values = list(map(float16_conv, sysarr_line_hex))
     python_line_values = list(map(float16_conv, python_line_hex))
     
-    matrix_num = i // 4
-    row_num = i % 4
+    matrix_num = i // mat_size
+    row_num = i % mat_size
 
     print(row_num)
     print(sysarr_line_hex)

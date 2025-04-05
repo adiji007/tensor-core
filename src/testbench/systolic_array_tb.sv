@@ -135,7 +135,8 @@ module systolic_array_tb();
       end
     end
   endtask
-  task get_m_output;
+
+task get_m_output;
     begin
       for (i = 0; i < N; i = i + 1) begin
         for (j = 0; j < N; j = j + 1) begin
@@ -149,6 +150,7 @@ module systolic_array_tb();
       end
     end
   endtask
+
   task load_weights();
     for (r = 0; r < N; r++)begin
       /* verilator lint_off WIDTHTRUNC */
@@ -156,6 +158,7 @@ module systolic_array_tb();
       /* verilator lint_off WIDTHTRUNC */
     end
   endtask
+
   task load_in_ps(input int delay);
     for (in = 0; in < N; in++)begin
       /* verilator lint_off WIDTHTRUNC */
@@ -201,6 +204,7 @@ module systolic_array_tb();
     end
   end
   // Test Stimulus
+   int flag;
   initial begin
     $dumpfile("dump.vcd");  // For VCD format
     $dumpvars(0, systolic_array_tb);
@@ -228,34 +232,45 @@ module systolic_array_tb();
       load_weights();
     end
     load_in_ps (.delay(1)); //delay was 1
-    repeat(N*N) @(posedge tb_clk); // last output drain
-    get_matrices(.weights(loaded_weights));
-    // load_in_ps (.delay(N));
-    row_load(.rtype(2'b01), .rinnum('d0), .rpsnum('0), .rinput(m_inputs['d0]), .rpartial('0));
-    @(posedge tb_clk);
-    row_load(.rtype(2'b01), .rinnum('d1), .rpsnum('0), .rinput(m_inputs['d1]), .rpartial('0));
-    @(posedge tb_clk);
-    row_load(.rtype(2'b01), .rinnum('d2), .rpsnum('0), .rinput(m_inputs['d2]), .rpartial('0));
-    @(posedge tb_clk);
-    row_load(.rtype(2'b01), .rinnum('d3), .rpsnum('0), .rinput(m_inputs['d3]), .rpartial('0));
-    @(posedge tb_clk);
-    row_load(.rtype(2'b10), .rinnum('0), .rpsnum('d0), .rinput('0), .rpartial(m_partials['d0]));
-    @(posedge tb_clk);
-    row_load(.rtype(2'b10), .rinnum('0), .rpsnum('d1), .rinput('0), .rpartial(m_partials['d1]));
-    @(posedge tb_clk);
-    row_load(.rtype(2'b10), .rinnum('0), .rpsnum('d2), .rinput('0), .rpartial(m_partials['d2]));
-    @(posedge tb_clk);
-    row_load(.rtype(2'b10), .rinnum('0), .rpsnum('d3), .rinput('0), .rpartial(m_partials['d3]));
-    @(posedge tb_clk);
-    repeat(N*N) @(posedge tb_clk);
-    get_matrices(.weights(loaded_weights));
-    load_in_ps (.delay(N));
-    repeat(N*(N+1)) @(posedge tb_clk); // last output drain
-    repeat(N*(N+1)) @(posedge tb_clk); // last output drain
-    repeat(N*(N+1)) @(posedge tb_clk); // last output drain
 
+    flag = 1;
+    while (flag == 1) begin
+      @(posedge tb_clk);
+      if (memory_if.fifo_has_space == 1'b1)begin
+        flag = 0;
+      end
+    end
+    // repeat(N*N) @(posedge tb_clk); // last output drain
+    get_matrices(.weights(loaded_weights));
+    load_in_ps (.delay(1));
+    flag = 1;
+    while (flag == 1) begin
+      @(posedge tb_clk);
+      if (memory_if.drained == 1'b1)begin
+        flag = 0;
+      end
+    end
     $display("array should be drained %d", memory_if.drained);
     $display("fifos should have space  %d", memory_if.fifo_has_space);
+
+    get_matrices(.weights(loaded_weights));
+    get_m_output();
+    if (loaded_weights == 1)begin
+      // LOAD WEIGHTS
+      load_weights();
+    end
+    load_in_ps (.delay(1)); //delay was 1
+
+    flag = 1;
+    while (flag == 1) begin
+      @(posedge tb_clk);
+      if (memory_if.drained == 1'b1)begin
+        flag = 0;
+      end
+    end
+    $display("array should be drained %d", memory_if.drained);
+    $display("fifos should have space  %d", memory_if.fifo_has_space);
+    
     $fclose(file);
     $fclose(out_file);
     $fclose(sysarr_dump_file);
