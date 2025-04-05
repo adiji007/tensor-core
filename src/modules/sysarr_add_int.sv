@@ -26,7 +26,7 @@ always_comb begin
         nxt_count = count + 1;
     end
     adder.value_ready = 0;
-    if (count == 3-1)begin
+    if (count == 3-1)begin // 3-1
         adder.add_output = adder.add_input1 + adder.add_input2;
         adder.value_ready = 1;
         nxt_count = 0;

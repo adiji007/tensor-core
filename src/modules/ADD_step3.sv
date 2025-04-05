@@ -23,13 +23,14 @@ module ADD_step3 (
     input unf_in,
     input dz,  // divide by zero flag
     input inv,
-    input [2:0] frm,
+    // input [2:0] frm,
     input [4:0] exponent_max_in,
     input sign_in,
     input [12:0] frac_in,
     input carry_out,
     output [15:0] floating_point_out,
-    output [4:0] flags
+    output [4:0] flags,
+    input round_loss
 );
 
     wire        inexact;
@@ -37,7 +38,7 @@ module ADD_step3 (
     // wire [ 4:0] exponent;
     // wire [9:0] frac;
 
-    // assign {sign, exponent, frac} = floating_point_out;      // I have no idea what this line was doing? It creates a combinational loop
+    // assign {sign, exponent, frac} = floating_point_out;      // I have no idea what this line was doing? It creates a combinational loop. --Vinay
 
     reg [ 4:0] exp_minus_shift_amount;
     reg [12:0] shifted_frac;
@@ -88,51 +89,25 @@ module ADD_step3 (
     logic round_flag;               // I added this. --Vinay 1/31/2025. Verilator wouldn't compile without it.
 
     //----------------------------------------------------------------------------------------------
-    // Rounding mode used: Round to Nearest, Tie to Max Magnitude (RMM)
-    logic [11:0] rounded_fraction;
+    // Rounding mode used: Round to Nearest, Tie to Even
+    logic G;
+    logic R;
+    assign G = round_this[1];
+    assign R = round_this[0];
+    logic [9:0] rounded_fraction;
     always_comb begin
-        if(round_this[1] == 1) begin
-            rounded_fraction = round_this + 1;
+        if(G & (R | round_loss | round_this[2])) begin
+            rounded_fraction = round_this[11:2] + 1;
             round_flag = 1;
         end
         else begin
-            rounded_fraction = round_this;
+            rounded_fraction = round_this[11:2];
             round_flag = 0;
         end
     end
 
-    assign round_out = {sign_in, exp_out, rounded_fraction[11:2]};
-
-    // Old rounding logic that we dont need. Copied from what used to be rounder.sv
-    // reg round_amount;
-
-    // localparam RNE = 3'b000;
-    // localparam RZE = 3'b001;    // Truncation
-    // localparam RDN = 3'b010;
-    // localparam RUP = 3'b011;
-    // localparam RMM = 3'b100;
-
-    // always_comb begin
-    //     round_amount = 0;
-    //     if (round_this[11:2] != '1) begin
-    //         if (frm == RNE) begin
-    //             if (round_this[1:0] == 2'b11) round_amount = 1;
-    //         end else if (frm == RZE) begin
-    //             round_amount = 0;
-    //         end else if (frm == RDN) begin
-    //             if (sign == 1 && ((round_this[0] == 1) || (round_this[1] == 1))) round_amount = 1;
-    //         end else if (frm == RUP) begin
-    //             if (sign == 0 && ((round_this[0] == 1) || (round_this[1] == 1))) round_amount = 1;
-    //         end else if (frm == RMM) begin
-    //             if (round_this[1] == 1) round_amount = 1;
-    //         end
-    //     end  // if (fraction[24:2] != '1)
-    // end  // always_comb
-
-    // assign round_flag   = round_amount;
-
-    
-
+    assign round_out = {sign_in, exp_out, rounded_fraction};
+ 
     //----------------------------------------------------------------------------------------------
 
 

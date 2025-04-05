@@ -20,29 +20,81 @@
 `timescale 1ns/1ps
 
 module MUL_step1 (
-    input  [15:0] fp1_in,
-    input  [15:0] fp2_in,
-    output        sign1,
-    output        sign2,
-    output [ 4:0] exp1,
-    output [ 4:0] exp2,
+    input clk, nRST, active,
+    /* verilator lint_off UNUSEDSIGNAL */
+    input [15:0] fp1_in,
+    /* verilator lint_off UNUSEDSIGNAL */
+    /* verilator lint_off UNUSEDSIGNAL */
+    input [15:0] fp2_in,
+    
     output [12:0] product,
-    output        carry_out
+    output carry_out,
+    output round_loss,
+    output mul_stall
 );
 
-    assign sign1 = fp1_in[15];
-    assign sign2 = fp2_in[15];
-    assign exp1  = fp1_in[14:10];
-    assign exp2  = fp2_in[14:10];
+    logic frac_leading_bit_fp1;
+    logic frac_leading_bit_fp2;
+    always_comb begin
+        if(fp1_in[14:10] == 5'b0)begin
+            frac_leading_bit_fp1 = 1'b0;
+        end
+        else begin
+            frac_leading_bit_fp1 = 1'b1;
+        end
 
-    mul_13b MUL (
-        .frac_in1({1'b1, fp1_in[9:0], 2'b00}),
-        .frac_in2({1'b1, fp2_in[9:0], 2'b00}),
-        .frac_out(product),
-        .overflow(carry_out)
+        if(fp2_in[14:10] == 5'b0)begin
+            frac_leading_bit_fp2 = 1'b0;
+        end
+        else begin
+            frac_leading_bit_fp2 = 1'b1;
+        end
+    end
+    
+    // Counter to drive multicycle multiplier
+    logic [3:0] count;
+    logic mul_start;
+    logic mul_stop;
+    always_ff @(posedge clk, negedge nRST) begin
+        if(nRST == 1'b0) begin
+            count <= 0;
+            mul_start <= 0;
+        end
+        else begin
+            mul_start <= 0;
+            if(count == 14) begin      
+                count <= 0;
+            end
+            else if(count == 0) begin
+                if(active == 1'b1) begin
+                    count <= count + 1;
+                    mul_start <= 1;
+                end
+            end
+            else begin
+                count <= count + 1;
+                // mul_start <= 0;
+            end
+        end
+    end
+
+    // assign mul_start = active & (count == 1);
+    assign mul_stop = (count == 0); 
+    assign mul_stall = |count;
+    logic [12:0] op1;
+    logic [12:0] op2;
+    assign op1 = {frac_leading_bit_fp1, fp1_in[9:0], 2'b00};
+    assign op2 = {frac_leading_bit_fp2, fp2_in[9:0], 2'b00};
+    mul_multicycle MUL(
+        .clk(clk),
+        .nRST(nRST),
+        .start(mul_start),
+        .stop(mul_stop),
+        .op1(op1),
+        .op2(op2),
+        .result(product),
+        .overflow(carry_out),
+        .round_loss(round_loss)
     );
 
 endmodule  // MUL_step1
-
-
-

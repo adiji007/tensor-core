@@ -68,48 +68,77 @@ module sysarr_MAC(input logic clk, input logic nRST, systolic_array_MAC_if.MAC m
     end
 
     assign run = run_latched | mac_if.start;       // This is to avoid a 1 clock cycle delay between receiving the start signal and actually starting the operation
+    assign mac_if.value_ready = ~run;
+    // always_ff @(posedge clk, negedge nRST) begin
+    //     if(nRST == 1'b0)
+    //         mac_if.value_ready <= 1'b0;
+    //     else
+    //         mac_if.value_ready <= mac_if.value_ready ? 0 : ~run;
+    // end
+
+    // assign mac_if.value_ready = ~run;
 
     // phase 1: multiply
 
     // signals connecting mul stage1 with stage2. these are registered, so need 2 signals (one coming out of stage1 going into register, the other coming out of register going into stage2)
+    // Latching the sign and exponent bits of both input values for stage2 of multiplication
+    logic [5:0] mul_fp1_head_s1_out, mul_fp1_head_s2_in;
+    logic [5:0] mul_fp2_head_s1_out, mul_fp2_head_s2_in;
+
     logic mul_sign1_out, mul_sign2_out, mul_carryout_out;
     logic mul_sign1_in, mul_sign2_in, mul_carryout_in;
     logic [4:0] mul_exp1_out, mul_exp2_out;
     logic [4:0] mul_exp1_in, mul_exp2_in;
     logic [12:0] mul_product_out;
     logic [12:0] mul_product_in;
+    logic mul_round_loss_s1_out, mul_round_loss_s2;
 
     // MUL takes in latched input_x from above
-    MUL_step1 mul1 (input_x, mac_if.weight, mul_sign1_out, mul_sign2_out, mul_exp1_out, mul_exp2_out, mul_product_out, mul_carryout_out);
+    // MUL_step1 is special in that contains a sequential multiplier. This means that other operations need to wait until it finishes, the MAC unit must not move to the next stage after just one clock cycle.
+    // It also means that it needs an enable signal. This can be on for one or more clock cycles, I dont think it matters.
+    // Since it is the very first thing in the MAC chain, i'm using mac_if.start as this enable signal.
+    // The flipflop after this should hold its values, and NOT allow the start passthrough signal to advance until the the multiply finishes (mul_stall goes low)
+    logic mul_stall;
+    MUL_step1 mul1 (clk, nRST, mac_if.start, input_x, mac_if.weight, mul_product_out, mul_carryout_out, mul_round_loss_s1_out, mul_stall);
     
+    // latching the run signal an extra time to fix a timing issue with mul_stall and mac_if.start
+    logic start_passthrough_0;
+    always_ff @(posedge clk, negedge nRST) begin
+        if(nRST == 1'b0)
+            start_passthrough_0 <= 0;
+        else
+            start_passthrough_0 <= mac_if.start | (start_passthrough_0 & mul_stall);
+    end
+
     // flipflop to connect mul stage1 and stage 2
     always_ff @(posedge clk, negedge nRST) begin
         if(nRST == 1'b0) begin
-            mul_sign1_in <= 0;
-            mul_sign2_in <= 0;
-            mul_exp1_in <= 0;
-            mul_exp2_in <= 0;
+            mul_fp1_head_s2_in <= 0;
+            mul_fp2_head_s2_in <= 0;
             mul_carryout_in <= 0;
             mul_product_in <= 0;
             start_passthrough_1 <= 0;
+            mul_round_loss_s2 <= 0;
         end
         else if(run) begin
-            mul_sign1_in    <= mul_sign1_out;
-            mul_sign2_in    <= mul_sign2_out;
-            mul_exp1_in     <= mul_exp1_out;
-            mul_exp2_in     <= mul_exp2_out;
+            if(mul_stall)
+                start_passthrough_1 <= 0;
+            else
+                start_passthrough_1 <= start_passthrough_0;
+            mul_fp1_head_s2_in <= input_x[15:10];
+            mul_fp2_head_s2_in <= mac_if.weight[15:10];
             mul_carryout_in <= mul_carryout_out;
             mul_product_in  <= mul_product_out;
-            start_passthrough_1 <= mac_if.start;
+            // start_passthrough_1 <= mac_if.start;
+            mul_round_loss_s2 <= mul_round_loss_s1_out;
         end
         else begin
-            mul_sign1_in    <= mul_sign1_in;
-            mul_sign2_in    <= mul_sign2_in;
-            mul_exp1_in     <= mul_exp1_in;
-            mul_exp2_in     <= mul_exp2_in;
+            mul_fp1_head_s2_in <= mul_fp1_head_s2_in;
+            mul_fp2_head_s2_in <= mul_fp2_head_s2_in;
             mul_carryout_in <= mul_carryout_in;
             mul_product_in  <= mul_product_in;
             start_passthrough_1 <= start_passthrough_1;
+            mul_round_loss_s2 <= mul_round_loss_s2;
         end
     end
 
@@ -118,13 +147,37 @@ module sysarr_MAC(input logic clk, input logic nRST, systolic_array_MAC_if.MAC m
     logic [4:0] mul_sum_exp;
     logic mul_ovf, mul_unf;
 
-    MUL_step2 mul2 (mul_sign1_in, mul_sign2_in, mul_exp1_in, mul_exp2_in, mul_sign_result, mul_sum_exp, mul_ovf, mul_unf, mul_carryout_in);
+    // step2 of FP multiply: Add exponents. 
+    adder_5b add_EXPs (
+        .carry(mul_carryout_in),
+        .exp1 (mul_fp1_head_s2_in[4:0]),
+        .exp2 (mul_fp2_head_s2_in[4:0]),
+        .sum  (mul_sum_exp),
+        .ovf  (mul_ovf),
+        .unf  (mul_unf)
+    );
+    assign mul_sign_result = mul_fp1_head_s2_in[5] ^ mul_fp2_head_s2_in[5];
+
+    // goodbye stupid module that just called an adder
+    // MUL_step2 mul2 (mul_sign1_in, mul_sign2_in, mul_exp1_in, mul_exp2_in, mul_sign_result, mul_sum_exp, mul_ovf, mul_unf, mul_carryout_in);
 
     //final multiplication result
     logic [15:0] mul_result;
-    logic [9:0] mul_significand_product_selected;
-    assign mul_significand_product_selected = mul_carryout_in ? mul_product_in[12:3] : mul_product_in[11:2];
-    assign mul_result = {mul_sign_result, mul_sum_exp, mul_significand_product_selected};
+    logic [11:0] mul_frac_product;
+    assign mul_frac_product = mul_carryout_in ? mul_product_in[12:1] : mul_product_in[11:0];
+
+    // this could potentially result in an edge case where if the mul significand is all 1's, rounding will cause it to become 0
+    logic [9:0] mul_significand_rounded;
+    always_comb begin
+        if(mul_frac_product[1] & (mul_frac_product[0] | mul_round_loss_s2 | mul_frac_product[2]))
+            mul_significand_rounded = mul_frac_product[11:2] + 1;
+        else
+            mul_significand_rounded = mul_frac_product[11:2];
+    end
+
+    logic [4:0] mul_final_exp;
+    assign mul_final_exp = (mul_product_in == 0) ? 0 : mul_sum_exp;
+    assign mul_result = {mul_sign_result, mul_final_exp, mul_significand_rounded};
 
 
     // phase 2: accumulate
@@ -135,8 +188,10 @@ module sysarr_MAC(input logic clk, input logic nRST, systolic_array_MAC_if.MAC m
     logic [12:0] frac_shifted_out, frac_not_shifted_out;
     logic [12:0] frac_shifted_in, frac_not_shifted_in;
     logic [4:0] add_exp_max_out, add_exp_max_in;
+    // This does not actually go through step 2 but must be latched until step3
+    logic add_round_loss_s1_out, add_round_loss_s2_in;
 
-    ADD_step1 add1 (mul_result, mac_if.in_accumulate, add_sign_shifted_out, frac_shifted_out, add_sign_not_shifted_out, frac_not_shifted_out, add_exp_max_out);
+    ADD_step1 add1 (mul_result, mac_if.in_accumulate, add_sign_shifted_out, frac_shifted_out, add_sign_not_shifted_out, frac_not_shifted_out, add_exp_max_out, add_round_loss_s1_out);
 
     // flipflop to connect add stage1 and stage2
     always_ff @(posedge clk, negedge nRST) begin
@@ -147,6 +202,7 @@ module sysarr_MAC(input logic clk, input logic nRST, systolic_array_MAC_if.MAC m
             frac_not_shifted_in     <= 0;
             add_exp_max_in          <= 0;
             start_passthrough_2 <= 0;
+            add_round_loss_s2_in <= 0;
         end
         else if(run) begin
             add_sign_shifted_in     <= add_sign_shifted_out;
@@ -155,6 +211,7 @@ module sysarr_MAC(input logic clk, input logic nRST, systolic_array_MAC_if.MAC m
             frac_not_shifted_in     <= frac_not_shifted_out;
             add_exp_max_in          <= add_exp_max_out;
             start_passthrough_2 <= start_passthrough_1;
+            add_round_loss_s2_in <= add_round_loss_s1_out; 
         end
         else begin
             add_sign_shifted_in     <= add_sign_shifted_in;
@@ -163,6 +220,7 @@ module sysarr_MAC(input logic clk, input logic nRST, systolic_array_MAC_if.MAC m
             frac_not_shifted_in     <= frac_not_shifted_in;
             add_exp_max_in          <= add_exp_max_in;
             start_passthrough_2 <= start_passthrough_2;
+            add_round_loss_s2_in <= add_round_loss_s2_in; 
         end
     end
 
@@ -171,6 +229,8 @@ module sysarr_MAC(input logic clk, input logic nRST, systolic_array_MAC_if.MAC m
     logic [12:0] add_sum_out, add_sum_in;
     logic add_carry_out, add_carry_in;
     logic [4:0] add_exp_max_s2_out, add_exp_max_s3_in;
+    // This does not actually go through step 2 but must be latched until step3
+    logic add_round_loss_s3_in;
 
     ADD_step2 add2 (frac_shifted_in, add_sign_shifted_in, frac_not_shifted_in, add_sign_not_shifted_in, add_exp_max_in, add_sign_out, add_sum_out, add_carry_out, add_exp_max_s2_out);
 
@@ -181,6 +241,7 @@ module sysarr_MAC(input logic clk, input logic nRST, systolic_array_MAC_if.MAC m
             add_carry_in            <= 0;
             add_exp_max_s3_in       <= 0;
             start_passthrough_3 <= 0;
+            add_round_loss_s3_in <= 0;
         end
         else if(run) begin
             add_sign_in             <= add_sign_out;
@@ -188,6 +249,7 @@ module sysarr_MAC(input logic clk, input logic nRST, systolic_array_MAC_if.MAC m
             add_carry_in            <= add_carry_out;
             add_exp_max_s3_in       <= add_exp_max_s2_out;
             start_passthrough_3 <= start_passthrough_2;
+            add_round_loss_s3_in <= add_round_loss_s2_in;
         end
         else begin
             add_sign_in             <= add_sign_in;
@@ -195,6 +257,7 @@ module sysarr_MAC(input logic clk, input logic nRST, systolic_array_MAC_if.MAC m
             add_carry_in            <= add_carry_in;
             add_exp_max_s3_in       <= add_exp_max_s3_in;
             start_passthrough_3 <= start_passthrough_3;
+            add_round_loss_s3_in <= add_round_loss_s3_in;
         end
     end
 //-------------------------------------------------------------------------------------
@@ -203,7 +266,7 @@ module sysarr_MAC(input logic clk, input logic nRST, systolic_array_MAC_if.MAC m
     logic [15:0] accumulate_result;
     logic [4:0] add_flags;
     // Rounding mode: truncation. Maybe should pick something else?
-    ADD_step3 add3(0, 0, 0, 0, 3'b001, add_exp_max_s3_in, add_sign_in, add_sum_in, add_carry_in, accumulate_result, add_flags);
+    ADD_step3 add3(0, 0, 0, 0, add_exp_max_s3_in, add_sign_in, add_sum_in, add_carry_in, accumulate_result, add_flags, add_round_loss_s3_in);
 
     // Check for overflow and assign the value to the interface port
     assign mac_if.out_accumulate = add_flags[2] ? 16'b0111110000000000 : accumulate_result;

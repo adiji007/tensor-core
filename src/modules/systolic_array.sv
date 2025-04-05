@@ -214,7 +214,7 @@ module systolic_array(
                 memory.array_output = current_out[row_out];
             end
             if (control_unit_if.iteration[q] > 0)begin
-                assign memory.drained = 1'b0;
+                memory.drained = 1'b0;
             end
         end
     end

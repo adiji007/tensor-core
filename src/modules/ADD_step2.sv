@@ -35,10 +35,12 @@ module ADD_step2 (
     reg [13:0] frac2_signed;
     reg [13:0] sum_signed;
 
-    always_comb begin : exp_max_assignment
-        if (sum == 0) exp_max_out = 5'b00000;
-        else exp_max_out = exp_max_in;
-    end
+    assign exp_max_out = exp_max_in;
+    // I have no idea why this existed, it seems to cause an issue where if the sum overflows perfectly the output gets set to 0. --Vinay
+    // always_comb begin : exp_max_assignment
+    //     if (sum == 0) exp_max_out = 5'b00000;
+    //     else exp_max_out = exp_max_in;
+    // end
 
     // always_comb begin
     //     case({sign1, sign2})
@@ -76,4 +78,3 @@ module ADD_step2 (
 
 
 endmodule
-

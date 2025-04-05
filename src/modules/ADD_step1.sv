@@ -23,7 +23,8 @@ module ADD_step1 (
     output logic [12:0] frac_shifted,
     output logic sign_not_shifted,
     output logic [12:0] frac_not_shifted,
-    output logic [4:0] exp_max
+    output logic [4:0] exp_max,
+    output logic rounding_loss
 );
 
     reg  [4:0]   unsigned_exp_diff;
@@ -52,22 +53,39 @@ module ADD_step1 (
         endcase
     end
     //--------------------------------------------------------------------------------------------
-    
-    
+    // Handling "implicit" 1/0 leading bit for fraction
+
+    logic frac_leading_bit_fp1;
+    logic frac_leading_bit_fp2;
+    always_comb begin
+        if(u_exp1 == 6'b0)
+            frac_leading_bit_fp1 = 1'b0;
+        else
+            frac_leading_bit_fp1 = 1'b1;
+
+        if(u_exp2 == 6'b0)
+            frac_leading_bit_fp2 = 1'b0;
+        else
+            frac_leading_bit_fp2 = 1'b1;
+    end
+
     // need to: right shift significand (fraction) of number with smaller exponent
     // Fraction format: {1'b1, fp_fraction[9:0], 2'b00}
+
     always_comb begin
         if(cmp_out == 1) begin
-            frac_shifted = {1'b1, floating_point1_in[9:0], 2'b00} >> unsigned_exp_diff;
+            frac_shifted = {frac_leading_bit_fp1, floating_point1_in[9:0], 2'b00} >> unsigned_exp_diff;
+            rounding_loss = |({frac_leading_bit_fp1, floating_point1_in[9:0], 2'b00} & ((1 << unsigned_exp_diff) - 1));    // chatgpt gave me this
             sign_shifted = floating_point1_in[15];
-            frac_not_shifted = {1'b1, floating_point2_in[9:0], 2'b00};
+            frac_not_shifted = {frac_leading_bit_fp2, floating_point2_in[9:0], 2'b00};
             sign_not_shifted = floating_point2_in[15];
             exp_max = floating_point2_in[14:10];
         end
         else begin
-            frac_shifted = {1'b1, floating_point2_in[9:0], 2'b00} >> unsigned_exp_diff;
+            frac_shifted = {frac_leading_bit_fp2, floating_point2_in[9:0], 2'b00} >> unsigned_exp_diff;
+            rounding_loss = |({frac_leading_bit_fp2, floating_point2_in[9:0], 2'b00} & ((1 << unsigned_exp_diff) - 1));
             sign_shifted = floating_point2_in[15];
-            frac_not_shifted = {1'b1, floating_point1_in[9:0], 2'b00};
+            frac_not_shifted = {frac_leading_bit_fp1, floating_point1_in[9:0], 2'b00};
             sign_not_shifted = floating_point1_in[15];
             exp_max = floating_point1_in[14:10];
         end

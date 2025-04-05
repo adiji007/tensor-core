@@ -38,7 +38,7 @@ module sysarr_MAC(
         nxt_count = count + 1;
     end
     mac_if.value_ready = 0;
-    if (count == 2+3-1)begin
+    if (count == 1+3-1)begin //1+3-1
         mac_if.out_accumulate = (input_x * mac_if.weight) + mac_if.in_accumulate;
         nxt_count = 0;
         mac_if.value_ready = 1;

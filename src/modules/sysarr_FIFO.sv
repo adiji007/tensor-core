@@ -9,39 +9,54 @@ module sysarr_FIFO(
     systolic_array_FIFO_if.FIFO fifo
 );
     // Internal storage for FIFO
-    logic [2 * DW * N - 1 : 0] fifo_mem; //need space for two arrays 2 rows of matrix rows
-    logic [2 * DW * N - 1 : 0] fifo_mem_nxt;
+    logic [DW-1:0] fifo_mem [1:0][N-1:0]; //need space for two arrays 2 rows of matrix rows
+    logic [DW-1:0] nxt_fifo_mem [1:0][N-1:0];
+    //fifo_mem_nxt[1][n][dw_bit]
+
     // write pointer
-    logic [$clog2(2 * N) : 0] wrt_ptr;
-    logic [$clog2(2 * N) : 0] wrt_ptr_nxt;
+    logic [$clog2(N)-1:0] rd_ptr;
+    logic [$clog2(N)-1:0] nxt_rd_ptr;
+    logic ld_ptr;
+    logic nxt_ld_ptr;
+    logic use_ptr;
+    logic nxt_use_ptr;
 
     always_ff @(posedge clk or negedge nRST) begin
         if (!nRST) begin
-            fifo_mem <= '0;     // Reset fifo mem to all zeros
-            wrt_ptr <= '0;
+            fifo_mem <= '{default: '{default: '0}};     // Reset fifo mem to all zeros
+            rd_ptr <= '0;
+            ld_ptr <= '0;
+            use_ptr <= '0;
         end else begin
-            fifo_mem <= fifo_mem_nxt;
-            wrt_ptr <= wrt_ptr_nxt;
+            fifo_mem <= nxt_fifo_mem;
+            rd_ptr <= nxt_rd_ptr;
+            ld_ptr <= nxt_ld_ptr;
+            use_ptr <= nxt_use_ptr;
         end
     end
     integer i;
     always_comb begin
-        fifo_mem_nxt = fifo_mem;
-        wrt_ptr_nxt = wrt_ptr;
-        fifo.out = fifo_mem[DW - 1 : 0];
+        nxt_fifo_mem = fifo_mem;
+        nxt_rd_ptr = rd_ptr;
+        nxt_ld_ptr = ld_ptr;
+        nxt_use_ptr = use_ptr;
+        fifo.out = fifo_mem[use_ptr][rd_ptr];
+        // fifo.load_values [DW*N-1:0]
         if (fifo.load) begin
-            for (i = 0; i < N; i = i + 1) begin
-                /* verilator lint_off WIDTHEXPAND */
-                fifo_mem_nxt[(N - i + wrt_ptr) * DW - 1 -: DW ] = fifo.load_values[i * DW +: DW ];
-                /* verilator lint_off WIDTHEXPAND */
+            for (i = 0; i < N; i++)begin
+                nxt_fifo_mem[ld_ptr][i] = fifo.load_values[(N-1-i) * DW +: DW];
             end
-            wrt_ptr_nxt = wrt_ptr_nxt + N;
+            nxt_ld_ptr = !ld_ptr;
         end
         if (fifo.shift)begin
-            fifo_mem_nxt = fifo_mem_nxt >> DW;    // Shift values forward 
-            if (wrt_ptr != '0) begin
-                wrt_ptr_nxt = wrt_ptr_nxt - 1;
-            end
+            nxt_rd_ptr = rd_ptr + 1;    // Shift values forward 
+        end
+        // read ptr would equal N aka we read everything
+        /* verilator lint_off WIDTHEXPAND */
+        if (nxt_rd_ptr == 0 && rd_ptr == N-1)begin
+        /* verilator lint_off WIDTHEXPAND */
+            nxt_use_ptr = !use_ptr;
+            nxt_rd_ptr = 0;
         end
     end
 
