@@ -1,18 +1,5 @@
 //By            : Joe Nasti
 //Last updated  : 11/17/2024 - reduced to 16 bit FP values for systolic array
-//
-//Module summary:
-//    First step for addition operation in three-step pipline.
-//    Shifts smaller fraction by difference in exponents
-//
-//Inputs:
-//    floating_point1/2_in - single precision floating point values
-//Outputs:
-//    sign_shifted         - sign of the floating point that gets shifted
-//    frac_shifted         - fraction of the floating point that gets shifted
-//    sign_not_shifted     - sign of the floating point that does not get shifted
-//    frac_not_shifted     - fraction of the floating point that does not get shifted
-//    exp_max              - max exponent of the two given floating points
 
 `timescale 1ns/1ps
 
@@ -29,6 +16,7 @@ module ADD_step1 (
 
     reg  [4:0]   unsigned_exp_diff;
     reg    cmp_out;
+    assign rounding_loss = 0;       // I originally had this to help with floating point rounding. Don't seem to need it though and it was increasing the critical path.
 
     // int_compare:
     // if exp1 >= exp2: cmp_out = 0
@@ -75,7 +63,7 @@ module ADD_step1 (
     always_comb begin
         if(cmp_out == 1) begin
             frac_shifted = {frac_leading_bit_fp1, floating_point1_in[9:0], 2'b00} >> unsigned_exp_diff;
-            rounding_loss = |({frac_leading_bit_fp1, floating_point1_in[9:0], 2'b00} & ((1 << unsigned_exp_diff) - 1));    // chatgpt gave me this
+            // rounding_loss = |({frac_leading_bit_fp1, floating_point1_in[9:0], 2'b00} & ((1 << unsigned_exp_diff) - 1));    // chatgpt gave me this
             sign_shifted = floating_point1_in[15];
             frac_not_shifted = {frac_leading_bit_fp2, floating_point2_in[9:0], 2'b00};
             sign_not_shifted = floating_point2_in[15];
@@ -83,7 +71,7 @@ module ADD_step1 (
         end
         else begin
             frac_shifted = {frac_leading_bit_fp2, floating_point2_in[9:0], 2'b00} >> unsigned_exp_diff;
-            rounding_loss = |({frac_leading_bit_fp2, floating_point2_in[9:0], 2'b00} & ((1 << unsigned_exp_diff) - 1));
+            // rounding_loss = |({frac_leading_bit_fp2, floating_point2_in[9:0], 2'b00} & ((1 << unsigned_exp_diff) - 1));
             sign_shifted = floating_point2_in[15];
             frac_not_shifted = {frac_leading_bit_fp1, floating_point1_in[9:0], 2'b00};
             sign_not_shifted = floating_point1_in[15];

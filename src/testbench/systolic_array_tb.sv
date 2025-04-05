@@ -16,7 +16,7 @@ module systolic_array_tb();
   logic tb_nRST;
 
   string testcase = "fp4";
-  string path_to_files = "/home/vinay/tensorcore/tensor-core/";
+  string path_to_files = "/home/asicfab/a/vpundith/tensor-core/";
   string input_filename = {"systolic_array_utils/matops_", testcase, "_encoded.txt"};
   string output_filename = {"systolic_array_utils/matops_", testcase, "_encoded_result.txt"};
   string python_output_filename = {"systolic_array_utils/matops_", testcase, "_encoded_output.txt"};
@@ -257,6 +257,7 @@ task get_m_output;
     get_m_output();
     if (loaded_weights == 1)begin
       // LOAD WEIGHTS
+      @(posedge tb_clk)           // Without this, fp6dub test case fails.
       load_weights();
     end
     load_in_ps (.delay(1)); //delay was 1
