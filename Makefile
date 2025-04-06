@@ -25,7 +25,7 @@ scratchpad:
 	vlog -sv +incdir+./src/include ./src/testbench/scratchpad_tb.sv \
 	./src/modules/scratchpad.sv \
 	./src/modules/scratchpad_bank.sv \
-	./src/modules/load_FSM.sv \
+	./src/modules/bank_access_FSM.sv \
 	./src/modules/gemm_FSM.sv \
 	./src/modules/dramstore_FSM.sv \
 	./src/modules/socetlib_fifo.sv

@@ -8,7 +8,7 @@ interface scratchpad_if;
     
     
     logic instrFIFO_WEN, psumout_en, drained, fifo_has_space, sLoad_hit, sStore_hit;
-    logic [2+MAT_S_W+ROW_S_W+WORD_W-1:0] instrFIFO_wdata;
+    instrFIFO_t instrFIFO_wdata;
     logic [ROW_S_W-1:0] psumout_row_sel_in, sLoad_row;
     logic [BITS_PER_ROW-1:0] psumout_data, load_data;
 

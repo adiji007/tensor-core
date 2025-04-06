@@ -6,11 +6,11 @@ add wave -noupdate /memory_subsystem_tb/CLK
 add wave -noupdate /memory_subsystem_tb/nRST
 add wave -noupdate -expand -group Scheduler /memory_subsystem_tb/spif/instrFIFO_WEN
 add wave -noupdate -expand -group Scheduler /memory_subsystem_tb/spif/instrFIFO_wdata
-add wave -noupdate -group {Systolic Array} /memory_subsystem_tb/spif/psumout_en
-add wave -noupdate -group {Systolic Array} /memory_subsystem_tb/spif/drained
-add wave -noupdate -group {Systolic Array} /memory_subsystem_tb/spif/fifo_has_space
-add wave -noupdate -group {Systolic Array} /memory_subsystem_tb/spif/psumout_row_sel_in
-add wave -noupdate -group {Systolic Array} /memory_subsystem_tb/spif/psumout_data
+add wave -noupdate -expand -group {Systolic Array} /memory_subsystem_tb/spif/psumout_en
+add wave -noupdate -expand -group {Systolic Array} /memory_subsystem_tb/spif/drained
+add wave -noupdate -expand -group {Systolic Array} /memory_subsystem_tb/spif/fifo_has_space
+add wave -noupdate -expand -group {Systolic Array} /memory_subsystem_tb/spif/psumout_row_sel_in
+add wave -noupdate -expand -group {Systolic Array} /memory_subsystem_tb/spif/psumout_data
 add wave -noupdate -group Arb /memory_subsystem_tb/spif/sLoad_hit
 add wave -noupdate -group Arb /memory_subsystem_tb/spif/sStore_hit
 add wave -noupdate -group Arb /memory_subsystem_tb/spif/sLoad_row
@@ -68,17 +68,16 @@ add wave -noupdate -group {cache interface} /memory_subsystem_tb/DUT/DCACHE/cif/
 add wave -noupdate -group {cache interface} /memory_subsystem_tb/DUT/DCACHE/cif/daddr
 add wave -noupdate /memory_subsystem_tb/DUT/SP/spb0/mats
 add wave -noupdate /memory_subsystem_tb/DUT/SP/spb1/mats
-add wave -noupdate -expand -subitemconfig {{/memory_subsystem_tb/DUT/SP/spb2/mats[2]} -expand} /memory_subsystem_tb/DUT/SP/spb2/mats
+add wave -noupdate /memory_subsystem_tb/DUT/SP/spb2/mats
 add wave -noupdate /memory_subsystem_tb/DUT/SP/spb3/mats
 add wave -noupdate -divider SCRATCHPAD
 add wave -noupdate /memory_subsystem_tb/DUT/SP/gemmFSM/PSFSM_state
 add wave -noupdate /memory_subsystem_tb/DUT/SP/gemmFSM/WIFSM_state
 add wave -noupdate /memory_subsystem_tb/DUT/SP/gemmFSM/weight_status
 add wave -noupdate /memory_subsystem_tb/DUT/SP/gfsmif/new_weight
-add wave -noupdate /memory_subsystem_tb/DUT/SP/loadFSM/state
-add wave -noupdate /memory_subsystem_tb/DUT/SP/lfsmif/instrFIFO_REN
+add wave -noupdate /memory_subsystem_tb/DUT/SP/gemm_mat
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {3120 ns} 0}
+WaveRestoreCursors {{Cursor 1} {2848 ns} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 191
 configure wave -valuecolwidth 215
@@ -94,4 +93,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 ns} {3455 ns}
+WaveRestoreZoom {0 ns} {4698 ns}

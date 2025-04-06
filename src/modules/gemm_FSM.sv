@@ -61,10 +61,10 @@ module gemm_FSM (
         else begin
             case(PSFSM_state)
                 WEIGHT_STALL: n_PSFSM_state = BANK0_CHECK;
-                BANK0_CHECK: n_PSFSM_state = ((spif.gemmFIFO0_rdata[69:68] == 2'd3) && (spif.gemmFIFO0_empty == 1'b0)) ? BANK0_0 : BANK1_CHECK;
-                BANK1_CHECK: n_PSFSM_state = ((spif.gemmFIFO1_rdata[69:68] == 2'd3) && (spif.gemmFIFO1_empty == 1'b0)) ? BANK1_0 : BANK2_CHECK;
-                BANK2_CHECK: n_PSFSM_state = ((spif.gemmFIFO2_rdata[69:68] == 2'd3) && (spif.gemmFIFO2_empty == 1'b0)) ? BANK2_0 : BANK3_CHECK;
-                BANK3_CHECK: n_PSFSM_state = ((spif.gemmFIFO3_rdata[69:68] == 2'd3) && (spif.gemmFIFO3_empty == 1'b0)) ? BANK3_0 : BANK0_CHECK;
+                BANK0_CHECK: n_PSFSM_state = ((spif.gemmFIFO0_rdata.mat_t == 2'd3) && (spif.gemmFIFO0_empty == 1'b0)) ? BANK0_0 : BANK1_CHECK;
+                BANK1_CHECK: n_PSFSM_state = ((spif.gemmFIFO1_rdata.mat_t == 2'd3) && (spif.gemmFIFO1_empty == 1'b0)) ? BANK1_0 : BANK2_CHECK;
+                BANK2_CHECK: n_PSFSM_state = ((spif.gemmFIFO2_rdata.mat_t == 2'd3) && (spif.gemmFIFO2_empty == 1'b0)) ? BANK2_0 : BANK3_CHECK;
+                BANK3_CHECK: n_PSFSM_state = ((spif.gemmFIFO3_rdata.mat_t == 2'd3) && (spif.gemmFIFO3_empty == 1'b0)) ? BANK3_0 : BANK0_CHECK;
                 BANK0_0: n_PSFSM_state = BANK0_1;
                 BANK0_1: n_PSFSM_state = BANK0_2;
                 BANK0_2: n_PSFSM_state = BANK0_3;
@@ -97,97 +97,97 @@ module gemm_FSM (
             BANK0_0: begin
                 spif.partial_enable = 1'b1;
                 spif.partial_sum_row_sel = 2'd0;
-                spif.partial_sum_data = spif.gemmFIFO0_rdata[63:0];
+                spif.partial_sum_data = spif.gemmFIFO0_rdata.data;
                 PSgemmFIFO0_REN = 1'b1;
             end
             BANK0_1: begin
                 spif.partial_enable = 1'b1;
                 spif.partial_sum_row_sel = 2'd1;
-                spif.partial_sum_data = spif.gemmFIFO0_rdata[63:0];
+                spif.partial_sum_data = spif.gemmFIFO0_rdata.data;
                 PSgemmFIFO0_REN = 1'b1;
             end
             BANK0_2: begin
                 spif.partial_enable = 1'b1;
                 spif.partial_sum_row_sel = 2'd2;
-                spif.partial_sum_data = spif.gemmFIFO0_rdata[63:0];
+                spif.partial_sum_data = spif.gemmFIFO0_rdata.data;
                 PSgemmFIFO0_REN = 1'b1;
             end
             BANK0_3: begin
                 spif.partial_enable = 1'b1;
                 spif.partial_sum_row_sel = 2'd3;
-                spif.partial_sum_data = spif.gemmFIFO0_rdata[63:0];
+                spif.partial_sum_data = spif.gemmFIFO0_rdata.data;
                 PSgemmFIFO0_REN = 1'b1;
             end
             BANK1_0: begin
                 spif.partial_enable = 1'b1;
                 spif.partial_sum_row_sel = 2'd0;
-                spif.partial_sum_data = spif.gemmFIFO1_rdata[63:0];
+                spif.partial_sum_data = spif.gemmFIFO1_rdata.data;
                 PSgemmFIFO1_REN = 1'b1;
             end
             BANK1_1: begin
                 spif.partial_enable = 1'b1;
                 spif.partial_sum_row_sel = 2'd1;
-                spif.partial_sum_data = spif.gemmFIFO1_rdata[63:0];
+                spif.partial_sum_data = spif.gemmFIFO1_rdata.data;
                 PSgemmFIFO1_REN = 1'b1;
             end
             BANK1_2: begin
                 spif.partial_enable = 1'b1;
                 spif.partial_sum_row_sel = 2'd2;
-                spif.partial_sum_data = spif.gemmFIFO1_rdata[63:0];
+                spif.partial_sum_data = spif.gemmFIFO1_rdata.data;
                 PSgemmFIFO1_REN = 1'b1;
             end
             BANK1_3: begin
                 spif.partial_enable = 1'b1;
                 spif.partial_sum_row_sel = 2'd3;
-                spif.partial_sum_data = spif.gemmFIFO1_rdata[63:0];
+                spif.partial_sum_data = spif.gemmFIFO1_rdata.data;
                 PSgemmFIFO1_REN = 1'b1;
             end
             BANK2_0: begin
                 spif.partial_enable = 1'b1;
                 spif.partial_sum_row_sel = 2'd0;
-                spif.partial_sum_data = spif.gemmFIFO2_rdata[63:0];
+                spif.partial_sum_data = spif.gemmFIFO2_rdata.data;
                 PSgemmFIFO2_REN = 1'b1;
             end
             BANK2_1: begin
                 spif.partial_enable = 1'b1;
                 spif.partial_sum_row_sel = 2'd1;
-                spif.partial_sum_data = spif.gemmFIFO2_rdata[63:0];
+                spif.partial_sum_data = spif.gemmFIFO2_rdata.data;
                 PSgemmFIFO2_REN = 1'b1;
             end
             BANK2_2: begin
                 spif.partial_enable = 1'b1;
                 spif.partial_sum_row_sel = 2'd2;
-                spif.partial_sum_data = spif.gemmFIFO2_rdata[63:0];
+                spif.partial_sum_data = spif.gemmFIFO2_rdata.data;
                 PSgemmFIFO2_REN = 1'b1;
             end
             BANK2_3: begin
                 spif.partial_enable = 1'b1;
                 spif.partial_sum_row_sel = 2'd3;
-                spif.partial_sum_data = spif.gemmFIFO2_rdata[63:0];
+                spif.partial_sum_data = spif.gemmFIFO2_rdata.data;
                 PSgemmFIFO2_REN = 1'b1;
             end
             BANK3_0: begin
                 spif.partial_enable = 1'b1;
                 spif.partial_sum_row_sel = 2'd0;
-                spif.partial_sum_data = spif.gemmFIFO3_rdata[63:0];
+                spif.partial_sum_data = spif.gemmFIFO3_rdata.data;
                 PSgemmFIFO3_REN = 1'b1;
             end
             BANK3_1: begin
                 spif.partial_enable = 1'b1;
                 spif.partial_sum_row_sel = 2'd1;
-                spif.partial_sum_data = spif.gemmFIFO3_rdata[63:0];
+                spif.partial_sum_data = spif.gemmFIFO3_rdata.data;
                 PSgemmFIFO3_REN = 1'b1;
             end
             BANK3_2: begin
                 spif.partial_enable = 1'b1;
                 spif.partial_sum_row_sel = 2'd2;
-                spif.partial_sum_data = spif.gemmFIFO3_rdata[63:0];
+                spif.partial_sum_data = spif.gemmFIFO3_rdata.data;
                 PSgemmFIFO3_REN = 1'b1;
             end
             BANK3_3: begin
                 spif.partial_enable = 1'b1;
                 spif.partial_sum_row_sel = 2'd3;
-                spif.partial_sum_data = spif.gemmFIFO3_rdata[63:0];
+                spif.partial_sum_data = spif.gemmFIFO3_rdata.data;
                 PSgemmFIFO3_REN = 1'b1;
             end
         endcase
@@ -203,34 +203,34 @@ module gemm_FSM (
                 WEIGHT_STALL: n_WIFSM_state = (spif.drained) ? BANK0_CHECK : WEIGHT_STALL;
                 BANK0_CHECK: begin
                     if (weight_status) begin
-                        n_WIFSM_state = ((spif.gemmFIFO0_rdata[69:68] == 2'd2) && (spif.gemmFIFO0_empty == 1'b0)) ? BANK0_0 : BANK1_CHECK;
+                        n_WIFSM_state = ((spif.gemmFIFO0_rdata.mat_t == 2'd2) && (spif.gemmFIFO0_empty == 1'b0)) ? BANK0_0 : BANK1_CHECK;
                     end
                     else begin
-                        n_WIFSM_state = ((spif.gemmFIFO0_rdata[69:68] == 2'd1) && (spif.gemmFIFO0_empty == 1'b0)) ? BANK0_0 : BANK1_CHECK;
+                        n_WIFSM_state = ((spif.gemmFIFO0_rdata.mat_t == 2'd1) && (spif.gemmFIFO0_empty == 1'b0)) ? BANK0_0 : BANK1_CHECK;
                     end
                 end
                 BANK1_CHECK: begin
                     if (weight_status) begin
-                        n_WIFSM_state = ((spif.gemmFIFO1_rdata[69:68] == 2'd2) && (spif.gemmFIFO1_empty == 1'b0)) ? BANK1_0 : BANK2_CHECK;
+                        n_WIFSM_state = ((spif.gemmFIFO1_rdata.mat_t == 2'd2) && (spif.gemmFIFO1_empty == 1'b0)) ? BANK1_0 : BANK2_CHECK;
                     end
                     else begin
-                        n_WIFSM_state = ((spif.gemmFIFO1_rdata[69:68] == 2'd1) && (spif.gemmFIFO1_empty == 1'b0)) ? BANK1_0 : BANK2_CHECK;
+                        n_WIFSM_state = ((spif.gemmFIFO1_rdata.mat_t == 2'd1) && (spif.gemmFIFO1_empty == 1'b0)) ? BANK1_0 : BANK2_CHECK;
                     end
                 end
                 BANK2_CHECK: begin
                     if (weight_status) begin
-                        n_WIFSM_state = ((spif.gemmFIFO2_rdata[69:68] == 2'd2) && (spif.gemmFIFO2_empty == 1'b0)) ? BANK2_0 : BANK3_CHECK;
+                        n_WIFSM_state = ((spif.gemmFIFO2_rdata.mat_t == 2'd2) && (spif.gemmFIFO2_empty == 1'b0)) ? BANK2_0 : BANK3_CHECK;
                     end
                     else begin
-                        n_WIFSM_state = ((spif.gemmFIFO2_rdata[69:68] == 2'd1) && (spif.gemmFIFO2_empty == 1'b0)) ? BANK2_0 : BANK3_CHECK;
+                        n_WIFSM_state = ((spif.gemmFIFO2_rdata.mat_t == 2'd1) && (spif.gemmFIFO2_empty == 1'b0)) ? BANK2_0 : BANK3_CHECK;
                     end
                 end
                 BANK3_CHECK: begin
                     if (weight_status) begin
-                        n_WIFSM_state = ((spif.gemmFIFO3_rdata[69:68] == 2'd2) && (spif.gemmFIFO3_empty == 1'b0)) ? BANK3_0 : BANK0_CHECK;
+                        n_WIFSM_state = ((spif.gemmFIFO3_rdata.mat_t == 2'd2) && (spif.gemmFIFO3_empty == 1'b0)) ? BANK3_0 : BANK0_CHECK;
                     end
                     else begin
-                        n_WIFSM_state = ((spif.gemmFIFO3_rdata[69:68] == 2'd1) && (spif.gemmFIFO3_empty == 1'b0)) ? BANK3_0 : BANK0_CHECK;
+                        n_WIFSM_state = ((spif.gemmFIFO3_rdata.mat_t == 2'd1) && (spif.gemmFIFO3_empty == 1'b0)) ? BANK3_0 : BANK0_CHECK;
                     end
                 end
                 BANK0_0: n_WIFSM_state = BANK0_1;
@@ -266,7 +266,7 @@ module gemm_FSM (
         case (WIFSM_state)
             BANK0_0: begin
                 spif.weight_input_row_sel = 2'd0;
-                spif.weight_input_data = spif.gemmFIFO0_rdata[63:0];
+                spif.weight_input_data = spif.gemmFIFO0_rdata.data;
                 WIgemmFIFO0_REN = 1'b1;
                 if (weight_status) begin
                     spif.weight_enable = 1'b1;
@@ -277,7 +277,7 @@ module gemm_FSM (
             end
             BANK0_1: begin
                 spif.weight_input_row_sel = 2'd1;
-                spif.weight_input_data = spif.gemmFIFO0_rdata[63:0];
+                spif.weight_input_data = spif.gemmFIFO0_rdata.data;
                 WIgemmFIFO0_REN = 1'b1;
                 if (weight_status) begin
                     spif.weight_enable = 1'b1;
@@ -288,7 +288,7 @@ module gemm_FSM (
             end
             BANK0_2: begin
                 spif.weight_input_row_sel = 2'd2;
-                spif.weight_input_data = spif.gemmFIFO0_rdata[63:0];
+                spif.weight_input_data = spif.gemmFIFO0_rdata.data;
                 WIgemmFIFO0_REN = 1'b1;
                 if (weight_status) begin
                     spif.weight_enable = 1'b1;
@@ -299,7 +299,7 @@ module gemm_FSM (
             end
             BANK0_3: begin
                 spif.weight_input_row_sel = 2'd3;
-                spif.weight_input_data = spif.gemmFIFO0_rdata[63:0];
+                spif.weight_input_data = spif.gemmFIFO0_rdata.data;
                 WIgemmFIFO0_REN = 1'b1;
                 if (weight_status) begin
                     spif.weight_enable = 1'b1;
@@ -311,7 +311,7 @@ module gemm_FSM (
             end
             BANK1_0: begin
                 spif.weight_input_row_sel = 2'd0;
-                spif.weight_input_data = spif.gemmFIFO1_rdata[63:0];
+                spif.weight_input_data = spif.gemmFIFO1_rdata.data;
                 WIgemmFIFO1_REN = 1'b1;
                 if (weight_status) begin
                     spif.weight_enable = 1'b1;
@@ -322,7 +322,7 @@ module gemm_FSM (
             end
             BANK1_1: begin
                 spif.weight_input_row_sel = 2'd1;
-                spif.weight_input_data = spif.gemmFIFO1_rdata[63:0];
+                spif.weight_input_data = spif.gemmFIFO1_rdata.data;
                 WIgemmFIFO1_REN = 1'b1;
                 if (weight_status) begin
                     spif.weight_enable = 1'b1;
@@ -333,7 +333,7 @@ module gemm_FSM (
             end
             BANK1_2: begin
                 spif.weight_input_row_sel = 2'd2;
-                spif.weight_input_data = spif.gemmFIFO1_rdata[63:0];
+                spif.weight_input_data = spif.gemmFIFO1_rdata.data;
                 WIgemmFIFO1_REN = 1'b1;
                 if (weight_status) begin
                     spif.weight_enable = 1'b1;
@@ -344,7 +344,7 @@ module gemm_FSM (
             end
             BANK1_3: begin
                 spif.weight_input_row_sel = 2'd3;
-                spif.weight_input_data = spif.gemmFIFO1_rdata[63:0];
+                spif.weight_input_data = spif.gemmFIFO1_rdata.data;
                 WIgemmFIFO1_REN = 1'b1;
                 if (weight_status) begin
                     spif.weight_enable = 1'b1;
@@ -356,7 +356,7 @@ module gemm_FSM (
             end
             BANK2_0: begin
                 spif.weight_input_row_sel = 2'd0;
-                spif.weight_input_data = spif.gemmFIFO2_rdata[63:0];
+                spif.weight_input_data = spif.gemmFIFO2_rdata.data;
                 WIgemmFIFO2_REN = 1'b1;
                 if (weight_status) begin
                     spif.weight_enable = 1'b1;
@@ -367,7 +367,7 @@ module gemm_FSM (
             end
             BANK2_1: begin
                 spif.weight_input_row_sel = 2'd1;
-                spif.weight_input_data = spif.gemmFIFO2_rdata[63:0];
+                spif.weight_input_data = spif.gemmFIFO2_rdata.data;
                 WIgemmFIFO2_REN = 1'b1;
                 if (weight_status) begin
                     spif.weight_enable = 1'b1;
@@ -378,7 +378,7 @@ module gemm_FSM (
             end
             BANK2_2: begin
                 spif.weight_input_row_sel = 2'd2;
-                spif.weight_input_data = spif.gemmFIFO2_rdata[63:0];
+                spif.weight_input_data = spif.gemmFIFO2_rdata.data;
                 WIgemmFIFO2_REN = 1'b1;
                 if (weight_status) begin
                     spif.weight_enable = 1'b1;
@@ -389,7 +389,7 @@ module gemm_FSM (
             end
             BANK2_3: begin
                 spif.weight_input_row_sel = 2'd3;
-                spif.weight_input_data = spif.gemmFIFO2_rdata[63:0];
+                spif.weight_input_data = spif.gemmFIFO2_rdata.data;
                 WIgemmFIFO2_REN = 1'b1;
                 if (weight_status) begin
                     spif.weight_enable = 1'b1;
@@ -401,7 +401,7 @@ module gemm_FSM (
             end
             BANK3_0: begin
                 spif.weight_input_row_sel = 2'd0;
-                spif.weight_input_data = spif.gemmFIFO3_rdata[63:0];
+                spif.weight_input_data = spif.gemmFIFO3_rdata.data;
                 WIgemmFIFO3_REN = 1'b1;
                 if (weight_status) begin
                     spif.weight_enable = 1'b1;
@@ -412,7 +412,7 @@ module gemm_FSM (
             end
             BANK3_1: begin
                 spif.weight_input_row_sel = 2'd1;
-                spif.weight_input_data = spif.gemmFIFO3_rdata[63:0];
+                spif.weight_input_data = spif.gemmFIFO3_rdata.data;
                 WIgemmFIFO3_REN = 1'b1;
                 if (weight_status) begin
                     spif.weight_enable = 1'b1;
@@ -423,7 +423,7 @@ module gemm_FSM (
             end
             BANK3_2: begin
                 spif.weight_input_row_sel = 2'd2;
-                spif.weight_input_data = spif.gemmFIFO3_rdata[63:0];
+                spif.weight_input_data = spif.gemmFIFO3_rdata.data;
                 WIgemmFIFO3_REN = 1'b1;
                 if (weight_status) begin
                     spif.weight_enable = 1'b1;
@@ -434,7 +434,7 @@ module gemm_FSM (
             end
             BANK3_3: begin
                 spif.weight_input_row_sel = 2'd3;
-                spif.weight_input_data = spif.gemmFIFO3_rdata[63:0];
+                spif.weight_input_data = spif.gemmFIFO3_rdata.data;
                 WIgemmFIFO3_REN = 1'b1;
                 if (weight_status) begin
                     spif.weight_enable = 1'b1;

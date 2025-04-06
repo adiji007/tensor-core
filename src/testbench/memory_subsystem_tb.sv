@@ -74,6 +74,7 @@ module memory_subsystem_tb;
   initial begin
     static string test_name = "Reset";
     static string major_test_name = "Reset";
+    spif.psumout_en = 1'b0;
     spif.drained = 1'b0;
     mem_init();
     test_num = 0;
@@ -139,7 +140,10 @@ module memory_subsystem_tb;
     @(negedge CLK);
     
     spif.instrFIFO_WEN = 1'b1;
-    spif.instrFIFO_wdata = {2'b01, 4'h2, 32'h00000004};
+    //spif.instrFIFO_wdata = {2'b01, 4'h2, 32'h00000004};
+    spif.instrFIFO_wdata.opcode = 2'd1;
+    spif.instrFIFO_wdata.ls_matrix_rd_gemm_new_weight = 6'h05;
+    spif.instrFIFO_wdata.ls_addr_gemm_gemm_sel = 32'h00000004;
     #(PERIOD);
     spif.instrFIFO_WEN = 1'b0;
     #(PERIOD*25);
@@ -148,17 +152,28 @@ module memory_subsystem_tb;
     @(negedge CLK);
     
     spif.instrFIFO_WEN = 1'b1;
-    spif.instrFIFO_wdata = {2'b01, 4'h6, 32'd36};
+    //spif.instrFIFO_wdata = {2'b01, 4'h6, 32'd36};\
+    spif.instrFIFO_wdata.opcode = 2'd1;
+    spif.instrFIFO_wdata.ls_matrix_rd_gemm_new_weight = 6'h15;
+    spif.instrFIFO_wdata.ls_addr_gemm_gemm_sel = 32'd36;
     #(PERIOD);
     spif.instrFIFO_WEN = 1'b0;
     #(PERIOD*25);
     spif.drained = 1'b1;
 
-    test_name = "Load Instruction 3";
+    test_name = "Load Instruction 3 / Store Instruction";
     @(negedge CLK);
     
     spif.instrFIFO_WEN = 1'b1;
-    spif.instrFIFO_wdata = {2'b01, 4'ha, 32'd68};
+    //spif.instrFIFO_wdata = {2'b01, 4'ha, 32'd68};
+    spif.instrFIFO_wdata.opcode = 2'd1;
+    spif.instrFIFO_wdata.ls_matrix_rd_gemm_new_weight = 6'h25;
+    spif.instrFIFO_wdata.ls_addr_gemm_gemm_sel = 32'd68;
+    #(PERIOD);
+    spif.instrFIFO_WEN = 1'b1;
+    spif.instrFIFO_wdata.opcode = 2'd2;
+    spif.instrFIFO_wdata.ls_matrix_rd_gemm_new_weight = 6'h15;
+    spif.instrFIFO_wdata.ls_addr_gemm_gemm_sel = 32'd100;
     #(PERIOD);
     spif.instrFIFO_WEN = 1'b0;
     #(PERIOD*25);
@@ -167,15 +182,47 @@ module memory_subsystem_tb;
     @(negedge CLK);
     
     spif.instrFIFO_WEN = 1'b1;
-    spif.instrFIFO_wdata = {2'b11, 4'b1000, 32'h0000ea62};
+    //spif.instrFIFO_wdata = {2'b11, 4'b1000, 32'h0000ea62};
+    spif.instrFIFO_wdata.opcode = 2'd3;
+    spif.instrFIFO_wdata.ls_matrix_rd_gemm_new_weight = 6'b100000;
+    spif.instrFIFO_wdata.ls_addr_gemm_gemm_sel = {8'b0, 6'h35, 6'h25, 6'h15, 6'h05};
+    #(PERIOD);
+    spif.instrFIFO_WEN = 1'b0;
+    #(PERIOD*25);
+
+    spif.psumout_en = 1'b1;
+    spif.psumout_data = 64'hffffffffffffffff;
+    spif.psumout_row_sel_in = 2'd0;
+    #(PERIOD);
+    spif.psumout_data = 64'hffffffffffffffff;
+    spif.psumout_row_sel_in = 2'd1;
+    #(PERIOD);
+    spif.psumout_data = 64'hffffffffffffffff;
+    spif.psumout_row_sel_in = 2'd2;
+    #(PERIOD);
+    spif.psumout_data = 64'hffffffffffffffff;
+    spif.psumout_row_sel_in = 2'd3;
+    #(PERIOD);
+    spif.psumout_en = 1'b0;
+    #(PERIOD*25);
+
+    test_name = "Store Instruction";
+    spif.instrFIFO_WEN = 1'b1;
+    spif.instrFIFO_wdata.opcode = 2'd2;
+    spif.instrFIFO_wdata.ls_matrix_rd_gemm_new_weight = 6'h35;
+    spif.instrFIFO_wdata.ls_addr_gemm_gemm_sel = 32'd132;
     #(PERIOD);
     spif.instrFIFO_WEN = 1'b0;
     #(PERIOD*25);
 
 
+
     // test_name = "Store Instruction";
     // spif.instrFIFO_WEN = 1'b1;
-    // spif.instrFIFO_wdata = {2'b10, 4'h2, 32'd36};
+    // //spif.instrFIFO_wdata = {2'b10, 4'h2, 32'd36};
+    // spif.opcode = 2'd2;
+    // spif.ls_matrix_rd_gemm_new_weight = 6'h25;
+    // spif.ls_addr_gemm_gemm_sel = 32'd100;
     // #(PERIOD);
     // spif.instrFIFO_WEN = 1'b0;
     // #(PERIOD*25);

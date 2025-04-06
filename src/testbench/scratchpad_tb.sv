@@ -48,7 +48,9 @@ initial begin
   @(negedge CLK);
   
   spif_tb.instrFIFO_WEN = 1'b1;
-  spif_tb.instrFIFO_wdata = {2'b01, 4'h2, 32'hf0f0f0f0};
+  spif_tb.instrFIFO_wdata.opcode = 2'd1;
+  spif_tb.instrFIFO_wdata.ls_matrix_rd_gemm_new_weight = 6'd22;
+  spif_tb.instrFIFO_wdata.ls_addr_gemm_gemm_sel = 32'hf0f0f0f0;
   @(negedge CLK);
   spif_tb.instrFIFO_WEN = 1'b0;
   #(PERIOD*5);
@@ -66,7 +68,7 @@ initial begin
   #(PERIOD*3);
   spif_tb.sLoad_hit = 1'b1;
   spif_tb.sLoad_row = 2'd2;
-  spif_tb.load_data = 64'hfffffffffffffff;
+  spif_tb.load_data = 64'hffffffffffffffff;
   @(negedge CLK);
   spif_tb.sLoad_hit = 1'b0;
   #(PERIOD*3);
@@ -80,7 +82,9 @@ initial begin
 
   test_name = "Store Instruction";
   spif_tb.instrFIFO_WEN = 1'b1;
-  spif_tb.instrFIFO_wdata = {2'b10, 4'h2, 32'hf0f0f0f0};
+  spif_tb.instrFIFO_wdata.opcode = 2'd2;
+  spif_tb.instrFIFO_wdata.ls_matrix_rd_gemm_new_weight = 6'd22;
+  spif_tb.instrFIFO_wdata.ls_addr_gemm_gemm_sel = 32'hf0f0f0f0;
   @(negedge CLK);
   spif_tb.instrFIFO_WEN = 1'b0;
   #(PERIOD*5);
@@ -104,7 +108,9 @@ initial begin
   
   spif_tb.sLoad_row = 2'd0;
   spif_tb.instrFIFO_WEN = 1'b1;
-  spif_tb.instrFIFO_wdata = {2'b01, 4'hf, 32'hf0f0f0f0};
+  spif_tb.instrFIFO_wdata.opcode = 2'd1;
+  spif_tb.instrFIFO_wdata.ls_matrix_rd_gemm_new_weight = 6'd53;
+  spif_tb.instrFIFO_wdata.ls_addr_gemm_gemm_sel = 32'hf0f0f0f0;
   @(negedge CLK);
   spif_tb.instrFIFO_WEN = 1'b0;
   #(PERIOD*5);
