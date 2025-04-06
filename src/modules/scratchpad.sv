@@ -102,6 +102,7 @@ module scratchpad (
     assign spif.store_data = dfsmif.store_data;
     assign spif.store_addr = dfsmif.store_addr;
     assign spif.sStore = dfsmif.sStore;
+    assign spif.store_complete = dfsmif.store_complete;
 
     //LoadFSMs <-> Banks
     assign bfsmif0.wFIFO_full = spbif0.wFIFO_full;

@@ -161,7 +161,7 @@ module memory_subsystem_tb;
     #(PERIOD*25);
     spif.drained = 1'b1;
 
-    test_name = "Load Instruction 3 / Store Instruction";
+    test_name = "Load Instruction 3";
     @(negedge CLK);
     
     spif.instrFIFO_WEN = 1'b1;
@@ -170,11 +170,11 @@ module memory_subsystem_tb;
     spif.instrFIFO_wdata.ls_matrix_rd_gemm_new_weight = 6'h25;
     spif.instrFIFO_wdata.ls_addr_gemm_gemm_sel = 32'd68;
     #(PERIOD);
-    spif.instrFIFO_WEN = 1'b1;
-    spif.instrFIFO_wdata.opcode = 2'd2;
-    spif.instrFIFO_wdata.ls_matrix_rd_gemm_new_weight = 6'h15;
-    spif.instrFIFO_wdata.ls_addr_gemm_gemm_sel = 32'd100;
-    #(PERIOD);
+    // spif.instrFIFO_WEN = 1'b1;
+    // spif.instrFIFO_wdata.opcode = 2'd2;
+    // spif.instrFIFO_wdata.ls_matrix_rd_gemm_new_weight = 6'h15;
+    // spif.instrFIFO_wdata.ls_addr_gemm_gemm_sel = 32'd100;
+    // #(PERIOD);
     spif.instrFIFO_WEN = 1'b0;
     #(PERIOD*25);
 
@@ -215,7 +215,34 @@ module memory_subsystem_tb;
     spif.instrFIFO_WEN = 1'b0;
     #(PERIOD*25);
 
+    major_test_name = "B2B";
+    test_name = "GEMM->Store";
+    spif.instrFIFO_WEN = 1'b1;
+    spif.instrFIFO_wdata.opcode = 2'd3;
+    spif.instrFIFO_wdata.ls_matrix_rd_gemm_new_weight = 6'b100000;
+    spif.instrFIFO_wdata.ls_addr_gemm_gemm_sel = {8'b0, 6'h35, 6'h25, 6'h15, 6'h05};
+    #(PERIOD);
+    spif.instrFIFO_WEN = 1'b1;
+    spif.instrFIFO_wdata.opcode = 2'd2;
+    spif.instrFIFO_wdata.ls_matrix_rd_gemm_new_weight = 6'h35;
+    spif.instrFIFO_wdata.ls_addr_gemm_gemm_sel = 32'd164;
+    #(PERIOD);
+    spif.instrFIFO_WEN = 1'b0;
+    #(PERIOD*25);
 
+    test_name = "Store->GEMM";
+    spif.instrFIFO_WEN = 1'b1;
+    spif.instrFIFO_wdata.opcode = 2'd2;
+    spif.instrFIFO_wdata.ls_matrix_rd_gemm_new_weight = 6'h35;
+    spif.instrFIFO_wdata.ls_addr_gemm_gemm_sel = 32'd196;
+    #(PERIOD);
+    spif.instrFIFO_WEN = 1'b1;
+    spif.instrFIFO_wdata.opcode = 2'd3;
+    spif.instrFIFO_wdata.ls_matrix_rd_gemm_new_weight = 6'b100000;
+    spif.instrFIFO_wdata.ls_addr_gemm_gemm_sel = {8'b0, 6'h35, 6'h25, 6'h15, 6'h05};
+    #(PERIOD);
+    spif.instrFIFO_WEN = 1'b0;
+    #(PERIOD*25);
 
     // test_name = "Store Instruction";
     // spif.instrFIFO_WEN = 1'b1;
