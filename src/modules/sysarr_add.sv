@@ -55,7 +55,7 @@ module sysarr_add (
     // This does not actually go through step 2 but must be latched until step3
     logic add_round_loss_s1_out, add_round_loss_s2_in;
 
-    ADD_step1 add1 (adder.add_input1, adder.add_input2, add_sign_shifted_out, frac_shifted_out, add_sign_not_shifted_out, frac_not_shifted_out, add_exp_max_out, add_round_loss_s1_out);
+    ADD_step1 add1 (input1_latched, input2_latched, add_sign_shifted_out, frac_shifted_out, add_sign_not_shifted_out, frac_not_shifted_out, add_exp_max_out, add_round_loss_s1_out);
 
     // flipflop to connect add stage1 and stage2
     always_ff @(posedge clk, negedge nRST) begin

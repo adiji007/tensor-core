@@ -15,7 +15,7 @@ module systolic_array_tb();
   // clk/reset
   logic tb_nRST;
 
-  string testcase = "fp4";
+  string testcase = "fp6dub";
   string path_to_files = "/home/asicfab/a/vpundith/tensor-core/";
   string input_filename = {"systolic_array_utils/matops_", testcase, "_encoded.txt"};
   string output_filename = {"systolic_array_utils/matops_", testcase, "_encoded_result.txt"};
