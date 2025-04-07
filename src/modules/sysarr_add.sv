@@ -12,7 +12,7 @@ module sysarr_add (
 );
 
     logic run_latched;
-    logic start_passthrough_2, start_passthrough_3;    //, start_passthrough_4, start_passthrough_final;
+    logic start_passthrough_1, start_passthrough_2, start_passthrough_3;    //, start_passthrough_4, start_passthrough_final;
     logic run;
 
     always_ff @(posedge clk, negedge nRST) begin    // "latching" enable signal
@@ -21,6 +21,26 @@ module sysarr_add (
         end
         else begin
             run_latched <= (run_latched | adder.start) & ~start_passthrough_3;
+        end
+    end
+
+    // Latch inputs to reduce critical path between PS FIFO and add stage1
+    logic [15:0] input1_latched, input2_latched;
+    always_ff @(posedge clk, negedge nRST) begin
+        if(nRST == 1'b0) begin
+            input1_latched <= 0;
+            input2_latched <= 0;
+            start_passthrough_1 <= 0;
+        end
+        else if (run) begin
+            input1_latched <= adder.add_input1;
+            input2_latched <= adder.add_input2;
+            start_passthrough_1 <= adder.start;
+        end
+        else begin
+            input1_latched <= input1_latched;
+            input2_latched <= input2_latched;
+            start_passthrough_1 <= start_passthrough_1;
         end
     end
 
@@ -54,7 +74,7 @@ module sysarr_add (
             frac_shifted_in         <= frac_shifted_out;
             frac_not_shifted_in     <= frac_not_shifted_out;
             add_exp_max_in          <= add_exp_max_out;
-            start_passthrough_2 <= adder.start;
+            start_passthrough_2 <= start_passthrough_1;
             add_round_loss_s2_in <= add_round_loss_s1_out; 
         end
         else begin
