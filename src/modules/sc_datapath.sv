@@ -148,7 +148,7 @@ module sc_datapath
     assign ex_out.load_wdat     = eif.eif_output.sls_dmemload;
     assign ex_out.load_reg_sel  = eif.eif_output.sls_rd;
     assign ex_out.spec          = eif.eif_output.spec;
-    assign ex_out.jump_done     = eif.eif_output.fu_ex[2];
+    assign ex_out.jump_done     = eif.eif_output.fu_ex[2] && (!(eif.eif_output.jump_wdat == 0));
     assign ex_out.jump_wdat     = eif.eif_output.jump_wdat;
     assign ex_out.jump_reg_sel  = eif.eif_output.jump_rd;
 
