@@ -95,8 +95,12 @@ add wave -noupdate -expand -group ALU /sc_datapath_tb/DUT/EXECUTE/SALU/aluif/alu
 add wave -noupdate -expand -group ALU /sc_datapath_tb/DUT/EXECUTE/SALU/aluif/port_a
 add wave -noupdate -expand -group ALU /sc_datapath_tb/DUT/EXECUTE/SALU/aluif/port_b
 add wave -noupdate -expand -group ALU /sc_datapath_tb/DUT/EXECUTE/SALU/aluif/port_output
+add wave -noupdate /sc_datapath_tb/DUT/SCOREBOARD/DI/held_fetch
+add wave -noupdate /sc_datapath_tb/DUT/SCOREBOARD/DI/held_flag
+add wave -noupdate /sc_datapath_tb/DUT/SCOREBOARD/DI/n_held_fetch
+add wave -noupdate /sc_datapath_tb/DUT/SCOREBOARD/DI/n_held_flag
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {261650 ps} 0}
+WaveRestoreCursors {{Cursor 1} {101980 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 150
 configure wave -valuecolwidth 100
@@ -112,4 +116,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ps
 update
-WaveRestoreZoom {30870 ps} {398370 ps}
+WaveRestoreZoom {0 ps} {367500 ps}

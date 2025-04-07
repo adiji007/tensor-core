@@ -213,7 +213,8 @@ package datapath_pkg;
   typedef struct packed {
     logic s_rw_en;
     regbits_t s_rw;
-    logic m_rw_en;
+    logic m_load_done;
+    logic gemm_done;
     matbits_t m_rw; // still need m_rw in wb for dispatch loopback to clear RST
     // logic load_done;  // Load Done Signal for Score Board
     // logic alu_done;   // Alu Done Signal for Score Board

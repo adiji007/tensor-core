@@ -104,7 +104,7 @@ module issue(
       fusif.busy[0]  = (fust_state[0] == FUST_EX && (next_fust_state[0] == FUST_EMPTY || next_fust_state[0] == FUST_WAIT)) ? 1'd0 : next_fust_state[0] != FUST_EMPTY;
       fusif.busy[1]  = (fust_state[1] == FUST_EX && (next_fust_state[1] == FUST_EMPTY || next_fust_state[1] == FUST_WAIT)) ? 1'd0 : next_fust_state[1] != FUST_EMPTY;
       fusif.busy[2]  = (fust_state[2] == FUST_EX && (next_fust_state[2] == FUST_EMPTY || next_fust_state[2] == FUST_WAIT)) ? 1'd0 : next_fust_state[2] != FUST_EMPTY;
-      
+     
       // TODO
       // could be writing the flush bits here as well if not in the dispatch,
       // like how busy is being written independent of the rows that dispatch
@@ -267,11 +267,22 @@ module issue(
             next_fust_state[i] = incoming_instr[i] ? FUST_WAIT : FUST_EMPTY;
           end
           FUST_WAIT: begin
-            if (n_rdy[i])
-              next_fust_state[i] = ((n_rdy[i] == next_oldest_rdy[i]) || (next_single_ready)) ? FUST_EX : FUST_RDY;
+            if (n_rdy[i]) begin
+              if ((i==3 || i==4) && isif.dispatch.spec) begin
+                next_fust_state[i] = FUST_RDY;
+              end 
+              else begin
+                next_fust_state[i] = ((n_rdy[i] == next_oldest_rdy[i]) || (next_single_ready)) ? FUST_EX : FUST_RDY;
+              end
+            end
           end
           FUST_RDY: begin
-            next_fust_state[i] = ((next_oldest_rdy[i]) || (single_ready)) ? FUST_EX : FUST_RDY;
+            if ((i==3 || i==4) && isif.dispatch.spec) begin
+                next_fust_state[i] = FUST_RDY;
+            end 
+            else begin 
+              next_fust_state[i] = ((next_oldest_rdy[i]) || (single_ready)) ? FUST_EX : FUST_RDY;
+            end
           end
           FUST_EX: begin
 
@@ -295,7 +306,12 @@ module issue(
             else if ((isif.fu_ex[2] == 1'b1) && (i == 2)) begin
               next_fust_state[i] = incoming_instr[i] ? FUST_WAIT : FUST_EMPTY;
             end
-
+            else if ((isif.fu_ex[3] == 1'b1) && (i == 3)) begin
+              next_fust_state[i] = incoming_instr[i] ? FUST_WAIT : FUST_EMPTY;
+            end
+            else if ((isif.fu_ex[4] == 1'b1) && (i == 4)) begin
+              next_fust_state[i] = incoming_instr[i] ? FUST_WAIT : FUST_EMPTY;
+            end
 
             //TODO: handle dones from branch and matrix FUs
 

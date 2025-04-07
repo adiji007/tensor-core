@@ -179,7 +179,7 @@ module control_unit(
                 cu_if.imm = {{22{instr[17]}}, instr[16:7]};
                 // cu_if.i_flag = '1;
                 // cu_if.alu_op = ALU_ADD;
-                cu_if.stride = instr[22:18]; // register
+                // cu_if.stride = instr[22:18]; // register
                 cu_if.fu_m = FU_M_LD_ST;
                 cu_if.m_mem_type = M_LOAD;
                 cu_if.matrix_rd = instr[31:28];
@@ -189,7 +189,7 @@ module control_unit(
         ST_M: //st.m
             begin
                 cu_if.imm = {{22{instr[17]}}, instr[16:7]};
-                cu_if.stride = instr[22:18]; // register
+                // cu_if.stride = instr[22:18]; // register
                 cu_if.fu_m = FU_M_LD_ST;
                 cu_if.m_mem_type = M_STORE;
                 cu_if.matrix_rd = instr[31:28];

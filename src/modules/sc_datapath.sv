@@ -59,7 +59,8 @@ module sc_datapath
 
     // input
     assign fif.imemload        = dcif.imemload;  // from mem
-    assign fif.freeze          = sbif.freeze || sbif.jump;
+    assign fif.freeze          = sbif.freeze;
+    assign fif.jump            = sbif.jump;
     assign fif.misprediction   = eif.eif_output.bfu_miss;
     assign fif.correct_pc      = eif.eif_output.bfu_correct_pc;
     assign fif.update_btb      = eif.eif_output.bfu_update_btb;
@@ -78,15 +79,16 @@ module sc_datapath
     // sb signals
 
     // inputs
-    assign sbif.fetch                 = sb_in;
-    assign sbif.wb_issue              = wbif.wb_out;
-    assign sbif.wb_dispatch.s_rw_en   = wbif.wb_out.reg_en;
-    assign sbif.wb_dispatch.s_rw      = wbif.wb_out.reg_sel;
-    assign sbif.wb_dispatch.m_rw_en   = '0; // these need logc from memory, saying m_reg can be cleared from rsts
-    assign sbif.wb_dispatch.m_rw      = '0; // these need logc from memory, saying which m_reg can be cleared from rsts
-    assign sbif.branch_miss           = eif.eif_output.bfu_miss;
-    assign sbif.branch_resolved       = eif.eif_output.bfu_resolved;
-    assign sbif.fu_ex                 = eif.eif_output.fu_ex;
+    assign sbif.fetch                  = sb_in;
+    assign sbif.wb_issue               = wbif.wb_out;
+    assign sbif.wb_dispatch.s_rw_en    = wbif.wb_out.reg_en;
+    assign sbif.wb_dispatch.s_rw       = wbif.wb_out.reg_sel;
+    assign sbif.wb_dispatch.gemm_done  = '0; // these need logc from memory, saying m_reg can be cleared from rsts
+    assign sbif.wb_dispatch.m_load_done  = '0; // these need logc from memory, saying m_reg can be cleared from rsts
+    assign sbif.wb_dispatch.m_rw       = '0; // these need logc from memory, saying which m_reg can be cleared from rsts
+    assign sbif.branch_miss            = eif.eif_output.bfu_miss;
+    assign sbif.branch_resolved        = eif.eif_output.bfu_resolved;
+    assign sbif.fu_ex                  = eif.eif_output.fu_ex;
 
     // outputs
     // assign sb_out = sbif.out;

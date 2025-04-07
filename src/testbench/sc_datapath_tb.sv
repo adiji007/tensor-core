@@ -216,8 +216,17 @@ program test(input logic CLK, output logic nrst, datapath_cache_if.tb dcif);
         @(posedge CLK);
         tb_test_case = "LW";
         itype_lw_instr(5'd12, 5'd15, 12'd16);
-        tb_test_case = "ADDI";
-        itype_instr(5'd11, 5'd13, 'd125, ADDI);
+        tb_test_case = "LW 2";
+        itype_lw_instr(5'd18, 5'd19, 12'd20);
+
+        repeat (7) @(posedge CLK);
+        dcif.dhit = 1'b1;
+        dcif.dmemload = 'd135;
+        @(posedge CLK);
+
+        dcif.dhit = 1'b0;
+        dcif.dmemload = '0;
+        @(posedge CLK);
 
         repeat (7) @(posedge CLK);
         dcif.dhit = 1'b1;
@@ -228,9 +237,9 @@ program test(input logic CLK, output logic nrst, datapath_cache_if.tb dcif);
         dcif.dmemload = '0;
         @(posedge CLK);
         
-        // tb_test_case = "JTYPE";
-        // jtype_instr(5'd20, 'd110);
-        // repeat (3) @(posedge CLK);
+        tb_test_case = "JTYPE";
+        jtype_instr(5'd20, 'd110);
+        repeat (3) @(posedge CLK);
 
         tb_test_case = "BEQ";
         btype_instr(11, 12, BEQ, 13'hBAC);
@@ -238,7 +247,7 @@ program test(input logic CLK, output logic nrst, datapath_cache_if.tb dcif);
 
         tb_test_case = "ADDI";
         itype_instr(5, 7, 12'h0A0, ADDI);
-        repeat (10) @(posedge CLK);
+        // repeat (10) @(posedge CLK);
 
         tb_test_case = "ADDI 2";
         itype_instr(6, 7, 12'h0B0, ADDI);
