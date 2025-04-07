@@ -314,7 +314,7 @@ package datapath_pkg;
     logic bfu_resolved;        // to sb and wb, combinationally - correct
     logic bfu_miss;            // to fetch, sb, and wb, combinationally - mispredict
     regbits_t jump_rd;
-    word_t jump_dest;
+    // word_t jump_dest;
     word_t jump_wdat;
 
     // Scalar ALU FU
