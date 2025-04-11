@@ -7,6 +7,9 @@ interface fust_g_if;
 
   // Inputs from dispatch
   logic en;
+  logic [1:0] t1;
+  logic [1:0] t2;
+  logic [1:0] t3;
   //logic fu; //dont need op idx with 1 row in FUST
   fust_g_row_t fust_row;
 
@@ -17,7 +20,7 @@ interface fust_g_if;
   fust_g_t fust;
     
   modport FUSTG (
-      input en, fust_row, busy,
+      input en, fust_row, busy, t1, t2, t3,
       output fust
   );
 

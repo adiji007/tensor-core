@@ -156,31 +156,36 @@ program test (
         reset_dut();
 
         @(posedge CLK);
+        
+        // matrix instructions 
+        
 
-        rtype_instr(RTYPE, 5'd11, 5'd12, 5'd13, ADD_SUB, ADD);
+
+
+        // rtype_instr(RTYPE, 5'd11, 5'd12, 5'd13, ADD_SUB, ADD);
+        // // sbif.fetch = '0;
+        // // @(posedge CLK);
+        // rtype_instr(RTYPE, 5'd15, 5'd14, 5'd16, ADD_SUB, ADD);
         // sbif.fetch = '0;
+
         // @(posedge CLK);
-        rtype_instr(RTYPE, 5'd15, 5'd14, 5'd16, ADD_SUB, ADD);
-        sbif.fetch = '0;
+        // @(posedge CLK);
+        // @(posedge CLK);
 
-        @(posedge CLK);
-        @(posedge CLK);
-        @(posedge CLK);
+        // sbif.fu_ex[0] = 1'b1;
+        // @(posedge CLK);
 
-        sbif.fu_ex[0] = 1'b1;
-        @(posedge CLK);
+        // sbif.fu_ex[0] = 1'b0;
 
-        sbif.fu_ex[0] = 1'b0;
+        // @(posedge CLK);
+        // @(posedge CLK);
+        // @(posedge CLK);
+        // @(posedge CLK);
 
-        @(posedge CLK);
-        @(posedge CLK);
-        @(posedge CLK);
-        @(posedge CLK);
+        // sbif.fu_ex[0] = 1'b1;
+        // @(posedge CLK);
 
-        sbif.fu_ex[0] = 1'b1;
-        @(posedge CLK);
-
-        sbif.fu_ex[0] = 1'b0;
+        // sbif.fu_ex[0] = 1'b0;
 
         // @(posedge CLK);
         // utype_instr(5'd27, 'h44);

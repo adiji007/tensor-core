@@ -167,7 +167,7 @@ module sc_datapath
     assign wbif.alu_wdat           = wb_in.alu_wdat;
     assign wbif.load_wdat          = wb_in.load_wdat;
     assign wbif.jump_wdat          = wb_in.jump_wdat;
-    assign wbif.branch_mispredict  = eif.eif_output.bfu_miss;
+    assign wbif.branch_mispredict  = eif.eif_output.bfu_miss; // need to double check this
     assign wbif.branch_spec        = wb_in.spec;
     assign wbif.branch_correct     = eif.eif_output.bfu_resolved;
     assign wbif.alu_done           = wb_in.alu_done;

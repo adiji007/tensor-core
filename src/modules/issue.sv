@@ -116,21 +116,28 @@ module issue(
 
       fumif.en       = isif.n_fust_m_en;
       fumif.fust_row = isif.n_fust_m;
-      fumif.busy     = next_fust_state[3] != FUST_EMPTY;
+      fumif.busy     = (fust_state[3] == FUST_EX && (next_fust_state[3] == FUST_EMPTY || next_fust_state[3] == FUST_WAIT)) ? 1'd0 : next_fust_state[3] != FUST_EMPTY;
+
+      fumif.t1 = isif.n_mt1;
 
       fugif.en       = isif.n_fust_g_en;
       fugif.fust_row = isif.n_fust_g;
-      fugif.busy     = next_fust_state[4] != FUST_EMPTY;
+      fugif.busy     = (fust_state[4] == FUST_EX && (next_fust_state[4] == FUST_EMPTY || next_fust_state[4] == FUST_WAIT)) ? 1'd0 : next_fust_state[4] != FUST_EMPTY;
 
-      fusif.flush = 1'b0;
+      fugif.t1 = isif.n_gt1;
+      fugif.t2 = isif.n_gt2;
+      fugif.t3 = isif.n_gt3;
 
-      if (isif.branch_miss) begin
-        fusif.flush = 1'b1;
-      //  then flush fusif.fust.op[i], easiest way is
-      //  probably adding a flush bit to the fusif.fust.op[]
-      //  and let the fust_s clear its rows with that bit asserted
-      //  since fusif.fust.op can only write one row at a time
-      end
+      fusif.flush = (isif.branch_miss) ? 1'b1 : 1'b0;
+
+      // if (isif.branch_miss) begin
+      //   fusif.flush = 1'b1;
+      // //  then flush fusif.fust.op[i], easiest way is
+      // //  probably adding a flush bit to the fusif.fust.op[]
+      // //  and let the fust_s clear its rows with that bit asserted
+      // //  since fusif.fust.op can only write one row at a time
+      // end
+      
     end
 
     always_ff @ (posedge CLK, negedge nRST) begin: Age_Latch
@@ -218,9 +225,9 @@ module issue(
             if (i < 3) begin // Scalar FUST
               n_rdy[i] = (!(|fusif.fust.t1[i]) && !(|fusif.fust.t2[i]));
             end else if (i == 3) begin // Matrix LD/ST FUST
-              n_rdy[i] = (!(|fumif.fust.op.t1) && !(|fumif.fust.op.t2));
+              n_rdy[i] = (!(|fumif.fust.t1));
             end else if (i == 4) begin // GEMM FUST
-              n_rdy[i] = (!(|fugif.fust.op.t1) && !(|fugif.fust.op.t2) && !(|fugif.fust.op.t3));
+              n_rdy[i] = (!(|fugif.fust.t1) && !(|fugif.fust.t2) && !(|fugif.fust.t3));
             end
           end
           // I think just let FUST_RDY state get its rdy bit resolved in EX if
@@ -385,8 +392,9 @@ module issue(
             issue.j_type = fusif.fust.op[i].j_type;
           end else if (i == 3) begin // mls
             // TODO: need to figure these out, not sure rn
+            issue.md  = fugif.fust.op.md;
             s_rs1 = fumif.fust.op.rs1;
-            s_rs2 = fumif.fust.op.rs2;
+            // s_rs2 = fumif.fust.op.rs2;
             issue.fu_en[i] = 1'b1;
             imm = fumif.fust.op.imm;
           end else if (i == 4) begin // gemm

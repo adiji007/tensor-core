@@ -40,9 +40,9 @@ interface dispatch_if;
     logic [2:0][1:0] n_t1;
     logic [2:0][1:0] n_t2;
 
-    logic n_gt1;
-    logic n_gt2;
-    logic n_gt3;
+    logic [1:0] n_gt1;
+    logic [1:0] n_gt2;
+    logic [1:0] n_gt3;
 
     logic [1:0] n_mt1;
 

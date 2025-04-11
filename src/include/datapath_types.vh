@@ -125,10 +125,8 @@ package datapath_pkg;
   typedef struct packed {
     matbits_t rd;
     regbits_t rs1;
-    regbits_t rs2; // stride
+    // regbits_t rs2; // stride
     word_t imm;
-    fu_mbits_t t1;
-    fu_mbits_t t2;
     matrix_mem_t mem_type;
     // fu_sbits_t t3;
   } fust_m_row_t;
@@ -136,6 +134,7 @@ package datapath_pkg;
   typedef struct packed {
     logic busy;
     fust_m_row_t op;
+    logic [1:0] t1;
   } fust_m_t;
 
   typedef struct packed {
@@ -143,14 +142,14 @@ package datapath_pkg;
     matbits_t ms1;
     matbits_t ms2;
     matbits_t ms3;
-    fu_mbits_t t1;
-    fu_mbits_t t2;
-    fu_mbits_t t3;
   } fust_g_row_t;
 
   typedef struct packed {
     logic busy;
     fust_g_row_t op;
+    logic [1:0] t1;
+    logic [1:0] t2;
+    logic [1:0] t3;
   } fust_g_t;
 
   /*************
