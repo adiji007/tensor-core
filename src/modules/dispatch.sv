@@ -195,13 +195,13 @@ module dispatch(
       end
 
       if (diif.wb.gemm_done) begin // done gemm or done ml
-        rstmif.wb_sel = diif.wb.m_rw_gemm;
+        rstmif.wb_sel = dispatch.fust_g.op.md;
         rstmif.wb_write = '1;
         // rstmif.wb_write = '0;
       end
 
       if (diif.wb.m_load_done) begin // done gemm or done ml
-        rstmif.wb_sel = diif.wb.m_rw_ld;
+        rstmif.wb_sel = dispatch.fust_m.op.md;
         rstmif.wb_write = '1;
         // rstmif.wb_write = '0;
       end
