@@ -177,12 +177,18 @@ program test(input logic CLK, output logic nrst, datapath_cache_if.tb dcif);
         input opcode_t opcode;
         input matbits_t rd;
         input regbits_t rs1;     // reg file register that holds location of matrix wanted
-        input regbits_t stride;  // offset
         input logic [10:0] imm;
         input word_t imemaddr;
         begin
-            dcif.imemload = {rd, rs1, stride, imm[10:0], opcode};
-            @(posedge CLK);
+            if (dcif.imemREN == 1'b1) begin
+                @(posedge CLK);
+                dcif.imemload = {rd, rs1, 5'd0, imm[10:0], opcode};
+                dcif.ihit = 1'b1;
+                @(posedge CLK);
+                dcif.imemload = '0;
+                dcif.ihit = 1'b0;
+                @(posedge CLK);
+            end
         end
     endtask
 
@@ -194,8 +200,15 @@ program test(input logic CLK, output logic nrst, datapath_cache_if.tb dcif);
         input matbits_t rc;
         input word_t imemaddr;
         begin
-            dcif.imemload = {rd, ra, rb, rc, 9'd0, opcode};
-            @(posedge CLK);
+            if (dcif.imemREN == 1'b1) begin
+                @(posedge CLK);
+                dcif.imemload = {rd, ra, rb, rc, 9'd0, opcode};
+                dcif.ihit = 1'b1;
+                @(posedge CLK);
+                dcif.imemload = '0;
+                dcif.ihit = 1'b0;
+                @(posedge CLK);
+            end
         end
     endtask
 
