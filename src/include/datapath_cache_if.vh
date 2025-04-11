@@ -27,25 +27,27 @@ interface datapath_cache_if;
   word_t              dmemload, dmemstore, dmemaddr;
 
 // Scratchpad signals
-  logic mhit;
+  logic mhit; // -> could change this to be 1 for load done, 2 for store done
   matrix_ls_t         matrix_ls;
   logic gemm_done;
+  logic m_ld_done; // needed?
 
-  // logic gemm_done;
   logic               gemm_new_weight; 
   fu_gemm_t           gemm_matrices; 
 
   // datapath ports
   modport dp (
-    input   ihit, imemload, dhit, dmemload, mhit, gemm_done,
+    input   ihit, imemload, dhit, dmemload, mhit,  
+    input   m_ld_done, gemm_done,
     output  halt, imemREN, imemaddr, dmemREN, dmemWEN,
             dmemstore, dmemaddr, matrix_ls, gemm_new_weight,
             gemm_matrices
   );
 
   modport tb (
-    output   ihit, imemload, dhit, dmemload, mhit, gemm_done,
-    input  halt, imemREN, imemaddr, dmemREN, dmemWEN,
+    output  ihit, imemload, dhit, dmemload, mhit,
+    output  m_ld_done, gemm_done,
+    input   halt, imemREN, imemaddr, dmemREN, dmemWEN,
             dmemstore, dmemaddr, matrix_ls, gemm_new_weight,
             gemm_matrices
   );
