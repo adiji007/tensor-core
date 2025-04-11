@@ -330,19 +330,20 @@ module issue(
             // TODO: need stall signals for the execute FUs if next_fust_state
             // is stalled in EX
 
-            // TODO TODO TODO
-            if ((i == 0 & (fusif.fust.t1[1] == 2'd0 | fusif.fust.t2[1] == 2'd0)) &
-                (fust_state[1] == FUST_WAIT | fust_state[1] == FUST_RDY) &
-                age[1] > age[0]) begin
-              // stall ALU from writing
-              next_fust_state[i] = FUST_EX;
-            end
-            if ((i == 1 & (fusif.fust.t1[0] == 2'd1 | fusif.fust.t2[0] == 2'd1) &&
-                (fust_state[0] == FUST_WAIT | fust_state[0] == FUST_RDY) &&
-                age[0] > age[1])) begin
-              // stall LD/ST from writing
-              next_fust_state[i] = FUST_EX;
-            end
+            // WAR not needed as if 4/11/25
+            
+            // if ((i == 0 & (fusif.fust.t1[1] == 2'd0 | fusif.fust.t2[1] == 2'd0)) &
+            //     (fust_state[1] == FUST_WAIT | fust_state[1] == FUST_RDY) &
+            //     age[1] > age[0]) begin
+            //   // stall ALU from writing
+            //   next_fust_state[i] = FUST_EX;
+            // end
+            // if ((i == 1 & (fusif.fust.t1[0] == 2'd1 | fusif.fust.t2[0] == 2'd1) &&
+            //     (fust_state[0] == FUST_WAIT | fust_state[0] == FUST_RDY) &&
+            //     age[0] > age[1])) begin
+            //   // stall LD/ST from writing
+            //   next_fust_state[i] = FUST_EX;
+            // end
             
 
           end
