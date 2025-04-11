@@ -185,6 +185,7 @@ module control_unit(
                 cu_if.matrix_rd = instr[31:28];
                 cu_if.m_reg_write = '1;
                 cu_if.fu_t = FU_M_T;
+                cu_if.i_flag = '1;
             end
         ST_M: //st.m
             begin
@@ -194,6 +195,7 @@ module control_unit(
                 cu_if.m_mem_type = M_STORE;
                 cu_if.matrix_rd = instr[31:28];
                 cu_if.fu_t = FU_M_T;
+                cu_if.i_flag = '1;
             end
         GEMM: // gemm.m
             begin

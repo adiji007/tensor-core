@@ -123,7 +123,7 @@ package datapath_pkg;
   } fust_s_t;
 
   typedef struct packed {
-    matbits_t rd;
+    matbits_t md;
     regbits_t rs1;
     // regbits_t rs2; // stride
     word_t imm;
@@ -138,10 +138,10 @@ package datapath_pkg;
   } fust_m_t;
 
   typedef struct packed {
-    matbits_t md;
     matbits_t ms1;
     matbits_t ms2;
     matbits_t ms3;
+    matbits_t md;
   } fust_g_row_t;
 
   typedef struct packed {
@@ -214,7 +214,8 @@ package datapath_pkg;
     regbits_t s_rw;
     logic m_load_done;
     logic gemm_done;
-    matbits_t m_rw; // still need m_rw in wb for dispatch loopback to clear RST
+    matbits_t m_rw_ld;
+    matbits_t m_rw_gemm; // still need m_rw in wb for dispatch loopback to clear RST
     // logic load_done;  // Load Done Signal for Score Board
     // logic alu_done;   // Alu Done Signal for Score Board
   } wb_ctr_t; // dispatch

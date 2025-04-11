@@ -194,8 +194,14 @@ module dispatch(
         // rstsif.wb_write = '0;
       end
 
-      if (diif.wb.m_load_done || diif.wb.gemm_done) begin // done gemm or done ml
-        rstmif.wb_sel = diif.wb.m_rw;
+      if (diif.wb.gemm_done) begin // done gemm or done ml
+        rstmif.wb_sel = diif.wb.m_rw_gemm;
+        rstmif.wb_write = '1;
+        // rstmif.wb_write = '0;
+      end
+
+      if (diif.wb.m_load_done) begin // done gemm or done ml
+        rstmif.wb_sel = diif.wb.m_rw_ld;
         rstmif.wb_write = '1;
         // rstmif.wb_write = '0;
       end
@@ -277,7 +283,7 @@ module dispatch(
 
       diif.n_fust_m_en   = (cuif.fu_t == FU_M_T & ~flush & ~hazard);
       //n_fu_m           = 1'b0; // only one row in FUST
-      diif.n_fust_m.rd   = m_rd;
+      diif.n_fust_m.md   = m_rd;
       diif.n_fust_m.rs1  = s_rs1;
       // diif.n_fust_m.rs2  = s_rs2;
       diif.n_fust_m.imm  = cuif.imm;

@@ -117,7 +117,7 @@ module execute (
     // Outputs
     assign eif.eif_output.gemm_new_weight_out = fugif.new_weight_out; // to mem (scratchpad)
     assign eif.eif_output.gemm_matrix_num = fugif.gemm_matrix_num;    // to mem (scratchpad)
-    assign eif.eif_output.fu_ex[4] = '0;
+    assign eif.eif_output.fu_ex[4] = eif.gemm_done;
     // TODO: need some sort of done signal
     // assign eif.eif_output.fu_ex[4] = fugif.done; <- something like this
 

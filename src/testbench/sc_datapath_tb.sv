@@ -121,7 +121,7 @@ program test(input logic CLK, output logic nrst, datapath_cache_if.tb dcif);
     task btype_instr;
         input regbits_t rs1;
         input regbits_t rs2;
-        input funct3_b_t funct3;
+        input branch_t funct3;
         input logic [12:0] imm;
         input word_t imemaddr;
 
@@ -244,28 +244,32 @@ program test(input logic CLK, output logic nrst, datapath_cache_if.tb dcif);
         
         tb_test_case = "JTYPE";
         jtype_instr(5'd20, 'd110, 32'd12);
-        repeat (3) @(posedge CLK);
+        repeat (13) @(posedge CLK);
 
         tb_test_case = "ALU";
-        itype_instr(5'd15, 5'd11, 13'd60, ADDI, 32'd16);
+        itype_instr(5'd15, 5'd11, 13'd60, ADDI, 32'd16); // 185
         repeat (7) @(posedge CLK);
-        itype_instr(5'd14, 5'd11, 13'd60, ADDI, 32'd20);
+        itype_instr(5'd14, 5'd11, 13'd60, ADDI, 32'd20); // 185
         repeat (7) @(posedge CLK);
 
         tb_test_case = "Actual BNE Happens";
-        btype_instr(5'd15, 5'd14, BNE, 13'd120, 32'd24);
+        btype_instr(5'd15, 5'd14, BT_BNE, 13'd120, 32'd24);
         repeat (10) @(posedge CLK);
 
         tb_test_case = "Speculative Test";
         itype_lw_instr(5'd20, 5'd22, 12'd20, 32'd28);
-        btype_instr(5'd20, 5'd14, BLT, 13'd120, 32'd32);
+        btype_instr(5'd20, 5'd14, BT_BLT, 13'd120, 32'd32);
         itype_instr(5'd25, 5'd5, 13'd3, ADDI, 32'd36);
         itype_instr(5'd26, 5'd5, 13'd3, ADDI, 32'd40);
-        repeat (2) @(posedge CLK);
+        // repeat (2) @(posedge CLK);
         itype_instr(5'd27, 5'd5, 13'd3, ADDI, 32'd44);
+        itype_instr(5'd28, 5'd5, 13'd3, ADDI, 32'd48);
         repeat (7) @(posedge CLK);
+
         dcif.dhit = '1;
         dcif.dmemload = 'd1600;
+        @(posedge CLK);
+        dcif.dhit = '0;
 
         tb_test_case = "HALT";
         halt(32'd28);

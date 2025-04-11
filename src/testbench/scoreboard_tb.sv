@@ -158,7 +158,7 @@ program test (
         @(posedge CLK);
         
         // matrix instructions 
-        
+        m_ls_instr(4'd9, 5'd6, 5'd0, 10'd110, LD_M);
 
 
 

@@ -79,16 +79,17 @@ module sc_datapath
     // sb signals
 
     // inputs
-    assign sbif.fetch                  = sb_in;
-    assign sbif.wb_issue               = wbif.wb_out;
-    assign sbif.wb_dispatch.s_rw_en    = wbif.wb_out.reg_en;
-    assign sbif.wb_dispatch.s_rw       = wbif.wb_out.reg_sel;
-    assign sbif.wb_dispatch.gemm_done  = '0; // these need logc from memory, saying m_reg can be cleared from rsts
-    assign sbif.wb_dispatch.m_load_done  = '0; // these need logc from memory, saying m_reg can be cleared from rsts
-    assign sbif.wb_dispatch.m_rw       = '0; // these need logc from memory, saying which m_reg can be cleared from rsts
-    assign sbif.branch_miss            = eif.eif_output.bfu_miss;
-    assign sbif.branch_resolved        = eif.eif_output.bfu_resolved;
-    assign sbif.fu_ex                  = eif.eif_output.fu_ex;
+    assign sbif.fetch                   = sb_in;
+    assign sbif.wb_issue                = wbif.wb_out;
+    assign sbif.wb_dispatch.s_rw_en     = wbif.wb_out.reg_en;
+    assign sbif.wb_dispatch.s_rw        = wbif.wb_out.reg_sel;
+    assign sbif.wb_dispatch.gemm_done   = dcif.gemm_done; 
+    assign sbif.wb_dispatch.m_load_done = dcif.m_ld_done; 
+    assign sbif.wb_dispatch.m_rw_ld     = '0; // TODO these need logc from memory?, saying which m_reg can be cleared from rsts
+    assign sbif.wb_dispatch.m_rw_gemm   = '0; // TODO these need logc from memory?, saying which m_reg can be cleared from rsts
+    assign sbif.branch_miss             = eif.eif_output.bfu_miss;
+    assign sbif.branch_resolved         = eif.eif_output.bfu_resolved;
+    assign sbif.fu_ex                   = eif.eif_output.fu_ex;
 
     // outputs
     // assign sb_out = sbif.out;
@@ -129,7 +130,7 @@ module sc_datapath
     assign eif.mls_ls_in      = sbif.out.ls_in;
     assign eif.mls_rd_in      = sbif.out.md;
     assign eif.mls_rs_in      = sbif.out.rdat1;
-    assign eif.mls_stride_in  = sbif.out.rdat2;
+    // assign eif.mls_stride_in  = sbif.out.rdat2;
     assign eif.mls_imm_in     = sbif.out.imm;
     // gemm
     assign eif.gemm_enable         = sbif.out.fu_en[4];

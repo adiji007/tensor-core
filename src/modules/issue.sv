@@ -137,7 +137,7 @@ module issue(
       // //  and let the fust_s clear its rows with that bit asserted
       // //  since fusif.fust.op can only write one row at a time
       // end
-      
+
     end
 
     always_ff @ (posedge CLK, negedge nRST) begin: Age_Latch
@@ -329,6 +329,8 @@ module issue(
             
             // TODO: need stall signals for the execute FUs if next_fust_state
             // is stalled in EX
+
+            // TODO TODO TODO
             if ((i == 0 & (fusif.fust.t1[1] == 2'd0 | fusif.fust.t2[1] == 2'd0)) &
                 (fust_state[1] == FUST_WAIT | fust_state[1] == FUST_RDY) &
                 age[1] > age[0]) begin
@@ -341,6 +343,8 @@ module issue(
               // stall LD/ST from writing
               next_fust_state[i] = FUST_EX;
             end
+            
+
           end
           default: begin
             next_fust_state = fust_state;
@@ -392,7 +396,8 @@ module issue(
             issue.j_type = fusif.fust.op[i].j_type;
           end else if (i == 3) begin // mls
             // TODO: need to figure these out, not sure rn
-            issue.md  = fugif.fust.op.md;
+            issue.md = fumif.fust.op.md;
+            issue.ls_in = fumif.fust.op.mem_type;
             s_rs1 = fumif.fust.op.rs1;
             // s_rs2 = fumif.fust.op.rs2;
             issue.fu_en[i] = 1'b1;
