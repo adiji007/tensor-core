@@ -1,0 +1,39 @@
+vlog -sv +incdir+./src/include ./src/testbench/system_tb.sv ./src/modules/system.sv
+QuestaSim-64 vlog 2021.4 Compiler 2021.10 Oct 13 2021
+Start time: 17:18:32 on Apr 06,2025
+vlog -sv "+incdir+./src/include" ./src/testbench/system_tb.sv ./src/modules/system.sv 
+-- Compiling package isa_pkg
+-- Compiling interface system_if
+-- Importing package isa_pkg
+-- Compiling package datapath_pkg
+-- Compiling module system_tb
+-- Importing package caches_pkg
+-- Importing package types_pkg
+-- Compiling package isa_pkg
+** Warning: ** while parsing file included at ./src/modules/system.sv(9)
+** while parsing file included at ./src/include/system_if.vh(11)
+** at ./src/include/isa_types.vh(4): (vlog-2275) Existing package 'isa_pkg' at line 4 will be overwritten.
+-- Compiling interface system_if
+** Warning: ** while parsing file included at ./src/modules/system.sv(9)
+** at ./src/include/system_if.vh(13): (vlog-2275) Existing interface 'system_if' at line 13 will be overwritten.
+-- Compiling package datapath_pkg
+** Warning: ** while parsing file included at ./src/modules/system.sv(12)
+** at ./src/include/datapath_types.vh(6): (vlog-2275) Existing package 'datapath_pkg' at line 6 will be overwritten.
+-- Compiling package ram_pkg
+-- Compiling package types_pkg
+-- Compiling interface cpu_ram_if
+-- Importing package ram_pkg
+-- Compiling interface datapath_cache_if
+-- Importing package datapath_pkg
+-- Compiling package caches_pkg
+-- Compiling interface caches_if
+-- Compiling interface arbiter_caches_if
+-- Compiling interface scratchpad_if
+-- Compiling module system
+
+Top level modules:
+	system_tb
+End time: 17:18:32 on Apr 06,2025, Elapsed time: 0:00:00
+Errors: 0, Warnings: 3
+vsim -voptargs="+acc" work.system_tb -do "do /home/asicfab/a/wong371/william_pr/tensor-core/src/scripts/system.do; run 100us             ;" -suppress 2275
+Reading pref.tcl

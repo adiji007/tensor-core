@@ -15,6 +15,14 @@ add wave -noupdate -expand -group Arb /memory_subsystem_tb/spif/sStore_hit
 add wave -noupdate -expand -group Arb /memory_subsystem_tb/spif/sLoad_row
 add wave -noupdate -expand -group Arb /memory_subsystem_tb/spif/load_data
 add wave -noupdate -expand -group Arb -divider {Internal Arbiter}
+add wave -noupdate -expand -group Arb -expand -group ram /memory_subsystem_tb/acif/ramWEN
+add wave -noupdate -expand -group Arb -expand -group ram /memory_subsystem_tb/acif/ramREN
+add wave -noupdate -expand -group Arb -expand -group ram /memory_subsystem_tb/acif/ramstate
+add wave -noupdate -expand -group Arb -expand -group ram /memory_subsystem_tb/acif/ramaddr
+add wave -noupdate -expand -group Arb -expand -group ram /memory_subsystem_tb/acif/ramstore
+add wave -noupdate -expand -group Arb -expand -group ram /memory_subsystem_tb/acif/ramload
+add wave -noupdate -expand -group Arb /memory_subsystem_tb/DUT/ARB/dcache_load
+add wave -noupdate -expand -group Arb /memory_subsystem_tb/DUT/ARB/icache_load
 add wave -noupdate -expand -group Arb -expand -group Arb-Internal /memory_subsystem_tb/DUT/ARB/sp_hit
 add wave -noupdate -expand -group Arb -expand -group Arb-Internal /memory_subsystem_tb/spif/sLoad_hit
 add wave -noupdate -expand -group Arb -expand -group Arb-Internal /memory_subsystem_tb/spif/sStore_hit
@@ -70,7 +78,7 @@ add wave -noupdate /memory_subsystem_tb/DUT/SP/spb1/mats
 add wave -noupdate /memory_subsystem_tb/DUT/SP/spb2/mats
 add wave -noupdate /memory_subsystem_tb/DUT/SP/spb3/mats
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {978 ns} 0}
+WaveRestoreCursors {{Cursor 1} {48 ns} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 191
 configure wave -valuecolwidth 215
@@ -86,4 +94,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 ns} {1529 ns}
+WaveRestoreZoom {0 ns} {127 ns}
