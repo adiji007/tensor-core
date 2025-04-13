@@ -48,15 +48,14 @@ module sysarr_FIFO(
             end
             nxt_ld_ptr = !ld_ptr;
         end
-        if (fifo.shift)begin
-            nxt_rd_ptr = rd_ptr + 1;    // Shift values forward 
-        end
         // read ptr would equal N aka we read everything
         /* verilator lint_off WIDTHEXPAND */
-        if (nxt_rd_ptr == 0 && rd_ptr == N-1)begin
+        if (fifo.shift && rd_ptr == N-1)begin
         /* verilator lint_off WIDTHEXPAND */
             nxt_use_ptr = !use_ptr;
             nxt_rd_ptr = 0;
+        end else if (fifo.shift)begin
+            nxt_rd_ptr = rd_ptr + 1;    // Shift values forward 
         end
     end
 

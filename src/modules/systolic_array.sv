@@ -197,11 +197,18 @@ module systolic_array(
     endgenerate
     // output time :D
     integer q;
-
+    always_ff @(posedge clk, negedge nRST) begin
+        if(nRST == 1'b0)begin
+            memory.drained <= 1'b1;
+        end else begin
+            memory.drained <= nxt_drained;
+        end 
+    end
+    logic nxt_drained;
     always_comb begin
         memory.out_en = 1'b0;
         memory.row_out = '0;
-        memory.drained = 1'b1;
+        nxt_drained = 1'b1;
         row_out = '0;
         memory.array_output = '0;
         for (q = 0; q < 3; q++)begin
@@ -214,7 +221,7 @@ module systolic_array(
                 memory.array_output = current_out[row_out];
             end
             if (control_unit_if.iteration[q] > 0)begin
-                memory.drained = 1'b0;
+                nxt_drained = 1'b0;
             end
         end
     end

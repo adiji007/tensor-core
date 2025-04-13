@@ -104,10 +104,11 @@ module sysarr_MAC(input logic clk, input logic nRST, systolic_array_MAC_if.MAC m
     // latching the run signal an extra time to fix a timing issue with mul_stall and mac_if.start
     logic start_passthrough_0;
     always_ff @(posedge clk, negedge nRST) begin
-        if(nRST == 1'b0)
+        if(nRST == 1'b0)begin
             start_passthrough_0 <= 0;
-        else
+        end else begin
             start_passthrough_0 <= mac_if.start | (start_passthrough_0 & mul_stall);
+        end
     end
 
     // flipflop to connect mul stage1 and stage 2
@@ -121,16 +122,17 @@ module sysarr_MAC(input logic clk, input logic nRST, systolic_array_MAC_if.MAC m
             mul_round_loss_s2 <= 0;
         end
         else if(run) begin
-            if(mul_stall)
+            if(mul_stall)begin
                 start_passthrough_1 <= 0;
-            else
+            end else begin
                 start_passthrough_1 <= start_passthrough_0;
-            mul_fp1_head_s2_in <= input_x[15:10];
-            mul_fp2_head_s2_in <= mac_if.weight[15:10];
-            mul_carryout_in <= mul_carryout_out;
-            mul_product_in  <= mul_product_out;
-            // start_passthrough_1 <= mac_if.start;
-            mul_round_loss_s2 <= mul_round_loss_s1_out;
+                mul_fp1_head_s2_in <= input_x[15:10];
+                mul_fp2_head_s2_in <= mac_if.weight[15:10];
+                mul_carryout_in <= mul_carryout_out;
+                mul_product_in  <= mul_product_out;
+                // start_passthrough_1 <= mac_if.start;
+                mul_round_loss_s2 <= mul_round_loss_s1_out;
+            end
         end
         else begin
             mul_fp1_head_s2_in <= mul_fp1_head_s2_in;
@@ -169,15 +171,43 @@ module sysarr_MAC(input logic clk, input logic nRST, systolic_array_MAC_if.MAC m
     // this could potentially result in an edge case where if the mul significand is all 1's, rounding will cause it to become 0
     logic [9:0] mul_significand_rounded;
     always_comb begin
-        if(mul_frac_product[1] & (mul_frac_product[0] | mul_round_loss_s2 | mul_frac_product[2]))
+        if(mul_frac_product[1] & (mul_frac_product[0] | mul_round_loss_s2 | mul_frac_product[2]))begin
             mul_significand_rounded = mul_frac_product[11:2] + 1;
-        else
+        end else begin
             mul_significand_rounded = mul_frac_product[11:2];
+        end
     end
 
     logic [4:0] mul_final_exp;
     assign mul_final_exp = (mul_product_in == 0) ? 0 : mul_sum_exp;
     assign mul_result = {mul_sign_result, mul_final_exp, mul_significand_rounded};
+
+
+    // latch mul_result to reduce critical path here
+    logic start_passthrough_2a;
+    logic [15:0] mul_result_latched;
+    logic [15:0] in_accumulate_latched;
+    always_ff @(posedge clk, negedge nRST) begin
+        if(nRST == 1'b0) begin
+            start_passthrough_2a <= 0;
+            mul_result_latched <= 0;
+	        in_accumulate_latched <= 0;
+        end
+        else begin
+            start_passthrough_2a <= start_passthrough_1;
+            mul_result_latched <= mul_result;
+	        in_accumulate_latched <= mac_if.in_accumulate;
+        end
+    end
+
+
+
+
+
+
+
+
+
 
 
     // phase 2: accumulate
@@ -191,7 +221,7 @@ module sysarr_MAC(input logic clk, input logic nRST, systolic_array_MAC_if.MAC m
     // This does not actually go through step 2 but must be latched until step3
     logic add_round_loss_s1_out, add_round_loss_s2_in;
 
-    ADD_step1 add1 (mul_result, mac_if.in_accumulate, add_sign_shifted_out, frac_shifted_out, add_sign_not_shifted_out, frac_not_shifted_out, add_exp_max_out, add_round_loss_s1_out);
+    ADD_step1 add1 (mul_result_latched, in_accumulate_latched, add_sign_shifted_out, frac_shifted_out, add_sign_not_shifted_out, frac_not_shifted_out, add_exp_max_out, add_round_loss_s1_out);
 
     // flipflop to connect add stage1 and stage2
     always_ff @(posedge clk, negedge nRST) begin
@@ -210,7 +240,7 @@ module sysarr_MAC(input logic clk, input logic nRST, systolic_array_MAC_if.MAC m
             frac_shifted_in         <= frac_shifted_out;
             frac_not_shifted_in     <= frac_not_shifted_out;
             add_exp_max_in          <= add_exp_max_out;
-            start_passthrough_2 <= start_passthrough_1;
+            start_passthrough_2 <= start_passthrough_2a;
             add_round_loss_s2_in <= add_round_loss_s1_out; 
         end
         else begin

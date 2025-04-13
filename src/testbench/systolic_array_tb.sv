@@ -6,7 +6,7 @@
 `include "systolic_array_add_if.vh"
 `include "systolic_array_FIFO_if.vh"
 
-`timescale 1 ns / 1 ns
+`timescale 1 ps / 1 ps
 
 module systolic_array_tb();
 
@@ -17,7 +17,7 @@ module systolic_array_tb();
   systolic_array_if memory_if();
 
   // Clock gen
-  parameter PERIOD = 10;
+  parameter PERIOD = 1000; // 1000 ps = 1 ns
   logic tb_clk = 0;
   always #(PERIOD/2) tb_clk++;
   // FILE I/O
@@ -159,7 +159,6 @@ module systolic_array_tb();
     .memory (memory_if.memory_array)
   );
   always @(posedge tb_clk) begin
-    $display("DRAINED, %d", memory_if.drained);
     if (memory_if.out_en == 1'b1)begin
       $display("\noutput row is %d", memory_if.row_out);
       if (m_outputs[memory_if.row_out] != memory_if.array_output)begin
@@ -232,14 +231,14 @@ module systolic_array_tb();
     end
     $display("array should be drained %d", memory_if.drained);
     $display("fifos should have space  %d", memory_if.fifo_has_space);
-    // repeat(1) @(posedge tb_clk); // last output drain
+    // @(posedge tb_clk); // last output drain
     get_matrices(.weights(loaded_weights));
     if (loaded_weights == 1)begin
       // LOAD WEIGHTS
       load_weights();
     end
     load_in_ps (.delay(1)); //delay was 1
-
+    
     flag = 1;
     while (flag == 1) begin
       @(posedge tb_clk);
