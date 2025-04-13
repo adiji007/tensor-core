@@ -88,22 +88,24 @@ module memory_subsystem_tb;
     test_name = "Write and read Dcache";
     $display("Test 1: Write and read Dcache");
     test_num = test_num + 1;
-    acif.ramstate = ACCESS;
     //first write has to be a miss
-    write_dcache(0, 1, 32'h00000100, 32'hFEEDCAFE); //store FEEDCAFE IN address 100
-    acif.ramstate = BUSY;
+    write_dcache(0, 1, 32'd00000100, 32'hFEEDCAFE); //store FEEDCAFE IN address 100
+    @(posedge CLK); //load0
+    @(posedge CLK); //load1
+    @(posedge CLK); //idle
     @(posedge CLK);
-    #10;
-    acif.ramstate = ACCESS;
-    write_dcache(0, 1, 32'h00000100, 32'hFEEDCAFF); //store FEEDCAFF in address 100
-    acif.ramstate = BUSY;
     @(posedge CLK);
-    #10;
-
-    #1000
-
-    //TODO: later
-    //mem_read(32'hFEEDCAFE, );
+    #3;
+    write_dcache(0, 0, '0, '0);
+    @(posedge CLK);
+    // write_dcache(0, 1, 32'd00000100, 32'hFEEDCAFF); //store FEEDCAFF in address 100
+    // @(posedge CLK);
+    // @(posedge CLK);
+    // @(posedge CLK);
+    // @(posedge CLK);
+    // write_dcache(1, 0, 32'd00000100, '0);
+    // @(posedge CLK);
+    //check acif.dload for
 
 
 
@@ -115,6 +117,7 @@ module memory_subsystem_tb;
 
 
     //SCRATCHPAD TESTS
+    #100;
     acif.ramstate = FREE;
     acif.ramload = 32'h0;
     write_dcache(0,0,0,0);
