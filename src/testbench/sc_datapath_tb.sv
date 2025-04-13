@@ -45,6 +45,7 @@ program test(input logic CLK, output logic nrst, datapath_cache_if.tb dcif);
         input regbits_t rs2;
         input funct3_r_t funct3;
         input funct7_r_t funct7;
+        input word_t imemaddr;
         begin
             if (dcif.imemREN == 1'b1) begin
                 @(posedge CLK);
@@ -63,6 +64,8 @@ program test(input logic CLK, output logic nrst, datapath_cache_if.tb dcif);
         input regbits_t rs1;
         input logic [11:0] imm;
         input funct3_i_t funct3;
+        input word_t imemaddr;
+
         begin
             if (dcif.imemREN == 1'b1) begin
                 @(posedge CLK);
@@ -80,6 +83,8 @@ program test(input logic CLK, output logic nrst, datapath_cache_if.tb dcif);
         input regbits_t rd;
         input regbits_t rs1;
         input logic [11:0] imm;
+        input word_t imemaddr;
+
         begin
             if (dcif.imemREN == 1'b1) begin
                 @(posedge CLK);
@@ -98,6 +103,8 @@ program test(input logic CLK, output logic nrst, datapath_cache_if.tb dcif);
         input regbits_t rs2;
         input logic [2:0] funct3;
         input logic [11:0] imm;
+        input word_t imemaddr;
+
         begin
             if (dcif.imemREN == 1'b1) begin
                 @(posedge CLK);
@@ -114,8 +121,10 @@ program test(input logic CLK, output logic nrst, datapath_cache_if.tb dcif);
     task btype_instr;
         input regbits_t rs1;
         input regbits_t rs2;
-        input funct3_b_t funct3;
+        input branch_t funct3;
         input logic [12:0] imm;
+        input word_t imemaddr;
+
         begin
             if (dcif.imemREN == 1'b1) begin
                 @(posedge CLK);
@@ -132,6 +141,7 @@ program test(input logic CLK, output logic nrst, datapath_cache_if.tb dcif);
     task jtype_instr;
         input regbits_t rd;
         input logic [20:0] imm;
+        input word_t imemaddr;
         begin
             if (dcif.imemREN == 1'b1) begin
                 @(posedge CLK);
@@ -149,6 +159,7 @@ program test(input logic CLK, output logic nrst, datapath_cache_if.tb dcif);
         input regbits_t rd;
         input regbits_t rs1;
         input logic [11:0] imm;
+        input word_t imemaddr;
         begin
             if (dcif.imemREN == 1'b1) begin
                 @(posedge CLK);
@@ -166,11 +177,18 @@ program test(input logic CLK, output logic nrst, datapath_cache_if.tb dcif);
         input opcode_t opcode;
         input matbits_t rd;
         input regbits_t rs1;     // reg file register that holds location of matrix wanted
-        input regbits_t stride;  // offset
         input logic [10:0] imm;
+        input word_t imemaddr;
         begin
-            dcif.imemload = {rd, rs1, stride, imm[10:0], opcode};
-            @(posedge CLK);
+            if (dcif.imemREN == 1'b1) begin
+                @(posedge CLK);
+                dcif.imemload = {rd, rs1, 5'd0, imm[10:0], opcode};
+                dcif.ihit = 1'b1;
+                @(posedge CLK);
+                dcif.imemload = '0;
+                dcif.ihit = 1'b0;
+                @(posedge CLK);
+            end
         end
     endtask
 
@@ -180,13 +198,22 @@ program test(input logic CLK, output logic nrst, datapath_cache_if.tb dcif);
         input matbits_t ra;
         input matbits_t rb;
         input matbits_t rc;
+        input word_t imemaddr;
         begin
-            dcif.imemload = {rd, ra, rb, rc, 9'd0, opcode};
-            @(posedge CLK);
+            if (dcif.imemREN == 1'b1) begin
+                @(posedge CLK);
+                dcif.imemload = {rd, ra, rb, rc, 9'd0, opcode};
+                dcif.ihit = 1'b1;
+                @(posedge CLK);
+                dcif.imemload = '0;
+                dcif.ihit = 1'b0;
+                @(posedge CLK);
+            end
         end
     endtask
 
     task halt;
+    input word_t imemaddr;
         begin
             if (dcif.imemREN == 1'b1) begin
                 @(posedge CLK);
@@ -215,9 +242,9 @@ program test(input logic CLK, output logic nrst, datapath_cache_if.tb dcif);
 
         @(posedge CLK);
         tb_test_case = "LW";
-        itype_lw_instr(5'd12, 5'd15, 12'd16);
+        itype_lw_instr(5'd12, 5'd15, 12'd16, 32'd4);
         tb_test_case = "ADDI";
-        itype_instr(5'd11, 5'd13, 'd125, ADDI);
+        itype_instr(5'd11, 5'd13, 'd125, ADDI, 32'd8);
 
         repeat (7) @(posedge CLK);
         dcif.dhit = 1'b1;
@@ -228,32 +255,41 @@ program test(input logic CLK, output logic nrst, datapath_cache_if.tb dcif);
         dcif.dmemload = '0;
         @(posedge CLK);
         
-        // tb_test_case = "JTYPE";
-        // jtype_instr(5'd20, 'd110);
-        // repeat (3) @(posedge CLK);
+        tb_test_case = "JTYPE";
+        jtype_instr(5'd20, 'd110, 32'd12);
+        repeat (13) @(posedge CLK);
 
-        tb_test_case = "BEQ";
-        btype_instr(11, 12, BEQ, 13'hBAC);
-        repeat (3) @(posedge CLK);
+        tb_test_case = "ALU";
+        itype_instr(5'd15, 5'd11, 13'd60, ADDI, 32'd16); // 185
+        repeat (7) @(posedge CLK);
+        itype_instr(5'd14, 5'd11, 13'd60, ADDI, 32'd20); // 185
+        repeat (7) @(posedge CLK);
 
-        tb_test_case = "ADDI";
-        itype_instr(5, 7, 12'h0A0, ADDI);
+        tb_test_case = "Actual BNE Happens";
+        btype_instr(5'd15, 5'd14, BT_BNE, 13'd120, 32'd24);
         repeat (10) @(posedge CLK);
 
-        tb_test_case = "ADDI 2";
-        itype_instr(6, 7, 12'h0B0, ADDI);
-        repeat (10) @(posedge CLK);
+        tb_test_case = "Speculative Test";
+        itype_lw_instr(5'd20, 5'd22, 12'd20, 32'd28);
+        btype_instr(5'd20, 5'd14, BT_BLT, 13'd120, 32'd32);
+        itype_instr(5'd25, 5'd5, 13'd3, ADDI, 32'd36);
+        itype_instr(5'd26, 5'd5, 13'd3, ADDI, 32'd40);
+        // repeat (2) @(posedge CLK);
+        itype_instr(5'd27, 5'd5, 13'd3, ADDI, 32'd44);
+        itype_instr(5'd28, 5'd5, 13'd3, ADDI, 32'd48);
+        repeat (7) @(posedge CLK);
 
-        tb_test_case = "BNE";
-        btype_instr(5, 6, BNE, 13'hBA0);
-        repeat (10) @(posedge CLK);
+        dcif.dhit = '1;
+        dcif.dmemload = 'd1600;
+        @(posedge CLK);
+        dcif.dhit = '0;
 
         tb_test_case = "HALT";
-        halt();
-        
+        halt(32'd28);
         repeat (15) @(posedge CLK);
 
         $finish;
     end
 
 endprogram
+

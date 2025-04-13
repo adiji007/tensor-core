@@ -59,7 +59,8 @@ module sc_datapath
 
     // input
     assign fif.imemload        = dcif.imemload;  // from mem
-    assign fif.freeze          = sbif.freeze || sbif.jump;
+    assign fif.freeze          = sbif.freeze;
+    assign fif.jump            = sbif.jump;
     assign fif.misprediction   = eif.eif_output.bfu_miss;
     assign fif.correct_pc      = eif.eif_output.bfu_correct_pc;
     assign fif.update_btb      = eif.eif_output.bfu_update_btb;
@@ -78,15 +79,17 @@ module sc_datapath
     // sb signals
 
     // inputs
-    assign sbif.fetch                 = sb_in;
-    assign sbif.wb_issue              = wbif.wb_out;
-    assign sbif.wb_dispatch.s_rw_en   = wbif.wb_out.reg_en;
-    assign sbif.wb_dispatch.s_rw      = wbif.wb_out.reg_sel;
-    assign sbif.wb_dispatch.m_rw_en   = '0; // these need logc from memory, saying m_reg can be cleared from rsts
-    assign sbif.wb_dispatch.m_rw      = '0; // these need logc from memory, saying which m_reg can be cleared from rsts
-    assign sbif.branch_miss           = eif.eif_output.bfu_miss;
-    assign sbif.branch_resolved       = eif.eif_output.bfu_resolved;
-    assign sbif.fu_ex                 = eif.eif_output.fu_ex;
+    assign sbif.fetch                   = sb_in;
+    assign sbif.wb_issue                = wbif.wb_out;
+    assign sbif.wb_dispatch.s_rw_en     = wbif.wb_out.reg_en;
+    assign sbif.wb_dispatch.s_rw        = wbif.wb_out.reg_sel;
+    assign sbif.wb_dispatch.gemm_done   = dcif.gemm_done; 
+    assign sbif.wb_dispatch.m_load_done = dcif.m_ld_done; 
+    assign sbif.wb_dispatch.m_rw_ld     = '0; // TODO these need logc from memory?, saying which m_reg can be cleared from rsts
+    assign sbif.wb_dispatch.m_rw_gemm   = '0; // TODO these need logc from memory?, saying which m_reg can be cleared from rsts
+    assign sbif.branch_miss             = eif.eif_output.bfu_miss;
+    assign sbif.branch_resolved         = eif.eif_output.bfu_resolved;
+    assign sbif.fu_ex                   = eif.eif_output.fu_ex;
 
     // outputs
     // assign sb_out = sbif.out;
@@ -127,7 +130,7 @@ module sc_datapath
     assign eif.mls_ls_in      = sbif.out.ls_in;
     assign eif.mls_rd_in      = sbif.out.md;
     assign eif.mls_rs_in      = sbif.out.rdat1;
-    assign eif.mls_stride_in  = sbif.out.rdat2;
+    // assign eif.mls_stride_in  = sbif.out.rdat2;
     assign eif.mls_imm_in     = sbif.out.imm;
     // gemm
     assign eif.gemm_enable         = sbif.out.fu_en[4];
@@ -146,7 +149,7 @@ module sc_datapath
     assign ex_out.load_wdat     = eif.eif_output.sls_dmemload;
     assign ex_out.load_reg_sel  = eif.eif_output.sls_rd;
     assign ex_out.spec          = eif.eif_output.spec;
-    assign ex_out.jump_done     = eif.eif_output.fu_ex[2];
+    assign ex_out.jump_done     = eif.eif_output.fu_ex[2] && (!(eif.eif_output.jump_wdat == 0));
     assign ex_out.jump_wdat     = eif.eif_output.jump_wdat;
     assign ex_out.jump_reg_sel  = eif.eif_output.jump_rd;
 
@@ -155,11 +158,9 @@ module sc_datapath
     assign dcif.dmemstore  = eif.eif_output.sls_dmemstore;
     assign dcif.dmemaddr   = eif.eif_output.sls_dmemaddr;
 
-    assign dcif.matrix_ls  = eif.eif_output.fu_matls_out;
-
-    assign dcif.gemm_out   = eif.eif_output.gemm_out;
-
-
+    assign dcif.matrix_ls        = '0;
+    assign dcif.gemm_new_weight  = '0;
+    assign dcif.gemm_matrices    = '0;
 
     // wb signals
 
@@ -167,7 +168,7 @@ module sc_datapath
     assign wbif.alu_wdat           = wb_in.alu_wdat;
     assign wbif.load_wdat          = wb_in.load_wdat;
     assign wbif.jump_wdat          = wb_in.jump_wdat;
-    assign wbif.branch_mispredict  = eif.eif_output.bfu_miss;
+    assign wbif.branch_mispredict  = eif.eif_output.bfu_miss; // need to double check this
     assign wbif.branch_spec        = wb_in.spec;
     assign wbif.branch_correct     = eif.eif_output.bfu_resolved;
     assign wbif.alu_done           = wb_in.alu_done;

@@ -10,7 +10,7 @@ module rst_m (
 
   rst_m_t status;
   
-  always_ff @(negedge CLK, negedge nRST) begin
+  always_ff @(posedge CLK, negedge nRST) begin
     if (~nRST)
       rsif.status <= '0;
     else
