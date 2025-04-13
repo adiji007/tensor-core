@@ -18,6 +18,7 @@ interface fetch_stage_if;
   
   // Pipeline Control
   logic freeze;
+  logic jump;
   logic misprediction;
   word_t correct_pc;
   
@@ -28,13 +29,13 @@ interface fetch_stage_if;
 
   modport fs (
     input imemload, freeze, misprediction, correct_pc,
-    input update_btb, branch_outcome, update_pc, branch_target,
+    input update_btb, branch_outcome, update_pc, branch_target, jump,
     output pc, instr, imemREN, predicted_outcome, imemaddr
   );
 
   modport tb (
     output imemload, freeze, misprediction, correct_pc, 
-    output update_btb, branch_outcome, update_pc, branch_target,
+    output update_btb, branch_outcome, update_pc, branch_target, jump,
     input pc, instr, imemREN, predicted_outcome, imemaddr
   );
 endinterface

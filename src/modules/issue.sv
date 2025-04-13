@@ -104,7 +104,7 @@ module issue(
       fusif.busy[0]  = (fust_state[0] == FUST_EX && (next_fust_state[0] == FUST_EMPTY || next_fust_state[0] == FUST_WAIT)) ? 1'd0 : next_fust_state[0] != FUST_EMPTY;
       fusif.busy[1]  = (fust_state[1] == FUST_EX && (next_fust_state[1] == FUST_EMPTY || next_fust_state[1] == FUST_WAIT)) ? 1'd0 : next_fust_state[1] != FUST_EMPTY;
       fusif.busy[2]  = (fust_state[2] == FUST_EX && (next_fust_state[2] == FUST_EMPTY || next_fust_state[2] == FUST_WAIT)) ? 1'd0 : next_fust_state[2] != FUST_EMPTY;
-      
+     
       // TODO
       // could be writing the flush bits here as well if not in the dispatch,
       // like how busy is being written independent of the rows that dispatch
@@ -116,21 +116,28 @@ module issue(
 
       fumif.en       = isif.n_fust_m_en;
       fumif.fust_row = isif.n_fust_m;
-      fumif.busy     = next_fust_state[3] != FUST_EMPTY;
+      fumif.busy     = (fust_state[3] == FUST_EX && (next_fust_state[3] == FUST_EMPTY || next_fust_state[3] == FUST_WAIT)) ? 1'd0 : next_fust_state[3] != FUST_EMPTY;
+
+      fumif.t1 = isif.n_mt1;
 
       fugif.en       = isif.n_fust_g_en;
       fugif.fust_row = isif.n_fust_g;
-      fugif.busy     = next_fust_state[4] != FUST_EMPTY;
+      fugif.busy     = (fust_state[4] == FUST_EX && (next_fust_state[4] == FUST_EMPTY || next_fust_state[4] == FUST_WAIT)) ? 1'd0 : next_fust_state[4] != FUST_EMPTY;
 
-      fusif.flush = 1'b0;
+      fugif.t1 = isif.n_gt1;
+      fugif.t2 = isif.n_gt2;
+      fugif.t3 = isif.n_gt3;
 
-      if (isif.branch_miss) begin
-        fusif.flush = 1'b1;
-      //  then flush fusif.fust.op[i], easiest way is
-      //  probably adding a flush bit to the fusif.fust.op[]
-      //  and let the fust_s clear its rows with that bit asserted
-      //  since fusif.fust.op can only write one row at a time
-      end
+      fusif.flush = (isif.branch_miss) ? 1'b1 : 1'b0;
+
+      // if (isif.branch_miss) begin
+      //   fusif.flush = 1'b1;
+      // //  then flush fusif.fust.op[i], easiest way is
+      // //  probably adding a flush bit to the fusif.fust.op[]
+      // //  and let the fust_s clear its rows with that bit asserted
+      // //  since fusif.fust.op can only write one row at a time
+      // end
+
     end
 
     always_ff @ (posedge CLK, negedge nRST) begin: Age_Latch
@@ -218,9 +225,9 @@ module issue(
             if (i < 3) begin // Scalar FUST
               n_rdy[i] = (!(|fusif.fust.t1[i]) && !(|fusif.fust.t2[i]));
             end else if (i == 3) begin // Matrix LD/ST FUST
-              n_rdy[i] = (!(|fumif.fust.op.t1) && !(|fumif.fust.op.t2));
+              n_rdy[i] = (!(|fumif.fust.t1));
             end else if (i == 4) begin // GEMM FUST
-              n_rdy[i] = (!(|fugif.fust.op.t1) && !(|fugif.fust.op.t2) && !(|fugif.fust.op.t3));
+              n_rdy[i] = (!(|fugif.fust.t1) && !(|fugif.fust.t2) && !(|fugif.fust.t3));
             end
           end
           // I think just let FUST_RDY state get its rdy bit resolved in EX if
@@ -267,11 +274,22 @@ module issue(
             next_fust_state[i] = incoming_instr[i] ? FUST_WAIT : FUST_EMPTY;
           end
           FUST_WAIT: begin
-            if (n_rdy[i])
-              next_fust_state[i] = ((n_rdy[i] == next_oldest_rdy[i]) || (next_single_ready)) ? FUST_EX : FUST_RDY;
+            if (n_rdy[i]) begin
+              if ((i==3 || i==4) && isif.dispatch.spec) begin
+                next_fust_state[i] = FUST_RDY;
+              end 
+              else begin
+                next_fust_state[i] = ((n_rdy[i] == next_oldest_rdy[i]) || (next_single_ready)) ? FUST_EX : FUST_RDY;
+              end
+            end
           end
           FUST_RDY: begin
-            next_fust_state[i] = ((next_oldest_rdy[i]) || (single_ready)) ? FUST_EX : FUST_RDY;
+            if ((i==3 || i==4) && isif.dispatch.spec) begin
+                next_fust_state[i] = FUST_RDY;
+            end 
+            else begin 
+              next_fust_state[i] = ((next_oldest_rdy[i]) || (single_ready)) ? FUST_EX : FUST_RDY;
+            end
           end
           FUST_EX: begin
 
@@ -295,7 +313,12 @@ module issue(
             else if ((isif.fu_ex[2] == 1'b1) && (i == 2)) begin
               next_fust_state[i] = incoming_instr[i] ? FUST_WAIT : FUST_EMPTY;
             end
-
+            else if ((isif.fu_ex[3] == 1'b1) && (i == 3)) begin
+              next_fust_state[i] = incoming_instr[i] ? FUST_WAIT : FUST_EMPTY;
+            end
+            else if ((isif.fu_ex[4] == 1'b1) && (i == 4)) begin
+              next_fust_state[i] = incoming_instr[i] ? FUST_WAIT : FUST_EMPTY;
+            end
 
             //TODO: handle dones from branch and matrix FUs
 
@@ -306,18 +329,23 @@ module issue(
             
             // TODO: need stall signals for the execute FUs if next_fust_state
             // is stalled in EX
-            if ((i == 0 & (fusif.fust.t1[1] == 2'd0 | fusif.fust.t2[1] == 2'd0)) &
-                (fust_state[1] == FUST_WAIT | fust_state[1] == FUST_RDY) &
-                age[1] > age[0]) begin
-              // stall ALU from writing
-              next_fust_state[i] = FUST_EX;
-            end
-            if ((i == 1 & (fusif.fust.t1[0] == 2'd1 | fusif.fust.t2[0] == 2'd1) &&
-                (fust_state[0] == FUST_WAIT | fust_state[0] == FUST_RDY) &&
-                age[0] > age[1])) begin
-              // stall LD/ST from writing
-              next_fust_state[i] = FUST_EX;
-            end
+
+            // WAR not needed as if 4/11/25
+            
+            // if ((i == 0 & (fusif.fust.t1[1] == 2'd0 | fusif.fust.t2[1] == 2'd0)) &
+            //     (fust_state[1] == FUST_WAIT | fust_state[1] == FUST_RDY) &
+            //     age[1] > age[0]) begin
+            //   // stall ALU from writing
+            //   next_fust_state[i] = FUST_EX;
+            // end
+            // if ((i == 1 & (fusif.fust.t1[0] == 2'd1 | fusif.fust.t2[0] == 2'd1) &&
+            //     (fust_state[0] == FUST_WAIT | fust_state[0] == FUST_RDY) &&
+            //     age[0] > age[1])) begin
+            //   // stall LD/ST from writing
+            //   next_fust_state[i] = FUST_EX;
+            // end
+            
+
           end
           default: begin
             next_fust_state = fust_state;
@@ -369,8 +397,10 @@ module issue(
             issue.j_type = fusif.fust.op[i].j_type;
           end else if (i == 3) begin // mls
             // TODO: need to figure these out, not sure rn
+            issue.md = fumif.fust.op.md;
+            issue.ls_in = fumif.fust.op.mem_type;
             s_rs1 = fumif.fust.op.rs1;
-            s_rs2 = fumif.fust.op.rs2;
+            // s_rs2 = fumif.fust.op.rs2;
             issue.fu_en[i] = 1'b1;
             imm = fumif.fust.op.imm;
           end else if (i == 4) begin // gemm

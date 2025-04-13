@@ -101,9 +101,10 @@ package isa_pkg;
   typedef logic [MATRIX_W-1:0] matbits_t;
 
   // u type
-  typedef enum logic [2:0] {
-    UT_LOAD,
-    UT_ADD // not using it but here still 
+  typedef enum logic [1:0] {
+    UT_NA = 2'd0,
+    UT_LOAD = 2'd1
+    // UT_ADD // not using it but here still 
   } utype_t;
 
   typedef enum logic [2:0] {

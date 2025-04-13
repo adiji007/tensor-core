@@ -19,6 +19,12 @@ interface issue_if;
     logic [2:0][1:0] n_t1;
     logic [2:0][1:0] n_t2;
 
+    logic [1:0] n_gt1;
+    logic [1:0] n_gt2;
+    logic [1:0] n_gt3;
+
+    logic [1:0] n_mt1;
+
     // Inputs to latch
     // logic flush;
 
@@ -40,7 +46,8 @@ interface issue_if;
     fust_state_e [4:0] fust_state;
     
     modport IS (
-        input dispatch, wb, n_fu_t, n_fust_s, n_fust_m, n_fust_g, n_fu_s, n_fu_m, n_fu_g, n_fust_s_en, n_fust_m_en, n_fust_g_en, n_t1, n_t2, s_wdata, branch_miss, branch_resolved, fu_ex,
+        input dispatch, wb, n_fu_t, n_fust_s, n_fust_m, n_fust_g, n_fu_s, n_fu_m, n_fu_g, n_fust_s_en, n_fust_m_en, n_fust_g_en, 
+        input n_t1, n_t2, s_wdata, branch_miss, branch_resolved, fu_ex, n_mt1, n_gt1, n_gt2, n_gt3,
         output out, fust_s, fust_m, fust_g, fust_state
     );
 

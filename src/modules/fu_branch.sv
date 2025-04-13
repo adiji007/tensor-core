@@ -111,7 +111,7 @@ module fu_branch(
         // enable will control when the BTB can update
         // btb_updated will only allow one update per branch instruction
         if (!btb_updated) fubif.update_btb = 1'b1;
-        fubif.resolved = 1'b1;
+        fubif.resolved = !fubif.miss;
         
         fubif.update_pc = fubif.current_pc;
       end

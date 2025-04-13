@@ -123,12 +123,10 @@ package datapath_pkg;
   } fust_s_t;
 
   typedef struct packed {
-    matbits_t rd;
+    matbits_t md;
     regbits_t rs1;
-    regbits_t rs2; // stride
+    // regbits_t rs2; // stride
     word_t imm;
-    fu_mbits_t t1;
-    fu_mbits_t t2;
     matrix_mem_t mem_type;
     // fu_sbits_t t3;
   } fust_m_row_t;
@@ -136,21 +134,22 @@ package datapath_pkg;
   typedef struct packed {
     logic busy;
     fust_m_row_t op;
+    logic [1:0] t1;
   } fust_m_t;
 
   typedef struct packed {
-    matbits_t md;
     matbits_t ms1;
     matbits_t ms2;
     matbits_t ms3;
-    fu_mbits_t t1;
-    fu_mbits_t t2;
-    fu_mbits_t t3;
+    matbits_t md;
   } fust_g_row_t;
 
   typedef struct packed {
     logic busy;
     fust_g_row_t op;
+    logic [1:0] t1;
+    logic [1:0] t2;
+    logic [1:0] t3;
   } fust_g_t;
 
   /*************
@@ -213,8 +212,10 @@ package datapath_pkg;
   typedef struct packed {
     logic s_rw_en;
     regbits_t s_rw;
-    logic m_rw_en;
-    matbits_t m_rw; // still need m_rw in wb for dispatch loopback to clear RST
+    logic m_load_done;
+    logic gemm_done;
+    matbits_t m_rw_ld;
+    matbits_t m_rw_gemm; // still need m_rw in wb for dispatch loopback to clear RST
     // logic load_done;  // Load Done Signal for Score Board
     // logic alu_done;   // Alu Done Signal for Score Board
   } wb_ctr_t; // dispatch
@@ -313,7 +314,7 @@ package datapath_pkg;
     logic bfu_resolved;        // to sb and wb, combinationally - correct
     logic bfu_miss;            // to fetch, sb, and wb, combinationally - mispredict
     regbits_t jump_rd;
-    word_t jump_dest;
+    // word_t jump_dest;
     word_t jump_wdat;
 
     // Scalar ALU FU

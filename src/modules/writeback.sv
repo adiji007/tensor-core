@@ -43,7 +43,7 @@ integer alu_count, next_alu_count;
 // Packed array holding the ALU data
 logic [BUFFER_DEPTH - 1: 0][BUFFER_WIDTH - 1: 0] alu_buffer, next_alu_buffer;
 // ALU Buffer Empty and Full Signals
-logic alu_full, alu_empty, next_alu_full, next_alu_empty;
+logic alu_full, alu_empty;
 
 /* Load Buffer Module Signals */
 
@@ -60,7 +60,7 @@ integer load_count, next_load_count;
 // Packed array holding the Load data
 logic [BUFFER_DEPTH - 1: 0][BUFFER_WIDTH - 1: 0] load_buffer, next_load_buffer;
 // Load Buffer Empty and Full Signals
-logic load_empty, load_full, next_load_empty, next_load_full;
+logic load_empty, load_full;
 
 /* Jump Data Signals */
 wb_t jump_din;
