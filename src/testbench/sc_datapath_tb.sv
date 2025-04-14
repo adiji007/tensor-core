@@ -236,6 +236,8 @@ program test(input logic CLK, output logic nrst, datapath_cache_if.tb dcif);
         dcif.dhit = '0;
         dcif.mhit = '0;
         dcif.dmemload = '0;
+        dcif.m_ld_done = '0;
+        dcif.gemm_done = '0;
 
         @(posedge CLK);
         nrst = 1'b1;

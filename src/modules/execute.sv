@@ -94,7 +94,7 @@ module execute (
     assign mlsif.ls_in = eif.mls_ls_in; // from sb
     assign mlsif.rd_in = eif.mls_rd_in; // from sb
     assign mlsif.rs_in = eif.mls_rs_in; // from sb
-    assign mlsif.stride_in = eif.mls_stride_in; // from sb
+    // assign mlsif.stride_in = eif.mls_stride_in; // from sb
     assign mlsif.imm_in = eif.mls_imm_in; // from sb
     // MLS Outputs
     assign eif.eif_output.fu_matls_out = mlsif.fu_matls_out; 
