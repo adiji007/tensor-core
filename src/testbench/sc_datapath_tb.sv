@@ -286,6 +286,10 @@ program test(input logic CLK, output logic nrst, datapath_cache_if.tb dcif);
         @(posedge CLK);
         dcif.dhit = '0;
 
+        repeat (5) @(posedge CLK);
+        itype_instr(5'd12, 5'd25, 13'd3, ADDI, 32'd36);
+        itype_instr(5'd26, 5'd27, 13'd3, ADDI, 32'd40);
+
         tb_test_case = "HALT";
         halt(32'd28);
         repeat (15) @(posedge CLK);

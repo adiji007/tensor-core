@@ -25,7 +25,7 @@ module writeback
 import datapath_pkg::*;
 import isa_pkg::*;
 
-localparam BUFFER_DEPTH = 3;
+localparam BUFFER_DEPTH = 4;
 localparam BUFFER_WIDTH = $bits(wb_t);
 
 /* ALU Buffer Module Signals */
@@ -37,9 +37,9 @@ wb_t alu_dout;
 // ALU write enable and read enable
 logic alu_write, alu_read; 
 // ALU read and write pointers
-logic [4:0] alu_wptr, alu_rptr, next_alu_wptr, next_alu_rptr;
+logic [2:0] alu_wptr, alu_rptr, next_alu_wptr, next_alu_rptr;
 // ALU internal counter for data in
-logic [4:0] alu_count, next_alu_count;
+logic [2:0] alu_count, next_alu_count;
 // Packed array holding the ALU data
 logic [BUFFER_DEPTH - 1: 0][BUFFER_WIDTH - 1: 0] alu_buffer, next_alu_buffer;
 // ALU Buffer Empty and Full Signals
@@ -54,9 +54,9 @@ wb_t load_dout;
 // Load write enable and read enable
 logic load_write, load_read; 
 // Load read and write pointers
-logic [4:0] load_wptr, load_rptr, next_load_wptr, next_load_rptr;
+logic [2:0] load_wptr, load_rptr, next_load_wptr, next_load_rptr;
 // Load internal counter for data in
-logic [4:0] load_count, next_load_count;
+logic [2:0] load_count, next_load_count;
 // Packed array holding the Load data
 logic [BUFFER_DEPTH - 1: 0][BUFFER_WIDTH - 1: 0] load_buffer, next_load_buffer;
 // Load Buffer Empty and Full Signals
@@ -81,11 +81,11 @@ logic wb_sel, next_wb_sel;
 // Previous Specbit Logic
 logic prev_spec;
 // Writeback Saved Spec Write Pointers
-logic [4:0] spec_alu_wptr, next_spec_alu_wptr;
+logic [2:0] spec_alu_wptr, next_spec_alu_wptr;
 // Writeback Saved Spec Write Counter
-logic [4:0] spec_write, next_spec_write;
+logic [2:0] spec_write, next_spec_write;
 // Writeback Clean Data Count
-logic [4:0] clean_count, next_clean_count;
+logic [2:0] clean_count, next_clean_count;
 
 always_ff @(posedge CLK, negedge nRST) begin : writeback_ff
     if (!nRST) begin
