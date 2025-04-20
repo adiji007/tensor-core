@@ -168,6 +168,9 @@ module memory_arbiter_basic(
       mem_read(sp_load_addr, sp_load_data);
   end
 
+
+
+  logic [31:0] dcache_load, icache_load;
   always_comb begin
     acif.ramstore = '0;
     acif.ramaddr = '0;
@@ -182,6 +185,10 @@ module memory_arbiter_basic(
     sp_wait = 1'b0;
     sp_load_addr = '0;
     sp_hit = '0;
+    dcache_load = '0;
+    icache_load = '0;
+    acif.load_done = '0;
+    acif.store_done = '0;
 
     case (arbiter_state)
       SP_LOAD1: begin
@@ -219,22 +226,30 @@ module memory_arbiter_basic(
         acif.ramaddr = acif.daddr;
         acif.ramWEN = acif.dWEN;
         acif.ramREN = !acif.dWEN && acif.dREN;
-        acif.dwait = ((acif.dREN && acif.ramstate == ACCESS) || (acif.dWEN && acif.ramstate == ACCESS)) ? 1'b0 : 1'b1;
-        acif.dload = acif.ramload;
-        acif.ramstore = acif.dstore;
-        acif.ramaddr = acif.daddr;
-        acif.ramWEN = acif.dWEN;
-        acif.ramREN = !acif.dWEN && acif.dREN;
-        acif.dwait = ((acif.dREN && acif.ramstate == ACCESS) || (acif.dWEN && acif.ramstate == ACCESS)) ? 1'b0 : 1'b1;
-        acif.dload = acif.ramload;
+        // acif.dwait = ((acif.dREN && acif.ramstate == ACCESS) || (acif.dWEN && acif.ramstate == ACCESS)) ? 1'b0 : 1'b1;
+        acif.dwait = ((acif.dREN) || (acif.dWEN)) ? 1'b0 : 1'b1;
+        // acif.dload = acif.ramload;
+        if(acif.ramWEN) begin
+          mem_write(acif.ramaddr, acif.ramstore);
+          mem_save();  
+          acif.store_done = 1;
+        end
+        else if(acif.ramREN) begin
+          mem_read(acif.ramaddr, dcache_load);
+          acif.dload = dcache_load;
+          acif.load_done = 1;
+        end
       end
       ICACHE: begin
+        acif.ramREN = acif.iREN;
         acif.ramaddr = acif.iaddr;
-        acif.iload = acif.ramload;
-        acif.iwait = (acif.ramstate == BUSY || acif.dREN || acif.dWEN) ? 1'b1 : 1'b0;
-        acif.ramaddr = acif.iaddr;
-        acif.iload = acif.ramload;
-        acif.iwait = (acif.ramstate == BUSY || acif.dREN || acif.dWEN) ? 1'b1 : 1'b0;
+        // acif.iload = acif.ramload;
+        // acif.iwait = (acif.ramstate == BUSY || acif.dREN || acif.dWEN) ? 1'b1 : 1'b0;
+        acif.iwait = (acif.dREN || acif.dWEN) ? 1'b1 : 1'b0;
+        if(acif.ramREN) begin
+          mem_read(acif.ramaddr, icache_load);
+          acif.iload = icache_load;
+        end
       end
     endcase
   end

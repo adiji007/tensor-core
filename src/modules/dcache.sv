@@ -3,7 +3,8 @@
 module dcache (
   input logic CLK, nRST,
   caches_if.dcache cif,
-  datapath_cache_if.dcache dcif                               
+  datapath_cache_if.dcache dcif,
+  arbiter_caches_if.dcache acif                               
 );
 
 import caches_pkg::*;
@@ -97,10 +98,10 @@ always_comb begin
           next_dcache_state = LOAD0;
       end
     end
-    WB0: if (!cif.dwait) next_dcache_state = WB1;
-    WB1: if (!cif.dwait) next_dcache_state = LOAD0;
-    LOAD0: if (!cif.dwait) next_dcache_state = LOAD1;
-    LOAD1: if (!cif.dwait) next_dcache_state = IDLE;
+    WB0: if (!cif.dwait && acif.store_done) next_dcache_state = WB1;
+    WB1: if (!cif.dwait && acif.store_done) next_dcache_state = LOAD0;
+    LOAD0: if (!cif.dwait && acif.load_done) next_dcache_state = LOAD1;
+    LOAD1: if (!cif.dwait && acif.load_done) next_dcache_state = IDLE;
     FLUSH: begin
       if (finish_flush) begin
         next_dcache_state = HALT;
@@ -109,8 +110,8 @@ always_comb begin
                (flush_counter >= NUM_SETS && dcache[flush_idx][1].dirty))
         next_dcache_state = WRITE0;
     end
-    WRITE0: if (!cif.dwait) next_dcache_state = WRITE1;
-    WRITE1: if (!cif.dwait) next_dcache_state = FLUSH;
+    WRITE0: if (!cif.dwait && acif.store_done) next_dcache_state = WRITE1;
+    WRITE1: if (!cif.dwait && acif.store_done) next_dcache_state = FLUSH;
     // COUNT: if (!cif.dwait) next_dcache_state = HALT;
     HALT: next_dcache_state = HALT;
     default: next_dcache_state = IDLE;

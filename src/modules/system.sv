@@ -20,7 +20,16 @@
 `include "scratchpad_if.vh"
 
 
-module system (input logic CLK, nrst, system_if.sys syif);
+// module system (input logic CLK, nrst, system_if.sys syif);
+module system (
+  input logic CLK, nrst,
+  datapath_cache_if dcif,
+  caches_if cif,
+  arbiter_caches_if acif,
+  scratchpad_if spif,
+  system_if.sys syif
+);
+
 
   import ram_pkg::*;
   import isa_pkg::*;
@@ -28,39 +37,32 @@ module system (input logic CLK, nrst, system_if.sys syif);
   import datapath_pkg::*;
 
   // stopped running
-  // logic halt;
+  logic halt;
 
   // clock division
-  parameter CLKDIV = 2;
-  logic CPUCLK;
+  // parameter CLKDIV = 2;
+  // logic CPUCLK;
   logic [3:0] count;
-  //logic CPUnrst;
+  // logic CPUnrst;
 
-  always_ff @(posedge CLK, negedge nrst)
-  begin
-    if (!nrst)
-    begin
-      count <= 0;
-      CPUCLK <= 0;
-    end
-    else if (count == CLKDIV-2)
-    begin
-      count <= 0;
-      CPUCLK <= ~CPUCLK;
-    end
-    else
-    begin
-      count <= count + 1;
-    end
-  end
+  // always_ff @(posedge CLK, negedge nrst)
+  // begin
+  //   if (!nrst)
+  //   begin
+  //     count <= 0;
+  //     CPUCLK <= 0;
+  //   end
+  //   else if (count == CLKDIV-2)
+  //   begin
+  //     count <= 0;
+  //     CPUCLK <= ~CPUCLK;
+  //   end
+  //   else
+  //   begin
+  //     count <= count + 1;
+  //   end
+  // end
 
-  datapath_cache_if dpif();
-  sc_datapath DP (CLK, nrst, dpif);
-
-  caches_if cif();
-  arbiter_caches_if acif(cif);
-  scratchpad_if spif();
-  memory_subsystem MS (CLK, nrst, dpif, cif, acif, spif);
 
 
   // // interfaces
@@ -68,12 +70,13 @@ module system (input logic CLK, nrst, system_if.sys syif);
 
   // // scheduler core processor
   // scheduler_core                        CPU (CPUCLK, nrst, halt, prif);
-
+  sc_datapath DP (CLK, nrst, dcif);
+  memory_subsystem MS (CLK, nrst, dcif, cif, acif, spif);
   // // memory
   // ram                                   RAM (CLK, nrst, prif);
 
   // // interface connections
-  // assign syif.halt = halt;
+  assign syif.halt = dcif.halt;
   // assign syif.load = prif.ramload;
 
   // // who has ram control
