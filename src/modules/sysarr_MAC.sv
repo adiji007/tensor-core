@@ -37,9 +37,10 @@ https://www.veripool.org/ftp/verilator_doc.pdf
 module sysarr_MAC(input logic clk, input logic nRST, systolic_array_MAC_if.MAC mac_if);
     logic [DW-1:0] input_x;
     logic [DW-1:0] nxt_input_x;
-    assign mac_if.in_pass = mac_if.weight_en ? weight : input_x;
 
     logic [DW-1:0] weight, nxt_weight;
+    assign mac_if.in_pass = mac_if.weight_en ? weight : input_x;
+
 
     // Latching MAC unit input value, to pass it on to the next 
     always_ff @(posedge clk, negedge nRST) begin
