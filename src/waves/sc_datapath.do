@@ -18,6 +18,23 @@ add wave -noupdate -expand -group dcif /sc_datapath_tb/DUT/dcif/mhit
 add wave -noupdate -expand -group dcif /sc_datapath_tb/DUT/dcif/matrix_ls
 add wave -noupdate -expand -group dcif /sc_datapath_tb/DUT/dcif/gemm_new_weight
 add wave -noupdate -expand -group dcif /sc_datapath_tb/DUT/dcif/gemm_matrices
+add wave -noupdate -expand -group FETCH -expand -group fsif /sc_datapath_tb/DUT/FETCH/fsif/imemREN
+add wave -noupdate -expand -group FETCH -expand -group fsif /sc_datapath_tb/DUT/FETCH/fsif/imemload
+add wave -noupdate -expand -group FETCH -expand -group fsif /sc_datapath_tb/DUT/FETCH/fsif/imemaddr
+add wave -noupdate -expand -group FETCH -expand -group fsif /sc_datapath_tb/DUT/FETCH/fsif/update_btb
+add wave -noupdate -expand -group FETCH -expand -group fsif /sc_datapath_tb/DUT/FETCH/fsif/branch_outcome
+add wave -noupdate -expand -group FETCH -expand -group fsif /sc_datapath_tb/DUT/FETCH/fsif/predicted_outcome
+add wave -noupdate -expand -group FETCH -expand -group fsif /sc_datapath_tb/DUT/FETCH/fsif/update_pc
+add wave -noupdate -expand -group FETCH -expand -group fsif /sc_datapath_tb/DUT/FETCH/fsif/branch_target
+add wave -noupdate -expand -group FETCH -expand -group fsif /sc_datapath_tb/DUT/FETCH/fsif/freeze
+add wave -noupdate -expand -group FETCH -expand -group fsif /sc_datapath_tb/DUT/FETCH/fsif/jump
+add wave -noupdate -expand -group FETCH -expand -group fsif /sc_datapath_tb/DUT/FETCH/fsif/misprediction
+add wave -noupdate -expand -group FETCH -expand -group fsif /sc_datapath_tb/DUT/FETCH/fsif/correct_pc
+add wave -noupdate -expand -group FETCH -expand -group fsif /sc_datapath_tb/DUT/FETCH/fsif/pc
+add wave -noupdate -expand -group FETCH -expand -group fsif /sc_datapath_tb/DUT/FETCH/fsif/instr
+add wave -noupdate -expand -group FETCH /sc_datapath_tb/DUT/FETCH/prev_instr
+add wave -noupdate -expand -group FETCH /sc_datapath_tb/DUT/FETCH/prev_pc
+add wave -noupdate -expand -group FETCH /sc_datapath_tb/DUT/FETCH/prev_pred
 add wave -noupdate -expand -group FETCH /sc_datapath_tb/DUT/FETCH/fif/freeze
 add wave -noupdate -expand -group FETCH /sc_datapath_tb/DUT/FETCH/fif/misprediction
 add wave -noupdate -expand -group FETCH /sc_datapath_tb/DUT/FETCH/fif/imemREN
@@ -30,6 +47,10 @@ add wave -noupdate -expand -group SB /sc_datapath_tb/DUT/SCOREBOARD/DI/WAW
 add wave -noupdate -expand -group SB /sc_datapath_tb/DUT/SCOREBOARD/DI/s_busy
 add wave -noupdate -expand -group SB /sc_datapath_tb/DUT/SCOREBOARD/DI/m_busy
 add wave -noupdate -expand -group SB /sc_datapath_tb/DUT/SCOREBOARD/DI/hazard
+add wave -noupdate -expand -group SB /sc_datapath_tb/DUT/SCOREBOARD/IS/n_rdy
+add wave -noupdate -expand -group SB /sc_datapath_tb/DUT/SCOREBOARD/DI/RSTS/status
+add wave -noupdate -expand -group SB /sc_datapath_tb/DUT/SCOREBOARD/IS/next_ready
+add wave -noupdate -expand -group SB -expand -subitemconfig {/sc_datapath_tb/DUT/SCOREBOARD/diif/fust_s.op -expand} /sc_datapath_tb/DUT/SCOREBOARD/diif/fust_s
 add wave -noupdate -expand -group SB -expand /sc_datapath_tb/DUT/SCOREBOARD/sbif/fetch
 add wave -noupdate -expand -group SB /sc_datapath_tb/DUT/SCOREBOARD/sbif/wb_issue
 add wave -noupdate -expand -group SB /sc_datapath_tb/DUT/SCOREBOARD/sbif/wb_dispatch
@@ -39,6 +60,7 @@ add wave -noupdate -expand -group SB /sc_datapath_tb/DUT/SCOREBOARD/sbif/fu_ex
 add wave -noupdate -expand -group SB /sc_datapath_tb/DUT/SCOREBOARD/sbif/freeze
 add wave -noupdate -expand -group SB -expand /sc_datapath_tb/DUT/SCOREBOARD/IS/fust_state
 add wave -noupdate -expand -group SB /sc_datapath_tb/DUT/SCOREBOARD/IS/incoming_instr
+add wave -noupdate -expand -group SB -expand /sc_datapath_tb/DUT/SCOREBOARD/isif/dispatch
 add wave -noupdate -expand -group SB -childformat {{/sc_datapath_tb/DUT/SCOREBOARD/sbif/out.rd -radix unsigned} {/sc_datapath_tb/DUT/SCOREBOARD/sbif/out.rdat1 -radix decimal} {/sc_datapath_tb/DUT/SCOREBOARD/sbif/out.rdat2 -radix decimal} {/sc_datapath_tb/DUT/SCOREBOARD/sbif/out.imm -radix unsigned}} -expand -subitemconfig {/sc_datapath_tb/DUT/SCOREBOARD/sbif/out.fu_en -expand /sc_datapath_tb/DUT/SCOREBOARD/sbif/out.rd {-height 16 -radix unsigned} /sc_datapath_tb/DUT/SCOREBOARD/sbif/out.rdat1 {-height 16 -radix decimal} /sc_datapath_tb/DUT/SCOREBOARD/sbif/out.rdat2 {-height 16 -radix decimal} /sc_datapath_tb/DUT/SCOREBOARD/sbif/out.imm {-height 16 -radix unsigned}} /sc_datapath_tb/DUT/SCOREBOARD/sbif/out
 add wave -noupdate -expand -group EX /sc_datapath_tb/DUT/EXECUTE/eif/bfu_enable
 add wave -noupdate -expand -group EX /sc_datapath_tb/DUT/EXECUTE/eif/bfu_predicted_outcome
@@ -64,7 +86,6 @@ add wave -noupdate -expand -group EX /sc_datapath_tb/DUT/EXECUTE/eif/mls_ls_in
 add wave -noupdate -expand -group EX /sc_datapath_tb/DUT/EXECUTE/eif/mls_rd_in
 add wave -noupdate -expand -group EX /sc_datapath_tb/DUT/EXECUTE/eif/mls_rs_in
 add wave -noupdate -expand -group EX /sc_datapath_tb/DUT/EXECUTE/eif/mls_imm_in
-add wave -noupdate -expand -group EX /sc_datapath_tb/DUT/EXECUTE/eif/mls_stride_in
 add wave -noupdate -expand -group EX /sc_datapath_tb/DUT/EXECUTE/eif/gemm_enable
 add wave -noupdate -expand -group EX /sc_datapath_tb/DUT/EXECUTE/eif/gemm_new_weight_in
 add wave -noupdate -expand -group EX /sc_datapath_tb/DUT/EXECUTE/eif/gemm_rs1_in
@@ -120,9 +141,9 @@ add wave -noupdate -expand -group ALU /sc_datapath_tb/DUT/EXECUTE/SALU/aluif/alu
 add wave -noupdate -expand -group ALU /sc_datapath_tb/DUT/EXECUTE/SALU/aluif/port_a
 add wave -noupdate -expand -group ALU /sc_datapath_tb/DUT/EXECUTE/SALU/aluif/port_b
 add wave -noupdate -expand -group ALU /sc_datapath_tb/DUT/EXECUTE/SALU/aluif/port_output
-
+add wave -noupdate /sc_datapath_tb/DUT/SCOREBOARD/diif/out
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {485220 ps} 1} {{Cursor 2} {825410 ps} 1} {{Cursor 3} {761730 ps} 0}
+WaveRestoreCursors {{Cursor 1} {485220 ps} 1} {{Cursor 2} {825410 ps} 1} {{Cursor 3} {791360 ps} 0}
 quietly wave cursor active 3
 configure wave -namecolwidth 157
 configure wave -valuecolwidth 100
@@ -138,4 +159,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ps
 update
-WaveRestoreZoom {393900 ps} {952080 ps}
+WaveRestoreZoom {649730 ps} {1207910 ps}

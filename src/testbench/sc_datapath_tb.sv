@@ -236,6 +236,8 @@ program test(input logic CLK, output logic nrst, datapath_cache_if.tb dcif);
         dcif.dhit = '0;
         dcif.mhit = '0;
         dcif.dmemload = '0;
+        dcif.m_ld_done = '0;
+        dcif.gemm_done = '0;
 
         @(posedge CLK);
         nrst = 1'b1;
@@ -283,6 +285,10 @@ program test(input logic CLK, output logic nrst, datapath_cache_if.tb dcif);
         dcif.dmemload = 'd1600;
         @(posedge CLK);
         dcif.dhit = '0;
+
+        repeat (5) @(posedge CLK);
+        itype_instr(5'd12, 5'd25, 13'd3, ADDI, 32'd36);
+        itype_instr(5'd12, 5'd12, 13'd3, ADDI, 32'd40);
 
         tb_test_case = "HALT";
         halt(32'd28);

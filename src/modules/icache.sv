@@ -36,7 +36,7 @@ always_ff @( posedge CLK, negedge nRST ) begin
     end
 end
 
-assign dcif.imemload = icache[icache_format.idx];
+assign dcif.imemload = icache[icache_format.idx].data;
 
 always_comb begin
     dcif.ihit = '0;

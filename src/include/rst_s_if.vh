@@ -10,7 +10,7 @@ interface rst_s_if;
   logic di_write;
   logic [1:0] di_tag;
   logic spec;
-  logic flush;
+  logic flush, resolved;
 
   // Inputs from writeback
   logic [4:0] wb_sel;
@@ -20,7 +20,7 @@ interface rst_s_if;
   rst_s_t status;
     
   modport RSTS (
-      input di_sel, di_write, di_tag, wb_sel, wb_write, spec, flush,
+      input di_sel, di_write, di_tag, wb_sel, wb_write, spec, flush, resolved,
       output status
   );
 

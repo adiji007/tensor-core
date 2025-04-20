@@ -20,10 +20,16 @@ module rst_s (
   always_comb begin
     status = rstif.status;
 
-    if (rstsif.flush) begin
+    if (rstif.flush) begin
       for (int i = 1; i < 32; i++) begin
         status.idx[i].busy = '0;
         status.idx[i].tag = '0;
+        status.idx[i].spec = '0;
+      end
+    end
+
+    if (rstif.resolved) begin
+      for (int i = 1; i < 32; i++) begin
         status.idx[i].spec = '0;
       end
     end
