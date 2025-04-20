@@ -10,6 +10,15 @@
 
 // types
 `include "datapath_types.vh"
+`include "isa_types.vh"
+`include "datapath_types.vh"
+`include "ram_pkg.vh"
+`include "types_pkg.vh"
+`include "cpu_ram_if.vh"
+`include "datapath_cache_if.vh"
+`include "caches_if.vh"
+`include "arbiter_caches_if.vh"
+`include "scratchpad_if.vh"
 
 // mapped timing needs this. 1ns is too fast
 `timescale 1 ns / 1 ns
@@ -31,14 +40,8 @@ module system_tb;
   arbiter_caches_if                   acif(cif);
   scratchpad_if                       spif();
 
-  // test program
-  test                                PROG (CLK,nRST,syif);
-
   // dut
   system                              DUT (CLK,nRST,dcif,cif,acif,spif,syif);
-endmodule
-
-program test(input logic CLK, output logic nRST, system_if.tb syif);
   // import word type
   import isa_pkg::word_t;
   import "DPI-C" function void mem_init();
@@ -61,6 +64,7 @@ program test(input logic CLK, output logic nRST, system_if.tb syif);
     // wait for halt
     while (!syif.halt)
     begin
+      // acif.ramaddr = '1;
       @(posedge CLK);
       cycles++;
     end
@@ -112,4 +116,4 @@ program test(input logic CLK, output logic nRST, system_if.tb syif);
   //     $display("Finished memory dump for Scheduler Core.");
   //   end
   // endtask
-endprogram
+endmodule
