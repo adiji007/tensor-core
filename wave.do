@@ -11,6 +11,7 @@ add wave -noupdate -expand -group icache-arbiter /system_tb/acif/iREN
 add wave -noupdate -expand -group icache-arbiter /system_tb/DUT/MS/ARB/acif/ramREN
 add wave -noupdate -expand -group icache-arbiter /system_tb/DUT/MS/ARB/acif/ramaddr
 add wave -noupdate -expand -group icache-arbiter /system_tb/acif/iload
+add wave -noupdate -expand -group icache-arbiter /system_tb/DUT/MS/ARB/icache_load
 add wave -noupdate -expand -group icache-arbiter /system_tb/DUT/MS/ARB/arbiter_state
 add wave -noupdate -expand -group icache-arbiter /system_tb/DUT/MS/ARB/next_arbiter_state
 add wave -noupdate -expand -group icache-arbiter /system_tb/acif/iaddr
@@ -48,7 +49,7 @@ add wave -noupdate -expand -group ram /system_tb/DUT/acif/ramstore
 add wave -noupdate -expand -group ram /system_tb/DUT/MS/ARB/dcache_load
 add wave -noupdate -divider {Matrix Operations}
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {92 ns} 0}
+WaveRestoreCursors {{Cursor 1} {52 ns} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 150
 configure wave -valuecolwidth 100
@@ -64,4 +65,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {88 ns} {96 ns}
+WaveRestoreZoom {51 ns} {54 ns}
