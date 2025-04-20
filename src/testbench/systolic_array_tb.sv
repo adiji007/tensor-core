@@ -15,8 +15,8 @@ module systolic_array_tb();
   // clk/reset
   logic tb_nRST;
 
-  string testcase = "fp6dub";
-  string path_to_files = "/home/asicfab/a/vpundith/tensor-core/";
+  string testcase = "fp4";
+  string path_to_files = "/home/vinay/tensorcore/tensor-core/";
   string input_filename = {"systolic_array_utils/matops_", testcase, "_encoded.txt"};
   string output_filename = {"systolic_array_utils/matops_", testcase, "_encoded_result.txt"};
   string python_output_filename = {"systolic_array_utils/matops_", testcase, "_encoded_output.txt"};
@@ -152,7 +152,7 @@ task get_m_output;
   endtask
 
   task load_weights();
-    for (r = 0; r < N; r++)begin
+    for (r = N-1; r >= 0; r--)begin
       /* verilator lint_off WIDTHTRUNC */
       row_load(.rtype(2'b00), .rinnum(r), .rpsnum('0), .rinput(m_weights[r]), .rpartial('0));
       /* verilator lint_off WIDTHTRUNC */

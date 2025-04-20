@@ -39,20 +39,20 @@ module sysarr_control_unit(
     assign cu.iteration = iteration;
 
     always_comb begin : input_buses // if we are receiving inputs tell the fifos where to load them :D
-        cu.input_type = 1'b0; 
+        // cu.input_type = 1'b0; 
         cu.input_row = '0;
         cu.input_load = 1'b0;
-        cu.weight_row = '0;
-        cu.weight_load = 1'b0;
+        // cu.weight_row = '0;
+        // cu.weight_load = 1'b0;
         cu.partials_row = '0;
         cu.partials_load = 1'b0;
         if (cu.input_en) begin
             cu.input_row = cu.row_in_en;
             cu.input_load = 1'b1;
         end else if (cu.weight_en) begin
-            cu.input_type = 1'b1;
-            cu.weight_row = cu.row_in_en;
-            cu.weight_load = 1'b1;
+            // cu.input_type = 1'b1;
+            // cu.weight_row = cu.row_in_en;
+            // cu.weight_load = 1'b1;
         end
         if (cu.partial_en) begin
             cu.partials_row = cu.row_ps_en;

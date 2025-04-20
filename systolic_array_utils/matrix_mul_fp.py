@@ -49,11 +49,11 @@ for line in lines:
         # Perform matrix multiplication
         for i in range(len(result_matrix)):  # Iterate over rows of A
             for j in range(len(result_matrix[i])):  # Iterate over columns of B
-                for k in range(4):  # Sum over A row * B column
+                for k in range(mat_size):  # Sum over A row * B column
                     result_matrix[i][j] += W[i][k] * I[k][j]
         result_matrix = result_matrix + PS
         # result_matrix = np.dot(W, I) + PS
-        for i in range(4):
+        for i in range(mat_size):
             result.append(result_matrix[i])
         continue
     
