@@ -128,7 +128,7 @@ module issue(
       fugif.t2 = isif.n_gt2;
       fugif.t3 = isif.n_gt3;
 
-      fusif.flush = (isif.branch_miss) ? 1'b1 : 1'b0;
+      fusif.flush = isif.branch_miss;
 
       // if (isif.branch_miss) begin
       //   fusif.flush = 1'b1;
@@ -267,90 +267,91 @@ module issue(
     // Issue Policy: Oldest instruction first
     always_comb begin : FUST_Next_State
       next_fust_state = fust_state;
-
-      for (int i = 0; i < 5; i++) begin
-        case (fust_state[i])
-          FUST_EMPTY: begin
-            next_fust_state[i] = incoming_instr[i] ? FUST_WAIT : FUST_EMPTY;
-          end
-          FUST_WAIT: begin
-            if (n_rdy[i]) begin
-              if ((i==3 || i==4) && isif.dispatch.spec) begin
-                next_fust_state[i] = FUST_RDY;
-              end 
-              else begin
-                next_fust_state[i] = ((n_rdy[i] == next_oldest_rdy[i]) || (next_single_ready)) ? FUST_EX : FUST_RDY;
+      if (!isif.freeze) begin
+        for (int i = 0; i < 5; i++) begin
+          case (fust_state[i])
+            FUST_EMPTY: begin
+              next_fust_state[i] = (incoming_instr[i]) ? FUST_WAIT : FUST_EMPTY;
+            end
+            FUST_WAIT: begin
+              if (n_rdy[i]) begin
+                if ((i==3 || i==4) && isif.dispatch.spec ) begin
+                  next_fust_state[i] = FUST_RDY;
+                end 
+                else begin
+                  next_fust_state[i] = (((n_rdy[i] == next_oldest_rdy[i]) || (next_single_ready))) ? FUST_EX : FUST_RDY;
+                end
               end
             end
-          end
-          FUST_RDY: begin
-            if ((i==3 || i==4) && isif.dispatch.spec) begin
-                next_fust_state[i] = FUST_RDY;
-            end 
-            else begin 
-              next_fust_state[i] = ((next_oldest_rdy[i]) || (single_ready)) ? FUST_EX : FUST_RDY;
+            FUST_RDY: begin
+              if ((i==3 || i==4) && isif.dispatch.spec) begin
+                  next_fust_state[i] = FUST_RDY;
+              end 
+              else begin 
+                next_fust_state[i] = (((next_oldest_rdy[i]) || (single_ready))) ? FUST_EX : FUST_RDY;
+              end
             end
-          end
-          FUST_EX: begin
+            FUST_EX: begin
 
-            //TODO:handle flushing on speculation
-            // if (isif.branch_miss & fusif.fust.op[i].spec) begin
-            //  then flush fusif.fust.op[i], easiest way is
-            //  probably adding a flush bit to the fusif.fust.op[]
-            //  and let the fust_s clear its rows with that bit asserted
-            //  since fusif.fust.op can only write one row at a time
+              //TODO:handle flushing on speculation
+              // if (isif.branch_miss & fusif.fust.op[i].spec) begin
+              //  then flush fusif.fust.op[i], easiest way is
+              //  probably adding a flush bit to the fusif.fust.op[]
+              //  and let the fust_s clear its rows with that bit asserted
+              //  since fusif.fust.op can only write one row at a time
 
-            // end
-            
+              // end
+              
 
-            // TODO fust related wb
-            if ((isif.fu_ex[0] == 1'b1) && (i == 0)) begin 
-              next_fust_state[i] = incoming_instr[i] ? FUST_WAIT : FUST_EMPTY;
+              // TODO fust related wb
+              if ((isif.fu_ex[0] == 1'b1) && (i == 0)) begin 
+                next_fust_state[i] = incoming_instr[i] ? FUST_WAIT : FUST_EMPTY;
+              end
+              else if ((isif.fu_ex[1] == 1'b1) && (i == 1)) begin
+                next_fust_state[i] = incoming_instr[i] ? FUST_WAIT : FUST_EMPTY;
+              end
+              else if ((isif.fu_ex[2] == 1'b1) && (i == 2)) begin
+                next_fust_state[i] = incoming_instr[i] ? FUST_WAIT : FUST_EMPTY;
+              end
+              else if ((isif.fu_ex[3] == 1'b1) && (i == 3)) begin
+                next_fust_state[i] = incoming_instr[i] ? FUST_WAIT : FUST_EMPTY;
+              end
+              else if ((isif.fu_ex[4] == 1'b1) && (i == 4)) begin
+                next_fust_state[i] = incoming_instr[i] ? FUST_WAIT : FUST_EMPTY;
+              end
+
+              //TODO: handle dones from branch and matrix FUs
+
+              // WAR HANDLING
+              //writing to reg A, where an older FUST thats in RDY or WAIT (hasnt
+              //read register) needs to stall the write to A until all reads to
+              //reg A are in EX
+              
+              // TODO: need stall signals for the execute FUs if next_fust_state
+              // is stalled in EX
+
+              // WAR not needed as if 4/11/25
+              
+              // if ((i == 0 & (fusif.fust.t1[1] == 2'd0 | fusif.fust.t2[1] == 2'd0)) &
+              //     (fust_state[1] == FUST_WAIT | fust_state[1] == FUST_RDY) &
+              //     age[1] > age[0]) begin
+              //   // stall ALU from writing
+              //   next_fust_state[i] = FUST_EX;
+              // end
+              // if ((i == 1 & (fusif.fust.t1[0] == 2'd1 | fusif.fust.t2[0] == 2'd1) &&
+              //     (fust_state[0] == FUST_WAIT | fust_state[0] == FUST_RDY) &&
+              //     age[0] > age[1])) begin
+              //   // stall LD/ST from writing
+              //   next_fust_state[i] = FUST_EX;
+              // end
+              
+
             end
-            else if ((isif.fu_ex[1] == 1'b1) && (i == 1)) begin
-              next_fust_state[i] = incoming_instr[i] ? FUST_WAIT : FUST_EMPTY;
+            default: begin
+              next_fust_state = fust_state;
             end
-            else if ((isif.fu_ex[2] == 1'b1) && (i == 2)) begin
-              next_fust_state[i] = incoming_instr[i] ? FUST_WAIT : FUST_EMPTY;
-            end
-            else if ((isif.fu_ex[3] == 1'b1) && (i == 3)) begin
-              next_fust_state[i] = incoming_instr[i] ? FUST_WAIT : FUST_EMPTY;
-            end
-            else if ((isif.fu_ex[4] == 1'b1) && (i == 4)) begin
-              next_fust_state[i] = incoming_instr[i] ? FUST_WAIT : FUST_EMPTY;
-            end
-
-            //TODO: handle dones from branch and matrix FUs
-
-            // WAR HANDLING
-            //writing to reg A, where an older FUST thats in RDY or WAIT (hasnt
-            //read register) needs to stall the write to A until all reads to
-            //reg A are in EX
-            
-            // TODO: need stall signals for the execute FUs if next_fust_state
-            // is stalled in EX
-
-            // WAR not needed as if 4/11/25
-            
-            // if ((i == 0 & (fusif.fust.t1[1] == 2'd0 | fusif.fust.t2[1] == 2'd0)) &
-            //     (fust_state[1] == FUST_WAIT | fust_state[1] == FUST_RDY) &
-            //     age[1] > age[0]) begin
-            //   // stall ALU from writing
-            //   next_fust_state[i] = FUST_EX;
-            // end
-            // if ((i == 1 & (fusif.fust.t1[0] == 2'd1 | fusif.fust.t2[0] == 2'd1) &&
-            //     (fust_state[0] == FUST_WAIT | fust_state[0] == FUST_RDY) &&
-            //     age[0] > age[1])) begin
-            //   // stall LD/ST from writing
-            //   next_fust_state[i] = FUST_EX;
-            // end
-            
-
-          end
-          default: begin
-            next_fust_state = fust_state;
-          end
-        endcase
+          endcase
+        end
       end
     end
 

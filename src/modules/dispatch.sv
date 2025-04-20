@@ -111,10 +111,9 @@ module dispatch(
 
     // TODO need to check
     always_comb begin : Hazard_Logic
-      // s_busy = (diif.fu_ex[1] == 1'b0) ? diif.fust_s.busy[1] : '0;
       // check_busy = 1'b0;
       case (cuif.fu_s)
-        FU_S_ALU:     s_busy = (diif.fu_ex[0] == 1'b0) ? diif.fust_s.busy[FU_S_ALU] : '0;
+        FU_S_ALU:     s_busy = diif.fust_s.busy[FU_S_ALU];
         FU_S_LD_ST:   s_busy = (diif.fu_ex[1] == 1'b0) ? diif.fust_s.busy[FU_S_LD_ST] : '0;
         // FU_S_LD_ST:   check_busy = diif.fust_s.busy[FU_S_LD_ST];
         FU_S_BRANCH:  s_busy = (diif.fu_ex[2] == 1'b0) ? diif.fust_s.busy[FU_S_BRANCH] : '0;
@@ -127,7 +126,7 @@ module dispatch(
       endcase
 
       WAW = (cuif.m_mem_type == M_LOAD | cuif.fu_m == FU_M_GEMM) ? rstmif.status.idx[m_rd].busy : 
-            (cuif.s_reg_write) ? rstsif.status.idx[s_rd].busy: 1'b0;
+            (cuif.s_reg_write && !(cuif.fu_s == FU_S_BRANCH)) ? rstsif.status.idx[s_rd].busy: 1'b0;
       hazard = (s_busy | m_busy | WAW); //TODO: remember to tie this hazard back to stall the fetch to not squash this stage on a hazard
       
     end
@@ -170,7 +169,8 @@ module dispatch(
       rstsif.di_write = 1'b0;
       rstsif.spec = 1'b0;
       rstsif.flush = diif.branch_miss;
-      if (cuif.s_reg_write) begin
+      rstsif.resolved = diif.branch_resolved;
+      if (cuif.s_reg_write && !(cuif.fu_s == FU_S_BRANCH)) begin
         if (~hazard & ~flush) begin // hazard a little strange, will need to take a look going forward
           rstsif.di_sel = s_rd;
           rstsif.di_write = 1'b1;
@@ -214,11 +214,13 @@ module dispatch(
 
       // tag updates on WB
       // if (diif.wb.s_rw_en & diif.wb.alu_done & diif.fust_state[0] == FUST_EX) begin // TODO fust related wb
-      if ((diif.fu_ex[0] == 1'b1) && diif.fust_state[0] == FUST_EX) begin // clearing alu tags
+      if (((diif.fu_ex[0] == 1'b1) && diif.fust_state[0] == FUST_EX) || (diif.wb.s_rw_en)) begin // clearing alu tags
         diif.n_t1[FU_S_LD_ST] = (diif.fust_s.t1[FU_S_LD_ST] == 2'd1) && diif.fust_s.busy[FU_S_LD_ST] ? '0 : diif.fust_s.t1[FU_S_LD_ST];
         diif.n_t2[FU_S_LD_ST] = (diif.fust_s.t2[FU_S_LD_ST] == 2'd1) && diif.fust_s.busy[FU_S_LD_ST] ? '0 : diif.fust_s.t2[FU_S_LD_ST];
         diif.n_t1[FU_S_BRANCH] = (diif.fust_s.t1[FU_S_BRANCH] == 2'd1) && diif.fust_s.busy[FU_S_BRANCH] ? '0 : diif.fust_s.t1[FU_S_BRANCH];
         diif.n_t2[FU_S_BRANCH] = (diif.fust_s.t2[FU_S_BRANCH] == 2'd1) && diif.fust_s.busy[FU_S_BRANCH] ? '0 : diif.fust_s.t2[FU_S_BRANCH];
+        diif.n_t1[FU_S_ALU] = (diif.fust_s.t1[FU_S_ALU] == 2'd1) && diif.fust_s.busy[FU_S_ALU] ? '0 : diif.fust_s.t1[FU_S_ALU];
+        diif.n_t2[FU_S_ALU] = (diif.fust_s.t2[FU_S_ALU] == 2'd1) && diif.fust_s.busy[FU_S_ALU] ? '0 : diif.fust_s.t2[FU_S_ALU];
         diif.n_mt1 = (diif.fust_m.t1 == 2'd1 && diif.fust_m.busy) ? '0 : diif.fust_m.t1;
       // end else if (diif.wb.s_rw_en & diif.wb.load_done & diif.fust_state[1] == FUST_EX) begin
       end else if ((diif.fu_ex[1] == 1'b1) && diif.fust_state[1] == FUST_EX) begin // clearing load tags
@@ -316,6 +318,7 @@ module dispatch(
 
       // To Fetch
       diif.freeze = hazard;
+      dispatch.freeze = hazard;
       diif.jump = (n_jump || jump) && !(diif.fu_ex[2] == 1'b1);
 
       // dispatch.i_type = cuif.i_flag;

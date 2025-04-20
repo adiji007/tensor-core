@@ -35,9 +35,9 @@ package isa_pkg;
     AUIPC     = 7'b0010111,
     LR_SC     = 7'b0101111,
     HALT      = 7'b1111111,
-    LD_M      = 7'b1000011,
-    ST_M      = 7'b1010011,
-    GEMM      = 7'b1110011 
+    LD_M      = 7'b0000111,
+    ST_M      = 7'b0100111,
+    GEMM      = 7'b1110011
   } opcode_t;
 
   typedef enum logic [FUNC3_W-1:0] {

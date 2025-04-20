@@ -24,8 +24,8 @@ module fust_s (
     fust.t1 = fuif.t1;
     fust.t2 = fuif.t2;
 
-    for (int i = 0; i < 3; i++) begin
-      if (fuif.flush) begin
+    if (fuif.flush) begin
+      for (int i = 0; i < 3; i++) begin
         fust.op = '0;
         fust.t1 = '0;
         fust.t2 = '0;
