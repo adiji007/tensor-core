@@ -101,8 +101,8 @@ module sysarr_MAC(input logic clk, input logic nRST, systolic_array_MAC_if.MAC m
     logic [12:0] mul_product_in;
     logic mul_round_loss_s1_out, mul_round_loss_s2;
 
-    assign mac_if.weight_read = weight;
-    assign mac_if.mul_result_read = mul_result_latched;
+    // assign mac_if.weight_read = weight;
+    // assign mac_if.mul_result_read = mul_result_latched;
 
     // MUL takes in latched input_x from above
     // MUL_step1 is special in that contains a sequential multiplier. This means that other operations need to wait until it finishes, the MAC unit must not move to the next stage after just one clock cycle.

@@ -26,14 +26,14 @@ interface systolic_array_MAC_if;
 
   // These two exist purely for debugging
   /* verilator lint_off UNUSEDSIGNAL */
-  logic [DW-1:0] weight_read, mul_result_read;
+  // logic [DW-1:0] weight_read, mul_result_read;
 
 
 
   // MAC Port for Array
   modport MAC(
     input  start, count, /* weight, */ in_value, MAC_shift, in_accumulate, weight_en,
-    output out_accumulate, in_pass, value_ready, weight_read, mul_result_read
+    output out_accumulate, in_pass, value_ready //, weight_read, mul_result_read
   );
 endinterface
 
