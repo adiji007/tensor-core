@@ -45,7 +45,7 @@ interface execute_if;
   logic           mls_mhit, mls_enable;
   matrix_mem_t    mls_ls_in;
   matbits_t       mls_rd_in;
-  word_t          mls_rs_in, mls_imm_in, mls_stride_in;
+  word_t          mls_rs_in, mls_imm_in;
 
   // Gemm FU
   logic gemm_enable, gemm_new_weight_in;
@@ -69,7 +69,7 @@ interface execute_if;
           // Scalar Load/Store FU
           sls_enable, sls_imm, sls_rs1, sls_rs2, sls_dmem_in, sls_dhit_in, sls_mem_type,
           // Matrix Load/Store FU
-          mls_mhit, mls_enable, mls_ls_in, mls_rd_in, mls_rs_in, mls_stride_in, mls_imm_in,
+          mls_mhit, mls_enable, mls_ls_in, mls_rd_in, mls_rs_in, mls_imm_in,
           // GEMM FUsadsaf
           gemm_enable, gemm_new_weight_in, gemm_rs1_in, gemm_rs2_in, gemm_rs3_in, gemm_rd_in, gemm_done,
           // halt
@@ -90,7 +90,7 @@ interface execute_if;
           // Scalar Load/Store FU
           sls_enable, sls_imm, sls_rs1, sls_rs2, sls_dmem_in, sls_dhit_in, sls_mem_type,
           // MLS FU
-          mls_mhit, mls_enable, mls_ls_in, mls_rd_in, mls_rs_in, mls_stride_in, mls_imm_in,
+          mls_mhit, mls_enable, mls_ls_in, mls_rd_in, mls_rs_in, mls_imm_in,
           // GEMM FU
           gemm_enable, gemm_new_weight_in, gemm_rs1_in, gemm_rs2_in, gemm_rs3_in, gemm_rd_in, gemm_done,
           // halt

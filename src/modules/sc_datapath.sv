@@ -47,6 +47,8 @@ module sc_datapath
     execute_t ex_out;
     execute_t wb_in;
 
+    wb_t wb_reg;
+
     assign dcif.halt = eif.eif_output.halt;
     // assign dcif.imemREN = 1;
     // assign dcif.imemaddr = fif.pc;
@@ -80,9 +82,9 @@ module sc_datapath
 
     // inputs
     assign sbif.fetch                   = sb_in;
-    assign sbif.wb_issue                = wbif.wb_out;
-    assign sbif.wb_dispatch.s_rw_en     = wbif.wb_out.reg_en;
-    assign sbif.wb_dispatch.s_rw        = wbif.wb_out.reg_sel;
+    assign sbif.wb_issue                = wb_reg;
+    assign sbif.wb_dispatch.s_rw_en     = wb_reg.reg_en;
+    assign sbif.wb_dispatch.s_rw        = wb_reg.reg_sel;
     assign sbif.wb_dispatch.gemm_done   = dcif.gemm_done; 
     assign sbif.wb_dispatch.m_load_done = dcif.m_ld_done; 
     assign sbif.wb_dispatch.m_rw_ld     = '0; // TODO these need logc from memory?, saying which m_reg can be cleared from rsts
@@ -185,11 +187,13 @@ module sc_datapath
             sb_in <= '0;
             // ex_in <= '0;
             wb_in <= '0;
+            wb_reg <= '0;
         end
         else begin
             sb_in <= fetch_out;
             // ex_in <= sb_out;
             wb_in <= ex_out;
+            wb_reg <= wbif.wb_out;
         end
     end
 

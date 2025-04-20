@@ -300,7 +300,7 @@ package datapath_pkg;
     matbits_t       rd_out;     // Matrix Reg destination (to Scratchpad)
     // word_t          imm_out;    // Immediate to Scratchpad -> needed?
     word_t          address;    // Address to Scratchpad   -> rs_in + imm
-    word_t          stride_out; // stride value
+    // word_t          stride_out; // stride value
   } matrix_ls_t;
 
   typedef struct packed {

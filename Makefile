@@ -1,5 +1,5 @@
-# SCRDIR = /home/asicfab/a/rrbathin/socet/amp/tensor-core/src/scripts
-SCRDIR = /home/asicfab/a/wong371/william_pr/tensor-core/src/scripts
+SCRDIR = /home/asicfab/a/rrbathin/socet/amp/tensor-core/src/scripts
+# SCRDIR = /home/asicfab/a/wong371/william_pr/tensor-core/src/scripts
 
 SOURCE_FILES = \
 	./src/modules/system.sv \
@@ -66,7 +66,7 @@ memory_subsystem.wav:
 
 system.wav:
 	vlog -sv +incdir+./src/include ./src/include/*.vh ./src/testbench/system_tb.sv ./src/modules/*.sv
-	vsim -voptargs="+acc" work.system_tb -sv_lib memory -do "do $(SCRDIR)/system.do; run $(SIMTIME);" -suppress 2275
+	vsim -voptargs="+acc" work.system_tb -sv_lib memory -do "do $(SCRDIR)/system.do; run 165;" -suppress 2275
 
 system:
 	vlog -sv +incdir+./src/include ./src/include/*.vh \

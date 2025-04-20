@@ -1,6 +1,6 @@
 vlog -sv ./src/modules/*.sv +incdir+./src/include/ 
 QuestaSim-64 vlog 2021.4 Compiler 2021.10 Oct 13 2021
-Start time: 09:08:55 on Apr 11,2025
+Start time: 16:19:02 on Apr 20,2025
 vlog -sv ./src/modules/bpt.sv ./src/modules/bpt_tbp.sv ./src/modules/btb.sv ./src/modules/buffer_module.sv ./src/modules/caches.sv ./src/modules/control_unit.sv ./src/modules/dcache.sv ./src/modules/dispatch.sv ./src/modules/dramstore_FSM.sv ./src/modules/execute.sv ./src/modules/fetch_branch.sv ./src/modules/fetch_stage.sv ./src/modules/fetch.sv ./src/modules/fetch_tbp.sv ./src/modules/flex_counter.sv ./src/modules/fu_alu.sv ./src/modules/fu_branch_predictor.sv ./src/modules/fu_branch.sv ./src/modules/fu_gemm.sv ./src/modules/fu_matrix_ls.sv ./src/modules/fu_scalar_ls.sv ./src/modules/fust_g.sv ./src/modules/fust_m.sv ./src/modules/fust_s.sv ./src/modules/gemm_FSM.sv ./src/modules/icache.sv ./src/modules/issue.sv ./src/modules/load_FSM.sv ./src/modules/memory_arbiter_basic.sv ./src/modules/memory_control.sv ./src/modules/memory_subsystem.sv ./src/modules/nbit_stp_shiftreg.sv ./src/modules/ram.sv ./src/modules/regfile.sv ./src/modules/rst_m.sv ./src/modules/rst_s.sv ./src/modules/sc_datapath.sv ./src/modules/scheduler_core.sv ./src/modules/scoreboard.sv ./src/modules/scratchpad_bank.sv ./src/modules/scratchpad.sv ./src/modules/socetlib_fifo.sv ./src/modules/state.sv ./src/modules/sysarr_add.sv ./src/modules/sysarr_control_unit.sv ./src/modules/sysarr_FIFO.sv ./src/modules/sysarr_MAC.sv ./src/modules/sysarr_OUT_FIFO.sv ./src/modules/system.sv ./src/modules/systolic_array.sv ./src/modules/writeback.sv "+incdir+./src/include/" 
 -- Compiling package isa_pkg
 -- Compiling package datapath_pkg
@@ -645,11 +645,11 @@ Top level modules:
 	scheduler_core
 	system
 	systolic_array
-End time: 09:08:55 on Apr 11,2025, Elapsed time: 0:00:00
+End time: 16:19:02 on Apr 20,2025, Elapsed time: 0:00:00
 Errors: 0, Warnings: 150
 vlog -sv ./src/testbench/sc_datapath_tb.sv +incdir+./src/include/
 QuestaSim-64 vlog 2021.4 Compiler 2021.10 Oct 13 2021
-Start time: 09:08:55 on Apr 11,2025
+Start time: 16:19:02 on Apr 20,2025
 vlog -sv ./src/testbench/sc_datapath_tb.sv "+incdir+./src/include/" 
 -- Compiling package isa_pkg
 -- Compiling package datapath_pkg
@@ -669,7 +669,7 @@ vlog -sv ./src/testbench/sc_datapath_tb.sv "+incdir+./src/include/"
 
 Top level modules:
 	sc_datapath_tb
-End time: 09:08:56 on Apr 11,2025, Elapsed time: 0:00:01
+End time: 16:19:02 on Apr 20,2025, Elapsed time: 0:00:00
 Errors: 0, Warnings: 0
 vsim -voptargs="+acc" work.sc_datapath_tb -do "view objects; do ./src/waves/sc_datapath.do; run -all;" -onfinish stop
 Reading pref.tcl
