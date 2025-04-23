@@ -79,7 +79,6 @@ module sc_datapath
 
 
     // sb signals
-
     // inputs
     assign sbif.fetch                   = sb_in;
     assign sbif.wb_issue                = wb_reg;
@@ -160,10 +159,10 @@ module sc_datapath
     assign dcif.dmemstore  = eif.eif_output.sls_dmemstore;
     assign dcif.dmemaddr   = eif.eif_output.sls_dmemaddr;
 
-    assign dcif.matrix_ls        = '0;
-    assign dcif.gemm_new_weight  = '0;
-    assign dcif.gemm_matrices    = '0;
+    assign dcif.matrix_ls  = eif.eif_output.fu_matls_out;
 
+    assign dcif.gemm_out   = eif.eif_output.gemm_out;
+    
     // wb signals
 
     // inputs
