@@ -2,6 +2,8 @@ onerror {resume}
 quietly WaveActivateNextPane {} 0
 add wave -noupdate /system_tb/CLK
 add wave -noupdate /system_tb/nRST
+add wave -noupdate /system_tb/dcif/halt
+add wave -noupdate /system_tb/dcif/flushed
 add wave -noupdate -divider {Instruction Operations}
 add wave -noupdate -group icache /system_tb/DUT/MS/ICACHE/icache_format
 add wave -noupdate -group icache /system_tb/DUT/MS/ICACHE/icache
@@ -14,7 +16,7 @@ add wave -noupdate -expand -group {datapath enables} /system_tb/DUT/DP/eif/sls_e
 add wave -noupdate -expand -group {datapath enables} /system_tb/DUT/DP/eif/mls_enable
 add wave -noupdate -expand -group {datapath enables} /system_tb/DUT/DP/eif/gemm_enable
 add wave -noupdate -expand -group {datapath instr signals} /system_tb/DUT/dcif/imemaddr
-add wave -noupdate -expand -group {datapath instr signals} -radix unsigned /system_tb/DUT/dcif/imemload
+add wave -noupdate -expand -group {datapath instr signals} -radix hexadecimal /system_tb/DUT/dcif/imemload
 add wave -noupdate -expand -group {datapath instr signals} /system_tb/DUT/dcif/imemREN
 add wave -noupdate -expand -group {cif icache} /system_tb/cif/iwait
 add wave -noupdate -expand -group {cif icache} /system_tb/cif/iREN
@@ -124,7 +126,7 @@ add wave -noupdate -expand -group ram /system_tb/DUT/MS/ARB/dcache_load
 add wave -noupdate -divider {Matrix Operations}
 add wave -noupdate /system_tb/DUT/DP/SCOREBOARD/IS/RF/register
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {164 ns} 0}
+WaveRestoreCursors {{Cursor 1} {15 ns} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 163
 configure wave -valuecolwidth 100
@@ -140,4 +142,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 ns} {733 ns}
+WaveRestoreZoom {0 ns} {43 ns}

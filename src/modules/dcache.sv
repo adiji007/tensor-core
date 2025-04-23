@@ -8,8 +8,8 @@ module dcache (
 );
 
 import caches_pkg::*;
-import "DPI-C" function void mem_write(input bit [31:0] address, input bit [31:0] data);
-import "DPI-C" function void mem_save(); 
+// import "DPI-C" function void mem_write(input bit [31:0] address, input bit [31:0] data);
+// import "DPI-C" function void mem_save(); 
 
 // Cache configuration parameters
 parameter CS = 1024;        // Cache size in bits Currently: 1KB dcache
@@ -178,8 +178,8 @@ always_comb begin
                    {(BLKOFF_BITS+BYTEOFF_BITS){1'b0}}} + 
                   ((dcache_state == WB1) ? (1 << BYTEOFF_BITS) : 0);
       cif.dstore = dcache[dcache_format.idx][lru[dcache_format.idx]].data[dcache_state == WB1];
-      mem_write(cif.daddr, cif.dstore);
-      mem_save();
+      // mem_write(cif.daddr, cif.dstore);
+      // mem_save();
       if (!cif.dwait && dcache_state == WB1) begin
         next_dcache[dcache_format.idx][lru[dcache_format.idx]].dirty = 1'b0;
         next_dcache[dcache_format.idx][lru[dcache_format.idx]].valid = 1'b0;
@@ -227,8 +227,8 @@ always_comb begin
                   {(BLKOFF_BITS+BYTEOFF_BITS){1'b0}}} +
                   ((dcache_state == WRITE1) ? (1 << BYTEOFF_BITS) : 0);
       cif.dstore = dcache[flush_idx][way_sel].data[dcache_state == WRITE1];
-      mem_write(cif.daddr, cif.dstore);
-      mem_save();
+      // mem_write(cif.daddr, cif.dstore);
+      // mem_save();
       if (!cif.dwait && dcache_state == WRITE1) begin
         next_dcache[flush_idx][way_sel].dirty = 1'b0;
         next_dcache[flush_idx][way_sel].valid = 1'b0;

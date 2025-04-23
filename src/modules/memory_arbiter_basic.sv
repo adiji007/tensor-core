@@ -54,5 +54,8 @@ module memory_arbiter_basic(
           acif.iload = icache_load;
         end
     end
+    else begin
+        
+    end
   end
 endmodule

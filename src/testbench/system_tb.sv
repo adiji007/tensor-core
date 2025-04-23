@@ -72,7 +72,7 @@ module system_tb;
     $display("Halted at time = %g and ran for %d cycles.",$time, cycles);
     nRST = 0;
     // dump_memory();
-    $finish;
+    $stop;
   end
 
   // task automatic dump_memory();
