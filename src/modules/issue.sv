@@ -104,6 +104,13 @@ module issue(
       fusif.busy[0]  = (fust_state[0] == FUST_EX && (next_fust_state[0] == FUST_EMPTY || next_fust_state[0] == FUST_WAIT)) ? 1'd0 : next_fust_state[0] != FUST_EMPTY;
       fusif.busy[1]  = (fust_state[1] == FUST_EX && (next_fust_state[1] == FUST_EMPTY || next_fust_state[1] == FUST_WAIT)) ? 1'd0 : next_fust_state[1] != FUST_EMPTY;
       fusif.busy[2]  = (fust_state[2] == FUST_EX && (next_fust_state[2] == FUST_EMPTY || next_fust_state[2] == FUST_WAIT)) ? 1'd0 : next_fust_state[2] != FUST_EMPTY;
+
+      // // (fust_state[0] == FUST_EX && (next_fust_state[0] == FUST_EMPTY || next_fust_state[0] == FUST_WAIT))
+      // fusif.busy[0]  = isif.fu_ex[0] == 1'b1 ? 1'd0 : next_fust_state[0] != FUST_EMPTY;
+      // // (fust_state[1] == FUST_EX && (next_fust_state[1] == FUST_EMPTY || next_fust_state[1] == FUST_WAIT))
+      // fusif.busy[1]  = isif.fu_ex[1] == 1'b1 ? 1'd0 : next_fust_state[1] != FUST_EMPTY;
+      // // (fust_state[2] == FUST_EX && (next_fust_state[2] == FUST_EMPTY || next_fust_state[2] == FUST_WAIT))
+      // fusif.busy[2]  = isif.fu_ex[2] == 1'b1 ? 1'd0 : next_fust_state[2] != FUST_EMPTY;
      
       // TODO
       // could be writing the flush bits here as well if not in the dispatch,

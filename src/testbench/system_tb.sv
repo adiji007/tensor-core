@@ -62,13 +62,13 @@ module system_tb;
     $display("Starting Scheduler Core:");
     nRST = 1;
     // wait for halt
-    // while (!syif.halt)
-    // begin
-    //   // acif.ramaddr = '1;
-    //   @(posedge CLK);
-    //   cycles++;
-    // end
-    repeat (100) @(posedge CLK);
+    while (!dcif.flushed)
+    begin
+      // acif.ramaddr = '1;
+      @(posedge CLK);
+      cycles++;
+    end
+    // repeat (100) @(posedge CLK);
     $display("Halted at time = %g and ran for %d cycles.",$time, cycles);
     nRST = 0;
     // dump_memory();
