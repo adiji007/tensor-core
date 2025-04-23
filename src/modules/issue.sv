@@ -177,19 +177,19 @@ module issue(
           // && (age[i] > oldest_age)
           // next_oldest_rdy[i] = 1'b1;
       if (rdy[0] && (fust_state[0] != FUST_EX)) begin
-        next_oldest_rdy[0] = ((age[0] > age[1]) && (age[0] > age[2]) && (age[0] > age[3]) && (age[0] > age[4])) ? 1'b1 : oldest_rdy[0];
+        next_oldest_rdy[0] = ((age[0] > age[1]) && (age[0] > age[2]) && (age[0] > age[3]) && (age[0] > age[4])) ? 1'b1 : (next_fust_state[0] == FUST_EMPTY) ? 1'b0 : oldest_rdy[0];
       end
       else if (rdy[1] && (fust_state[1] != FUST_EX)) begin
-        next_oldest_rdy[1] = ((age[1] > age[0]) && (age[1] > age[2]) && (age[1] > age[3]) && (age[1] > age[4])) ? 1'b1 : oldest_rdy[1];
+        next_oldest_rdy[1] = ((age[1] > age[0]) && (age[1] > age[2]) && (age[1] > age[3]) && (age[1] > age[4])) ? 1'b1 : (next_fust_state[1] == FUST_EMPTY) ? 1'b0 : oldest_rdy[1];
       end
       else if (rdy[2] && (fust_state[2] != FUST_EX)) begin
-        next_oldest_rdy[2] = ((age[2] > age[0]) && (age[2] > age[1]) && (age[2] > age[3]) && (age[2] > age[4])) ? 1'b1 : oldest_rdy[2];
+        next_oldest_rdy[2] = ((age[2] > age[0]) && (age[2] > age[1]) && (age[2] > age[3]) && (age[2] > age[4])) ? 1'b1 : (next_fust_state[2] == FUST_EMPTY) ? 1'b0 : oldest_rdy[2];
       end
       else if (rdy[3] && (fust_state[3] != FUST_EX)) begin
-        next_oldest_rdy[3] = ((age[3] > age[0]) && (age[3] > age[1]) && (age[3] > age[2]) && (age[3] > age[4])) ? 1'b1 : oldest_rdy[3];
+        next_oldest_rdy[3] = ((age[3] > age[0]) && (age[3] > age[1]) && (age[3] > age[2]) && (age[3] > age[4])) ? 1'b1 : (next_fust_state[3] == FUST_EMPTY) ? 1'b0 : oldest_rdy[3];
       end
       else if (rdy[4] && (fust_state[4] != FUST_EX)) begin
-        next_oldest_rdy[4] = ((age[4] > age[0]) && (age[4] > age[1]) && (age[4] > age[2]) && (age[4] > age[3])) ? 1'b1 : oldest_rdy[4];
+        next_oldest_rdy[4] = ((age[4] > age[0]) && (age[4] > age[1]) && (age[4] > age[2]) && (age[4] > age[3])) ? 1'b1 : (next_fust_state[4] == FUST_EMPTY) ? 1'b0 : oldest_rdy[4];
       end
 
         // if (rdy[i] && fust_state == FUST_RDY && (age[i] > oldest_rdy)) begin
@@ -413,7 +413,7 @@ module issue(
             issue.fu_en[i] = 1'b1;
           end
           issue.rdat1 = (lui_type) ? '0 : rfif.rdat1;
-          issue.rdat2 = (i_type) ? imm : rfif.rdat2;
+          issue.rdat2 = (i_type && (fusif.fust.op[i].mem_type == scalar_na) && (issue.fu_en[2] != 1'b1)) ? imm : rfif.rdat2;
           issue.imm = imm;
         end
       end
