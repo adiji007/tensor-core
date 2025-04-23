@@ -101,19 +101,19 @@ module fu_scalar_ls (
                         sls_if.dmemstore = latched_dmemstore;
                         if (sls_if.dhit_in) begin
                             next_state = idle;
-                            sls_if.dmemWEN = '0;
+                            // sls_if.dmemWEN = '0;
                             sls_if.dhit = dhit_store;
                         end
                     end 
                     else if (latched_dmemREN) begin
                         sls_if.dmemaddr = latched_dmemaddr;
                         sls_if.dmemREN = latched_dmemREN;
+                        sls_if.rd = latched_rd;
                         if (sls_if.dhit_in) begin
                             next_state = idle;
                             sls_if.dmemload = sls_if.dmem_in;
-                            sls_if.dmemREN = '0;
-                            sls_if.dhit = dhit_load;
-                            sls_if.rd = latched_rd; 
+                            // sls_if.dmemREN = '0;
+                            sls_if.dhit = dhit_load; 
                         end
                     end
                 end

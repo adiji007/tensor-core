@@ -79,7 +79,6 @@ module sc_datapath
 
 
     // sb signals
-
     // inputs
     assign sbif.fetch                   = sb_in;
     assign sbif.wb_issue                = wb_reg;
