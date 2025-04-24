@@ -5,7 +5,7 @@ import types_pkg::*;
 
 interface bank_access_FSM_if;
 
-    logic sLoad_hit, wFIFO_full, instrFIFO_empty, rFIFO_full, psumoutFIFO_empty, new_instr;
+    logic sLoad_hit, wFIFO_full, instrFIFO_empty, rFIFO_full, psumoutFIFO_full, new_instr;
     logic [ROW_S_W-1:0] sLoad_row;
     logic [BITS_PER_ROW-1:0] load_data;
     instrFIFO_t instrFIFO_rdata;
@@ -18,7 +18,7 @@ interface bank_access_FSM_if;
     rFIFO_t rFIFO_wdata;
 
     modport sp(
-        input sLoad_hit, wFIFO_full, instrFIFO_empty, rFIFO_full, psumoutFIFO_empty, sLoad_row, load_data, instrFIFO_rdata, psumoutFIFO_rdata, gemm_mat, new_instr, 
+        input sLoad_hit, wFIFO_full, instrFIFO_empty, rFIFO_full, psumoutFIFO_full, sLoad_row, load_data, instrFIFO_rdata, psumoutFIFO_rdata, gemm_mat, new_instr, 
         output instrFIFO_REN, psumoutFIFO_REN, sLoad, wFIFO_WEN, rFIFO_WEN, load_addr, wFIFO_wdata, rFIFO_wdata
     );
 

@@ -48,7 +48,7 @@ module bank_access_FSM #(
         n_ls_mat = ls_mat;
         case (state)
             DECODE: begin
-                if(~spif.psumoutFIFO_empty && (spif.gemm_mat[5:4] == BANK_NUM)) begin
+                if(spif.psumoutFIFO_full && (spif.gemm_mat[5:4] == BANK_NUM)) begin
                     n_state = PSUMLOAD;
                 end
                 else if (~spif.instrFIFO_empty) begin

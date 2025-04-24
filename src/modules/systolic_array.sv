@@ -31,6 +31,8 @@ module systolic_array(
     // Weight Registers
     logic [DW*N-1:0] weights [N-1:0];
 
+    logic nxt_drained;
+
     // Generate variables
     genvar i,j,l,m,n,o,p;
 
@@ -204,7 +206,7 @@ module systolic_array(
             memory.drained <= nxt_drained;
         end 
     end
-    logic nxt_drained;
+    
     always_comb begin
         memory.out_en = 1'b0;
         memory.row_out = '0;

@@ -23,7 +23,7 @@ module sysarr_OUT_FIFO(
         fifo_mem_next = fifo_mem;
         out_fifo.out = fifo_mem; // Output from the last row
         if (out_fifo.shift) begin
-            fifo_mem_next = {out_fifo.shift_value, fifo_mem[DW * N - 1: DW]};    // Shift values forward 
+            fifo_mem_next = {fifo_mem[DW * (N-1) - 1 : 0], out_fifo.shift_value};    // Shift values forward 
         end
     end
 
