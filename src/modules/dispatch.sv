@@ -114,9 +114,9 @@ module dispatch(
       // check_busy = 1'b0;
       case (cuif.fu_s)
         FU_S_ALU:     s_busy = (diif.fu_ex[0] == 1'b0 && (|diif.fust_s.t1 || |diif.fust_s.t2)) ? diif.fust_s.busy[FU_S_ALU] : '0;
-        FU_S_LD_ST:   s_busy = (diif.fu_ex[1] == 1'b0 && |diif.fust_s.t1 && |diif.fust_s.t2) ? diif.fust_s.busy[FU_S_LD_ST] : '0;
+        FU_S_LD_ST:   s_busy = (diif.fu_ex[1] == 1'b0 && (|diif.fust_s.t1 || |diif.fust_s.t2)) ? diif.fust_s.busy[FU_S_LD_ST] : '0;
         // FU_S_LD_ST:   check_busy = diif.fust_s.busy[FU_S_LD_ST];
-        FU_S_BRANCH:  s_busy = (diif.fu_ex[2] == 1'b0 && |diif.fust_s.t1 && |diif.fust_s.t2) ? diif.fust_s.busy[FU_S_BRANCH] : '0;
+        FU_S_BRANCH:  s_busy = (diif.fu_ex[2] == 1'b0 && (|diif.fust_s.t1 || |diif.fust_s.t2)) ? diif.fust_s.busy[FU_S_BRANCH] : '0;
         default: s_busy = 1'b0;
       endcase
       case (cuif.fu_m)
