@@ -11,7 +11,6 @@ interface scratchpad_if;
     instrFIFO_t instrFIFO_wdata;
     logic [ROW_S_W-1:0] psumout_row_sel_in, sLoad_row;
     logic [BITS_PER_ROW-1:0] psumout_data, load_data;
-    logic [BITS_PER_ROW-1:0] psumout_data, load_data;
 
     logic instrFIFO_full, partial_enable, weight_enable, input_enable, sLoad, sStore, gemm_complete, load_complete, store_complete;
     logic [BITS_PER_ROW-1:0] weight_input_data, partial_sum_data, store_data;
@@ -47,10 +46,10 @@ interface scratchpad_if;
             output sLoad, sStore, load_addr, store_addr, store_data,
             input load_data, sLoad_hit, sStore_hit, sLoad_row
         );
-    modport testbench (
-            output sLoad, sStore, load_addr, store_addr, store_data,
-            input load_data, sLoad_hit, sStore_hit, sLoad_row
-        );
+    // modport testbench (
+    //         output sLoad, sStore, load_addr, store_addr, store_data,
+    //         input load_data, sLoad_hit, sStore_hit, sLoad_row
+    //     );
 
 endinterface
 
