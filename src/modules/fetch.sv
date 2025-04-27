@@ -13,7 +13,7 @@ module fetch(
     always_comb begin
         next_pc = fif.pc_prediction;
 
-        if (fif.misprediction && !fif.freeze) begin
+        if ((fif.misprediction || fif.br_jump) && !fif.freeze) begin
             next_pc = fif.correct_pc;
         end
         

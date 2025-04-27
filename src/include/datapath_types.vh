@@ -318,6 +318,7 @@ package datapath_pkg;
     regbits_t jump_rd;
     // word_t jump_dest;
     word_t jump_wdat;
+    logic br_jump;
 
     // Scalar ALU FU
     logic salu_negative;       // needed?

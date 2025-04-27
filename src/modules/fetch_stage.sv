@@ -21,6 +21,7 @@ module fetch_stage(
   assign fif.freeze = fsif.freeze || fsif.jump;               // Input from scoreboard
   assign fif.misprediction = fsif.misprediction; // Input from branch predictor
   assign fif.correct_pc = fsif.correct_pc;       // Input from branch predictor
+  assign fif.br_jump = fsif.br_jump;
   assign fsif.pc = (fsif.freeze) ? prev_pc : fif.pc;                       // Output to scoreboard, branch predictor
   assign fsif.instr = (fsif.freeze) ? prev_instr : fif.instr;                 // Output to scoreboard
   assign fsif.imemREN = fif.imemREN;             // Output to memory

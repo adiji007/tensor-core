@@ -51,6 +51,7 @@ module execute (
     assign eif.eif_output.fu_ex[2] = (fubif.resolved || fubif.miss); // to sb
     assign eif.eif_output.jump_rd = eif.rd;
     assign eif.eif_output.jump_wdat = fubif.jump_wdat; 
+    assign eif.eif_output.br_jump = fubif.br_jump;
     // assign eif.eif_output.jump_dest = fubif.jump_dest; // might not need this, can just update using bfu_update_pc?
 
     // Scalar ALU FU
