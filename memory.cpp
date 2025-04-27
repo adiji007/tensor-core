@@ -26,19 +26,22 @@ extern "C" {
         std::cout << "Memory initialized with " << memory.size() << " words" << std::endl;
     }
 
-    void mem_read(const svBitVecVal* address, svBitVecVal* data) {
+    bool mem_read(const svBitVecVal* address, svBitVecVal* data) {
         uint32_t addr = *address;
         if (addr % 4 != 0) {
             std::cerr << "Error: Unaligned memory read at address " << addr << std::endl;
             *data = 0;
-            return;
+            return false;
         }
         uint32_t index = addr / 4;
         if (index < memory.size()) {
             *data = memory[index];
+            return true;
         } else {
             *data = 0;  // Uninitialized addresses return 0
+            return false;
         }
+        return false;
     }
 
 
