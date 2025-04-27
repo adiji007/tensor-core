@@ -1,7 +1,7 @@
 `ifndef SP_TYPES_PKG_VH
 `define SP_TYPES_PKG_VH
 
-package types_pkg;
+package sp_types_pkg;
   parameter WORD_W = 32;
   parameter REG_W  = 5;
   parameter MATRIX_W = 4;
