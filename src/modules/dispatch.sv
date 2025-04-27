@@ -211,6 +211,10 @@ module dispatch(
       diif.n_fu_t = cuif.fu_t;
       diif.n_t1 = diif.fust_s.t1;
       diif.n_t2 = diif.fust_s.t2;
+      diif.n_mt1 = diif.fust_m.t1;
+      diif.n_gt1 = diif.fust_g.t1;
+      diif.n_gt3 = diif.fust_g.t2;
+      diif.n_gt2 = diif.fust_g.t3;
 
       // tag updates on WB
       // if (diif.wb.s_rw_en & diif.wb.alu_done & diif.fust_state[0] == FUST_EX) begin // TODO fust related wb
