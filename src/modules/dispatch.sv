@@ -113,10 +113,10 @@ module dispatch(
     always_comb begin : Hazard_Logic
       // check_busy = 1'b0;
       case (cuif.fu_s)
-        FU_S_ALU:     s_busy = (diif.fu_ex[0] == 1'b0 && (|diif.fust_s.t1 || |diif.fust_s.t2)) ? diif.fust_s.busy[FU_S_ALU] : '0;
-        FU_S_LD_ST:   s_busy = (diif.fu_ex[1] == 1'b0 && (|diif.fust_s.t1 || |diif.fust_s.t2)) ? diif.fust_s.busy[FU_S_LD_ST] : '0;
+        FU_S_ALU:     s_busy = (diif.fu_ex[0] == 1'b0 || (|diif.fust_s.t1 || |diif.fust_s.t2)) ? diif.fust_s.busy[FU_S_ALU] : '0;
+        FU_S_LD_ST:   s_busy = (diif.fu_ex[1] == 1'b0 || (|diif.fust_s.t1 || |diif.fust_s.t2)) ? diif.fust_s.busy[FU_S_LD_ST] : '0;
         // FU_S_LD_ST:   check_busy = diif.fust_s.busy[FU_S_LD_ST];
-        FU_S_BRANCH:  s_busy = (diif.fu_ex[2] == 1'b0 && (|diif.fust_s.t1 || |diif.fust_s.t2)) ? diif.fust_s.busy[FU_S_BRANCH] : '0;
+        FU_S_BRANCH:  s_busy = (diif.fu_ex[2] == 1'b0 || (|diif.fust_s.t1 || |diif.fust_s.t2)) ? diif.fust_s.busy[FU_S_BRANCH] : '0;
         default: s_busy = 1'b0;
       endcase
       case (cuif.fu_m)
@@ -211,6 +211,10 @@ module dispatch(
       diif.n_fu_t = cuif.fu_t;
       diif.n_t1 = diif.fust_s.t1;
       diif.n_t2 = diif.fust_s.t2;
+      diif.n_mt1 = diif.fust_m.t1;
+      diif.n_gt1 = diif.fust_g.t1;
+      diif.n_gt3 = diif.fust_g.t2;
+      diif.n_gt2 = diif.fust_g.t3;
 
       // tag updates on WB
       // if (diif.wb.s_rw_en & diif.wb.alu_done & diif.fust_state[0] == FUST_EX) begin // TODO fust related wb
@@ -223,13 +227,13 @@ module dispatch(
         diif.n_t2[FU_S_ALU] = (diif.fust_s.t2[FU_S_ALU] == 2'd1) && diif.fust_s.busy[FU_S_ALU] ? '0 : diif.fust_s.t2[FU_S_ALU];
         diif.n_mt1 = (diif.fust_m.t1 == 2'd1 && diif.fust_m.busy) ? '0 : diif.fust_m.t1;
       // end else if (diif.wb.s_rw_en & diif.wb.load_done & diif.fust_state[1] == FUST_EX) begin
-      end else if ((diif.fu_ex[1] == 1'b1) && diif.fust_state[1] == FUST_EX) begin // clearing load tags
+      end else if (((diif.fu_ex[1] == 1'b1) && diif.fust_state[1] == FUST_EX) || (diif.wb.s_rw_en)) begin // clearing load tags
         diif.n_t1[FU_S_ALU] = (diif.fust_s.t1[FU_S_ALU] == 2'd2) && diif.fust_s.busy[FU_S_ALU] ? '0 : diif.fust_s.t1[FU_S_ALU];
         diif.n_t2[FU_S_ALU] = (diif.fust_s.t2[FU_S_ALU] == 2'd2) && diif.fust_s.busy[FU_S_ALU] ? '0 : diif.fust_s.t2[FU_S_ALU];
         diif.n_t1[FU_S_BRANCH] = (diif.fust_s.t1[FU_S_BRANCH] == 2'd2) && diif.fust_s.busy[FU_S_BRANCH] ? '0 : diif.fust_s.t1[FU_S_BRANCH];
         diif.n_t2[FU_S_BRANCH] = (diif.fust_s.t2[FU_S_BRANCH] == 2'd2) && diif.fust_s.busy[FU_S_BRANCH] ? '0 : diif.fust_s.t2[FU_S_BRANCH];
         diif.n_mt1 = (diif.fust_m.t1 == 2'd2 && diif.fust_m.busy) ? '0 : diif.fust_m.t1;
-      end else if ((diif.fu_ex[2] == 1'b1) && diif.fust_state[2] == FUST_EX) begin // clearing jump tags
+      end else if (((diif.fu_ex[2] == 1'b1) && diif.fust_state[2] == FUST_EX) || (diif.wb.s_rw_en)) begin // clearing jump tags
         diif.n_t1[FU_S_ALU] = (diif.fust_s.t1[FU_S_ALU] == 2'd3) && diif.fust_s.busy[FU_S_ALU] ? '0 : diif.fust_s.t1[FU_S_ALU];
         diif.n_t2[FU_S_ALU] = (diif.fust_s.t2[FU_S_ALU] == 2'd3) && diif.fust_s.busy[FU_S_ALU] ? '0 : diif.fust_s.t2[FU_S_ALU];
         diif.n_t1[FU_S_LD_ST] = (diif.fust_s.t1[FU_S_LD_ST] == 2'd3) && diif.fust_s.busy[FU_S_LD_ST] ? '0 : diif.fust_s.t1[FU_S_LD_ST];
@@ -269,9 +273,11 @@ module dispatch(
         diif.n_gt2 = (diif.fust_g.t2 != '0) && diif.fust_g.busy ? '0 : diif.fust_g.t2;
         diif.n_gt3 = (diif.fust_g.t3 != '0) && diif.fust_g.busy ? '0 : diif.fust_g.t3;
       end
-
-      diif.n_t1[cuif.fu_s] = diif.n_fust_s_en ? rstsif.status.idx[s_rs1].tag : diif.n_t1[cuif.fu_s];
-      diif.n_t2[cuif.fu_s] = diif.n_fust_s_en ? rstsif.status.idx[s_rs2].tag : diif.n_t2[cuif.fu_s];
+      
+      if (!(diif.wb.s_rw_en && ((diif.wb.s_rw == s_rs1) || (diif.wb.s_rw == s_rs2)))) begin
+        diif.n_t1[cuif.fu_s] = rstsif.status.idx[s_rs1].tag;
+        diif.n_t2[cuif.fu_s] = rstsif.status.idx[s_rs2].tag;
+      end
 
       diif.n_mt1 = diif.n_fust_m_en ? rstsif.status.idx[s_rs1].tag : diif.n_mt1;
       diif.n_gt1 = diif.n_fust_g_en ? rstmif.status.idx[m_rs1].tag : diif.n_gt1;

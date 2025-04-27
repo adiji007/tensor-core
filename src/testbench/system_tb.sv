@@ -13,7 +13,7 @@
 `include "isa_types.vh"
 `include "datapath_types.vh"
 `include "ram_pkg.vh"
-`include "types_pkg.vh"
+// `include "types_pkg.vh"
 `include "cpu_ram_if.vh"
 `include "datapath_cache_if.vh"
 `include "caches_if.vh"

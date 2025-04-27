@@ -14,7 +14,7 @@ interface issue_if;
     fust_m_row_t n_fust_m;
     fust_g_row_t n_fust_g;
     fu_scalar_t n_fu_s;
-    logic n_fu_m, n_fu_g;
+    // logic n_fu_m, n_fu_g;
     logic n_fust_s_en, n_fust_m_en, n_fust_g_en;
     logic [2:0][1:0] n_t1;
     logic [2:0][1:0] n_t2;
@@ -31,7 +31,7 @@ interface issue_if;
     // Inputs from execute
     // ex_t ex; //branch and matrix done signals
     logic branch_miss;
-    logic branch_resolved;
+    // logic branch_resolved;
     logic [4:0] fu_ex;
     logic freeze;
     // Inputs from writeback
@@ -46,8 +46,8 @@ interface issue_if;
     fust_state_e [4:0] fust_state;
     
     modport IS (
-        input dispatch, wb, n_fu_t, n_fust_s, n_fust_m, n_fust_g, n_fu_s, n_fu_m, n_fu_g, n_fust_s_en, n_fust_m_en, n_fust_g_en, 
-        input n_t1, n_t2, s_wdata, branch_miss, branch_resolved, fu_ex, n_mt1, n_gt1, n_gt2, n_gt3, freeze,
+        input dispatch, wb, n_fu_t, n_fust_s, n_fust_m, n_fust_g, n_fu_s, n_fust_s_en, n_fust_m_en, n_fust_g_en, 
+        input n_t1, n_t2, s_wdata, branch_miss, fu_ex, n_mt1, n_gt1, n_gt2, n_gt3, freeze,
         output out, fust_s, fust_m, fust_g, fust_state
     );
 
