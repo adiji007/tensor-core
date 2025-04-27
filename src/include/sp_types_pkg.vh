@@ -1,5 +1,5 @@
-`ifndef TYPES_PKG_VH
-`define TYPES_PKG_VH
+`ifndef SP_TYPES_PKG_VH
+`define SP_TYPES_PKG_VH
 
 package types_pkg;
   parameter WORD_W = 32;

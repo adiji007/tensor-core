@@ -1,4 +1,4 @@
-`include "types_pkg.vh"
+`include "sp_types_pkg.vh"
 `include "scratchpad_if.vh"
 `include "scratchpad_bank_if.vh"
 `include "gemm_FSM_if.vh"

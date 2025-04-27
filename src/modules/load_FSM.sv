@@ -1,4 +1,4 @@
-`include "types_pkg.vh"
+`include "sp_types_pkg.vh"
 `include "load_FSM_if.vh"
 import types_pkg::*;
 

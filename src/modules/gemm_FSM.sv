@@ -1,4 +1,4 @@
-`include "types_pkg.vh"
+`include "sp_types_pkg.vh"
 `include "gemm_FSM_if.vh"
 /*
 ***** Fifo has space not implemented.
