@@ -85,15 +85,6 @@ module control_unit(
                     cu_if.fu_s = FU_S_LD_ST;
                 end
             end
-        JALR:
-            begin 
-                cu_if.imm = {{20{instr[31]}},instr[31:20]};
-                cu_if.s_reg_write = '1;
-                cu_if.jalr = '1;
-                cu_if.alu_op = ALU_ADD;
-                cu_if.i_flag = '1;
-                cu_if.fu_s = FU_S_ALU;
-            end
         STYPE:
             begin
                 if (instr[14:12] == 3'h2) begin 
@@ -154,16 +145,28 @@ module control_unit(
                 cu_if.imm = {{11{instr[31]}},instr[31],instr[19:12],instr[20],instr[30:21],1'b0};
                 cu_if.jal = '1;
                 cu_if.s_reg_write = '1;
-                cu_if.alu_op = ALU_ADD;
+                // cu_if.alu_op = ALU_ADD;
                 cu_if.i_flag = '1;
-                cu_if.fu_s = FU_S_ALU;
+                cu_if.fu_s = FU_S_BRANCH;
             end
-        // LUI:
-        //     begin
-        //         cu_if.imm = {instr[31:12], 12'b0};
-        //         cu_if.u_type = UT_LOAD;
-        //         cu_if.s_reg_write = '1;
-        //     end
+        JALR:
+            begin 
+                cu_if.imm = {{20{instr[31]}},instr[31:20]};
+                cu_if.s_reg_write = '1;
+                cu_if.jalr = '1;
+                // cu_if.alu_op = ALU_ADD;
+                cu_if.i_flag = '1;
+                cu_if.fu_s = FU_S_BRANCH;
+            end
+        LUI:
+            begin
+                cu_if.imm = {instr[31:12], 12'b0};
+                cu_if.u_type = UT_LOAD;
+                cu_if.alu_op = ALU_ADD;
+                cu_if.fu_s = FU_S_ALU;
+                cu_if.i_flag = 1'b1;
+                cu_if.s_reg_write = '1;
+            end
         // AUIPC:
         //     begin 
         //         cu_if.u_type = ADD;
@@ -176,21 +179,23 @@ module control_unit(
                 cu_if.imm = {{22{instr[17]}}, instr[16:7]};
                 // cu_if.i_flag = '1;
                 // cu_if.alu_op = ALU_ADD;
-                cu_if.stride = instr[22:18]; // register
+                // cu_if.stride = instr[22:18]; // register
                 cu_if.fu_m = FU_M_LD_ST;
                 cu_if.m_mem_type = M_LOAD;
                 cu_if.matrix_rd = instr[31:28];
                 cu_if.m_reg_write = '1;
                 cu_if.fu_t = FU_M_T;
+                cu_if.i_flag = '1;
             end
         ST_M: //st.m
             begin
                 cu_if.imm = {{22{instr[17]}}, instr[16:7]};
-                cu_if.stride = instr[22:18]; // register
+                // cu_if.stride = instr[22:18]; // register
                 cu_if.fu_m = FU_M_LD_ST;
                 cu_if.m_mem_type = M_STORE;
                 cu_if.matrix_rd = instr[31:28];
                 cu_if.fu_t = FU_M_T;
+                cu_if.i_flag = '1;
             end
         GEMM: // gemm.m
             begin

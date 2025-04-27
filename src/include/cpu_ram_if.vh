@@ -9,11 +9,13 @@
 `define CPU_RAM_IF_VH
 
 // typedefs
-`include "cpu_types_pkg.vh"
+`include "isa_types.vh"
+`include "ram_pkg.vh"
 
 interface cpu_ram_if;
   // import types
-  import cpu_types_pkg::*;
+  import ram_pkg::*;
+  import isa_pkg::*;
 
   // ram signals
   logic               ramREN, ramWEN;

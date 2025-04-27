@@ -13,6 +13,7 @@ localparam CLK_PERIOD = 1;
 // Testbench Signals
 logic tb_clk;
 logic tb_nrst;
+logic tb_ihit;
 
 always
 begin
@@ -23,7 +24,7 @@ begin
 end
 
 fu_branch_predictor_if fubpif ();
-fu_branch_predictor DUT (.CLK(tb_clk), .nRST(tb_nrst), .fubpif(fubpif));
+fu_branch_predictor DUT (.CLK(tb_clk), .nRST(tb_nrst), .ihit(tb_ihit), .fubpif(fubpif));
 
 string tb_test_case = "INIT";
 integer tb_test_num = 0;
@@ -52,6 +53,7 @@ initial begin
     fubpif.update_btb = '0;
     fubpif.branch_outcome = '0;
     fubpif.branch_target = '0;
+    tb_ihit = 1'b1;
 
     #(CLK_PERIOD*2);
     tb_nrst = 1'b1;

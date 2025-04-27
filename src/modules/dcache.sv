@@ -3,12 +3,13 @@
 module dcache (
   input logic CLK, nRST,
   caches_if.dcache cif,
-  datapath_cache_if.dcache dcif                               
+  datapath_cache_if.dcache dcif,
+  arbiter_caches_if.dcache acif                               
 );
 
 import caches_pkg::*;
-import "DPI-C" function void mem_write(input bit [31:0] address, input bit [31:0] data);
-import "DPI-C" function void mem_save(); 
+// import "DPI-C" function void mem_write(input bit [31:0] address, input bit [31:0] data);
+// import "DPI-C" function void mem_save(); 
 
 // Cache configuration parameters
 parameter CS = 1024;        // Cache size in bits Currently: 1KB dcache
@@ -97,10 +98,10 @@ always_comb begin
           next_dcache_state = LOAD0;
       end
     end
-    WB0: if (!cif.dwait) next_dcache_state = WB1;
-    WB1: if (!cif.dwait) next_dcache_state = LOAD0;
-    LOAD0: if (!cif.dwait) next_dcache_state = LOAD1;
-    LOAD1: if (!cif.dwait) next_dcache_state = IDLE;
+    WB0: if (!cif.dwait && acif.store_done) next_dcache_state = WB1;
+    WB1: if (!cif.dwait && acif.store_done) next_dcache_state = LOAD0;
+    LOAD0: if (!cif.dwait && acif.load_done) next_dcache_state = LOAD1;
+    LOAD1: if (!cif.dwait && acif.load_done) next_dcache_state = IDLE;
     FLUSH: begin
       if (finish_flush) begin
         next_dcache_state = HALT;
@@ -109,8 +110,8 @@ always_comb begin
                (flush_counter >= NUM_SETS && dcache[flush_idx][1].dirty))
         next_dcache_state = WRITE0;
     end
-    WRITE0: if (!cif.dwait) next_dcache_state = WRITE1;
-    WRITE1: if (!cif.dwait) next_dcache_state = FLUSH;
+    WRITE0: if (!cif.dwait && acif.store_done) next_dcache_state = WRITE1;
+    WRITE1: if (!cif.dwait && acif.store_done) next_dcache_state = FLUSH;
     // COUNT: if (!cif.dwait) next_dcache_state = HALT;
     HALT: next_dcache_state = HALT;
     default: next_dcache_state = IDLE;
@@ -177,8 +178,8 @@ always_comb begin
                    {(BLKOFF_BITS+BYTEOFF_BITS){1'b0}}} + 
                   ((dcache_state == WB1) ? (1 << BYTEOFF_BITS) : 0);
       cif.dstore = dcache[dcache_format.idx][lru[dcache_format.idx]].data[dcache_state == WB1];
-      mem_write(cif.daddr, cif.dstore);
-      mem_save();
+      // mem_write(cif.daddr, cif.dstore);
+      // mem_save();
       if (!cif.dwait && dcache_state == WB1) begin
         next_dcache[dcache_format.idx][lru[dcache_format.idx]].dirty = 1'b0;
         next_dcache[dcache_format.idx][lru[dcache_format.idx]].valid = 1'b0;
@@ -226,8 +227,8 @@ always_comb begin
                   {(BLKOFF_BITS+BYTEOFF_BITS){1'b0}}} +
                   ((dcache_state == WRITE1) ? (1 << BYTEOFF_BITS) : 0);
       cif.dstore = dcache[flush_idx][way_sel].data[dcache_state == WRITE1];
-      mem_write(cif.daddr, cif.dstore);
-      mem_save();
+      // mem_write(cif.daddr, cif.dstore);
+      // mem_save();
       if (!cif.dwait && dcache_state == WRITE1) begin
         next_dcache[flush_idx][way_sel].dirty = 1'b0;
         next_dcache[flush_idx][way_sel].valid = 1'b0;

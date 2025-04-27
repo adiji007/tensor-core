@@ -33,6 +33,8 @@ program test (
         sls_if.rs2 = '0;
         sls_if.dmem_in = '0;
         sls_if.dhit_in = '0;
+        sls_if.rd_in = '0;
+        sls_if.enable = '0;
 
         @(posedge CLK);
         @(posedge CLK);
@@ -48,13 +50,27 @@ program test (
         sls_if.imm = 32'd400;
         sls_if.mem_type = LOAD;
         sls_if.rs1 = 32'd440;
+        sls_if.enable = 1'b1;
+        sls_if.rd_in = 5'd10;
 
         @(negedge CLK);
+        sls_if.rd_in = 5'd15;
+        sls_if.imm = 32'd100;
+        sls_if.rs2 = 32'd101;
         @(negedge CLK);
+        sls_if.rs1 = 32'd740;
+        sls_if.mem_type = STORE;
         @(negedge CLK);
+        sls_if.imm = 32'd540;
+        sls_if.mem_type = scalar_na;
+        sls_if.rs2 = 32'd211;
         @(negedge CLK);
+        sls_if.rd_in = 5'd11;
+        sls_if.mem_type = LOAD;
         @(negedge CLK);
-        @(negedge CLK);
+        sls_if.mem_type = STORE;
+        sls_if.rd_in = 5'd12;
+        @(posedge CLK);
 
         sls_if.dmem_in = 32'd555;
         sls_if.dhit_in = '1;
@@ -63,11 +79,50 @@ program test (
 
         sls_if.dhit_in = '0;
 
-        @(negedge CLK);
+        @(posedge CLK);
+        sls_if.enable = 1'b0;
+        @(posedge CLK);
 
         @(negedge CLK);
         @(negedge CLK);
         @(negedge CLK);
+        @(negedge CLK);
+
+        sls_if.imm = 32'd250;
+        sls_if.mem_type = STORE;
+        sls_if.rs1 = 32'd101;
+        sls_if.rs2 = 32'd544;
+        sls_if.enable = 1'b1;
+
+        @(negedge CLK);
+        sls_if.rd_in = 5'd15;
+        sls_if.imm = 32'd100;
+        sls_if.rs2 = 32'd101;
+        @(negedge CLK);
+        sls_if.rs1 = 32'd740;
+        sls_if.mem_type = LOAD;
+        @(negedge CLK);
+        sls_if.imm = 32'd540;
+        sls_if.mem_type = scalar_na;
+        sls_if.rs2 = 32'd211;
+        @(negedge CLK);
+        sls_if.rd_in = 5'd11;
+        sls_if.mem_type = LOAD;
+        @(negedge CLK);
+        sls_if.mem_type = scalar_na;
+        sls_if.rd_in = 5'd12;
+        @(posedge CLK);
+
+        sls_if.dmem_in = 32'd555;
+        sls_if.dhit_in = '1;
+
+        @(posedge CLK);
+
+        sls_if.dhit_in = '0;
+
+        @(posedge CLK);
+        sls_if.enable = 1'b0;
+        @(posedge CLK);
 
 
 

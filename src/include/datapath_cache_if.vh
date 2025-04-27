@@ -3,10 +3,12 @@
 
 // types
 `include "isa_types.vh"
+`include "datapath_types.vh"
 
 interface datapath_cache_if;
   // import types
   import isa_pkg::*;
+  import datapath_pkg::*;
 
 // datapath signals
   // stop processing
@@ -24,11 +26,27 @@ interface datapath_cache_if;
   // data and address
   word_t              dmemload, dmemstore, dmemaddr;
 
+// Scratchpad signals
+  logic mhit; // -> could change this to be 1 for load done, 2 for store done
+  matrix_ls_t         matrix_ls;
+  logic gemm_done;
+  logic m_ld_done; // needed?
+
+  scratch_input_t     gemm_out; 
+
   // datapath ports
   modport dp (
-    input   ihit, imemload, dhit, dmemload,
-    output  halt, imemREN, imemaddr, dmemREN, dmemWEN, datomic,
-            dmemstore, dmemaddr
+    input   ihit, imemload, dhit, dmemload, mhit,  
+    input   m_ld_done, gemm_done,
+    output  halt, imemREN, imemaddr, dmemREN, dmemWEN,
+            dmemstore, dmemaddr, matrix_ls, gemm_out
+  );
+
+  modport tb (
+    output  ihit, imemload, dhit, dmemload, mhit,
+    output  m_ld_done, gemm_done,
+    input   halt, imemREN, imemaddr, dmemREN, dmemWEN,
+            dmemstore, dmemaddr, matrix_ls, gemm_out
   );
 
   // cache block ports

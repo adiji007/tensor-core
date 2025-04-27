@@ -33,16 +33,12 @@ module fetch_tb;
     // Reset
     nRST = 1'b1;
     tb_ihit = 1'b1;
-    fif.flush = 1'b0;
-    fif.stall = 1'b0;
-    fif.dispatch_free = 1'b1;
+    fif.freeze = 1'b0;
     fif.misprediction = 1'b0;
-    fif.correct_target = 32'd0;
     fif.pc_prediction = 32'd0;
     nRST = 1'b0;
     #10;
     nRST = 1'b1;
-    fif.correct_target = 32'h00001000;
     fif.pc_prediction = 32'hDEADBEEF;
     #10;
 
@@ -53,7 +49,7 @@ module fetch_tb;
     fif.correct_pc = 32'hABCDEF01;
     #(PERIOD * 6);
     check_output(fif.instr, 32'hACE1ACE1, tb_test_case);
-    check_output(fif.pc, 32'h00001000, tb_test_case);
+    check_output(fif.pc, 32'hABCDEF01, tb_test_case);
 
     tb_test_case = "Correct Prediction Test";
     tb_test_num = tb_test_num + 1;
@@ -68,25 +64,13 @@ module fetch_tb;
     fif.misprediction = 1'b0;
     fif.correct_pc = 32'd0;
     fif.imemload = 32'hACE2ACE2;
-    fif.stall = 1'b1;
-    fif.correct_target = 32'h00004000;
+    fif.freeze = 1'b1;
     fif.pc_prediction = 32'hAABBCCDD;
     #(PERIOD * 6);
-    check_output(fif.instr, 32'hACE2ACE2, tb_test_case);
-    check_output(fif.pc, 32'hDEADBEEF, tb_test_case);
+    check_output(fif.instr, 32'h0, tb_test_case);
+    check_output(fif.pc, 32'h0, tb_test_case);
 
-    tb_test_case = "Dispatch Busy Test";
-    tb_test_num = tb_test_num + 1;
-    fif.misprediction = 1'b0;
-    fif.imemload = 32'hACE2ACE2;
-    fif.stall = 1'b0;
-    fif.correct_pc = 32'd0;
-    fif.dispatch_free = 1'b0;
-    fif.correct_target = 32'h00004000;
-    fif.pc_prediction = 32'hAABBCCDD;
-    #(PERIOD * 6);
-    check_output(fif.instr, 32'hACE2ACE2, tb_test_case);
-    check_output(fif.pc, 32'hDEADBEEF, tb_test_case);
+    fif.freeze = 1'b0;
 
     $stop;
   end

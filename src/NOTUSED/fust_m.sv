@@ -10,7 +10,7 @@ module fust_m (
 
   fust_m_t fust;
   
-  always_ff @(negedge CLK, negedge nRST) begin
+  always_ff @(posedge CLK, negedge nRST) begin
     if (~nRST)
       fuif.fust <= '0;
     else
@@ -22,6 +22,8 @@ module fust_m (
    
     fust.op = fuif.en ? fuif.fust_row : fuif.fust.op;
     fust.busy = fuif.busy;
+
+    fust.t1 = fuif.t1;
   end
 
 endmodule

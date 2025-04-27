@@ -9,57 +9,82 @@
 `include "system_if.vh"
 //types
 `include "isa_types.vh"
+`include "datapath_types.vh"
 `include "ram_pkg.vh"
-`include "ram_if.vh"
+`include "types_pkg.vh"
+// `include "ram_if.vh"
+`include "cpu_ram_if.vh"
+`include "datapath_cache_if.vh"
+`include "caches_if.vh"
+`include "arbiter_caches_if.vh"
+`include "scratchpad_if.vh"
 
-module system (input logic CLK, nrst, system_if.sys syif);
 
+// module system (input logic CLK, nrst, system_if.sys syif);
+module system (
+  input logic CLK, nrst,
+  datapath_cache_if dcif,
+  caches_if cif,
+  arbiter_caches_if acif,
+  scratchpad_if spif,
+  system_if.sys syif
+);
+
+
+  import ram_pkg::*;
   import isa_pkg::*;
+  import types_pkg::*;
+  import datapath_pkg::*;
 
   // stopped running
   logic halt;
 
   // clock division
-  parameter CLKDIV = 2;
-  logic CPUCLK;
+  // parameter CLKDIV = 2;
+  // logic CPUCLK;
   logic [3:0] count;
-  //logic CPUnrst;
+  // logic CPUnrst;
 
-  always_ff @(posedge CLK, negedge nrst)
-  begin
-    if (!nrst)
-    begin
-      count <= 0;
-      CPUCLK <= 0;
-    end
-    else if (count == CLKDIV-2)
-    begin
-      count <= 0;
-      CPUCLK <= ~CPUCLK;
-    end
-    else
-    begin
-      count <= count + 1;
-    end
-  end
+  // always_ff @(posedge CLK, negedge nrst)
+  // begin
+  //   if (!nrst)
+  //   begin
+  //     count <= 0;
+  //     CPUCLK <= 0;
+  //   end
+  //   else if (count == CLKDIV-2)
+  //   begin
+  //     count <= 0;
+  //     CPUCLK <= ~CPUCLK;
+  //   end
+  //   else
+  //   begin
+  //     count <= count + 1;
+  //   end
+  // end
 
-  // interfaces
-  ram_if                            prif ();
 
-  // scheduler core processor
-  scheduler_core                        CPU (CPUCLK, nrst, halt, prif);
 
-  // memory
-  ram                                   RAM (CLK, nrst, prif);
+  // // interfaces
+  // cpu_ram_if                            prif ();
 
-  // interface connections
-  assign syif.halt = halt;
-  assign syif.load = prif.ramload;
+  // // scheduler core processor
+  // scheduler_core                        CPU (CPUCLK, nrst, halt, prif);
+  sc_datapath DP (CLK, nrst, dcif);
+  memory_subsystem MS (CLK, nrst, dcif, cif, acif, spif);
+  // // memory
+  // ram                                   RAM (CLK, nrst, prif);
 
-  // who has ram control
-  assign prif.ramWEN = (syif.tbCTRL) ? syif.WEN : prif.memWEN;
-  assign prif.ramREN = (syif.tbCTRL) ? syif.REN : prif.memREN;
-  assign prif.ramaddr = (syif.tbCTRL) ? syif.addr : prif.memaddr;
-  assign prif.ramstore = (syif.tbCTRL) ? syif.store : prif.memstore;
+  // // interface connections
+  assign syif.halt = dcif.halt;
+  // assign syif.load = prif.ramload;
+
+  // // who has ram control
+  // assign prif.ramWEN = (syif.tbCTRL) ? syif.WEN : prif.memWEN;
+  // assign prif.ramREN = (syif.tbCTRL) ? syif.REN : prif.memREN;
+  // assign prif.ramaddr = (syif.tbCTRL) ? syif.addr : prif.memaddr;
+  // assign prif.ramstore = (syif.tbCTRL) ? syif.store : prif.memstore;
+
+
 
 endmodule

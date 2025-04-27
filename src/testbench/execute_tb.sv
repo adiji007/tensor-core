@@ -44,19 +44,24 @@ program test (
 
     task reset_in;
         begin
+          tbif.rd = '0;
+
           tbif.bfu_branch = '0;
-          tbif.bfu_branch_type = '0;
-          tbif.bfu_branch_gate_sel = '0;
+          tbif.bfu_branch_type = branch_t'('0);
+          //   tbif.bfu_branch_gate_sel = '0;
           tbif.bfu_reg_a = '0;
           tbif.bfu_reg_b = '0;
           tbif.bfu_current_pc = '0;
           tbif.bfu_imm = '0;
           tbif.bfu_predicted_outcome = '0;
+          tbif.bfu_enable = '0;
           // Scalar ALU FU
-          tbif.salu_aluop = '0;
+          tbif.salu_aluop = aluop_t'('0);
           tbif.salu_port_a = '0;
           tbif.salu_port_b = '0;
+          tbif.salu_enable = '0;
           // Scalar Load/Store FU
+          tbif.sls_enable = '0;
           tbif.sls_imm = '0;
           tbif.sls_rs1 = '0;
           tbif.sls_rs2 = '0;
@@ -66,8 +71,8 @@ program test (
           // MLS FU
           tbif.mls_mhit = '0;
           tbif.mls_enable = '0;
-          tbif.mls_ls_in = '0;
-          tbif.mls_rd_in = '0;
+          tbif.mls_ls_in = matrix_mem_t'('0);
+          tbif.mls_rd_in = matbits_t'('0);
           tbif.mls_rs_in = '0;
           tbif.mls_stride_in = '0;
           tbif.mls_imm_in = '0;
@@ -97,17 +102,19 @@ program test (
         tb_test_case = "SALU ADD";
         tbif.salu_port_a  = 32'd2;
         tbif.salu_port_b = 32'd3;
-        tbif.salu_aluop = 4'd3;
+        tbif.salu_aluop = ALU_ADD;
+        tbif.salu_enable = 1'b1;
         #(100);
 
         reset_in();
 
         // test case 2 - branch fu
         tb_test_case = "Brach FU (BEQ 1)";
-        tbif.bfu_branch_type = 2'd0;
-        tbif.bfu_branch_gate_sel = 1'b0;
+        tbif.bfu_branch_type = BT_BEQ;
+        // tbif.bfu_branch_gate_sel = 1'b0;
         tbif.bfu_reg_a = 32'd10;
         tbif.bfu_reg_b = 32'd10;
+        tbif.bfu_enable = 1'b1;
         #(100);
 
         reset_in();
@@ -117,7 +124,8 @@ program test (
         tbif.sls_imm = 32'd400;
         tbif.sls_mem_type = LOAD;
         tbif.sls_rs1 = 32'd440;
-       #(100);
+        tbif.sls_enable = 1'b1;
+        #(100);
 
         reset_in();
 
@@ -136,7 +144,7 @@ program test (
         // Test Case 5 - matrix load/store
         tb_test_case = "Matrix Load/Store";
         tbif.mls_enable    = 1;         // Enable the module
-        tbif.mls_ls_in     = 2'b01;     // LOAD operation selected (bit0 high)
+        tbif.mls_ls_in     = M_LOAD;     // LOAD operation selected (bit0 high)
         tbif.mls_rd_in     = 5'd15;     // Example destination register value
         tbif.mls_rs_in     = 32'd100;   // Example source register value (assume word_t is 32-bit)
         tbif.mls_stride_in = 32'd5;     // Example stride value

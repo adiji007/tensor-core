@@ -35,9 +35,9 @@ package isa_pkg;
     AUIPC     = 7'b0010111,
     LR_SC     = 7'b0101111,
     HALT      = 7'b1111111,
-    LD_M      = 7'b1000011,
-    ST_M      = 7'b1010011,
-    GEMM      = 7'b1110011 
+    LD_M      = 7'b0000111,
+    ST_M      = 7'b0100111,
+    GEMM      = 7'b1110011
   } opcode_t;
 
   typedef enum logic [FUNC3_W-1:0] {
@@ -101,19 +101,28 @@ package isa_pkg;
   typedef logic [MATRIX_W-1:0] matbits_t;
 
   // u type
-  typedef enum logic [2:0] {
-    UT_LOAD,
-    UT_ADD // not using it but here still 
+  typedef enum logic [1:0] {
+    UT_NA = 2'd0,
+    UT_LOAD = 2'd1
+    // UT_ADD // not using it but here still 
   } utype_t;
 
   typedef enum logic [2:0] {
-    BT_BEQ, 
-    BT_BNE, 
-    BT_BLT,
-    BT_BGE,
-    BT_BLTU,
-    BT_BGEU
+    BT_BEQ,  // 0
+    BT_BNE,  // 1
+    BT_BLT,  // 2
+    BT_BGE,  // 3
+    BT_BLTU, // 4
+    BT_BGEU  // 5
   } branch_t;
+
+//   typedef enum logic [1:0] {
+//    FREE,
+//    BUSY,
+//    ACCESS,
+//    ERROR
+//  } ramstate_t; //ramstate
+
 
 endpackage
 `endif

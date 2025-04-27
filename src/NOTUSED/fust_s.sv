@@ -10,7 +10,7 @@ module fust_s (
 
   fust_s_t fust;
   
-  always_ff @(negedge CLK, negedge nRST) begin
+  always_ff @(posedge CLK, negedge nRST) begin
     if (~nRST)
       fuif.fust <= '0;
     else
@@ -19,11 +19,19 @@ module fust_s (
 
   always_comb begin
     fust = fuif.fust;
-    
     fust.op[fuif.fu] = fuif.en ? fuif.fust_row : fuif.fust.op[fuif.fu];
     fust.busy = fuif.busy;
     fust.t1 = fuif.t1;
     fust.t2 = fuif.t2;
+
+    if (fuif.flush) begin
+      for (int i = 0; i < 3; i++) begin
+        fust.op = '0;
+        fust.t1 = '0;
+        fust.t2 = '0;
+      end
+    end
+
   end
 
 endmodule

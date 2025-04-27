@@ -9,6 +9,7 @@ module memory_subsystem (
     caches_if cif,
     arbiter_caches_if acif,
     scratchpad_if spif
+    // scratchpad_if.sp spif
 );
 
     // Internal interface for scratchpad
@@ -18,7 +19,7 @@ module memory_subsystem (
         .CLK(CLK),
         .nRST(nRST),
         .acif(acif),
-        .spif(spif.arbiter)
+        .spif(spif)
     );
 
     // Instruction cache
@@ -34,14 +35,15 @@ module memory_subsystem (
         .CLK(CLK),
         .nRST(nRST),
         .cif(cif),
-        .dcif(dcif)
+        .dcif(dcif),
+        .acif(acif)
     );
 
     // Scratchpad
     scratchpad SP (
         .CLK(CLK),
         .nRST(nRST),
-        .spif(spif.sp)
+        .spif(spif)
     );
 
 endmodule

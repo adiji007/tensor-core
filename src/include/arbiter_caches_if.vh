@@ -12,7 +12,7 @@ interface arbiter_caches_if(
   import caches_pkg::*;
 
   // arbitration
-  logic   iwait, dwait, iREN, dREN, dWEN;
+  logic   iwait, dwait, iREN, dREN, dWEN, load_done, store_done;
   word_t  iload, dload, dstore;
   word_t  iaddr, daddr;
  
@@ -44,7 +44,14 @@ interface arbiter_caches_if(
       // cache outputs
       output  iwait, dwait, iload, dload,
       // ram outputs
-      output  ramstore, ramaddr, ramWEN, ramREN
+      output  ramstore, ramaddr, ramWEN, ramREN,
+      // dcache outputs
+      output  load_done, store_done
+      // icache outputs
+  );
+
+  modport dcache (
+    input load_done, store_done
   );
 
 endinterface

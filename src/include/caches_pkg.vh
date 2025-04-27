@@ -1,6 +1,9 @@
 `ifndef CACHES_PKG_VH
 `define CACHES_PKG_VH
 
+
+
+
 package caches_pkg;
 
   // word width and size
@@ -55,14 +58,14 @@ package caches_pkg;
 	logic valid;
 	logic dirty;
 	logic [DTAG_W - 1:0] tag;
-	logic [31:0] [1:0] data;
+	word_t [1:0] data;
   } dcache_frame;
 
   //icache frame  
   typedef struct packed {
 	logic valid;
 	logic [ITAG_W - 1:0] tag;
-	logic [31:0] data;
+	word_t data;
   } icache_frame;
 
 endpackage

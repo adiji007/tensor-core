@@ -9,22 +9,29 @@ interface scoreboard_if;
 
     // inputs
     fetch_t fetch;
-    logic flush, freeze;
+    // logic flush;
 
-    wb_t wb;
-    wb_ctr_t wb_ctrl;
-    word_t s_wdata;
+    wb_t wb_issue;
+    wb_ctr_t wb_dispatch;
+    // word_t s_wdata;
+
+    // execute signals
+    logic branch_miss, branch_resolved;
+    logic [4:0] fu_ex;
+
+    logic freeze;
+    logic jump;
 
     issue_t out;
     
     modport SB (
-        input fetch, flush, freeze, wb, s_wdata, wb_ctrl,
-        output out
+        input fetch, wb_issue, wb_dispatch, branch_miss, branch_resolved, fu_ex,
+        output out, freeze, jump
     );
 
     modport tb (
-        input out,
-        output fetch, flush, freeze, wb, s_wdata, wb_ctrl
+        input out, freeze, jump,
+        output fetch, wb_issue, wb_dispatch, branch_miss, branch_resolved, fu_ex
     );
     
 
