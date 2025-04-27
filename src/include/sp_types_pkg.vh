@@ -7,7 +7,6 @@ package sp_types_pkg;
   parameter MATRIX_W = 4;
   parameter VALUE_BITS = 16;
   parameter BITS_PER_ROW = 64;
-  parameter BITS_PER_ROW = 64;
 
   parameter MAT_S_W = 4;
   parameter ROW_S_W = 2;

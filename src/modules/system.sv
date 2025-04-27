@@ -10,8 +10,9 @@
 //types
 `include "isa_types.vh"
 `include "datapath_types.vh"
+`include "sp_types_pkg.vh"
 `include "ram_pkg.vh"
-`include "types_pkg.vh"
+// `include "types_pkg.vh"
 // `include "ram_if.vh"
 `include "cpu_ram_if.vh"
 `include "datapath_cache_if.vh"
@@ -33,8 +34,9 @@ module system (
 
   import ram_pkg::*;
   import isa_pkg::*;
-  import types_pkg::*;
+  // import types_pkg::*;
   import datapath_pkg::*;
+  import sp_types_pkg::*;
 
   // stopped running
   logic halt;
