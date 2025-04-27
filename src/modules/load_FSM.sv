@@ -931,6 +931,7 @@ module load_FSM (
                 endcase
             end
             PS_GEMM3: begin
+                spif.instrFIFO_REN = 1'b1;
                 case (spif.instrFIFO_rdata[3:2])
                     2'd0: begin
                         if(spif.rFIFO0_full == 1'b0) begin

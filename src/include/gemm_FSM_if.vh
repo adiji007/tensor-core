@@ -7,7 +7,7 @@ import types_pkg::*;
 
 interface gemm_FSM_if;
 
-    logic [BITS_PER_ROW+MAT_S_W+ROW_S_W+1:0] gemmFIFO0_rdata, gemmFIFO1_rdata, gemmFIFO2_rdata, gemmFIFO3_rdata;
+    gemmFIFO_t gemmFIFO0_rdata, gemmFIFO1_rdata, gemmFIFO2_rdata, gemmFIFO3_rdata;
     logic gemmFIFO0_empty, gemmFIFO1_empty, gemmFIFO2_empty, gemmFIFO3_empty, drained, fifo_has_space, new_weight;
     logic [BITS_PER_ROW-1:0] weight_input_data, partial_sum_data;
     logic [ROW_S_W-1:0] weight_input_row_sel, partial_sum_row_sel;
