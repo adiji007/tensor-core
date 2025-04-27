@@ -113,10 +113,10 @@ module dispatch(
     always_comb begin : Hazard_Logic
       // check_busy = 1'b0;
       case (cuif.fu_s)
-        FU_S_ALU:     s_busy = (diif.fu_ex[0] == 1'b0 && (|diif.fust_s.t1 || |diif.fust_s.t2)) ? diif.fust_s.busy[FU_S_ALU] : '0;
-        FU_S_LD_ST:   s_busy = (diif.fu_ex[1] == 1'b0 && (|diif.fust_s.t1 || |diif.fust_s.t2)) ? diif.fust_s.busy[FU_S_LD_ST] : '0;
+        FU_S_ALU:     s_busy = (diif.fu_ex[0] == 1'b0 || (|diif.fust_s.t1 || |diif.fust_s.t2)) ? diif.fust_s.busy[FU_S_ALU] : '0;
+        FU_S_LD_ST:   s_busy = (diif.fu_ex[1] == 1'b0 || (|diif.fust_s.t1 || |diif.fust_s.t2)) ? diif.fust_s.busy[FU_S_LD_ST] : '0;
         // FU_S_LD_ST:   check_busy = diif.fust_s.busy[FU_S_LD_ST];
-        FU_S_BRANCH:  s_busy = (diif.fu_ex[2] == 1'b0 && (|diif.fust_s.t1 || |diif.fust_s.t2)) ? diif.fust_s.busy[FU_S_BRANCH] : '0;
+        FU_S_BRANCH:  s_busy = (diif.fu_ex[2] == 1'b0 || (|diif.fust_s.t1 || |diif.fust_s.t2)) ? diif.fust_s.busy[FU_S_BRANCH] : '0;
         default: s_busy = 1'b0;
       endcase
       case (cuif.fu_m)
@@ -211,6 +211,10 @@ module dispatch(
       diif.n_fu_t = cuif.fu_t;
       diif.n_t1 = diif.fust_s.t1;
       diif.n_t2 = diif.fust_s.t2;
+      diif.n_mt1 = diif.fust_m.t1;
+      diif.n_gt1 = diif.fust_g.t1;
+      diif.n_gt3 = diif.fust_g.t2;
+      diif.n_gt2 = diif.fust_g.t3;
 
       // tag updates on WB
       // if (diif.wb.s_rw_en & diif.wb.alu_done & diif.fust_state[0] == FUST_EX) begin // TODO fust related wb
