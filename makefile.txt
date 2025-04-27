@@ -1,0 +1,3 @@
+$  cat -e -t -v Makefile  (to see spaces/indents in makefile)
+
+ mv -f Makefile{,.old} && sed -E 's/^ {3,}/\t/' Makefile.old >Makefile (to fix separator error in Makefile)

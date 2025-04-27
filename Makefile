@@ -45,19 +45,19 @@ SIMTIME = 100us             # Default simulation run time
 
 # modelsim viewing options
 ifneq (0,$(words $(filter %.wav,$(MAKECMDGOALS))))
-    # view waveform in graphical mode and load do file if there is one
-    DOFILES = $(notdir $(basename $(wildcard $(shell find . -name "*.do"))))  # Search for all .do files in the project
-    DOFILE = $(filter $(MAKECMDGOALS:%.wav=%) $(MAKECMDGOALS:%_tb.wav=%), $(DOFILES))
-    ifeq (1, $(words $(DOFILE)))
-        WAVDO = do $(firstword $(shell find . -name $(DOFILE).do))  # Load the .do file from anywhere in the project
-    else
-        WAVDO = add wave *
-    endif
-    SIMDO = "view objects; $(WAVDO); run $(SIMTIME);"
+#     # view waveform in graphical mode and load do file if there is one
+	DOFILES = $(notdir $(basename $(wildcard $(shell find . -name "*.do"))))  # Search for all .do files in the project
+	DOFILE = $(filter $(MAKECMDGOALS:%.wav=%) $(MAKECMDGOALS:%_tb.wav=%), $(DOFILES))
+	ifeq (1, $(words $(DOFILE)))
+	WAVDO = do $(firstword $(shell find . -name $(DOFILE).do))  # Load the .do file from anywhere in the project
+	else
+	WAVDO = add wave *
+	endif
+	SIMDO = "view objects; $(WAVDO); run $(SIMTIME);"
 else
-    # view text output in cmdline mode
-    SIMTERM = -c
-    SIMDO = "run $(SIMTIME);"
+	# view text output in cmdline mode
+	SIMTERM = -c
+	SIMDO = "run $(SIMTIME);"
 endif
 
 memory_subsystem.wav:
@@ -116,8 +116,8 @@ vlog:
 	vsim $(SIMTERM) -voptargs="+acc" work.$*_tb -do $(SIMDO)
 
 %.wav:
-	vlog -sv +incdir+./src/include ./src/testbench/$*_tb.sv ./src/modules/$*.sv
-	vsim -voptargs="+acc" work.$*_tb -do "do $(SCRDIR)/$*.do; run $(SIMTIME);" -suppress 2275
+	vlog -sv +incdir+./src/include ./src/testbench/$*_tb.sv ./src/modules/*.sv
+	vsim -voptargs="+acc" work.$*_tb -sv_lib memory -do "do $(SCRDIR)/$*.do; run $(SIMTIME);" -suppress 2275
 
 %.sim:
 	vlog -sv +incdir+./src/include ./src/modules/$*.sv

@@ -1,28 +1,32 @@
-`include "load_FSM_if.vh"
-`include "types_pkg.vh"
+`include "sp_types_pkg.vh"
 `include "scratchpad_if.vh"
 `include "scratchpad_bank_if.vh"
 `include "gemm_FSM_if.vh"
 `include "dramstore_FSM_if.vh"
+`include "bank_access_FSM_if.vh"
 
-import types_pkg::*;
+import sp_types_pkg::*;
 
 module scratchpad (
     input logic CLK, nRST,
     scratchpad_if.sp spif
 );
 
-    logic [2+MAT_S_W+ROW_S_W+WORD_W-1:0] instrFIFO_rdata;
-    logic instrFIFO_empty, instrFIFO_REN;
-    //logic [BITS_PER_ROW+ROW_S_W-1:0] psumoutFIFO_wdata;
-    //logic psumoutFIFO_full, psumoutFIFO_WEN;  
+    instrFIFO_t prev_instrFIFO_rdata, instrFIFO_rdata;
+    logic instrFIFO_empty, instrFIFO_REN, instrFIFO_unused, n_instrFIFO_unused, psumoutFIFO_REN, psumoutFIFO_empty, psumoutFIFO_full, new_instr;
+    psumoutFIFO_t psumoutFIFO_rdata, psumoutFIFO_wdata;
+    logic [MAT_S_W+2-1:0] gemm_mat, n_gemm_mat;
+    logic [1:0] count;
 
     scratchpad_bank_if spbif0();
     scratchpad_bank_if spbif1();
     scratchpad_bank_if spbif2();
     scratchpad_bank_if spbif3();
 
-    load_FSM_if lfsmif();
+    bank_access_FSM_if bfsmif0();
+    bank_access_FSM_if bfsmif1();
+    bank_access_FSM_if bfsmif2();
+    bank_access_FSM_if bfsmif3();
 
     gemm_FSM_if gfsmif();
 
@@ -33,27 +37,39 @@ module scratchpad (
     scratchpad_bank spb2(CLK, nRST, spbif2);
     scratchpad_bank spb3(CLK, nRST, spbif3);
 
-    load_FSM loadFSM(CLK, nRST, lfsmif);
+    bank_access_FSM #(.BANK_NUM(0)) bfsm0(CLK, nRST, bfsmif0);
+    bank_access_FSM #(.BANK_NUM(1)) bfsm1(CLK, nRST, bfsmif1);
+    bank_access_FSM #(.BANK_NUM(2)) bfsm2(CLK, nRST, bfsmif2);
+    bank_access_FSM #(.BANK_NUM(3)) bfsm3(CLK, nRST, bfsmif3);
 
     gemm_FSM gemmFSM(CLK, nRST, gfsmif);
 
     dramstore_FSM dramstoreFSM(CLK, nRST, dfsmif);
 
-    socetlib_fifo #(.T(logic [2+MAT_S_W+ROW_S_W+WORD_W-1:0]), .DEPTH(4)) instrFIFO(.CLK(CLK), 
-    .nRST(nRST), .WEN(spif.instrFIFO_WEN), .REN(lfsmif.instrFIFO_REN), .clear(), .wdata(spif.instrFIFO_wdata), 
-    .full(spif.instrFIFO_full), .empty(lfsmif.instrFIFO_empty), .underrun(), .overrun(), .count(), .rdata(lfsmif.instrFIFO_rdata));
+    socetlib_fifo #(.T(instrFIFO_t), .DEPTH(4)) instrFIFO(.CLK(CLK), 
+    .nRST(nRST), .WEN(spif.instrFIFO_WEN), .REN(instrFIFO_REN), .clear(), .wdata(spif.instrFIFO_wdata), 
+    .full(spif.instrFIFO_full), .empty(instrFIFO_empty), .underrun(), .overrun(), .count(count), .rdata(instrFIFO_rdata));
 
+    socetlib_fifo #(.T(psumoutFIFO_t), .DEPTH(4)) psumoutFIFO (.CLK(CLK), 
+    .nRST(nRST), .WEN(spif.psumout_en), .REN(psumoutFIFO_REN), .clear(), .wdata(psumoutFIFO_wdata), 
+    .full(psumoutFIFO_full), .empty(psumoutFIFO_empty), .underrun(), .overrun(), .count(), .rdata(psumoutFIFO_rdata));
     
     //PSUM OUT Logic
-    assign lfsmif.psumoutFIFO_WEN = spif.psumout_en;
-    assign lfsmif.psumoutFIFO_wdata = {spif.psumout_row_sel_in, spif.psumout_data}; /////FULL Not Implemented
+    assign psumoutFIFO_REN = bfsmif0.psumoutFIFO_REN || bfsmif1.psumoutFIFO_REN || bfsmif2.psumoutFIFO_REN || bfsmif3.psumoutFIFO_REN;
+    assign psumoutFIFO_wdata.row_s = spif.psumout_row_sel_in;
+    assign psumoutFIFO_wdata.data = spif.psumout_data;
 
     //Inputs
     assign gfsmif.drained = spif.drained;
     assign gfsmif.fifo_has_space = spif.fifo_has_space;
-    assign lfsmif.load_data = spif.load_data;
-    assign lfsmif.sLoad_hit = spif.sLoad_hit;
-    assign lfsmif.sLoad_row = spif.sLoad_row;
+    assign bfsmif0.load_data = spif.load_data;
+    assign bfsmif1.load_data = spif.load_data;
+    assign bfsmif2.load_data = spif.load_data;
+    assign bfsmif3.load_data = spif.load_data;
+    assign bfsmif0.sLoad_hit = spif.sLoad_hit;
+    assign bfsmif1.sLoad_hit = spif.sLoad_hit;
+    assign bfsmif2.sLoad_hit = spif.sLoad_hit;
+    assign bfsmif3.sLoad_hit = spif.sLoad_hit;
     assign dfsmif.sStore_hit = spif.sStore_hit;
 
     //Outputs
@@ -66,41 +82,109 @@ module scratchpad (
     assign spif.partial_sum_data = gfsmif.partial_sum_data;
     assign spif.weight_input_row_sel = gfsmif.weight_input_row_sel;
     assign spif.partial_sum_row_sel = gfsmif.partial_sum_row_sel;
-    assign spif.load_addr = lfsmif.load_addr;
-    assign spif.sLoad = lfsmif.sLoad;
+    assign spif.sLoad = (bfsmif0.sLoad || bfsmif1.sLoad || bfsmif2.sLoad || bfsmif3.sLoad);
+    always_comb begin
+        spif.load_addr = '0;
+        if (bfsmif0.sLoad) begin
+            spif.load_addr = bfsmif0.load_addr;
+        end
+        else if (bfsmif1.sLoad) begin
+            spif.load_addr = bfsmif1.load_addr;
+        end
+        else if (bfsmif2.sLoad) begin
+            spif.load_addr = bfsmif2.load_addr;
+        end
+        else if (bfsmif3.sLoad) begin
+            spif.load_addr = bfsmif3.load_addr;
+        end
+    end
     assign spif.store_data = dfsmif.store_data;
     assign spif.store_addr = dfsmif.store_addr;
     assign spif.sStore = dfsmif.sStore;
+    assign spif.store_complete = dfsmif.store_complete;
 
     //LoadFSMs <-> Banks
-    assign lfsmif.wFIFO0_full = spbif0.wFIFO_full;
-    assign lfsmif.wFIFO1_full = spbif1.wFIFO_full;
-    assign lfsmif.wFIFO2_full = spbif2.wFIFO_full;
-    assign lfsmif.wFIFO3_full = spbif3.wFIFO_full;
-    assign lfsmif.rFIFO0_full = spbif0.rFIFO_full;
-    assign lfsmif.rFIFO1_full = spbif1.rFIFO_full;
-    assign lfsmif.rFIFO2_full = spbif2.rFIFO_full;
-    assign lfsmif.rFIFO3_full = spbif3.rFIFO_full;
+    assign bfsmif0.wFIFO_full = spbif0.wFIFO_full;
+    assign bfsmif1.wFIFO_full = spbif1.wFIFO_full;
+    assign bfsmif2.wFIFO_full = spbif2.wFIFO_full;
+    assign bfsmif3.wFIFO_full = spbif3.wFIFO_full;
+    assign bfsmif0.rFIFO_full = spbif0.rFIFO_full;
+    assign bfsmif1.rFIFO_full = spbif1.rFIFO_full;
+    assign bfsmif2.rFIFO_full = spbif2.rFIFO_full;
+    assign bfsmif3.rFIFO_full = spbif3.rFIFO_full;
 
-    assign spbif0.wFIFO_wdata = lfsmif.wFIFO0_wdata;
-    assign spbif1.wFIFO_wdata = lfsmif.wFIFO1_wdata;
-    assign spbif2.wFIFO_wdata = lfsmif.wFIFO2_wdata;
-    assign spbif3.wFIFO_wdata = lfsmif.wFIFO3_wdata;
-    assign spbif0.rFIFO_wdata = lfsmif.rFIFO0_wdata;
-    assign spbif1.rFIFO_wdata = lfsmif.rFIFO1_wdata;
-    assign spbif2.rFIFO_wdata = lfsmif.rFIFO2_wdata;
-    assign spbif3.rFIFO_wdata = lfsmif.rFIFO3_wdata;
-    assign spbif0.wFIFO_WEN = lfsmif.wFIFO0_WEN;
-    assign spbif1.wFIFO_WEN = lfsmif.wFIFO1_WEN;
-    assign spbif2.wFIFO_WEN = lfsmif.wFIFO2_WEN;
-    assign spbif3.wFIFO_WEN = lfsmif.wFIFO3_WEN;
-    assign spbif0.rFIFO_WEN = lfsmif.rFIFO0_WEN;
-    assign spbif1.rFIFO_WEN = lfsmif.rFIFO1_WEN;
-    assign spbif2.rFIFO_WEN = lfsmif.rFIFO2_WEN;
-    assign spbif3.rFIFO_WEN = lfsmif.rFIFO3_WEN;
+    assign spbif0.wFIFO_wdata = bfsmif0.wFIFO_wdata;
+    assign spbif1.wFIFO_wdata = bfsmif1.wFIFO_wdata;
+    assign spbif2.wFIFO_wdata = bfsmif2.wFIFO_wdata;
+    assign spbif3.wFIFO_wdata = bfsmif3.wFIFO_wdata;
+    assign spbif0.rFIFO_wdata = bfsmif0.rFIFO_wdata;
+    assign spbif1.rFIFO_wdata = bfsmif1.rFIFO_wdata;
+    assign spbif2.rFIFO_wdata = bfsmif2.rFIFO_wdata;
+    assign spbif3.rFIFO_wdata = bfsmif3.rFIFO_wdata;
+    assign spbif0.wFIFO_WEN = bfsmif0.wFIFO_WEN;
+    assign spbif1.wFIFO_WEN = bfsmif1.wFIFO_WEN;
+    assign spbif2.wFIFO_WEN = bfsmif2.wFIFO_WEN;
+    assign spbif3.wFIFO_WEN = bfsmif3.wFIFO_WEN;
+    assign spbif0.rFIFO_WEN = bfsmif0.rFIFO_WEN;
+    assign spbif1.rFIFO_WEN = bfsmif1.rFIFO_WEN;
+    assign spbif2.rFIFO_WEN = bfsmif2.rFIFO_WEN;
+    assign spbif3.rFIFO_WEN = bfsmif3.rFIFO_WEN;
 
     //LoadFSM <-> gemmFSM
-    assign gfsmif.new_weight = lfsmif.new_weight;
+    assign gfsmif.new_weight = instrFIFO_rdata.ls_matrix_rd_gemm_new_weight[5] && new_instr && (instrFIFO_rdata.opcode == 2'd3);
+
+    //LoadFSMIN
+    assign bfsmif0.instrFIFO_empty = instrFIFO_empty;
+    assign bfsmif1.instrFIFO_empty = instrFIFO_empty;
+    assign bfsmif2.instrFIFO_empty = instrFIFO_empty;
+    assign bfsmif3.instrFIFO_empty = instrFIFO_empty;
+    assign bfsmif0.psumoutFIFO_full = psumoutFIFO_full;
+    assign bfsmif1.psumoutFIFO_full = psumoutFIFO_full;
+    assign bfsmif2.psumoutFIFO_full = psumoutFIFO_full;
+    assign bfsmif3.psumoutFIFO_full = psumoutFIFO_full;
+    assign bfsmif0.instrFIFO_rdata = instrFIFO_rdata;
+    assign bfsmif1.instrFIFO_rdata = instrFIFO_rdata;
+    assign bfsmif2.instrFIFO_rdata = instrFIFO_rdata;
+    assign bfsmif3.instrFIFO_rdata = instrFIFO_rdata;
+    assign bfsmif0.psumoutFIFO_rdata = psumoutFIFO_rdata;
+    assign bfsmif1.psumoutFIFO_rdata = psumoutFIFO_rdata;
+    assign bfsmif2.psumoutFIFO_rdata = psumoutFIFO_rdata;
+    assign bfsmif3.psumoutFIFO_rdata = psumoutFIFO_rdata;
+    assign bfsmif0.new_instr = new_instr;
+    assign bfsmif1.new_instr = new_instr;
+    assign bfsmif2.new_instr = new_instr;
+    assign bfsmif3.new_instr = new_instr;
+    assign bfsmif0.gemm_mat = gemm_mat;
+    assign bfsmif1.gemm_mat = gemm_mat;
+    assign bfsmif2.gemm_mat = gemm_mat;
+    assign bfsmif3.gemm_mat = gemm_mat;
+    assign new_instr = (prev_instrFIFO_rdata.opcode != instrFIFO_rdata.opcode) && (instrFIFO_rdata.opcode != '0);
+    always_ff @(posedge CLK, negedge nRST) begin
+        if (nRST == 1'b0) begin
+            gemm_mat <= '0;
+            instrFIFO_unused <= 1'b1;
+            prev_instrFIFO_rdata <= '0;
+        end
+        else begin
+            gemm_mat <= n_gemm_mat;
+            instrFIFO_unused <= n_instrFIFO_unused;
+            prev_instrFIFO_rdata <= instrFIFO_rdata;
+        end
+    end
+    always_comb begin
+        n_gemm_mat = gemm_mat;
+        n_instrFIFO_unused = instrFIFO_unused;
+        if ((instrFIFO_rdata.opcode == 2'd3) && new_instr) begin
+            n_gemm_mat = instrFIFO_rdata.ls_addr_gemm_gemm_sel[23:18];
+        end
+        if (spif.instrFIFO_WEN) begin
+            n_instrFIFO_unused = 1'b0;
+        end
+    end
+
+
+    //LoadFSMOut
+    assign instrFIFO_REN = bfsmif0.instrFIFO_REN & bfsmif1.instrFIFO_REN & bfsmif2.instrFIFO_REN & bfsmif3.instrFIFO_REN;
 
     //DramStoreFSM <-> Banks
     assign dfsmif.dramFIFO0_empty = spbif0.dramFIFO_empty;
@@ -131,45 +215,5 @@ module scratchpad (
     assign spbif1.gemmFIFO_REN = gfsmif.gemmFIFO1_REN;
     assign spbif2.gemmFIFO_REN = gfsmif.gemmFIFO2_REN;
     assign spbif3.gemmFIFO_REN = gfsmif.gemmFIFO3_REN;
-
-
-
-    /*
-    {2'b(store?)(load?), 4'd(matrix_rd), 32,d(matrix address)} MATRIX LS
-    {2'b11, 4'b(new weight?)000, 16'd0, 16'(gemm select)} GEMM Ops
-    */
-
-    /*
-    Inputs:
-    instrFIFO_WEN
-    instrFIFO_wdata
-    psumout_en
-    psumout_row_sel_in
-    psumout_data
-    drained
-    fifo_has_space
-    load_data
-    sLoad_hit
-    sLoad_row
-    sStore_hit
-
-    Outputs:
-    instrFIFO_full
-    partial_enable
-    weight_enable
-    input_enable
-    weight_input_data
-    partial_sum_data
-    weight_input_row_sel
-    partial_sum_row_sel
-    load_addr
-    sLoad
-    store_data
-    store_addr
-    sStore
-
-
-    */
-
     
 endmodule
