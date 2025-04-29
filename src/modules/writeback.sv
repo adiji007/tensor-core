@@ -144,6 +144,9 @@ always_comb begin : wb_out_logic
     alu_din.reg_en = 1;
     alu_din.reg_sel = wbif.alu_reg_sel;
     alu_din.wdat = wbif.alu_wdat;
+    alu_din.alu_done = 1;
+    alu_din.jump_done = 0;
+    alu_din.load_done = 0;
     alu_read = 0;
     alu_write = 0;
 
@@ -154,16 +157,25 @@ always_comb begin : wb_out_logic
     load_din.reg_en = 1;
     load_din.reg_sel = wbif.load_reg_sel;
     load_din.wdat = wbif.load_wdat;
+    load_din.load_done = 1;
+    load_din.alu_done = 0;
+    load_din.jump_done = 0;
     load_read = 0;
     load_write = 0;
 
     jump_din.reg_en = 1;
     jump_din.reg_sel = wbif.jump_reg_sel;
     jump_din.wdat = wbif.jump_wdat;
+    jump_din.jump_done = 1;
+    jump_din.alu_done = 0;
+    jump_din.load_done = 0;
 
     wbif.wb_out.reg_en = 0;
     wbif.wb_out.reg_sel = '0;
     wbif.wb_out.wdat = '0;
+    wbif.wb_out.alu_done = '0;
+    wbif.wb_out.jump_done = '0;
+    wbif.wb_out.load_done = '0;
         /* IDLE Cases:
             Spec High: Spec just went high so data going into buffer should be accounted for as a speculative writeback. Take record of alu_wptr and alu_count to determine size of and position of buffer when writing back.
 
@@ -198,6 +210,7 @@ always_comb begin : wb_out_logic
                     if (wb_sel) begin
                         alu_read = 1;
                         wbif.wb_out = alu_buffer[alu_rptr];
+                        // wbif.wb_out.alu_done = 1'b1;
                         next_alu_buffer[alu_rptr] = '0;
                         next_alu_rptr = ((alu_rptr + 1) == BUFFER_DEPTH ? 0 : alu_rptr + 1);
                         next_clean_count = alu_count - 1; // 1 less clean data value
@@ -205,6 +218,7 @@ always_comb begin : wb_out_logic
                     else begin
                         load_read = 1;
                         wbif.wb_out = load_buffer[load_rptr];
+                        // wbif.wb_out.load_done = 1'b1;
                         next_load_buffer[load_rptr] = '0;
                         next_load_rptr = ((load_rptr + 1) == BUFFER_DEPTH ? 0 : load_rptr + 1);
                         next_clean_count = alu_count;
@@ -214,6 +228,7 @@ always_comb begin : wb_out_logic
                 else if (!alu_empty && load_empty) begin // load buffer empty, alu buffer not empty
                     alu_read = 1;
                     wbif.wb_out = alu_buffer[alu_rptr];
+                    // wbif.wb_out.alu_done = 1'b1;
                     next_alu_buffer[alu_rptr] = '0;
                     next_alu_rptr = ((alu_rptr + 1) == BUFFER_DEPTH ? 0 : alu_rptr + 1);
                     next_clean_count = alu_count - 1; // 1 less clean data value
@@ -222,6 +237,7 @@ always_comb begin : wb_out_logic
                 else if (alu_empty && !load_empty) begin // load buffer not empty, alu buffer empty
                     load_read = 1;
                     wbif.wb_out = load_buffer[load_rptr];
+                    // wbif.wb_out.load_done = 1'b1;
                     next_load_buffer[load_rptr] = '0;
                     next_load_rptr = ((load_rptr + 1) == BUFFER_DEPTH ? 0 : load_rptr + 1);
                     next_clean_count = alu_count;
@@ -244,11 +260,13 @@ always_comb begin : wb_out_logic
                 next_load_wptr = ((load_wptr + 1) == BUFFER_DEPTH ? 0 : load_wptr + 1);
 
                 wbif.wb_out = jump_din;
+                // wbif.wb_out.jump_done = 1'b1;
             end
 
             else if (wbif.jump_done && !wbif.alu_done && !wbif.load_done) begin // jump done
                 // Bypass all buffers and immediately write data in reg file
                 wbif.wb_out = jump_din;
+                // wbif.wb_out.jump_done = 1'b1;
             end
 
             else if (!wbif.jump_done && wbif.alu_done && wbif.load_done) begin // alu load done

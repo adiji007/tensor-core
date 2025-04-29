@@ -69,6 +69,7 @@ module sc_datapath
     assign fif.branch_outcome  = eif.eif_output.bfu_branch_outcome;
     assign fif.update_pc       = eif.eif_output.bfu_update_pc;
     assign fif.branch_target   = eif.eif_output.bfu_branch_target;
+    assign fif.br_jump         = eif.eif_output.br_jump;
 
     // output 
     assign fetch_out.imemload  = fif.instr;
@@ -84,6 +85,9 @@ module sc_datapath
     assign sbif.wb_issue                = wb_reg;
     assign sbif.wb_dispatch.s_rw_en     = wb_reg.reg_en;
     assign sbif.wb_dispatch.s_rw        = wb_reg.reg_sel;
+    assign sbif.wb_dispatch.alu_done    = wb_reg.alu_done;
+    assign sbif.wb_dispatch.jump_done   = wb_reg.jump_done;
+    assign sbif.wb_dispatch.load_done   = wb_reg.load_done;
     assign sbif.wb_dispatch.gemm_done   = dcif.gemm_done; 
     assign sbif.wb_dispatch.m_load_done = dcif.m_ld_done; 
     assign sbif.wb_dispatch.m_rw_ld     = '0; // TODO these need logc from memory?, saying which m_reg can be cleared from rsts
@@ -142,7 +146,7 @@ module sc_datapath
     assign eif.gemm_rs2_in         = sbif.out.ms2;
     assign eif.gemm_rs3_in         = sbif.out.ms3;
 
-    // ouputs
+    // outputs
     assign ex_out.alu_done      = eif.eif_output.fu_ex[0] && !eif.eif_output.bfu_miss;
     assign ex_out.alu_wdat      = eif.eif_output.salu_port_output;
     assign ex_out.alu_reg_sel   = eif.eif_output.salu_rd;
@@ -153,6 +157,7 @@ module sc_datapath
     assign ex_out.jump_done     = eif.eif_output.fu_ex[2] && (!(eif.eif_output.jump_wdat == 0));
     assign ex_out.jump_wdat     = eif.eif_output.jump_wdat;
     assign ex_out.jump_reg_sel  = eif.eif_output.jump_rd;
+    // assign ex_out.br_jump       = eif.eif_output.br_jump;
 
     assign dcif.dmemWEN    = eif.eif_output.sls_dmemWEN;
     assign dcif.dmemREN    = eif.eif_output.sls_dmemREN;

@@ -41,6 +41,8 @@ org 0x0000
   addi $2, $2, 4
    halt
 
+// push is 2 
+// halt is instr 34
 
 
 #void insertion_sort(int* $a0, int $a1)
