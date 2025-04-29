@@ -28,7 +28,8 @@ module system (
   caches_if cif,
   arbiter_caches_if acif,
   scratchpad_if spif,
-  system_if.sys syif
+  systolic_array_if saif,
+  system_if.sys syif,
 );
 
 
@@ -74,6 +75,22 @@ module system (
   // scheduler_core                        CPU (CPUCLK, nrst, halt, prif);
   sc_datapath DP (CLK, nrst, dcif);
   memory_subsystem MS (CLK, nrst, dcif, cif, acif, spif);
+  systolic_array SYS (CLK, nrst, saif);
+
+  always_comb begin
+    saif.weight_en = spif.weight_enable;
+    saif.input_en = spif.input_enable;
+    saif.partial_en = spif.partial_enable;
+    saif.row_in_en = spif.weight_input_row_sel;
+    saif.row_ps_en = spif.partial_sum_row_sel;
+    saif.array_in = spif.weight_input_data;
+    saif.array_in_partials = spif.partial_sum_data;
+    spif.drained = saif.drained;
+    spif.fifo_has_space = saif.fifo_has_space;
+    spif.psumout_data = saif.array_output;
+    spif.psumout_row_sel_in = saif.row_out;
+    spif.psumout_en = saif.out_en;
+  end
   // // memory
   // ram                                   RAM (CLK, nrst, prif);
 
