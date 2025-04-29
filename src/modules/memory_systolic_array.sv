@@ -36,7 +36,8 @@ module memory_systolic_array (
         .CLK(CLK),
         .nRST(nRST),
         .cif(cif),
-        .dcif(dcif)
+        .dcif(dcif),
+        .acif(acif)
     );
 
     // Scratchpad

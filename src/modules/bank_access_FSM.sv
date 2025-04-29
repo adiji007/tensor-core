@@ -239,28 +239,28 @@ module bank_access_FSM #(
                 spif.rFIFO_wdata.addr = '0;
                 spif.rFIFO_wdata.mat_t = 2'd2;
                 spif.rFIFO_wdata.mat_s = weight[MAT_S_W-1:0];
-                spif.rFIFO_wdata.row_s = 2'd0;
+                spif.rFIFO_wdata.row_s = 2'd3;
             end
             W_GEMM1: begin
                 spif.rFIFO_WEN = 1'b1;
                 spif.rFIFO_wdata.addr = '0;
                 spif.rFIFO_wdata.mat_t = 2'd2;
                 spif.rFIFO_wdata.mat_s = weight[MAT_S_W-1:0];
-                spif.rFIFO_wdata.row_s = 2'd1;
+                spif.rFIFO_wdata.row_s = 2'd2;
             end
             W_GEMM2: begin
                 spif.rFIFO_WEN = 1'b1;
                 spif.rFIFO_wdata.addr = '0;
                 spif.rFIFO_wdata.mat_t = 2'd2;
                 spif.rFIFO_wdata.mat_s = weight[MAT_S_W-1:0];
-                spif.rFIFO_wdata.row_s = 2'd2;
+                spif.rFIFO_wdata.row_s = 2'd1;
             end
             W_GEMM3: begin
                 spif.rFIFO_WEN = 1'b1;
                 spif.rFIFO_wdata.addr = '0;
                 spif.rFIFO_wdata.mat_t = 2'd2;
                 spif.rFIFO_wdata.mat_s = weight[MAT_S_W-1:0];
-                spif.rFIFO_wdata.row_s = 2'd3;
+                spif.rFIFO_wdata.row_s = 2'd0;
             end
             I_GEMM0: begin
                 spif.rFIFO_WEN = 1'b1;
