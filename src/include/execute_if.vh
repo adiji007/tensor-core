@@ -25,6 +25,7 @@ interface execute_if;
 
   // Branch FU
   logic bfu_enable;
+  logic br_jump;
   // logic bfu_branch_gate_sel;
   logic [1:0] bfu_j_type;
   logic bfu_predicted_outcome;

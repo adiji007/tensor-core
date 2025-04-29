@@ -177,26 +177,34 @@ module issue(
       end
     end
 
+    logic [5:0] test;
+
     always_comb begin : Oldest_Logic
       // next_oldest_age = oldest_age;
       next_oldest_rdy = oldest_rdy;
+      test = '0;
       // for (int i = 0; i < 5; i++) begin
           // && (age[i] > oldest_age)
           // next_oldest_rdy[i] = 1'b1;
       if (rdy[0] && (fust_state[0] != FUST_EX)) begin
         next_oldest_rdy[0] = ((age[0] > age[1]) && (age[0] > age[2]) && (age[0] > age[3]) && (age[0] > age[4])) ? 1'b1 : (next_fust_state[0] == FUST_EMPTY) ? 1'b0 : oldest_rdy[0];
+        test[1] = 1;
       end
-      else if (rdy[1] && (fust_state[1] != FUST_EX)) begin
+      if (rdy[1] && (fust_state[1] != FUST_EX)) begin
         next_oldest_rdy[1] = ((age[1] > age[0]) && (age[1] > age[2]) && (age[1] > age[3]) && (age[1] > age[4])) ? 1'b1 : (next_fust_state[1] == FUST_EMPTY) ? 1'b0 : oldest_rdy[1];
+        test[2] = 1;
       end
-      else if (rdy[2] && (fust_state[2] != FUST_EX)) begin
+      if (rdy[2] && (fust_state[2] != FUST_EX)) begin
         next_oldest_rdy[2] = ((age[2] > age[0]) && (age[2] > age[1]) && (age[2] > age[3]) && (age[2] > age[4])) ? 1'b1 : (next_fust_state[2] == FUST_EMPTY) ? 1'b0 : oldest_rdy[2];
+        test[3] = 1;
       end
-      else if (rdy[3] && (fust_state[3] != FUST_EX)) begin
+      if (rdy[3] && (fust_state[3] != FUST_EX)) begin
         next_oldest_rdy[3] = ((age[3] > age[0]) && (age[3] > age[1]) && (age[3] > age[2]) && (age[3] > age[4])) ? 1'b1 : (next_fust_state[3] == FUST_EMPTY) ? 1'b0 : oldest_rdy[3];
+        test[4] = 1;
       end
-      else if (rdy[4] && (fust_state[4] != FUST_EX)) begin
+      if (rdy[4] && (fust_state[4] != FUST_EX)) begin
         next_oldest_rdy[4] = ((age[4] > age[0]) && (age[4] > age[1]) && (age[4] > age[2]) && (age[4] > age[3])) ? 1'b1 : (next_fust_state[4] == FUST_EMPTY) ? 1'b0 : oldest_rdy[4];
+        test[5] = 1;
       end
 
         // if (rdy[i] && fust_state == FUST_RDY && (age[i] > oldest_rdy)) begin
@@ -373,6 +381,7 @@ module issue(
       i_type = '0;
       lui_type = '0;
       issue.halt = '0;
+      // issue.spec = '0;
       if (!(|isif.fust_s.busy || isif.fust_m.busy || isif.fust_g.busy || isif.branch_miss)) begin
         issue.halt = isif.dispatch.halt;
       end
@@ -401,7 +410,7 @@ module issue(
             issue.branch_pred_pc = isif.dispatch.n_br_pred;
             // end
             issue.rd = fusif.fust.op[i].rd;
-            issue.spec = (i==0 && !isif.branch_miss) ? isif.dispatch.spec : '0; // pretty sure only on alu instr
+            issue.spec = ((i==0 || i==1) && !isif.branch_resolved && !isif.branch_miss) ? isif.dispatch.spec : '0; // pretty sure only on alu instr
             issue.j_type = fusif.fust.op[i].j_type;
           end else if (i == 3) begin // mls
             // TODO: need to figure these out, not sure rn
