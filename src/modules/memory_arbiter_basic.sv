@@ -140,7 +140,7 @@ module memory_arbiter_basic(
     acif.ramaddr = '0;
     acif.ramWEN = '0;
     acif.ramREN = '0;
-    acif.dwait = '0;
+    acif.dwait = '1;
     acif.dload = '0;
     acif.iwait = 1;
     acif.iload = '0;

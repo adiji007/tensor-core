@@ -95,5 +95,5 @@ module socetlib_fifo #(
 
     assign full = count == DEPTH;
     assign empty = count == 0;
-    assign rdata = fifo[read_ptr];
+    assign rdata = empty ? '0 : fifo[read_ptr];
 endmodule

@@ -1,6 +1,6 @@
-`include "types_pkg.vh"
+`include "sp_types_pkg.vh"
 `include "load_FSM_if.vh"
-import types_pkg::*;
+import sp_types_pkg::*;
 
 module load_FSM (
     input logic CLK, nRST,
@@ -931,6 +931,7 @@ module load_FSM (
                 endcase
             end
             PS_GEMM3: begin
+                spif.instrFIFO_REN = 1'b1;
                 case (spif.instrFIFO_rdata[3:2])
                     2'd0: begin
                         if(spif.rFIFO0_full == 1'b0) begin

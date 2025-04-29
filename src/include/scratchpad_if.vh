@@ -1,22 +1,23 @@
 `ifndef  SCRATCHPAD_IF_VH
 `define SCRATCHPAD_IF_VH
-
-`include "types_pkg.vh"
-
+`include "sp_types_pkg.vh"
+import sp_types_pkg::*;
 
 interface scratchpad_if;
-    import types_pkg::*;
+    
     
     
     logic instrFIFO_WEN, psumout_en, drained, fifo_has_space, sLoad_hit, sStore_hit;
-    logic [2+MAT_S_W+ROW_S_W+WORD_W-1:0] instrFIFO_wdata;
+    instrFIFO_t instrFIFO_wdata;
     logic [ROW_S_W-1:0] psumout_row_sel_in, sLoad_row;
     logic [BITS_PER_ROW-1:0] psumout_data, load_data;
 
-    logic instrFIFO_full, partial_enable, weight_enable, input_enable, sLoad, sStore, gemm_complete, load_complete;
+    logic instrFIFO_full, partial_enable, weight_enable, input_enable, sLoad, sStore, gemm_complete, load_complete, store_complete;
     logic [BITS_PER_ROW-1:0] weight_input_data, partial_sum_data, store_data;
     logic [ROW_S_W-1:0] weight_input_row_sel, partial_sum_row_sel;
     logic [WORD_W-1:0] load_addr, store_addr;
+
+
 
 
 
@@ -25,7 +26,7 @@ interface scratchpad_if;
         instrFIFO_wdata, psumout_row_sel_in, sLoad_row, psumout_data, load_data,
         output instrFIFO_full, partial_enable, weight_enable, input_enable, sLoad, sStore,
         weight_input_data, partial_sum_data, store_data, weight_input_row_sel, partial_sum_row_sel,
-        load_addr, store_addr, gemm_complete, load_complete
+        load_addr, store_addr, gemm_complete, load_complete, store_complete
     );
 
     modport tb (
@@ -45,6 +46,10 @@ interface scratchpad_if;
             output sLoad, sStore, load_addr, store_addr, store_data,
             input load_data, sLoad_hit, sStore_hit, sLoad_row
         );
+    // modport testbench (
+    //         output sLoad, sStore, load_addr, store_addr, store_data,
+    //         input load_data, sLoad_hit, sStore_hit, sLoad_row
+    //     );
 
 endinterface
 

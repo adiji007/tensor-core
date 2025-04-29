@@ -1,5 +1,6 @@
-# SCRDIR = /home/asicfab/a/rrbathin/socet/amp/tensor-core/src/scripts
-SCRDIR = /home/asicfab/a/wong371/william_pr/tensor-core/src/scripts
+# SCRDIR = /home/asicfab/a/saha56/tensor-core/src/waves
+SCRDIR = /home/asicfab/a/rrbathin/socet/amp/tensor-core/src/waves
+# SCRDIR = /home/asicfab/a/wong371/william_pr/tensor-core/src/scripts
 
 SOURCE_FILES = \
 	./src/modules/system.sv \
@@ -45,19 +46,19 @@ SIMTIME = 100us             # Default simulation run time
 
 # modelsim viewing options
 ifneq (0,$(words $(filter %.wav,$(MAKECMDGOALS))))
-    # view waveform in graphical mode and load do file if there is one
-    DOFILES = $(notdir $(basename $(wildcard $(shell find . -name "*.do"))))  # Search for all .do files in the project
-    DOFILE = $(filter $(MAKECMDGOALS:%.wav=%) $(MAKECMDGOALS:%_tb.wav=%), $(DOFILES))
-    ifeq (1, $(words $(DOFILE)))
-        WAVDO = do $(firstword $(shell find . -name $(DOFILE).do))  # Load the .do file from anywhere in the project
-    else
-        WAVDO = add wave *
-    endif
-    SIMDO = "view objects; $(WAVDO); run $(SIMTIME);"
+#     # view waveform in graphical mode and load do file if there is one
+	DOFILES = $(notdir $(basename $(wildcard $(shell find . -name "*.do"))))  # Search for all .do files in the project
+	DOFILE = $(filter $(MAKECMDGOALS:%.wav=%) $(MAKECMDGOALS:%_tb.wav=%), $(DOFILES))
+	ifeq (1, $(words $(DOFILE)))
+	WAVDO = do $(firstword $(shell find . -name $(DOFILE).do))  # Load the .do file from anywhere in the project
+	else
+	WAVDO = add wave *
+	endif
+	SIMDO = "view objects; $(WAVDO); run $(SIMTIME);"
 else
-    # view text output in cmdline mode
-    SIMTERM = -c
-    SIMDO = "run $(SIMTIME);"
+	# view text output in cmdline mode
+	SIMTERM = -c
+	SIMDO = "run $(SIMTIME);"
 endif
 
 memory_subsystem.wav:
@@ -66,7 +67,7 @@ memory_subsystem.wav:
 
 system.wav:
 	vlog -sv +incdir+./src/include ./src/include/*.vh ./src/testbench/system_tb.sv ./src/modules/*.sv
-	vsim -voptargs="+acc" work.system_tb -sv_lib memory -do "do $(SCRDIR)/system.do; run -a;" -suppress 2275
+	vsim -voptargs="+acc" work.system_tb -sv_lib memory -do "do ./src/waves/system.do; run -a;" -suppress 2275
 
 system:
 	vlog -sv +incdir+./src/include ./src/include/*.vh \
@@ -116,8 +117,8 @@ vlog:
 	vsim $(SIMTERM) -voptargs="+acc" work.$*_tb -do $(SIMDO)
 
 %.wav:
-	vlog -sv +incdir+./src/include ./src/testbench/$*_tb.sv ./src/modules/$*.sv
-	vsim -voptargs="+acc" work.$*_tb -do "do $(SCRDIR)/$*.do; run $(SIMTIME);" -suppress 2275
+	vlog -sv +incdir+./src/include ./src/testbench/$*_tb.sv ./src/modules/*.sv
+	vsim -voptargs="+acc" work.$*_tb -sv_lib memory -do "do $(SCRDIR)/$*.do; run $(SIMTIME);" -suppress 2275
 
 %.sim:
 	vlog -sv +incdir+./src/include ./src/modules/$*.sv

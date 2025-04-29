@@ -12,6 +12,7 @@ src/modules/sysarr_FIFO.sv
 src/modules/sysarr_OUT_FIFO.sv
 src/testbench/systolic_array_tb.sv
 +incdir+src/include/
++incdir+src/modules/
 --timing
 //strict warnings
 --Wall
