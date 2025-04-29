@@ -85,6 +85,9 @@ module sc_datapath
     assign sbif.wb_issue                = wb_reg;
     assign sbif.wb_dispatch.s_rw_en     = wb_reg.reg_en;
     assign sbif.wb_dispatch.s_rw        = wb_reg.reg_sel;
+    assign sbif.wb_dispatch.alu_done    = wb_reg.alu_done;
+    assign sbif.wb_dispatch.jump_done   = wb_reg.jump_done;
+    assign sbif.wb_dispatch.load_done   = wb_reg.load_done;
     assign sbif.wb_dispatch.gemm_done   = dcif.gemm_done; 
     assign sbif.wb_dispatch.m_load_done = dcif.m_ld_done; 
     assign sbif.wb_dispatch.m_rw_ld     = '0; // TODO these need logc from memory?, saying which m_reg can be cleared from rsts

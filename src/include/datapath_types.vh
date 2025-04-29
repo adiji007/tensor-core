@@ -219,6 +219,9 @@ package datapath_pkg;
     logic gemm_done;
     matbits_t m_rw_ld;
     matbits_t m_rw_gemm; // still need m_rw in wb for dispatch loopback to clear RST
+    logic alu_done;
+    logic jump_done;
+    logic load_done;
     // logic load_done;  // Load Done Signal for Score Board
     // logic alu_done;   // Alu Done Signal for Score Board
   } wb_ctr_t; // dispatch
@@ -227,6 +230,9 @@ package datapath_pkg;
     logic reg_en;  // scalar read write reg enable
     regbits_t reg_sel; // scalar read write register
     logic [WORD_W-1:0] wdat; //empty until execute (write data)
+    logic alu_done;
+    logic jump_done;
+    logic load_done;
   } wb_t; // issue
 
   /**********

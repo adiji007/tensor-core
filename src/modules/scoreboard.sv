@@ -62,6 +62,7 @@ module scoreboard(
       isif.branch_miss = sbif.branch_miss;
       diif.branch_miss = sbif.branch_miss;
       diif.branch_resolved = sbif.branch_resolved;
+      isif.branch_resolved = sbif.branch_resolved;
 
       sbif.freeze = diif.freeze;
       isif.freeze = diif.freeze;

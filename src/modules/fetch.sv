@@ -29,20 +29,27 @@ module fetch(
             imemaddr <= '0;
             fif.pc <= '0;
         end else begin
-            if (ihit) begin
+            if (fif.br_jump) begin
+                fif.pc <= next_pc;
+                pc_reg <= next_pc;
                 imemaddr <= next_pc;
             end
-
-            if (ihit && !fif.freeze) begin
-                pc_reg <= next_pc;
-                fif.instr <= fif.imemload;
-                fif.pc <= imemaddr;
-                // imemaddr <= next_pc;
-            end
             else begin
-                pc_reg <= '0;
-                fif.instr <= '0;
-                fif.pc <= '0;
+                if (ihit) begin
+                    imemaddr <= next_pc;
+                end
+
+                if (ihit && !fif.freeze) begin
+                    pc_reg <= next_pc;
+                    fif.instr <= fif.imemload;
+                    fif.pc <= imemaddr;
+                    // imemaddr <= next_pc;
+                end
+                else begin
+                    pc_reg <= '0;
+                    fif.instr <= '0;
+                    fif.pc <= '0;
+                end
             end
         end
     end
