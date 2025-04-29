@@ -19,6 +19,7 @@
 `include "caches_if.vh"
 `include "arbiter_caches_if.vh"
 `include "scratchpad_if.vh"
+`include "systolic_array_if.vh"
 
 // mapped timing needs this. 1ns is too fast
 `timescale 1 ns / 1 ns
@@ -39,6 +40,7 @@ module system_tb;
   caches_if                           cif();
   arbiter_caches_if                   acif(cif);
   scratchpad_if                       spif();
+  systolic_array_if saif();
 
   // dut
   system                              DUT (CLK,nRST,dcif,cif,acif,spif,syif);
