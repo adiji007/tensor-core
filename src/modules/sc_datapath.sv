@@ -88,8 +88,8 @@ module sc_datapath
     assign sbif.wb_dispatch.alu_done    = wb_reg.alu_done;
     assign sbif.wb_dispatch.jump_done   = wb_reg.jump_done;
     assign sbif.wb_dispatch.load_done   = wb_reg.load_done;
-    assign sbif.wb_dispatch.gemm_done   = dcif.gemm_done; 
-    assign sbif.wb_dispatch.m_load_done = dcif.m_ld_done; 
+    assign sbif.wb_dispatch.gemm_done   = dcif.gemm_complete; 
+    assign sbif.wb_dispatch.m_load_done = dcif.load_complete; 
     assign sbif.wb_dispatch.m_rw_ld     = '0; // TODO these need logc from memory?, saying which m_reg can be cleared from rsts
     assign sbif.wb_dispatch.m_rw_gemm   = '0; // TODO these need logc from memory?, saying which m_reg can be cleared from rsts
     assign sbif.branch_miss             = eif.eif_output.bfu_miss;
@@ -103,6 +103,10 @@ module sc_datapath
     // execute signals
 
     // inputs
+    assign eif.load_complete   = dcif.load_complete;
+    assign eif.gemm_complete   = dcif.gemm_complete; 
+    assign eif.store_complete  = dcif.store_complete; 
+
     assign eif.rd = sbif.out.rd;
     assign eif.spec = sbif.out.spec;
     assign eif.halt = sbif.out.halt;
@@ -131,7 +135,7 @@ module sc_datapath
     assign eif.sls_dhit_in   = dcif.dhit;     // from mem
     // matrix ls
     assign eif.mls_enable     = sbif.out.fu_en[3];
-    assign eif.mls_mhit       = dcif.mhit;
+    // assign eif.mls_mhit       = dcif.mhit;
     assign eif.mls_ls_in      = sbif.out.ls_in;
     assign eif.mls_rd_in      = sbif.out.md;
     assign eif.mls_rs_in      = sbif.out.rdat1;
@@ -139,7 +143,7 @@ module sc_datapath
     assign eif.mls_imm_in     = sbif.out.imm;
     // gemm
     assign eif.gemm_enable         = sbif.out.fu_en[4];
-    assign eif.gemm_done           = dcif.gemm_done;
+    // assign eif.gemm_done           = dcif.gemm_done;
     assign eif.gemm_new_weight_in  = sbif.out.gemm_new_weight;
     assign eif.gemm_rd_in          = sbif.out.md;
     assign eif.gemm_rs1_in         = sbif.out.ms1;
@@ -164,9 +168,12 @@ module sc_datapath
     assign dcif.dmemstore  = eif.eif_output.sls_dmemstore;
     assign dcif.dmemaddr   = eif.eif_output.sls_dmemaddr;
 
-    assign dcif.matrix_ls  = eif.eif_output.fu_matls_out;
+    // assign dcif.matrix_ls  = eif.eif_output.fu_matls_out;
 
-    assign dcif.gemm_out   = eif.eif_output.gemm_out;
+    // assign dcif.gemm_out   = eif.eif_output.gemm_out;
+
+    assign dcif.sp_out    = eif.eif_output.sp_out;
+    assign dcif.sp_write  = eif.eif_output.sp_write;
     
     // wb signals
 

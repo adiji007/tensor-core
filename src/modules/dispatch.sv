@@ -73,12 +73,12 @@ module dispatch(
     always_comb begin: Instr_Signals
       instr  = diif.fetch.imemload;
       s_rd   = instr[11:7];
-      s_rs1  = (cuif.fu_m == FU_M_LD_ST) ? instr [27:23] : instr[19:15];
+      s_rs1  = (cuif.fu_m == FU_M_LD_ST) ? instr [25:21] : instr[19:15];
       s_rs2  = instr[24:20];
-      m_rd   = instr[31:28];
-      m_rs1  = instr[27:24];
-      m_rs2  = instr[23:20];
-      m_rs3  = instr[19:16];
+      m_rd   = instr[31:26];
+      m_rs1  = instr[25:20];
+      m_rs2  = instr[19:14];
+      m_rs3  = instr[13:8];
     end
 
     always_comb begin : Control_Unit

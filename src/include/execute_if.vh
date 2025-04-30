@@ -3,6 +3,7 @@
 
 `include "datapath_types.vh"
 `include "isa_types.vh"
+`include "sp_types_pkg.vh"
 
 
 // IGNORE
@@ -22,6 +23,7 @@
 interface execute_if;
   import datapath_pkg::*; 
   import isa_pkg::*;
+  import sp_types_pkg::*;
 
   // Branch FU
   logic bfu_enable;
@@ -60,8 +62,11 @@ interface execute_if;
   logic spec;
   regbits_t rd;
 
+  logic gemm_complete, store_complete, load_complete;
+
   modport eif (
-    input // lw and alu destination
+    input gemm_complete, store_complete, load_complete,
+          // lw and alu destination
           rd,
           // Branch FU
           bfu_enable, bfu_branch_type, bfu_reg_a, bfu_reg_b, bfu_current_pc, bfu_imm, bfu_predicted_outcome, bfu_j_type,

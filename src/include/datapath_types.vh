@@ -2,9 +2,11 @@
 `define DP_TYPES_PKG_VH
 
 `include "isa_types.vh"
+`include "sp_types_pkg.vh"
 
 package datapath_pkg;
   import isa_pkg::*;
+  import sp_types_pkg::*;
 
   parameter FU_W   = 5;
   parameter FU_S_W = 2;
@@ -343,16 +345,19 @@ package datapath_pkg;
     regbits_t sls_rd;          // (load_reg_sel) to wb thru latch ***
     
     // MLS FU
-    matrix_ls_t fu_matls_out;  // to mem
+    // matrix_ls_t fu_matls_out;  // to mem
     
     // Gemm FU
     // logic gemm_new_weight_out; // to mem
     // fu_gemm_t gemm_matrix_num; // to mem
-    scratch_input_t gemm_out;
+    // scratch_input_t gemm_out;
+    instrFIFO_t sp_out;
 
     logic [4:0] fu_ex; // to sb, fu_ex[0] (alu_done) to wb thru latch ***
     logic spec;
     logic halt;
+
+    logic sp_write;
 
   } eif_output_t;
 

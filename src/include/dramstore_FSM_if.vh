@@ -1,7 +1,10 @@
 `ifndef  DRAMSTORE_FSM_IF_VH
 `define DRAMSTORE_FSM_IF_VH
 `include "sp_types_pkg.vh"
+`include "isa_types.vh"
+
 import sp_types_pkg::*;
+import isa_pkg::*;
 
 interface dramstore_FSM_if;
     

@@ -1,7 +1,10 @@
 `ifndef  LOAD_FSM_IF_VH
 `define LOAD_FSM_IF_VH
 `include "sp_types_pkg.vh"
+`include "isa_types.vh"
+
 import sp_types_pkg::*;
+import isa_pkg::*;
 
 interface load_FSM_if;
     

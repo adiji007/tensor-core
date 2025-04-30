@@ -7,11 +7,13 @@
 // types
 `include "datapath_types.vh"
 `include "isa_types.vh"
+`include "sp_types_pkg.vh"
 
 interface fu_matrix_ls_if;
 // import types
 import datapath_pkg::*;
 import isa_pkg::*;
+import sp_types_pkg::*;
 
 // Signals
 
@@ -32,7 +34,7 @@ matbits_t       rd_in;
 word_t          rs_in, imm_in, stride_in;
 
 // Outputs (REFER TO DATAPATH_TYPES)
-matrix_ls_t fu_matls_out;
+instrFIFO_t fu_matls_out;
 
 // LS Matrix Port Map
 modport mls (

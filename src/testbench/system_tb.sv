@@ -43,7 +43,7 @@ module system_tb;
   systolic_array_if saif();
 
   // dut
-  system                              DUT (CLK,nRST,dcif,cif,acif,spif,syif);
+  system                              DUT (CLK,nRST,dcif,cif,acif,spif,saif,syif);
   // import word type
   import isa_pkg::word_t;
   import "DPI-C" function void mem_init();

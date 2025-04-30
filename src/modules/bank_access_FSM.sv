@@ -1,6 +1,9 @@
 `include "sp_types_pkg.vh"
 `include "bank_access_FSM_if.vh"
+`include "isa_types.vh"
+
 import sp_types_pkg::*;
+import isa_pkg::*;
 
 module bank_access_FSM #(
     parameter BANK_NUM = 0 
