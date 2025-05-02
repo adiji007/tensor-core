@@ -1,8 +1,7 @@
 import numpy as np
 import struct
 import sys
-# filename = sys.argv[1]
-filename = "help"
+filename = sys.argv[1]
 # Read matrices from input.txt
 with open(f"{filename}.txt", "r") as f:
     lines = f.readlines()
