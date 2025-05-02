@@ -10,21 +10,20 @@ module sysarr_OUT_FIFO(
 );
     // Internal storage for FIFO
     logic [DW * N - 1 : 0] fifo_mem; 
-    logic [DW * N - 1 : 0] fifo_mem_next;
+    logic [DW * N - 1 : 0] fifo_mem_nxt;
 
     always_ff @(posedge clk or negedge nRST) begin
         if (!nRST) begin
             fifo_mem <= '0;     // Reset fifo mem to all zeros
         end else begin
-            fifo_mem <= fifo_mem_next; 
+            fifo_mem <= fifo_mem_nxt; 
         end
     end
     always_comb begin
-        fifo_mem_next = fifo_mem;
-        out_fifo.out = fifo_mem; // Output from the last row
+        fifo_mem_nxt = fifo_mem;
+        out_fifo.out = fifo_mem;
         if (out_fifo.shift) begin
-            fifo_mem_next = {out_fifo.shift_value, fifo_mem[DW * N - 1: DW]};    // Shift values forward 
+            fifo_mem_nxt = {fifo_mem[DW * (N-1) - 1 : 0], out_fifo.shift_value}; 
         end
     end
-
 endmodule

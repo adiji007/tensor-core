@@ -30,7 +30,9 @@ module systolic_array(
     logic [DW-1:0] ps_add_inputs [N-1:0];
     // Weight Registers
     logic [DW*N-1:0] weights [N-1:0];
-
+    logic nxt_drained;
+    logic start;
+    logic nxt_start;
     // Generate variables
     genvar i,j,l,m,n,o,p;
 
@@ -200,11 +202,18 @@ module systolic_array(
     always_ff @(posedge clk, negedge nRST) begin
         if(nRST == 1'b0)begin
             memory.drained <= 1'b1;
+            start <= 1'b1;
         end else begin
-            memory.drained <= nxt_drained;
+            memory.drained <= nxt_drained && (control_unit_if.MAC_value_ready || start);
+            start <= nxt_start;
         end 
     end
-    logic nxt_drained;
+    always_comb begin
+        nxt_start = start;
+        if (memory.input_en)begin
+            nxt_start = 1'b0;
+        end
+    end
     always_comb begin
         memory.out_en = 1'b0;
         memory.row_out = '0;

@@ -197,7 +197,7 @@ module systolic_array_tb();
     load_in_ps (.delay(1)); //delay was 1
     repeat(N*N) @(posedge tb_clk); // last output drain
     get_matrices(.weights(loaded_weights));
-    // load_in_ps (.delay(N));
+    load_in_ps (.delay(N));
     row_load(.rtype(2'b01), .rinnum('d0), .rpsnum('0), .rinput(m_inputs['d0]), .rpartial('0));
     @(posedge tb_clk);
     row_load(.rtype(2'b01), .rinnum('d1), .rpsnum('0), .rinput(m_inputs['d1]), .rpartial('0));

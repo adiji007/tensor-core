@@ -6,7 +6,7 @@
 `include "systolic_array_add_if.vh"
 `include "systolic_array_FIFO_if.vh"
 
-`timescale 1 ps / 1 ps
+`timescale 1 ns / 1 ns
 
 module systolic_array_tb();
 
@@ -17,7 +17,7 @@ module systolic_array_tb();
   systolic_array_if memory_if();
 
   // Clock gen
-  parameter PERIOD = 1016; // 1000 ps = 1 ns
+  parameter PERIOD = 10;
   logic tb_clk = 0;
   always #(PERIOD/2) tb_clk++;
   // FILE I/O
@@ -80,41 +80,40 @@ module systolic_array_tb();
   task get_matrices(output int weights);
     begin
       int iterations;
-      int unused;
       // $display("In get matrices task");
       weights = 0;
       which = 0;
-      unused = $fgets(line, file);
+      $fgets(line, file);
       // $display("In get matrices task. just fgets'ed");
       // $display("Line read in: %s", line);
       if (line == "Weights\n") begin
         which = 1;
         iterations = 3;
         weights = 1;
-        // $display("weights loaded beep boop");
+        $display("weights loaded beep boop");
       end else if (line == "Inputs\n") begin
         which = 2;
         iterations = 2;
       end
       // $display("In get matrices task. just read value type. which: ");
-      // $display("%d", which);
+      $display("%d", which);
       for (k = 0; k < iterations; k++) begin
         for (i = 0; i < N; i = i + 1) begin
           for (j = 0; j < N; j = j + 1) begin
             if (which == 1)begin
-              unused =$fscanf(file, "%x ", temp_weights[i][j]);
+              $fscanf(file, "%x ", temp_weights[i][j]);
               // $display("i just read in weight %x", temp_weights[i][j]);
             end else if (which == 2) begin
-              unused = $fscanf(file, "%x ", temp_inputs[i][j]);
+              $fscanf(file, "%x ", temp_inputs[i][j]);
               // $display("i just read in input %x", temp_inputs[i][j]);
             end else begin
-              unused = $fscanf(file, "%x ", temp_partials[i][j]);
+              $fscanf(file, "%x ", temp_partials[i][j]);
               // $display("i just read in partial %x", temp_partials[i][j]);
             end
           end  
         end
         which = which + 1;
-        unused = $fgets(line, file);
+        $fgets(line, file);
       end
       for (i = 0; i < N; i++)begin
         m_weights[i] = {>>{temp_weights[i]}};
@@ -125,10 +124,9 @@ module systolic_array_tb();
   endtask
   task get_m_output;
     begin
-      int unused;
       for (i = 0; i < N; i = i + 1) begin
         for (j = 0; j < N; j = j + 1) begin
-          unused = $fscanf(out_file, "%x ", temp_outputs[i][j]);
+          $fscanf(out_file, "%x ", temp_outputs[i][N-1-j]);
         end
       end
       for (i = 0; i < N; i++)begin
@@ -153,7 +151,7 @@ module systolic_array_tb();
       repeat(delay) @(posedge tb_clk); // everyone else iteration delay
     end
   endtask
-  int count;
+
   // Instantiate the DUT
   systolic_array DUT (
     .clk    (tb_clk),
@@ -161,24 +159,21 @@ module systolic_array_tb();
     .memory (memory_if.memory_array)
   );
   always @(posedge tb_clk) begin
-    count = count + 1;
     if (memory_if.out_en == 1'b1)begin
-      // $display("\noutput row is %d", memory_if.row_out);
+      $display("\noutput row is %d", memory_if.row_out);
       if (m_outputs[memory_if.row_out] != memory_if.array_output)begin
         $display("OUTPUT INCORRECT");
-        $display("Our Output for row %d is", memory_if.row_out);
-        // for (y = 0; y < N; y++)begin
-        for (y = N; y > 0; y--)begin
-          $write("%x, ", memory_if.array_output[y*DW-1-:DW]);
+        $display("Our Output is");
+        for (y = 0; y < N; y++)begin
+          $write("%x, ", memory_if.array_output[(y+1)*DW-1-:DW]);
         end
         $display("");
       end else begin
         $display("CORRECT OUTPUT");
       end
-      $display("Correct Output row %d is", memory_if.row_out);
-      // for (z = 0; z < N; z++)begin
-      for (z = N; z > 0; z--)begin
-          $write("%x, ", m_outputs[memory_if.row_out][z*DW-1-:DW]);
+      $display("Correct Output is");
+      for (z = 0; z < N; z++)begin
+          $write("%x, ", m_outputs[memory_if.row_out][(z+1)*DW-1-:DW]);
       end
       $display("");
       /* verilator lint_off WIDTHEXPAND */
@@ -190,12 +185,9 @@ module systolic_array_tb();
   end
   // Test Stimulus
   int flag;
-  int done;
-  int unused;
- 
   initial begin
-    // $dumpfile("dump.vcd");  // For VCD format
-    // $dumpvars(0, systolic_array_tb);
+    $dumpfile("dump.vcd");  // For VCD format
+    $dumpvars(0, systolic_array_tb);
     memory_if.weight_en = '0;
     memory_if.input_en = '0;
     memory_if.partial_en = '0;
@@ -204,56 +196,72 @@ module systolic_array_tb();
     memory_if.array_in = '0;
     memory_if.array_in_partials = '0;
     loaded_weights = 0;
-    count = 0;
-    // custom test file
-    // file = $fopen("systolic_array_utils/matopsdub_encoded.txt", "r");
-    // $system("/bin/python3 systolic_array_utils/matrix_mul_fp.py systolic_array_utils/matopsdub_encoded");
-    // out_file = $fopen("systolic_array_utils/matopsdub_encoded_output.txt", "r");
     
-    // tiled matrix multiplication file 
-    $system("/bin/python3 systolic_array_utils/matmul_creation.py dense_fp_test fp 32 32");
-    file = $fopen("systolic_array_utils/dense_fp_test.txt", "r");
-    out_file = $fopen("systolic_array_utils/dense_fp_test_output.txt", "r");
+    // any file
+    file = $fopen("systolic_array_utils/matopsdub_encoded.txt", "r");
+    $system("/bin/python3 systolic_array_utils/matrix_mul_fp.py systolic_array_utils/matopsdub_encoded");
+    out_file = $fopen("systolic_array_utils/matopsdub_encoded_output.txt", "r");
     reset();
-
-
-    done = $fgetc(file);
-    unused = $ungetc(done, file);
+    get_matrices(.weights(loaded_weights));
     get_m_output();
-    while (done >= 0)begin
-      // get_matrices(.weights(loaded_weights), .rows(input_rows));
-      get_matrices(.weights(loaded_weights));
-      // $display("%d %d", loaded_weights, input_rows);
-      if (loaded_weights == 1)begin
-        // $display("Load new weights");
-        // load_weights();                          // DOUBLE BUFFERED WEIGHTS
-        wait(memory_if.drained == 1'b1);
-        @(posedge tb_clk);
-        // load weights and inputs 
-        load_weights();                          // NO DOUBLE BUFFERED WEIGHTS
-        load_in_ps (.delay(1));
-      end else begin
-        // $display("Pipeline new inputs");
-        wait(memory_if.fifo_has_space == 1'b1);
-        @(posedge tb_clk);
-        // loads inputs
-        load_in_ps (.delay(1));
+    if (loaded_weights == 1)begin
+      // LOAD WEIGHTS
+      load_weights();
+    end
+    load_in_ps (.delay(1)); //delay was 1
+
+    flag = 1;
+    while (flag == 1) begin
+      @(posedge tb_clk);
+      if (memory_if.fifo_has_space == 1'b1)begin
+        flag = 0;
       end
-      done = $fgetc(file);
-      unused = $ungetc(done, file);
     end
-
-    wait(memory_if.drained == 1'b1);
-    // wait (memory_if.out_en == 1'b1);
-    done = $fgetc(out_file);
-    unused = $ungetc(done, out_file);
-    while (done > 0) begin
-      wait (memory_if.out_en == 1'b1);
-      done = $fgetc(out_file);
-      unused = $ungetc(done, out_file);
+    // repeat(N*N) @(posedge tb_clk); // last output drain
+    get_matrices(.weights(loaded_weights));
+    load_in_ps (.delay(1));
+    // row_load(.rtype(2'b01), .rinnum('d0), .rpsnum('0), .rinput(m_inputs['d0]), .rpartial('0));
+    // @(posedge tb_clk);
+    // row_load(.rtype(2'b01), .rinnum('d1), .rpsnum('0), .rinput(m_inputs['d1]), .rpartial('0));
+    // @(posedge tb_clk);
+    // row_load(.rtype(2'b01), .rinnum('d2), .rpsnum('0), .rinput(m_inputs['d2]), .rpartial('0));
+    // @(posedge tb_clk);
+    // row_load(.rtype(2'b01), .rinnum('d3), .rpsnum('0), .rinput(m_inputs['d3]), .rpartial('0));
+    // @(posedge tb_clk);
+    // row_load(.rtype(2'b10), .rinnum('0), .rpsnum('d0), .rinput('0), .rpartial(m_partials['d0]));
+    // @(posedge tb_clk);
+    // row_load(.rtype(2'b10), .rinnum('0), .rpsnum('d1), .rinput('0), .rpartial(m_partials['d1]));
+    // @(posedge tb_clk);
+    // row_load(.rtype(2'b10), .rinnum('0), .rpsnum('d2), .rinput('0), .rpartial(m_partials['d2]));
+    // @(posedge tb_clk);
+    // row_load(.rtype(2'b10), .rinnum('0), .rpsnum('d3), .rinput('0), .rpartial(m_partials['d3]));
+    // @(posedge tb_clk);
+    // repeat(N*N) @(posedge tb_clk);
+    // get_matrices(.weights(loaded_weights));
+    // load_in_ps (.delay(N));
+    repeat(N*(N+1)) @(posedge tb_clk); // last output drain
+    repeat(N*(N+1)) @(posedge tb_clk); // last output drain
+    repeat(N*(N+1)) @(posedge tb_clk); // last output drain
+    flag = 1;
+    while (flag == 1) begin
+      @(posedge tb_clk);
+      if (memory_if.drained == 1'b1)begin
+        flag = 0;
+      end
     end
+    $display("array should be drained %d", memory_if.drained);
+    $display("fifos should have space  %d", memory_if.fifo_has_space);
 
-    $display("Total Cycle Count = %d", count);
+    get_matrices(.weights(loaded_weights));
+    get_m_output();
+    if (loaded_weights == 1)begin
+      // LOAD WEIGHTS
+      load_weights();
+    end
+    load_in_ps (.delay(N)); //delay was 1
+    repeat(N*(N+1)) @(posedge tb_clk); // last output drain
+    repeat(N*(N+1)) @(posedge tb_clk); // last output drain
+    $fclose(file);
     $fclose(out_file);
     #50;
     $stop;
