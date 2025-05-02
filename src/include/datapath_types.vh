@@ -148,6 +148,7 @@ package datapath_pkg;
     matbits_t ms2;
     matbits_t ms3;
     matbits_t md;
+    logic new_weight;
   } fust_g_row_t;
 
   typedef struct packed {
@@ -255,6 +256,9 @@ package datapath_pkg;
     word_t n_br_pc;
     logic n_br_pred;
 
+    matbits_t gemm_weight_addr;
+    logic new_weight;
+
     logic i_type;
     logic freeze;
     logic spec;
@@ -349,7 +353,7 @@ package datapath_pkg;
     // matrix_ls_t fu_matls_out;  // to mem
     
     // Gemm FU
-    // logic gemm_new_weight_out; // to mem
+    logic gemm_new_weight_out; // to scratchpad
     // fu_gemm_t gemm_matrix_num; // to mem
     // scratch_input_t gemm_out;
     instrFIFO_t sp_out;

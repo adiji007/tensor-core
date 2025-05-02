@@ -119,7 +119,7 @@ module execute (
     // Outputs
     /* Nick Changes: Outputs to Scratchpad FIFO Buff using my structs */
     
-    // assign eif.eif_output.gemm_new_weight_out = fugif.new_weight_out; // to mem (scratchpad)
+    assign eif.eif_output.gemm_new_weight_out = eif.gemm_new_weight_in; // to mem (scratchpad)
     // assign eif.eif_output.gemm_matrix_num = fugif.gemm_matrix_num;    // to mem (scratchpad)
     // assign eif.eif_output.gemm_out = fugif.gemm_out; 
     // TODO: need some sort of done signal

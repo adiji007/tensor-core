@@ -28,22 +28,22 @@ import sp_types_pkg::*;
     mhit: Scratchpad ready
 */
 
-logic           mhit, enable;
+logic           enable;
 matrix_mem_t    ls_in;
 matbits_t       rd_in;
-word_t          rs_in, imm_in, stride_in;
+word_t          rs_in, imm_in;
 
 // Outputs (REFER TO DATAPATH_TYPES)
 instrFIFO_t fu_matls_out;
 
 // LS Matrix Port Map
 modport mls (
-    input   mhit, enable, ls_in, rd_in, rs_in, stride_in, imm_in,
+    input   enable, ls_in, rd_in, rs_in, imm_in,
     output  fu_matls_out
 );
 
 modport tb (
-    output   mhit, enable, ls_in, rd_in, rs_in, stride_in, imm_in,
+    output  enable, ls_in, rd_in, rs_in, imm_in,
     input  fu_matls_out
 );
 

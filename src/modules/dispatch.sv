@@ -35,6 +35,7 @@ module dispatch(
     logic flush;
     dispatch_t n_dispatch;
     dispatch_t dispatch;
+    matbits_t gemm_weight_addr;
     logic spec;
     logic n_spec;
     logic jump;
@@ -55,6 +56,18 @@ module dispatch(
       if (cuif.fu_s == FU_S_BRANCH) begin
         fetch_br_pc  = diif.fetch.br_pc;
         fetch_br_pred = diif.fetch.br_pred;
+      end
+    end
+
+    always_comb begin
+      gemm_weight_addr = diif.out.gemm_weight_addr;
+      if (cuif.fu_m == FU_M_GEMM) begin
+        gemm_weight_addr = m_rs2;
+      end
+      else if (cuif.m_mem_type == M_LOAD) begin
+        if (diif.out.gemm_weight_addr == m_rd) begin
+          gemm_weight_addr = ~gemm_weight_addr;
+        end
       end
     end
 
@@ -324,6 +337,8 @@ module dispatch(
       diif.n_fust_g.ms1  = m_rs1;
       diif.n_fust_g.ms2  = m_rs2;
       diif.n_fust_g.ms3  = m_rs3;
+
+      diif.n_fust_g.new_weight = (diif.out.gemm_weight_addr != gemm_weight_addr);
       // diif.n_fust_g.t1   = rstmif.status.idx[m_rs1].tag;
       // diif.n_fust_g.t2   = rstmif.status.idx[m_rs2].tag;
       // diif.n_fust_g.t3   = rstmif.status.idx[m_rs3].tag;
@@ -346,6 +361,11 @@ module dispatch(
       diif.freeze = hazard;
       dispatch.freeze = hazard;
       diif.jump = (n_jump || jump) && !(diif.fu_ex[2] == 1'b1);
+
+      // Scratchpad Weight Addr
+      dispatch.gemm_weight_addr = gemm_weight_addr;
+
+      // dispatch.new_weight = (diif.out.gemm_weight_addr != gemm_weight_addr);
 
       // dispatch.i_type = cuif.i_flag;
 

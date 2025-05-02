@@ -52,7 +52,8 @@ interface dispatch_if;
     
     modport DI (
         input fetch, fust_s, fust_m, fust_g, fust_state, wb, branch_resolved, branch_miss, fu_ex,
-        output out, n_fu_t, n_fust_s, n_fust_m, n_fust_g, n_fu_s, n_fust_s_en, n_fust_m_en, n_fust_g_en, n_t1, n_t2, freeze, jump, n_gt1, n_gt2, n_gt3, n_rm, n_mm
+        output out, n_fu_t, n_fust_s, n_fust_m, n_fust_g, n_fu_s, n_fust_s_en, n_fust_m_en, n_fust_g_en,
+        output n_t1, n_t2, freeze, jump, n_gt1, n_gt2, n_gt3, n_rm, n_mm
     );
 
     modport tb (

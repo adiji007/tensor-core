@@ -37,7 +37,7 @@ interface issue_if;
     logic freeze;
     // Inputs from writeback
     wb_t wb; //alu and ld/st done signals
-    word_t s_wdata;
+    // word_t s_wdata;
     
     // Outputs of stage
     issue_t out;
@@ -48,7 +48,7 @@ interface issue_if;
     
     modport IS (
         input dispatch, wb, n_fu_t, n_fust_s, n_fust_m, n_fust_g, n_fu_s, n_fust_s_en, n_fust_m_en, n_fust_g_en, 
-        input n_t1, n_t2, s_wdata, branch_miss, branch_resolved, fu_ex, n_rm, n_mm, n_gt1, n_gt2, n_gt3, freeze,
+        input n_t1, n_t2, branch_miss, branch_resolved, fu_ex, n_rm, n_mm, n_gt1, n_gt2, n_gt3, freeze,
         output out, fust_s, fust_m, fust_g, fust_state
     );
 
