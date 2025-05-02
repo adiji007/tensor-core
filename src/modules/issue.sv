@@ -31,7 +31,7 @@ module issue(
     fust_g FG (CLK, nRST, fugif);
 
     // Local Variables
-    logic hazard;
+    logic hazard, halt;
     fust_s_t fust_s;
     fust_m_t fust_m;
     fust_g_t fust_g;
@@ -371,6 +371,16 @@ module issue(
       end
     end
 
+    always_ff @(posedge CLK, negedge nRST)begin
+      if (!nRST) begin
+        halt <= '0;
+      end
+      else begin 
+        halt <= halt || isif.dispatch.halt;
+      end
+    end
+
+    assign isif.halt = halt;
 
     always_comb begin : Output_Logic
       // TODO: output each struct if that fu is going into FUST_EX, if not set to 0
@@ -384,7 +394,7 @@ module issue(
       issue.halt = '0;
       // issue.spec = '0;
       if (!(|isif.fust_s.busy || isif.fust_m.busy || isif.fust_g.busy || isif.branch_miss)) begin
-        issue.halt = isif.dispatch.halt;
+        issue.halt = halt;
       end
       // issue.halt = (|fust_s.busy || fust_m.busy || fust_g.busy || isif.branch_miss) ? '0 : isif.dispatch.halt;
       for (int i = 0; i < 5; i++) begin

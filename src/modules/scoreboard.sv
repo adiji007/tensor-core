@@ -69,6 +69,8 @@ module scoreboard(
       isif.freeze = diif.freeze;
       sbif.jump = diif.jump;
 
+      sbif.halt = isif.halt;
+
       sbif.out = isif.out;
     end
 endmodule

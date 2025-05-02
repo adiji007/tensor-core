@@ -300,6 +300,9 @@ module dispatch(
       if ((diif.fu_ex[4] == 1'b1) && diif.fust_state[4] == FUST_EX) begin // clearing matrix
         diif.n_mm = (diif.fust_m.t2 != '0) && diif.fust_m.busy ? '0 : diif.fust_m.t2;
       end
+      else begin
+        diif.n_mm  = (cuif.fu_t == FU_M_T & ~flush & ~hazard) ? rstmif.status.idx[m_rd].tag  : diif.fust_m.t2;
+      end
       
       if (!(diif.wb.s_rw_en && (diif.wb.s_rw == s_rs1)))begin
         diif.n_t1[cuif.fu_s] = rstsif.status.idx[s_rs1].tag;
@@ -313,7 +316,7 @@ module dispatch(
       end
 
       // diif.n_rm = diif.n_fust_m_en ? rstsif.status.idx[s_rs1].tag : diif.n_rm;
-      diif.n_mm  = (cuif.fu_t == FU_M_T & ~flush & ~hazard) ? rstmif.status.idx[m_rd].tag  : diif.fust_m.t2;
+      // diif.n_mm  = (cuif.fu_t == FU_M_T & ~flush & ~hazard) ? rstmif.status.idx[m_rd].tag  : diif.fust_m.t2;
       
 
       tag_val = (cuif.fu_t == FU_G_T & ~flush & ~hazard) ? rstmif.status.idx[m_rs3].tag : '0;

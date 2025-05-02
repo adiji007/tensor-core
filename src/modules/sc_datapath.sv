@@ -61,7 +61,7 @@ module sc_datapath
 
     // input
     assign fif.imemload        = dcif.imemload;  // from mem
-    assign fif.freeze          = sbif.freeze;
+    assign fif.freeze          = sbif.freeze || sbif.halt;
     assign fif.jump            = sbif.jump;
     assign fif.misprediction   = eif.eif_output.bfu_miss;
     assign fif.correct_pc      = eif.eif_output.bfu_correct_pc;

@@ -91,7 +91,7 @@ module execute (
 
     // Matrix Load/Store FU
     fu_matrix_ls MLS(mlsif);
-    assign mlsif.mhit = eif.mls_mhit; // from mem (scratchpad)
+    // assign mlsif.mhit = eif.mls_mhit; // from mem (scratchpad)
     assign mlsif.enable = eif.mls_enable; // from sb
     assign mlsif.ls_in = eif.mls_ls_in; // from sb
     assign mlsif.rd_in = eif.mls_rd_in; // from sb
@@ -119,7 +119,7 @@ module execute (
     // Outputs
     /* Nick Changes: Outputs to Scratchpad FIFO Buff using my structs */
     
-    assign eif.eif_output.gemm_new_weight_out = eif.gemm_new_weight_in; // to mem (scratchpad)
+    // assign eif.eif_output.gemm_new_weight_out = eif.gemm_new_weight_in; // to mem (scratchpad)
     // assign eif.eif_output.gemm_matrix_num = fugif.gemm_matrix_num;    // to mem (scratchpad)
     // assign eif.eif_output.gemm_out = fugif.gemm_out; 
     // TODO: need some sort of done signal
