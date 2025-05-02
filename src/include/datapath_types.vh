@@ -140,6 +140,7 @@ package datapath_pkg;
     logic busy;
     fust_m_row_t op;
     logic [1:0] t1;
+    logic [1:0] t2;
   } fust_m_t;
 
   typedef struct packed {
@@ -176,7 +177,7 @@ package datapath_pkg;
   } rst_m_row_t;
 
   typedef struct packed {
-    rst_m_row_t [15:0] idx; 
+    rst_m_row_t [63:0] idx; 
   } rst_m_t;
 
   /*******

@@ -44,7 +44,8 @@ module scoreboard(
       isif.n_t2   = diif.n_t2;
       // isif.n_fu_m = diif.n_fu_m;
       // isif.n_fu_g = diif.n_fu_g;
-      isif.n_mt1 = diif.n_mt1;
+      isif.n_rm = diif.n_rm;
+      isif.n_mm = diif.n_mm;
 
       isif.n_gt1 = diif.n_gt1;
       isif.n_gt2 = diif.n_gt2;

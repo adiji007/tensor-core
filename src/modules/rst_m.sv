@@ -24,6 +24,7 @@ module rst_m (
       status.idx[rsif.di_sel].busy = 1;
       status.idx[rsif.di_sel].tag = rsif.di_tag;
     end
+    
     if (rsif.wb_write) begin
       status.idx[rsif.wb_sel].busy = 0;
       status.idx[rsif.wb_sel].tag = '0;

@@ -125,8 +125,8 @@ module dispatch(
         default: m_busy = 1'b0;
       endcase
 
-      WAW = (cuif.m_mem_type == M_LOAD | cuif.fu_m == FU_M_GEMM) ? rstmif.status.idx[m_rd].busy : 
-            (cuif.s_reg_write && !(cuif.fu_s == FU_S_BRANCH)) ? rstsif.status.idx[s_rd].busy: 1'b0;
+      WAW = (cuif.m_mem_type == M_LOAD || cuif.fu_m == FU_M_GEMM) ? rstmif.status.idx[m_rd].busy : 
+            (cuif.s_reg_write || (cuif.jal || cuif.jalr)) ? rstsif.status.idx[s_rd].busy: 1'b0;
       hazard = (s_busy | m_busy | WAW); //TODO: remember to tie this hazard back to stall the fetch to not squash this stage on a hazard
       
     end
@@ -170,7 +170,7 @@ module dispatch(
       rstsif.spec = 1'b0;
       rstsif.flush = diif.branch_miss;
       rstsif.resolved = diif.branch_resolved;
-      if (cuif.s_reg_write && !(cuif.fu_s == FU_S_BRANCH)) begin
+      if (cuif.s_reg_write || (cuif.jal || cuif.jalr)) begin
         if (~hazard & ~flush) begin // hazard a little strange, will need to take a look going forward
           rstsif.di_sel = s_rd;
           rstsif.di_write = 1'b1;
@@ -195,26 +195,28 @@ module dispatch(
       end
 
       if (diif.wb.gemm_done) begin // done gemm or done ml
-        rstmif.wb_sel = dispatch.fust_g.op.md;
+        rstmif.wb_sel = diif.fust_g.op.md;
         rstmif.wb_write = '1;
         // rstmif.wb_write = '0;
       end
 
       if (diif.wb.m_load_done) begin // done gemm or done ml
-        rstmif.wb_sel = dispatch.fust_m.op.md;
+        rstmif.wb_sel = diif.fust_m.op.md;
         rstmif.wb_write = '1;
         // rstmif.wb_write = '0;
       end
     end
 
+    logic [2:0] tag_val;
+
     always_comb begin : FUST
       diif.n_fu_t = cuif.fu_t;
       diif.n_t1 = diif.fust_s.t1;
       diif.n_t2 = diif.fust_s.t2;
-      diif.n_mt1 = diif.fust_m.t1;
-      diif.n_gt1 = diif.fust_g.t1;
-      diif.n_gt3 = diif.fust_g.t2;
-      diif.n_gt2 = diif.fust_g.t3;
+      // diif.n_rm = diif.fust_m.t1;
+      // diif.n_gt1 = diif.fust_g.t1;
+      // diif.n_gt2 = diif.fust_g.t2;
+      // diif.n_gt3 = diif.fust_g.t3;
 
       // tag updates on WB
       // if (diif.wb.s_rw_en & diif.wb.alu_done & diif.fust_state[0] == FUST_EX) begin // TODO fust related wb
@@ -226,7 +228,7 @@ module dispatch(
         diif.n_t2[FU_S_BRANCH] = ((diif.fust_s.t2[FU_S_BRANCH] == 2'd1) && diif.fust_s.busy[FU_S_BRANCH]) ? '0 : diif.fust_s.t2[FU_S_BRANCH];
         diif.n_t1[FU_S_ALU] = (diif.fust_s.t1[FU_S_ALU] == 2'd1) && diif.fust_s.busy[FU_S_ALU] ? '0 : diif.fust_s.t1[FU_S_ALU];
         diif.n_t2[FU_S_ALU] = (diif.fust_s.t2[FU_S_ALU] == 2'd1) && diif.fust_s.busy[FU_S_ALU] ? '0 : diif.fust_s.t2[FU_S_ALU];
-        diif.n_mt1 = (diif.fust_m.t1 == 2'd1 && diif.fust_m.busy) ? '0 : diif.fust_m.t1;
+        diif.n_rm = (diif.fust_m.t1 == 2'd1 && diif.fust_m.busy) ? '0 : diif.fust_m.t1;
       // end else if (diif.wb.s_rw_en & diif.wb.load_done & diif.fust_state[1] == FUST_EX) begin
       // end else if (((diif.fu_ex[1] == 1'b1) && diif.fust_state[1] == FUST_EX) || (diif.wb.s_rw_en)) begin // clearing load tags
       end else if (diif.wb.s_rw_en && diif.wb.jump_done) begin
@@ -234,14 +236,14 @@ module dispatch(
         diif.n_t2[FU_S_ALU] = (diif.fust_s.t2[FU_S_ALU] == 2'd2) && diif.fust_s.busy[FU_S_ALU] ? '0 : diif.fust_s.t2[FU_S_ALU];
         diif.n_t1[FU_S_BRANCH] = (diif.fust_s.t1[FU_S_BRANCH] == 2'd2) && diif.fust_s.busy[FU_S_BRANCH] ? '0 : diif.fust_s.t1[FU_S_BRANCH];
         diif.n_t2[FU_S_BRANCH] = (diif.fust_s.t2[FU_S_BRANCH] == 2'd2) && diif.fust_s.busy[FU_S_BRANCH] ? '0 : diif.fust_s.t2[FU_S_BRANCH];
-        diif.n_mt1 = (diif.fust_m.t1 == 2'd2 && diif.fust_m.busy) ? '0 : diif.fust_m.t1;
+        diif.n_rm = (diif.fust_m.t1 == 2'd2 && diif.fust_m.busy) ? '0 : diif.fust_m.t1;
       // end else if (((diif.fu_ex[2] == 1'b1) && diif.fust_state[2] == FUST_EX) || (diif.wb.s_rw_en)) begin // clearing jump tags
       end else if (diif.wb.s_rw_en && diif.wb.load_done) begin
         diif.n_t1[FU_S_ALU] = (diif.fust_s.t1[FU_S_ALU] == 2'd3) && diif.fust_s.busy[FU_S_ALU] ? '0 : diif.fust_s.t1[FU_S_ALU];
         diif.n_t2[FU_S_ALU] = (diif.fust_s.t2[FU_S_ALU] == 2'd3) && diif.fust_s.busy[FU_S_ALU] ? '0 : diif.fust_s.t2[FU_S_ALU];
         diif.n_t1[FU_S_LD_ST] = (diif.fust_s.t1[FU_S_LD_ST] == 2'd3) && diif.fust_s.busy[FU_S_LD_ST] ? '0 : diif.fust_s.t1[FU_S_LD_ST];
         diif.n_t2[FU_S_LD_ST] = (diif.fust_s.t2[FU_S_LD_ST] == 2'd3) && diif.fust_s.busy[FU_S_LD_ST] ? '0 : diif.fust_s.t2[FU_S_LD_ST];
-        diif.n_mt1 = (diif.fust_m.t1 == 2'd3 && diif.fust_m.busy) ? '0 : diif.fust_m.t1;
+        diif.n_rm = (diif.fust_m.t1 == 2'd3 && diif.fust_m.busy) ? '0 : diif.fust_m.t1;
       end
 
       // To Issue **Combinationally**
@@ -276,6 +278,15 @@ module dispatch(
         diif.n_gt2 = (diif.fust_g.t2 != '0) && diif.fust_g.busy ? '0 : diif.fust_g.t2;
         diif.n_gt3 = (diif.fust_g.t3 != '0) && diif.fust_g.busy ? '0 : diif.fust_g.t3;
       end
+      else begin
+        diif.n_gt1 = (cuif.fu_t == FU_G_T & ~flush & ~hazard) ? rstmif.status.idx[m_rs1].tag : diif.fust_g.t1;
+        diif.n_gt2 = (cuif.fu_t == FU_G_T & ~flush & ~hazard) ? rstmif.status.idx[m_rs2].tag : diif.fust_g.t2;
+        diif.n_gt3 = (cuif.fu_t == FU_G_T & ~flush & ~hazard) ? rstmif.status.idx[m_rs3].tag : diif.fust_g.t3;
+      end
+
+      if ((diif.fu_ex[4] == 1'b1) && diif.fust_state[4] == FUST_EX) begin // clearing matrix
+        diif.n_mm = (diif.fust_m.t2 != '0) && diif.fust_m.busy ? '0 : diif.fust_m.t2;
+      end
       
       if (!(diif.wb.s_rw_en && (diif.wb.s_rw == s_rs1)))begin
         diif.n_t1[cuif.fu_s] = rstsif.status.idx[s_rs1].tag;
@@ -284,12 +295,15 @@ module dispatch(
         diif.n_t1[cuif.fu_s] = rstsif.status.idx[s_rs2].tag;
       end
 
+      if (!(diif.wb.s_rw_en && (diif.wb.s_rw == s_rs1)))begin
+        diif.n_rm = diif.n_fust_m_en ? rstsif.status.idx[s_rs1].tag : diif.fust_m.t1;
+      end
 
-      diif.n_mt1 = diif.n_fust_m_en ? rstsif.status.idx[s_rs1].tag : diif.n_mt1;
-      diif.n_gt1 = diif.n_fust_g_en ? rstmif.status.idx[m_rs1].tag : diif.n_gt1;
-      diif.n_gt3 = diif.n_fust_g_en ? rstmif.status.idx[m_rs3].tag : diif.n_gt1;
-      diif.n_gt2 = diif.n_fust_g_en ? rstmif.status.idx[m_rs2].tag : diif.n_gt1;
+      // diif.n_rm = diif.n_fust_m_en ? rstsif.status.idx[s_rs1].tag : diif.n_rm;
+      diif.n_mm  = (cuif.fu_t == FU_M_T & ~flush & ~hazard) ? rstmif.status.idx[m_rd].tag  : diif.fust_m.t2;
       
+
+      tag_val = (cuif.fu_t == FU_G_T & ~flush & ~hazard) ? rstmif.status.idx[m_rs3].tag : '0;
 
       if (cuif.fu_m == FU_M_LD_ST) begin
         diif.n_fust_m.mem_type = cuif.m_mem_type;

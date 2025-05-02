@@ -125,7 +125,8 @@ module issue(
       fumif.fust_row = isif.n_fust_m;
       fumif.busy     = (fust_state[3] == FUST_EX && (next_fust_state[3] == FUST_EMPTY || next_fust_state[3] == FUST_WAIT)) ? 1'd0 : next_fust_state[3] != FUST_EMPTY;
 
-      fumif.t1 = isif.n_mt1;
+      fumif.t1 = isif.n_rm;
+      fumif.t2 = isif.n_mm;
 
       fugif.en       = isif.n_fust_g_en;
       fugif.fust_row = isif.n_fust_g;
@@ -240,7 +241,7 @@ module issue(
             if (i < 3) begin // Scalar FUST
               n_rdy[i] = (!(|fusif.fust.t1[i]) && !(|fusif.fust.t2[i]));
             end else if (i == 3) begin // Matrix LD/ST FUST
-              n_rdy[i] = (!(|fumif.fust.t1));
+              n_rdy[i] = (!(|fumif.fust.t1) && !(|fumif.fust.t2));
             end else if (i == 4) begin // GEMM FUST
               n_rdy[i] = (!(|fugif.fust.t1) && !(|fugif.fust.t2) && !(|fugif.fust.t3));
             end

@@ -9,7 +9,7 @@ interface fust_m_if;
   logic en;
   //logic fu; //dont need op idx with 1 row in FUST
   fust_m_row_t fust_row;
-  logic [1:0] t1;
+  logic [1:0] t1, t2;
   // Inputs from issue
   logic busy;
 
@@ -17,7 +17,7 @@ interface fust_m_if;
   fust_m_t fust;
     
   modport FUSTM (
-      input en, fust_row, busy, t1,
+      input en, fust_row, busy, t1, t2,
       output fust
   );
 
