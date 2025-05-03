@@ -37,18 +37,27 @@ https://www.veripool.org/ftp/verilator_doc.pdf
 module sysarr_MAC(input logic clk, input logic nRST, systolic_array_MAC_if.MAC mac_if);
     logic [DW-1:0] input_x;
     logic [DW-1:0] nxt_input_x;
-    assign mac_if.in_pass = input_x;
+
+    logic [DW-1:0] weight, nxt_weight;
+    assign mac_if.in_pass = mac_if.weight_en ? weight : input_x;
+
 
     // Latching MAC unit input value, to pass it on to the next 
     always_ff @(posedge clk, negedge nRST) begin
         if(nRST == 1'b0)begin
             input_x <= '0;
+            weight <= '0;
         end else begin
             input_x <= nxt_input_x;
+            weight <= nxt_weight;
         end 
     end
     always_comb begin
         nxt_input_x = input_x;
+        nxt_weight = weight;
+        if(mac_if.weight_en) begin
+            nxt_weight = mac_if.in_value;
+        end
         if (mac_if.MAC_shift)begin
             nxt_input_x = mac_if.in_value;
         end
@@ -93,22 +102,24 @@ module sysarr_MAC(input logic clk, input logic nRST, systolic_array_MAC_if.MAC m
     logic [12:0] mul_product_in;
     logic mul_round_loss_s1_out, mul_round_loss_s2;
 
+    // assign mac_if.weight_read = weight;
+    // assign mac_if.mul_result_read = mul_result_latched;
+
     // MUL takes in latched input_x from above
     // MUL_step1 is special in that contains a sequential multiplier. This means that other operations need to wait until it finishes, the MAC unit must not move to the next stage after just one clock cycle.
     // It also means that it needs an enable signal. This can be on for one or more clock cycles, I dont think it matters.
     // Since it is the very first thing in the MAC chain, i'm using mac_if.start as this enable signal.
     // The flipflop after this should hold its values, and NOT allow the start passthrough signal to advance until the the multiply finishes (mul_stall goes low)
     logic mul_stall;
-    MUL_step1 mul1 (clk, nRST, mac_if.start, input_x, mac_if.weight, mul_product_out, mul_carryout_out, mul_round_loss_s1_out, mul_stall);
+    MUL_step1 mul1 (clk, nRST, mac_if.start, input_x, weight, mul_product_out, mul_carryout_out, mul_round_loss_s1_out, mul_stall);
     
     // latching the run signal an extra time to fix a timing issue with mul_stall and mac_if.start
     logic start_passthrough_0;
     always_ff @(posedge clk, negedge nRST) begin
-        if(nRST == 1'b0)begin
+        if(nRST == 1'b0)
             start_passthrough_0 <= 0;
-        end else begin
+        else
             start_passthrough_0 <= mac_if.start | (start_passthrough_0 & mul_stall);
-        end
     end
 
     // flipflop to connect mul stage1 and stage 2
@@ -122,17 +133,16 @@ module sysarr_MAC(input logic clk, input logic nRST, systolic_array_MAC_if.MAC m
             mul_round_loss_s2 <= 0;
         end
         else if(run) begin
-            if(mul_stall)begin
+            if(mul_stall)
                 start_passthrough_1 <= 0;
-            end else begin
+            else
                 start_passthrough_1 <= start_passthrough_0;
-                mul_fp1_head_s2_in <= input_x[15:10];
-                mul_fp2_head_s2_in <= mac_if.weight[15:10];
-                mul_carryout_in <= mul_carryout_out;
-                mul_product_in  <= mul_product_out;
-                // start_passthrough_1 <= mac_if.start;
-                mul_round_loss_s2 <= mul_round_loss_s1_out;
-            end
+            mul_fp1_head_s2_in <= input_x[15:10];
+            mul_fp2_head_s2_in <= weight[15:10];
+            mul_carryout_in <= mul_carryout_out;
+            mul_product_in  <= mul_product_out;
+            // start_passthrough_1 <= mac_if.start;
+            mul_round_loss_s2 <= mul_round_loss_s1_out;
         end
         else begin
             mul_fp1_head_s2_in <= mul_fp1_head_s2_in;
@@ -171,11 +181,10 @@ module sysarr_MAC(input logic clk, input logic nRST, systolic_array_MAC_if.MAC m
     // this could potentially result in an edge case where if the mul significand is all 1's, rounding will cause it to become 0
     logic [9:0] mul_significand_rounded;
     always_comb begin
-        if(mul_frac_product[1] & (mul_frac_product[0] | mul_round_loss_s2 | mul_frac_product[2]))begin
+        if(mul_frac_product[1] & (mul_frac_product[0] | mul_round_loss_s2 | mul_frac_product[2]))
             mul_significand_rounded = mul_frac_product[11:2] + 1;
-        end else begin
+        else
             mul_significand_rounded = mul_frac_product[11:2];
-        end
     end
 
     logic [4:0] mul_final_exp;
@@ -191,12 +200,12 @@ module sysarr_MAC(input logic clk, input logic nRST, systolic_array_MAC_if.MAC m
         if(nRST == 1'b0) begin
             start_passthrough_2a <= 0;
             mul_result_latched <= 0;
-	        in_accumulate_latched <= 0;
+	    in_accumulate_latched <= 0;
         end
         else begin
             start_passthrough_2a <= start_passthrough_1;
             mul_result_latched <= mul_result;
-	        in_accumulate_latched <= mac_if.in_accumulate;
+	    in_accumulate_latched <= mac_if.in_accumulate;
         end
     end
 
