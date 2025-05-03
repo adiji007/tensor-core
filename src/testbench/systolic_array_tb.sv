@@ -13,17 +13,6 @@ module systolic_array_tb();
   // clk/reset
   logic tb_nRST;
 
-  string testcase = "fp4";
-  string path_to_files = "/home/vinay/tensorcore/tensor-core/";
-  string input_filename = {"systolic_array_utils/matops_", testcase, "_encoded.txt"};
-  string output_filename = {"systolic_array_utils/matops_", testcase, "_encoded_result.txt"};
-  string python_output_filename = {"systolic_array_utils/matops_", testcase, "_encoded_output.txt"};
-  string python_command = {"/bin/python3 ", path_to_files, "systolic_array_utils/matrix_mul_fp.py systolic_array_utils/matops_", testcase, "_encoded"};
-  string comparison_command = {"/bin/python3 ", path_to_files, "systolic_array_utils/compare_sysarr_output.py systolic_array_utils/matops_", testcase, "_encoded_result.txt systolic_array_utils/matops_", testcase, "_encoded_output.txt systolic_array_utils/matops_", testcase, "_comp.txt"};
-
-
-
-
   // Memory interface instance
   systolic_array_if memory_if();
 
@@ -33,7 +22,6 @@ module systolic_array_tb();
   always #(PERIOD/2) tb_clk++;
   // FILE I/O
   int out_file, file, k, i, j, z, y, r, in, which;
-  int sysarr_dump_file;
   /* verilator lint_off UNUSEDSIGNAL */
   string line;
   /* verilator lint_off UNUSEDSIGNAL */
@@ -135,8 +123,7 @@ module systolic_array_tb();
       end
     end
   endtask
-
-task get_m_output;
+  task get_m_output;
     begin
       int unused;
       for (i = 0; i < N; i = i + 1) begin
@@ -151,15 +138,14 @@ task get_m_output;
       end
     end
   endtask
-
   task load_weights();
-    for (r = N-1; r >= 0; r--)begin
+    for (r = N-1; r >= 0; r--)begin // reverse weights
+      // for (r = 0; r < N; r++)begin 
       /* verilator lint_off WIDTHTRUNC */
       row_load(.rtype(2'b00), .rinnum(r), .rpsnum('0), .rinput(m_weights[r]), .rpartial('0));
       /* verilator lint_off WIDTHTRUNC */
     end
   endtask
-
   task load_in_ps(input int delay);
     for (in = 0; in < N; in++)begin
       /* verilator lint_off WIDTHTRUNC */
@@ -175,7 +161,6 @@ task get_m_output;
     .nRST   (tb_nRST),
     .memory (memory_if.memory_array)
   );
-
   always @(posedge tb_clk) begin
     count = count + 1;
     if (memory_if.out_en == 1'b1)begin
@@ -227,7 +212,7 @@ task get_m_output;
     // out_file = $fopen("systolic_array_utils/matopsdub_encoded_output.txt", "r");
     
     // tiled matrix multiplication file 
-    $system("/bin/python3 systolic_array_utils/matmul_creation.py dense_fp_test fp 32 32");
+    $system("/bin/python3 systolic_array_utils/matmul_creation.py dense_fp_test fp 32 64");
     file = $fopen("systolic_array_utils/dense_fp_test.txt", "r");
     out_file = $fopen("systolic_array_utils/dense_fp_test_output.txt", "r");
     reset();
@@ -271,9 +256,6 @@ task get_m_output;
 
     $display("Total Cycle Count = %d", count);
     $fclose(out_file);
-    $fclose(sysarr_dump_file);
-    $system(comparison_command);
-
     #50;
     $stop;
   end

@@ -28,8 +28,9 @@ module systolic_array(
     logic [DW-1:0] nxt_MAC_outputs [N-1:0][N-1:0];
     // Partial Sum adder inputs
     logic [DW-1:0] ps_add_inputs [N-1:0];
-    // Weight Registers
-    // logic [DW*N-1:0] weights [N-1:0];
+    logic start;
+    logic nxt_start;
+    logic nxt_drained;
 
     // Generate variables
     genvar /*i,*/j,l,m,n,o,p;
@@ -231,7 +232,7 @@ module systolic_array(
                 memory.array_output = current_out[row_out];
             end
             if (control_unit_if.iteration[q] > 0)begin
-                memory.drained = 1'b0;
+                nxt_drained = 1'b0;
             end
         end
     end

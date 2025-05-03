@@ -9,12 +9,7 @@ import sys_arr_pkg::*;
 interface systolic_array_MAC_if;
 
   // Signals
-  /* verilator lint_off UNUSEDSIGNAL */
   logic start;          // MAC unit start signal
-  /* verilator lint_off UNUSEDSIGNAL */
-  /* verilator lint_off UNUSEDSIGNAL */
-  logic [$clog2(MUL_LEN+ADD_LEN):0]count;     // Count for Mulitplier to execute correct number of cycles
-  /* verilator lint_off UNUSEDSIGNAL */
   // logic [DW-1:0] weight;                    // Input weight value to be pre-loaded
   logic [DW-1:0] in_value;                  // Input value to be multiplied
   logic MAC_shift;                              // shift the input to the next array
@@ -32,7 +27,7 @@ interface systolic_array_MAC_if;
 
   // MAC Port for Array
   modport MAC(
-    input  start, count, /* weight, */ in_value, MAC_shift, in_accumulate, weight_en,
+    input  start, /* weight, */ in_value, MAC_shift, in_accumulate, weight_en,
     output out_accumulate, in_pass, value_ready //, weight_read, mul_result_read
   );
 endinterface
