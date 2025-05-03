@@ -16,11 +16,11 @@ module systolic_array(
 );
     // Input to systolic array
     logic [DW*N-1:0] top_input;
-    logic [DW*N-1:0] weights_input;
+    // logic [DW*N-1:0] weights_input;
     // logic [DW*N-1:0] partial_sums;
     // Load signals within systolic array
     logic [N-1:0] loadi;
-    logic [N-1:0] loadw;
+    // logic [N-1:0] loadw;
     logic [N-1:0] loadps;
     // MAC Unit inputs/outputs latched within systolic array
     logic [DW-1:0] MAC_inputs [N-1:0][N-1:0];
@@ -28,15 +28,17 @@ module systolic_array(
     logic [DW-1:0] nxt_MAC_outputs [N-1:0][N-1:0];
     // Partial Sum adder inputs
     logic [DW-1:0] ps_add_inputs [N-1:0];
-    // Weight Registers
-    logic [DW*N-1:0] weights [N-1:0];
+    logic start;
+    logic nxt_start;
+    logic nxt_drained;
 
     logic nxt_drained;
 
     // Generate variables
-    genvar i,j,l,m,n,o,p;
+    genvar /*i,*/j,l,m,n,o,p;
 
-    // Instantiate Control Unit interface
+    // Instantiate Control Unit interface    always_comb begin
+
     systolic_array_control_unit_if control_unit_if();
 
     // Instantiate the control unit
@@ -65,41 +67,42 @@ module systolic_array(
         memory.fifo_has_space = control_unit_if.fifo_has_space;
     end
     //Selection Muxes for the input bus
-    always_comb begin : input_bus_identity
-        top_input = '0;
-        weights_input = '0; //'{default: '0};
-        if (control_unit_if.input_type == 1'b0) begin
-            top_input = memory.array_in;
-        end else if (control_unit_if.input_type == 1'b1) begin
-            weights_input = memory.array_in;
-        end
-    end
+    assign top_input = memory.array_in;                  // Temporarily bypassing inputs/weights bus selection to test loading weights into MAC units directly
+    // always_comb begin : input_bus_identity
+    //     top_input = '0;
+    //     weights_input = '0; //'{default: '0};
+    //     if (control_unit_if.input_type == 1'b0) begin
+    //         top_input = memory.array_in;
+    //     end else if (control_unit_if.input_type == 1'b1) begin
+    //         weights_input = memory.array_in;
+    //     end
+    // end
     always_comb begin : load_sel
         loadi = '0;
-        loadw = '0;
+        // loadw = '0;
         loadps = '0;
         if (control_unit_if.input_load == 1'b1) begin
             loadi[control_unit_if.input_row] = 1'b1;
         end
-        if (control_unit_if.weight_load == 1'b1) begin
-            loadw[control_unit_if.weight_row] = 1'b1;
-        end
+        // if (control_unit_if.weight_load == 1'b1) begin
+        //     loadw[control_unit_if.weight_row] = 1'b1;
+        // end
         if (control_unit_if.partials_load == 1'b1) begin
             loadps[control_unit_if.partials_row] = 1'b1;
         end
     end
     // Weight Registers Generation
-    generate
-        for (i = 0; i < N; i++) begin
-            always_ff @(posedge clk, negedge nRST) begin : weights_registers
-                if(nRST == 1'b0)begin
-                    weights[i] <= '0;
-                end else if (loadw[i] == 1'b1) begin
-                    weights[i] <= weights_input;
-                end
-            end
-        end
-    endgenerate    
+    // generate
+    //     for (i = 0; i < N; i++) begin
+    //         always_ff @(posedge clk, negedge nRST) begin : weights_registers
+    //             if(nRST == 1'b0)begin
+    //                 weights[i] <= '0;
+    //             end else if (loadw[i] == 1'b1) begin
+    //                 weights[i] <= weights_input;
+    //             end
+    //         end
+    //     end
+    // endgenerate    
     // Input Fifo Generation
     generate
         for (j = 0; j < N; j++) begin
@@ -110,7 +113,7 @@ module systolic_array(
             assign input_fifos_ifs[j].load = loadi[j];
             assign input_fifos_ifs[j].shift = control_unit_if.in_fifo_shift[j];
             assign input_fifos_ifs[j].load_values = top_input;
-            assign MAC_inputs[j][0] = input_fifos_ifs[j].out;
+            assign MAC_inputs[j][0] = memory.weight_en ? memory.array_in[((N-j)*DW)-1 : ((N-j-1)*DW)] : input_fifos_ifs[j].out;
         end
     endgenerate
     // Partial Sum Generation
@@ -151,7 +154,8 @@ module systolic_array(
                     assign control_unit_if.MAC_value_ready = mac_ifs[m*N + n].value_ready;
                 end
                 assign mac_ifs[m*N + n].start = control_unit_if.MAC_start;
-                assign mac_ifs[m*N + n].weight = weights[n][(N - m) * DW - 1 -: DW];
+                // assign mac_ifs[m*N + n].weight = weights[n][(N - m) * DW - 1 -: DW];
+                assign mac_ifs[m*N + n].weight_en = memory.weight_en;
                 assign mac_ifs[m*N + n].in_value = MAC_inputs[m][n];
                 assign mac_ifs[m*N + n].MAC_shift = control_unit_if.MAC_shift;
                 if (m == 0) begin : no_accumulate
@@ -202,11 +206,18 @@ module systolic_array(
     always_ff @(posedge clk, negedge nRST) begin
         if(nRST == 1'b0)begin
             memory.drained <= 1'b1;
+            start <= 1'b1;
         end else begin
-            memory.drained <= nxt_drained;
+            memory.drained <= nxt_drained && (control_unit_if.MAC_value_ready || start);
+            start <= nxt_start;
         end 
     end
-    
+    always_comb begin
+        nxt_start = start;
+        if (memory.input_en)begin
+            nxt_start = 1'b0;
+        end
+    end
     always_comb begin
         memory.out_en = 1'b0;
         memory.row_out = '0;
@@ -228,4 +239,3 @@ module systolic_array(
         end
     end
 endmodule
-
