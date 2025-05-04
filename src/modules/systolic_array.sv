@@ -32,8 +32,6 @@ module systolic_array(
     logic nxt_start;
     logic nxt_drained;
 
-    logic nxt_drained;
-
     // Generate variables
     genvar /*i,*/j,l,m,n,o,p;
 
