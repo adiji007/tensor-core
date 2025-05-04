@@ -1,3 +1,4 @@
+// THIS VERSION WILL ONLY WORK IF ADDERS AND MACS HAVE INDIVIDUAL START SIGNALS
 // `include "systolic_array_OUT_FIFO_if.vh"
 // `include "sys_arr_pkg.vh"
 // /* verilator lint_off IMPORTSTAR */
