@@ -424,11 +424,9 @@ module issue(
             issue.spec = ((i==0 || i==1) && !isif.branch_resolved && !isif.branch_miss) ? isif.dispatch.spec : '0; // pretty sure only on alu instr
             issue.j_type = fusif.fust.op[i].j_type;
           end else if (i == 3) begin // mls
-            // TODO: need to figure these out, not sure rn
             issue.md = fumif.fust.op.md;
             issue.ls_in = fumif.fust.op.mem_type;
             s_rs1 = fumif.fust.op.rs1;
-            // s_rs2 = fumif.fust.op.rs2;
             issue.fu_en[i] = 1'b1;
             imm = fumif.fust.op.imm;
           end else if (i == 4) begin // gemm
@@ -436,7 +434,7 @@ module issue(
             issue.ms1 = fugif.fust.op.ms1;
             issue.ms2 = fugif.fust.op.ms2;
             issue.ms3 = fugif.fust.op.ms3;
-            issue.gemm_new_weight = fugif.fust.op.new_weight; // TODO: logic for when new weight check, need clarification
+            issue.gemm_new_weight = fugif.fust.op.new_weight; 
             issue.fu_en[i] = 1'b1;
           end
           issue.rdat1 = (lui_type) ? '0 : rfif.rdat1;

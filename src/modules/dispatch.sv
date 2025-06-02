@@ -303,6 +303,10 @@ module dispatch(
       else begin
         diif.n_mm  = (cuif.fu_t == FU_M_T & ~flush & ~hazard) ? rstmif.status.idx[m_rd].tag  : diif.fust_m.t2;
       end
+
+      if (!(diif.wb.s_rw_en && (diif.wb.s_rw == s_rs1)))begin
+        diif.n_rm = diif.n_fust_m_en ? rstsif.status.idx[s_rs1].tag : diif.fust_m.t1;
+      end
       
       if (!(diif.wb.s_rw_en && (diif.wb.s_rw == s_rs1)))begin
         diif.n_t1[cuif.fu_s] = rstsif.status.idx[s_rs1].tag;
@@ -311,9 +315,7 @@ module dispatch(
         diif.n_t1[cuif.fu_s] = rstsif.status.idx[s_rs2].tag;
       end
 
-      if (!(diif.wb.s_rw_en && (diif.wb.s_rw == s_rs1)))begin
-        diif.n_rm = diif.n_fust_m_en ? rstsif.status.idx[s_rs1].tag : diif.fust_m.t1;
-      end
+      
 
       // diif.n_rm = diif.n_fust_m_en ? rstsif.status.idx[s_rs1].tag : diif.n_rm;
       // diif.n_mm  = (cuif.fu_t == FU_M_T & ~flush & ~hazard) ? rstmif.status.idx[m_rd].tag  : diif.fust_m.t2;
