@@ -270,6 +270,9 @@ module dispatch(
       diif.n_fust_s.lui    = (cuif.u_type == UT_LOAD);
       diif.n_fust_s.j_type = (cuif.jal) ? 2'd1 : (cuif.jalr) ? 2'd2 : 2'd0;
       diif.n_fust_s.spec   = spec && !(diif.branch_resolved || diif.branch_miss); // sets spec bit in FUST on new instructions
+      if (diif.branch_resolved) begin
+        
+      end
 
       diif.n_fust_s.op_type = '0;
       diif.n_fust_s.mem_type = scalar_mem_t'('0);
@@ -312,7 +315,7 @@ module dispatch(
         diif.n_t1[cuif.fu_s] = rstsif.status.idx[s_rs1].tag;
       end
       if (!(diif.wb.s_rw_en && (diif.wb.s_rw == s_rs2)))begin
-        diif.n_t1[cuif.fu_s] = rstsif.status.idx[s_rs2].tag;
+        diif.n_t2[cuif.fu_s] = rstsif.status.idx[s_rs2].tag;
       end
 
       

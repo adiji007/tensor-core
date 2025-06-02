@@ -12,6 +12,7 @@ interface fust_s_if;
   logic [2:0][1:0] t1;
   logic [2:0][1:0] t2;
   logic flush;
+  logic resolved;
 
   // Inputs from issue
   logic [2:0] busy;
@@ -20,7 +21,7 @@ interface fust_s_if;
   fust_s_t fust;
     
   modport FUSTS (
-      input en, fu, fust_row, busy, t1, t2, flush,
+      input en, fu, fust_row, busy, t1, t2, flush, resolved,
       output fust
   );
 

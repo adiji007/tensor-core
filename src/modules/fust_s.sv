@@ -32,6 +32,12 @@ module fust_s (
       end
     end
 
+    if (fuif.resolved) begin
+      for (int i = 0; i < 3; i++) begin
+        fust.op[i].spec = '0;
+      end
+    end
+
   end
 
 endmodule
