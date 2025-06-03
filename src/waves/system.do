@@ -284,9 +284,7 @@ add wave -noupdate -group spif /system_tb/DUT/spif/store_addr
 add wave -noupdate -group {syst array} /system_tb/DUT/SYS/clk
 add wave -noupdate -group {syst array} /system_tb/DUT/SYS/nRST
 add wave -noupdate -group {syst array} /system_tb/DUT/SYS/top_input
-add wave -noupdate -group {syst array} /system_tb/DUT/SYS/weights_input
 add wave -noupdate -group {syst array} /system_tb/DUT/SYS/loadi
-add wave -noupdate -group {syst array} /system_tb/DUT/SYS/loadw
 add wave -noupdate -group {syst array} /system_tb/DUT/SYS/loadps
 add wave -noupdate -group {syst array} /system_tb/DUT/SYS/nxt_drained
 add wave -noupdate -group {syst array} /system_tb/DUT/SYS/z
@@ -347,8 +345,8 @@ add wave -noupdate /system_tb/DUT/MS/SP/spb0/mats
 add wave -noupdate /system_tb/DUT/DP/SCOREBOARD/DI/RSTS/status
 add wave -noupdate /system_tb/DUT/MS/DCACHE/dcache
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {1065264 ps} 1} {{Cursor 7} {1264916 ps} 1} {{Cursor 8} {1528269 ps} 0}
-quietly wave cursor active 3
+WaveRestoreCursors {{Cursor 8} {3375484 ps} 1} {{Cursor 4} {3359419 ps} 0}
+quietly wave cursor active 2
 configure wave -namecolwidth 331
 configure wave -valuecolwidth 143
 configure wave -justifyvalue left
@@ -363,4 +361,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {1359952 ps} {1692510 ps}
+WaveRestoreZoom {3175757 ps} {3508315 ps}
