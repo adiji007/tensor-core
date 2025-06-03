@@ -126,10 +126,10 @@ module dispatch(
     always_comb begin : Hazard_Logic
       // check_busy = 1'b0;
       case (cuif.fu_s)
-        FU_S_ALU:     s_busy = (diif.fu_ex[0] == 1'b0 || (|diif.fust_s.t1 || |diif.fust_s.t2)) ? diif.fust_s.busy[FU_S_ALU] : '0;
-        FU_S_LD_ST:   s_busy = (diif.fu_ex[1] == 1'b0 || (|diif.fust_s.t1 || |diif.fust_s.t2)) ? diif.fust_s.busy[FU_S_LD_ST] : '0;
+        FU_S_ALU:     s_busy = (diif.fu_ex[0] == 1'b0 || (|diif.fust_s.t1 || |diif.fust_s.t2)) ? (diif.fu_ex[0] == 1'b1) ? '0 : diif.fust_s.busy[FU_S_ALU] : '0;
+        FU_S_LD_ST:   s_busy = (diif.fu_ex[1] == 1'b0 || (|diif.fust_s.t1 || |diif.fust_s.t2)) ? (diif.fu_ex[1] == 1'b1) ? '0 : diif.fust_s.busy[FU_S_LD_ST] : '0;
         // FU_S_LD_ST:   check_busy = diif.fust_s.busy[FU_S_LD_ST];
-        FU_S_BRANCH:  s_busy = (diif.fu_ex[2] == 1'b0 || (|diif.fust_s.t1 || |diif.fust_s.t2)) ? diif.fust_s.busy[FU_S_BRANCH] : '0;
+        FU_S_BRANCH:  s_busy = (diif.fu_ex[2] == 1'b0 || (|diif.fust_s.t1 || |diif.fust_s.t2)) ? (diif.fu_ex[2] == 1'b1) ? '0 : diif.fust_s.busy[FU_S_BRANCH] : '0;
         default: s_busy = 1'b0;
       endcase
       case (cuif.fu_m)
@@ -220,12 +220,13 @@ module dispatch(
       end
     end
 
-    logic [2:0] tag_val;
+    logic [2:0] tag_val, temp;
 
     always_comb begin : FUST
       diif.n_fu_t = cuif.fu_t;
       diif.n_t1 = diif.fust_s.t1;
       diif.n_t2 = diif.fust_s.t2;
+      temp = 3'd1;
       // diif.n_rm = diif.fust_m.t1;
       // diif.n_gt1 = diif.fust_g.t1;
       // diif.n_gt2 = diif.fust_g.t2;
@@ -235,28 +236,42 @@ module dispatch(
       // if (diif.wb.s_rw_en & diif.wb.alu_done & diif.fust_state[0] == FUST_EX) begin // TODO fust related wb
       // if (((diif.fu_ex[0] == 1'b1) && diif.fust_state[0] == FUST_EX) || (diif.wb.s_rw_en)) begin // clearing alu tags
       if (diif.wb.s_rw_en && diif.wb.alu_done) begin
-        diif.n_t1[FU_S_LD_ST] = (diif.fust_s.t1[FU_S_LD_ST] == 2'd1) && diif.fust_s.busy[FU_S_LD_ST] ? '0 : diif.fust_s.t1[FU_S_LD_ST];
-        diif.n_t2[FU_S_LD_ST] = (diif.fust_s.t2[FU_S_LD_ST] == 2'd1) && diif.fust_s.busy[FU_S_LD_ST] ? '0 : diif.fust_s.t2[FU_S_LD_ST];
-        diif.n_t1[FU_S_BRANCH] = ((diif.fust_s.t1[FU_S_BRANCH] == 2'd1) && diif.fust_s.busy[FU_S_BRANCH]) ? '0 : diif.fust_s.t1[FU_S_BRANCH];
-        diif.n_t2[FU_S_BRANCH] = ((diif.fust_s.t2[FU_S_BRANCH] == 2'd1) && diif.fust_s.busy[FU_S_BRANCH]) ? '0 : diif.fust_s.t2[FU_S_BRANCH];
-        diif.n_t1[FU_S_ALU] = (diif.fust_s.t1[FU_S_ALU] == 2'd1) && diif.fust_s.busy[FU_S_ALU] ? '0 : diif.fust_s.t1[FU_S_ALU];
-        diif.n_t2[FU_S_ALU] = (diif.fust_s.t2[FU_S_ALU] == 2'd1) && diif.fust_s.busy[FU_S_ALU] ? '0 : diif.fust_s.t2[FU_S_ALU];
+        diif.n_t1[FU_S_LD_ST] = ((diif.wb.s_rw == diif.fust_s.op[FU_S_LD_ST].rs1) && (diif.fust_s.t1[FU_S_LD_ST] == 2'd1) && diif.fust_s.busy[FU_S_LD_ST]) ? '0 : diif.fust_s.t1[FU_S_LD_ST];
+        diif.n_t2[FU_S_LD_ST] = ((diif.wb.s_rw == diif.fust_s.op[FU_S_LD_ST].rs2) && (diif.fust_s.t2[FU_S_LD_ST] == 2'd1) && diif.fust_s.busy[FU_S_LD_ST]) ? '0 : diif.fust_s.t2[FU_S_LD_ST];
+        diif.n_t1[FU_S_BRANCH] = ((diif.wb.s_rw == diif.fust_s.op[FU_S_BRANCH].rs1) && (diif.fust_s.t1[FU_S_BRANCH] == 2'd1) && diif.fust_s.busy[FU_S_BRANCH]) ? '0 : diif.fust_s.t1[FU_S_BRANCH];
+        diif.n_t2[FU_S_BRANCH] = ((diif.wb.s_rw == diif.fust_s.op[FU_S_BRANCH].rs2) && (diif.fust_s.t2[FU_S_BRANCH] == 2'd1) && diif.fust_s.busy[FU_S_BRANCH]) ? '0 : diif.fust_s.t2[FU_S_BRANCH];
+        diif.n_t1[FU_S_ALU] = ((diif.wb.s_rw == diif.fust_s.op[FU_S_ALU].rs1) && (diif.fust_s.t1[FU_S_ALU] == 2'd1) && diif.fust_s.busy[FU_S_ALU]) ? '0 : diif.fust_s.t1[FU_S_ALU];
+        diif.n_t2[FU_S_ALU] = ((diif.wb.s_rw == diif.fust_s.op[FU_S_ALU].rs2) && (diif.fust_s.t2[FU_S_ALU] == 2'd1) && diif.fust_s.busy[FU_S_ALU]) ? '0 : diif.fust_s.t2[FU_S_ALU];
         diif.n_rm = (diif.fust_m.t1 == 2'd1 && diif.fust_m.busy) ? '0 : diif.fust_m.t1;
       // end else if (diif.wb.s_rw_en & diif.wb.load_done & diif.fust_state[1] == FUST_EX) begin
       // end else if (((diif.fu_ex[1] == 1'b1) && diif.fust_state[1] == FUST_EX) || (diif.wb.s_rw_en)) begin // clearing load tags
+        temp = 3'd3;
       end else if (diif.wb.s_rw_en && diif.wb.jump_done) begin
-        diif.n_t1[FU_S_ALU] = (diif.fust_s.t1[FU_S_ALU] == 2'd2) && diif.fust_s.busy[FU_S_ALU] ? '0 : diif.fust_s.t1[FU_S_ALU];
-        diif.n_t2[FU_S_ALU] = (diif.fust_s.t2[FU_S_ALU] == 2'd2) && diif.fust_s.busy[FU_S_ALU] ? '0 : diif.fust_s.t2[FU_S_ALU];
-        diif.n_t1[FU_S_BRANCH] = (diif.fust_s.t1[FU_S_BRANCH] == 2'd2) && diif.fust_s.busy[FU_S_BRANCH] ? '0 : diif.fust_s.t1[FU_S_BRANCH];
-        diif.n_t2[FU_S_BRANCH] = (diif.fust_s.t2[FU_S_BRANCH] == 2'd2) && diif.fust_s.busy[FU_S_BRANCH] ? '0 : diif.fust_s.t2[FU_S_BRANCH];
+        diif.n_t1[FU_S_ALU] = (diif.wb.s_rw == diif.fust_s.op[FU_S_ALU].rs1) && (diif.fust_s.t1[FU_S_ALU] == 2'd2) && diif.fust_s.busy[FU_S_ALU] ? '0 : diif.fust_s.t1[FU_S_ALU];
+        diif.n_t2[FU_S_ALU] = (diif.wb.s_rw == diif.fust_s.op[FU_S_ALU].rs2) && (diif.fust_s.t2[FU_S_ALU] == 2'd2) && diif.fust_s.busy[FU_S_ALU] ? '0 : diif.fust_s.t2[FU_S_ALU];
+        diif.n_t1[FU_S_BRANCH] = (diif.wb.s_rw == diif.fust_s.op[FU_S_BRANCH].rs1) && (diif.fust_s.t1[FU_S_BRANCH] == 2'd2) && diif.fust_s.busy[FU_S_BRANCH] ? '0 : diif.fust_s.t1[FU_S_BRANCH];
+        diif.n_t2[FU_S_BRANCH] = (diif.wb.s_rw == diif.fust_s.op[FU_S_BRANCH].rs2) && (diif.fust_s.t2[FU_S_BRANCH] == 2'd2) && diif.fust_s.busy[FU_S_BRANCH] ? '0 : diif.fust_s.t2[FU_S_BRANCH];
+        diif.n_t1[FU_S_LD_ST] = (diif.wb.s_rw == diif.fust_s.op[FU_S_LD_ST].rs1) && (diif.fust_s.t1[FU_S_LD_ST] == 2'd2) && diif.fust_s.busy[FU_S_LD_ST] ? '0 : diif.fust_s.t1[FU_S_LD_ST];
+        diif.n_t2[FU_S_LD_ST] = (diif.wb.s_rw == diif.fust_s.op[FU_S_LD_ST].rs2) && (diif.fust_s.t2[FU_S_LD_ST] == 2'd2) && diif.fust_s.busy[FU_S_LD_ST] ? '0 : diif.fust_s.t2[FU_S_LD_ST];
         diif.n_rm = (diif.fust_m.t1 == 2'd2 && diif.fust_m.busy) ? '0 : diif.fust_m.t1;
       // end else if (((diif.fu_ex[2] == 1'b1) && diif.fust_state[2] == FUST_EX) || (diif.wb.s_rw_en)) begin // clearing jump tags
       end else if (diif.wb.s_rw_en && diif.wb.load_done) begin
-        diif.n_t1[FU_S_ALU] = (diif.fust_s.t1[FU_S_ALU] == 2'd3) && diif.fust_s.busy[FU_S_ALU] ? '0 : diif.fust_s.t1[FU_S_ALU];
-        diif.n_t2[FU_S_ALU] = (diif.fust_s.t2[FU_S_ALU] == 2'd3) && diif.fust_s.busy[FU_S_ALU] ? '0 : diif.fust_s.t2[FU_S_ALU];
-        diif.n_t1[FU_S_LD_ST] = (diif.fust_s.t1[FU_S_LD_ST] == 2'd3) && diif.fust_s.busy[FU_S_LD_ST] ? '0 : diif.fust_s.t1[FU_S_LD_ST];
-        diif.n_t2[FU_S_LD_ST] = (diif.fust_s.t2[FU_S_LD_ST] == 2'd3) && diif.fust_s.busy[FU_S_LD_ST] ? '0 : diif.fust_s.t2[FU_S_LD_ST];
+        diif.n_t1[FU_S_ALU] = (diif.wb.s_rw == diif.fust_s.op[FU_S_ALU].rs1) && (diif.fust_s.t1[FU_S_ALU] == 2'd3) && diif.fust_s.busy[FU_S_ALU] ? '0 : diif.fust_s.t1[FU_S_ALU];
+        diif.n_t2[FU_S_ALU] = (diif.wb.s_rw == diif.fust_s.op[FU_S_ALU].rs2) && (diif.fust_s.t2[FU_S_ALU] == 2'd3) && diif.fust_s.busy[FU_S_ALU] ? '0 : diif.fust_s.t2[FU_S_ALU];
+        diif.n_t1[FU_S_LD_ST] = (diif.wb.s_rw == diif.fust_s.op[FU_S_LD_ST].rs1) && (diif.fust_s.t1[FU_S_LD_ST] == 2'd3) && diif.fust_s.busy[FU_S_LD_ST] ? '0 : diif.fust_s.t1[FU_S_LD_ST];
+        diif.n_t2[FU_S_LD_ST] = (diif.wb.s_rw == diif.fust_s.op[FU_S_LD_ST].rs2) && (diif.fust_s.t2[FU_S_LD_ST] == 2'd3) && diif.fust_s.busy[FU_S_LD_ST] ? '0 : diif.fust_s.t2[FU_S_LD_ST];
+        diif.n_t1[FU_S_BRANCH] = (diif.wb.s_rw == diif.fust_s.op[FU_S_BRANCH].rs1) && (diif.fust_s.t1[FU_S_BRANCH] == 2'd3) && diif.fust_s.busy[FU_S_BRANCH] ? '0 : diif.fust_s.t1[FU_S_BRANCH];
+        diif.n_t2[FU_S_BRANCH] = (diif.wb.s_rw == diif.fust_s.op[FU_S_BRANCH].rs2) && (diif.fust_s.t2[FU_S_BRANCH] == 2'd3) && diif.fust_s.busy[FU_S_BRANCH] ? '0 : diif.fust_s.t2[FU_S_BRANCH];
         diif.n_rm = (diif.fust_m.t1 == 2'd3 && diif.fust_m.busy) ? '0 : diif.fust_m.t1;
+      end
+      else begin
+        if (!(diif.wb.s_rw_en && (diif.wb.s_rw == s_rs1)) && !hazard)begin
+          diif.n_t1[cuif.fu_s] = rstsif.status.idx[s_rs1].tag;
+          temp = 3'd2;
+        end
+        if (!(diif.wb.s_rw_en && (diif.wb.s_rw == s_rs2)) && !hazard)begin
+          diif.n_t2[cuif.fu_s] = rstsif.status.idx[s_rs2].tag;
+        end
       end
 
       // To Issue **Combinationally**
@@ -311,12 +326,7 @@ module dispatch(
         diif.n_rm = diif.n_fust_m_en ? rstsif.status.idx[s_rs1].tag : diif.fust_m.t1;
       end
       
-      if (!(diif.wb.s_rw_en && (diif.wb.s_rw == s_rs1)))begin
-        diif.n_t1[cuif.fu_s] = rstsif.status.idx[s_rs1].tag;
-      end
-      if (!(diif.wb.s_rw_en && (diif.wb.s_rw == s_rs2)))begin
-        diif.n_t2[cuif.fu_s] = rstsif.status.idx[s_rs2].tag;
-      end
+      
 
       
 

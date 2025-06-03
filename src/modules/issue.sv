@@ -43,8 +43,8 @@ module issue(
 
     logic [4:0] rdy;
     logic [4:0] n_rdy;
-    logic [4:0][1:0] age;
-    logic [4:0][1:0] n_age;
+    logic [4:0][2:0] age;
+    logic [4:0][2:0] n_age;
     fust_state_e [4:0] fust_state;
     fust_state_e [4:0] next_fust_state;
     logic [4:0] oldest_rdy;
@@ -163,7 +163,7 @@ module issue(
           FUST_EMPTY: n_age[i] = {1'b0,incoming_instr[i]}; // set new instructions to age 1
           FUST_WAIT:  n_age[i] = (|incoming_instr) ? age[i] + 1 : age[i];
           FUST_RDY:   n_age[i] = (|incoming_instr) ? age[i] + 1 : age[i];
-          FUST_EX:    n_age[i] = '0;
+          FUST_EX:    n_age[i] = (next_fust_state[i] == FUST_WAIT) ? 1'b1 :'0;
           default: n_age = age;
         endcase
       end
@@ -284,7 +284,7 @@ module issue(
     // Issue Policy: Oldest instruction first
     always_comb begin : FUST_Next_State
       next_fust_state = fust_state;
-      if (!isif.freeze) begin
+      // if (!isif.freeze) begin
         for (int i = 0; i < 5; i++) begin
           if (isif.branch_miss) begin
             next_fust_state[i] = FUST_EMPTY;
@@ -296,7 +296,7 @@ module issue(
               end
               FUST_WAIT: begin
                 if (n_rdy[i]) begin
-                  if ((i==3 || i==4) && isif.dispatch.spec ) begin
+                  if ((i==3 || i==4 || i==1) && fusif.fust.op[i].spec) begin
                     next_fust_state[i] = FUST_RDY;
                   end 
                   else begin
@@ -305,7 +305,7 @@ module issue(
                 end
               end
               FUST_RDY: begin
-                if ((i==3 || i==4) && isif.dispatch.spec) begin
+                if ((i==3 || i==4 || i==1) && fusif.fust.op[i].spec) begin
                     next_fust_state[i] = FUST_RDY;
                 end 
                 else begin 
@@ -374,7 +374,7 @@ module issue(
             endcase
           end
         end
-      end
+      // end
     end
 
     always_ff @(posedge CLK, negedge nRST)begin

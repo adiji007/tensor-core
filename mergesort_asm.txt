@@ -20,7 +20,7 @@ org 0x0000
    srl  $13,$24,$6       ✓
    or    $9, $0, $12     ✓
    or    $18, $0, $13    ✓
-   jal   insertion_sort  ✓
+   jal   insertion_sort  ✓ - 56
   ori   $6, $0, 1
    srl  $5,$24,$6
    sub  $13, $24, $5
@@ -52,26 +52,26 @@ org 0x0000
 # $a1 : size of array
 #--------------------------------------
 insertion_sort:
-  ori   $5, $0, 4        ✓
+  ori   $5, $0, 4        ✓ - 140
    ori   $7, $0, 2       ✓
    sll  $6,$13,$7        ✓
  is_outer:
-  sltu  $4, $5, $6       ✓ - 152
-   beq   $4, $0, is_end  ✓ - 156
-   add  $31, $12, $5     ✓ - 160
-   lw    $30, 0($31)     ✓ - 164
+  sltu  $4, $5, $6       ✓ - 152 ✓
+   beq   $4, $0, is_end  ✓ - 156 ✓
+   add  $31, $12, $5     ✓ - 160 ✓
+   lw    $30, 0($31)     ✓ - 164 ✓
  is_inner:
-  beq   $31, $12, is_inner_end  ✓ - 168
-   lw    $16, -4($31)           ✓ - 172
-   slt   $4, $30, $16           ✓ - 176
-   beq   $4, $0, is_inner_end   ✓ - 180
-   sw    $16, 0($31)     ✓ - 184
-   addi $31, $31, -4     ✓ - 188
+  beq   $31, $12, is_inner_end  ✓ - 168 ✓
+   lw    $16, -4($31)           ✓ - 172 ✓
+   slt   $4, $30, $16           ✓ - 176 ✓
+   beq   $4, $0, is_inner_end   ✓ - 180 ✓
+   sw    $16, 0($31)     ✓ - 184 ✓
+   addi $31, $31, -4     ✓ - 188 ✓
    j     is_inner        ✓ - 192
 is_inner_end:
   sw    $30, 0($31)      ✓ - 196
-   addi $5, $5, 4
-   j     is_outer
+   addi $5, $5, 4        ✓ - 200
+   j     is_outer        ✓ - 204
 is_end:
   jr    $1
  #--------------------------------------
