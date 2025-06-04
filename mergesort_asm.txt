@@ -36,15 +36,23 @@ org 0x0000
    or    $14, $0, $19
    or    $15, $0, $20
    ori   $5, $0, sorted
-   push  $5
-   jal   merge
-  addi $2, $2, 4
-   halt
+   push  $5               - 120, 124
+   jal   merge            - 128
+  addi $2, $2, 4          - 132
+   halt                   - 136
 
    34 - 136
 
 // push is 2 
 // halt is instr 34
+
+push $5: 
+
+111111111100   00010   000   00010   0010011
+addi $2, $2, -4
+
+0000000 00101   00010   010   00000   0100011
+sw $5, 0($2)
 
 
 #void insertion_sort(int* $a0, int $a1)
@@ -73,7 +81,7 @@ is_inner_end:
    addi $5, $5, 4        ✓ - 200
    j     is_outer        ✓ - 204
 is_end:
-  jr    $1
+  jr    $1 - 208
  #--------------------------------------
 
 #void merge(int* $a0, int $a1, int* $a2, int $a3, int* dst)
@@ -84,7 +92,7 @@ is_end:
 # dst [$sp+4] : pointer to merged list location
 #--------------------------------------
 merge:
-  lw    $5, 0($2)
+  lw    $5, 0($2)   - 212
  m_1:
   bne   $13, $0, m_3
  m_2:
@@ -94,16 +102,16 @@ m_3:
   beq   $15, $0, m_4
    beq   $13, $0, m_5
    lw    $6, 0($12)
-   lw    $7, 0($14)
+   lw    $7, 0($14)  - 240
    slt   $4, $6, $7
-   beq   $4, $0, m_3a
+   beq   $4, $0, m_3a - 248
    sw    $6, 0($5)
    addi $5, $5, 4
    addi $12, $12, 4
    addi $13, $13, -1
-   j     m_1
+   j     m_1  - 268
 m_3a:
-  sw    $7, 0($5)
+  sw    $7, 0($5)   - 272
    addi $5, $5, 4
    addi $14, $14, 4
    addi $15, $15, -1

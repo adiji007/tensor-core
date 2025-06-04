@@ -12,6 +12,9 @@ module fetch_stage(
   word_t prev_pc, prev_instr;
   logic prev_pred;
 
+  word_t save_pc, pc_change;
+  logic miss_pred, missed;
+
   // Instantiation interfaces
   fetch_if fif();
   fu_branch_predictor_if btbif();
@@ -23,6 +26,7 @@ module fetch_stage(
   assign fif.misprediction = fsif.misprediction; // Input from branch predictor
   assign fif.correct_pc = fsif.correct_pc;       // Input from branch predictor
   assign fif.br_jump = fsif.br_jump;
+  assign fif.missed = missed;
   // assign fsif.pc = (fsif.freeze) ? prev_pc : fif.pc;                       // Output to scoreboard, branch predictor
   // assign fsif.instr = (fsif.freeze) ? prev_instr : fif.instr;              // Output to scoreboard
   assign fsif.imemREN = fif.imemREN;             // Output to memory
@@ -46,8 +50,7 @@ module fetch_stage(
     end
   end
 
-  word_t save_pc, pc_change;
-  logic miss_pred, missed;
+  
   
   always_comb begin
     pc_change = save_pc;

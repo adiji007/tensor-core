@@ -168,10 +168,10 @@ module dispatch(
 
     always_comb begin : Jump_State
       n_jump = jump;
-      if (cuif.jal || cuif.jalr)
-        n_jump = 1'b1;
-      else if (diif.branch_resolved || diif.branch_miss)
+      if (diif.branch_resolved || diif.branch_miss)
         n_jump = 1'b0;
+      else if (cuif.jal || cuif.jalr)
+        n_jump = 1'b1;
     end
 
     always_comb begin : Reg_Status_Tables

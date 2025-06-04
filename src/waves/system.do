@@ -21,10 +21,10 @@ add wave -noupdate -expand -group {datapath instr signals} /system_tb/dcif/store
 add wave -noupdate -expand -group {datapath instr signals} -radix unsigned /system_tb/DUT/dcif/imemaddr
 add wave -noupdate -expand -group {datapath instr signals} -radix hexadecimal /system_tb/DUT/dcif/imemload
 add wave -noupdate -expand -group {datapath instr signals} /system_tb/DUT/dcif/imemREN
-add wave -noupdate -expand -group {cif icache} /system_tb/cif/iwait
-add wave -noupdate -expand -group {cif icache} /system_tb/cif/iREN
-add wave -noupdate -expand -group {cif icache} /system_tb/cif/iload
-add wave -noupdate -expand -group {cif icache} -radix unsigned /system_tb/cif/iaddr
+add wave -noupdate -group {cif icache} /system_tb/cif/iwait
+add wave -noupdate -group {cif icache} /system_tb/cif/iREN
+add wave -noupdate -group {cif icache} /system_tb/cif/iload
+add wave -noupdate -group {cif icache} -radix unsigned /system_tb/cif/iaddr
 add wave -noupdate -expand -group {fetch if} /system_tb/DUT/DP/fif/imemREN
 add wave -noupdate -expand -group {fetch if} /system_tb/DUT/DP/fif/imemload
 add wave -noupdate -expand -group {fetch if} -radix unsigned /system_tb/DUT/DP/fif/imemaddr
@@ -35,16 +35,19 @@ add wave -noupdate -expand -group {fetch if} -expand -group fetch /system_tb/DUT
 add wave -noupdate -expand -group {fetch if} -expand -group fetch /system_tb/DUT/DP/FETCH/fif/misprediction
 add wave -noupdate -expand -group {fetch if} -expand -group fetch /system_tb/DUT/DP/FETCH/fif/imemREN
 add wave -noupdate -expand -group {fetch if} -expand -group fetch /system_tb/DUT/DP/FETCH/fif/br_jump
+add wave -noupdate -expand -group {fetch if} -expand -group fetch /system_tb/DUT/DP/FETCH/fetch_unit/ihit
 add wave -noupdate -expand -group {fetch if} -expand -group fetch -radix unsigned /system_tb/DUT/DP/FETCH/fif/imemload
 add wave -noupdate -expand -group {fetch if} -expand -group fetch -radix unsigned /system_tb/DUT/DP/FETCH/fif/pc_prediction
 add wave -noupdate -expand -group {fetch if} -expand -group fetch -radix unsigned /system_tb/DUT/DP/FETCH/fetch_unit/next_pc
 add wave -noupdate -expand -group {fetch if} -expand -group fetch -radix unsigned /system_tb/DUT/DP/FETCH/fetch_unit/pc_reg
 add wave -noupdate -expand -group {fetch if} -expand -group fetch -radix unsigned /system_tb/DUT/DP/FETCH/fif/pc
-add wave -noupdate -expand -group {fetch if} -expand -group fetch -radix unsigned /system_tb/DUT/DP/FETCH/fif/instr
+add wave -noupdate -expand -group {fetch if} -expand -group fetch -radix hexadecimal /system_tb/DUT/DP/FETCH/fif/instr
 add wave -noupdate -expand -group {fetch if} -expand -group fetch -radix unsigned /system_tb/DUT/DP/FETCH/fif/correct_pc
 add wave -noupdate -expand -group {fetch if} -expand -group fetch -radix unsigned /system_tb/DUT/DP/FETCH/fif/imemaddr
 add wave -noupdate -expand -group {fetch if} -radix unsigned /system_tb/DUT/DP/fif/update_pc
 add wave -noupdate -expand -group {fetch if} /system_tb/DUT/DP/fif/branch_target
+add wave -noupdate -expand -group {fetch if} /system_tb/DUT/DP/FETCH/missed
+add wave -noupdate -expand -group {fetch if} -radix unsigned /system_tb/DUT/DP/FETCH/save_pc
 add wave -noupdate -expand -group {fetch if} /system_tb/DUT/DP/fif/freeze
 add wave -noupdate -expand -group {fetch if} /system_tb/DUT/DP/fif/jump
 add wave -noupdate -expand -group {fetch if} /system_tb/DUT/DP/fif/br_jump
@@ -59,20 +62,22 @@ add wave -noupdate -group {fif interface fetch} /system_tb/DUT/DP/FETCH/fif/imem
 add wave -noupdate -group {fif interface fetch} -radix unsigned /system_tb/DUT/DP/FETCH/fif/pc
 add wave -noupdate -group {fif interface fetch} -radix unsigned /system_tb/DUT/DP/FETCH/fetch_unit/next_pc
 add wave -noupdate -group {fif interface fetch} /system_tb/DUT/DP/FETCH/fif/correct_pc
-add wave -noupdate -expand -group icache-datapath /system_tb/dcif/ihit
-add wave -noupdate -expand -group icache-datapath /system_tb/dcif/imemREN
-add wave -noupdate -expand -group icache-datapath /system_tb/dcif/imemload
-add wave -noupdate -expand -group icache-datapath -radix unsigned /system_tb/dcif/imemaddr
-add wave -noupdate -expand -group icache-arbiter /system_tb/acif/iREN
-add wave -noupdate -expand -group icache-arbiter /system_tb/DUT/MS/ARB/acif/ramREN
-add wave -noupdate -expand -group icache-arbiter -radix unsigned /system_tb/DUT/MS/ARB/acif/ramaddr
-add wave -noupdate -expand -group icache-arbiter /system_tb/acif/iload
-add wave -noupdate -expand -group icache-arbiter /system_tb/DUT/MS/ARB/icache_load
-add wave -noupdate -expand -group icache-arbiter /system_tb/acif/iaddr
+add wave -noupdate -group icache-datapath /system_tb/dcif/ihit
+add wave -noupdate -group icache-datapath /system_tb/dcif/imemREN
+add wave -noupdate -group icache-datapath /system_tb/dcif/imemload
+add wave -noupdate -group icache-datapath -radix unsigned /system_tb/dcif/imemaddr
+add wave -noupdate -group icache-arbiter /system_tb/acif/iREN
+add wave -noupdate -group icache-arbiter /system_tb/DUT/MS/ARB/acif/ramREN
+add wave -noupdate -group icache-arbiter -radix unsigned /system_tb/DUT/MS/ARB/acif/ramaddr
+add wave -noupdate -group icache-arbiter /system_tb/acif/iload
+add wave -noupdate -group icache-arbiter /system_tb/DUT/MS/ARB/icache_load
+add wave -noupdate -group icache-arbiter /system_tb/acif/iaddr
 add wave -noupdate -divider {Scalar Operations}
 add wave -noupdate -expand -group dispatch -childformat {{/system_tb/DUT/DP/SCOREBOARD/diif/fetch.br_pc -radix unsigned}} -expand -subitemconfig {/system_tb/DUT/DP/SCOREBOARD/diif/fetch.br_pc {-height 16 -radix unsigned}} /system_tb/DUT/DP/SCOREBOARD/diif/fetch
 add wave -noupdate -expand -group dispatch /system_tb/DUT/DP/SCOREBOARD/DI/RSTS/status
 add wave -noupdate -expand -group dispatch -expand -subitemconfig {/system_tb/DUT/DP/SCOREBOARD/diif/fust_s.t1 -expand /system_tb/DUT/DP/SCOREBOARD/diif/fust_s.t2 {-height 16 -childformat {{{[0]} -radix unsigned}} -expand} {/system_tb/DUT/DP/SCOREBOARD/diif/fust_s.t2[0]} {-radix unsigned} /system_tb/DUT/DP/SCOREBOARD/diif/fust_s.op -expand} /system_tb/DUT/DP/SCOREBOARD/diif/fust_s
+add wave -noupdate -expand -group dispatch /system_tb/DUT/DP/SCOREBOARD/DI/jump
+add wave -noupdate -expand -group dispatch /system_tb/DUT/DP/SCOREBOARD/DI/n_jump
 add wave -noupdate -expand -group dispatch /system_tb/DUT/DP/SCOREBOARD/diif/fust_m
 add wave -noupdate -expand -group dispatch /system_tb/DUT/DP/SCOREBOARD/diif/fust_g
 add wave -noupdate -expand -group dispatch -expand /system_tb/DUT/DP/SCOREBOARD/diif/fust_state
@@ -345,7 +350,7 @@ add wave -noupdate /system_tb/DUT/MS/SP/spb0/mats
 add wave -noupdate /system_tb/DUT/DP/SCOREBOARD/DI/RSTS/status
 add wave -noupdate /system_tb/DUT/MS/DCACHE/dcache
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 8} {3375484 ps} 1} {{Cursor 4} {3359419 ps} 0}
+WaveRestoreCursors {{Cursor 8} {3375484 ps} 1} {{Cursor 4} {3458812 ps} 0}
 quietly wave cursor active 2
 configure wave -namecolwidth 331
 configure wave -valuecolwidth 143
@@ -361,4 +366,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {3175757 ps} {3508315 ps}
+WaveRestoreZoom {3171931 ps} {3608708 ps}
