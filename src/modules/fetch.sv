@@ -44,7 +44,7 @@ module fetch(
                     imemaddr <= next_pc;
                 end
 
-                if ((ihit && !fif.freeze) || (fif.missed)) begin
+                if ((ihit && !fif.freeze) || (fif.missed && ihit)) begin
                     pc_reg <= next_pc;
                     fif.instr <= fif.imemload;
                     fif.pc <= imemaddr;

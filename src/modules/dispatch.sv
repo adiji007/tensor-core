@@ -153,10 +153,10 @@ module dispatch(
 
     always_comb begin : Speculation_State
       n_spec = spec;
-      if (cuif.fu_s == FU_S_BRANCH && !(cuif.jal || cuif.jalr))
-        n_spec = 1'b1;
-      else if (diif.branch_resolved || diif.branch_miss)
+      if (diif.branch_resolved || diif.branch_miss)
         n_spec = 1'b0;
+      else if (cuif.fu_s == FU_S_BRANCH && !(cuif.jal || cuif.jalr))
+        n_spec = 1'b1;
     end
 
     always_ff @ (posedge CLK, negedge nRST) begin: Jump_State_Latch
