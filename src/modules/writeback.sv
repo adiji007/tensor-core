@@ -193,7 +193,7 @@ always_comb begin : wb_out_logic
         */
     case (state)
         IDLE: begin
-            if(!prev_spec && wbif.branch_spec) begin // If spec goes high
+            if(!prev_spec && wbif.branch_spec && !wbif.branch_correct) begin // If spec goes high
                 next_state = SPEC;
                 next_spec_alu_wptr = alu_wptr; // Current Wptr is saved as any val onward is spec
 
@@ -442,7 +442,7 @@ always_comb begin : wb_out_logic
         end
 
         SPEC: begin
-            if (wbif.alu_done && wbif.branch_spec) begin // ALU done while spec
+            if (wbif.alu_done && wbif.branch_spec && !wbif.branch_correct) begin // ALU done while spec
                 alu_write = 1;
                 next_spec_write = spec_write + 1;
                 next_alu_buffer[alu_wptr] = alu_din;

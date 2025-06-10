@@ -85,9 +85,9 @@ module dispatch(
 
     always_comb begin: Instr_Signals
       instr  = diif.fetch.imemload;
-      s_rd   = instr[11:7];
-      s_rs1  = (cuif.fu_m == FU_M_LD_ST) ? instr [25:21] : instr[19:15];
-      s_rs2  = instr[24:20];
+      s_rd   = (cuif.s_mem_type == STORE || (cuif.fu_s == FU_S_BRANCH && !(cuif.jal || cuif.jalr)) ) ? '0 : instr[11:7];
+      s_rs1  = (cuif.u_type == UT_LOAD || cuif.jal) ? '0 : (cuif.fu_m == FU_M_LD_ST) ? instr [25:21] : instr[19:15];
+      s_rs2  = (cuif.i_flag && (cuif.fu_s == FU_S_ALU || cuif.s_mem_type == LOAD || cuif.jal || cuif.jalr)) ? '0 : instr[24:20];
       m_rd   = instr[31:26];
       m_rs1  = instr[25:20];
       m_rs2  = instr[19:14];
@@ -168,7 +168,7 @@ module dispatch(
 
     always_comb begin : Jump_State
       n_jump = jump;
-      if (diif.branch_resolved || diif.branch_miss)
+      if ((diif.branch_resolved && !(cuif.jal || cuif.jalr)) || diif.branch_miss)
         n_jump = 1'b0;
       else if (cuif.jal || cuif.jalr)
         n_jump = 1'b1;
@@ -220,13 +220,14 @@ module dispatch(
       end
     end
 
-    logic [2:0] tag_val, temp;
+    logic [2:0] tag_val, temp, temp1;
 
     always_comb begin : FUST
       diif.n_fu_t = cuif.fu_t;
       diif.n_t1 = diif.fust_s.t1;
       diif.n_t2 = diif.fust_s.t2;
       temp = 3'd1;
+      temp1 = 3'd1;
       // diif.n_rm = diif.fust_m.t1;
       // diif.n_gt1 = diif.fust_g.t1;
       // diif.n_gt2 = diif.fust_g.t2;
@@ -254,6 +255,7 @@ module dispatch(
         diif.n_t1[FU_S_LD_ST] = (diif.wb.s_rw == diif.fust_s.op[FU_S_LD_ST].rs1) && (diif.fust_s.t1[FU_S_LD_ST] == 2'd2) && diif.fust_s.busy[FU_S_LD_ST] ? '0 : diif.fust_s.t1[FU_S_LD_ST];
         diif.n_t2[FU_S_LD_ST] = (diif.wb.s_rw == diif.fust_s.op[FU_S_LD_ST].rs2) && (diif.fust_s.t2[FU_S_LD_ST] == 2'd2) && diif.fust_s.busy[FU_S_LD_ST] ? '0 : diif.fust_s.t2[FU_S_LD_ST];
         diif.n_rm = (diif.fust_m.t1 == 2'd2 && diif.fust_m.busy) ? '0 : diif.fust_m.t1;
+        temp = 3'd4;
       // end else if (((diif.fu_ex[2] == 1'b1) && diif.fust_state[2] == FUST_EX) || (diif.wb.s_rw_en)) begin // clearing jump tags
       end else if (diif.wb.s_rw_en && diif.wb.load_done) begin
         diif.n_t1[FU_S_ALU] = (diif.wb.s_rw == diif.fust_s.op[FU_S_ALU].rs1) && (diif.fust_s.t1[FU_S_ALU] == 2'd3) && diif.fust_s.busy[FU_S_ALU] ? '0 : diif.fust_s.t1[FU_S_ALU];
@@ -263,16 +265,20 @@ module dispatch(
         diif.n_t1[FU_S_BRANCH] = (diif.wb.s_rw == diif.fust_s.op[FU_S_BRANCH].rs1) && (diif.fust_s.t1[FU_S_BRANCH] == 2'd3) && diif.fust_s.busy[FU_S_BRANCH] ? '0 : diif.fust_s.t1[FU_S_BRANCH];
         diif.n_t2[FU_S_BRANCH] = (diif.wb.s_rw == diif.fust_s.op[FU_S_BRANCH].rs2) && (diif.fust_s.t2[FU_S_BRANCH] == 2'd3) && diif.fust_s.busy[FU_S_BRANCH] ? '0 : diif.fust_s.t2[FU_S_BRANCH];
         diif.n_rm = (diif.fust_m.t1 == 2'd3 && diif.fust_m.busy) ? '0 : diif.fust_m.t1;
+        temp = 3'd5;
       end
-      else begin
-        if (!(diif.wb.s_rw_en && (diif.wb.s_rw == s_rs1)) && !hazard)begin
-          diif.n_t1[cuif.fu_s] = rstsif.status.idx[s_rs1].tag;
-          temp = 3'd2;
-        end
-        if (!(diif.wb.s_rw_en && (diif.wb.s_rw == s_rs2)) && !hazard)begin
-          diif.n_t2[cuif.fu_s] = rstsif.status.idx[s_rs2].tag;
-        end
+      // else begin
+      // !(cuif.fu_s == FU_S_BRANCH && (cuif.jal || cuif.jalr))
+
+      if (!(diif.wb.s_rw_en && (diif.wb.s_rw == s_rs1)) && !hazard) begin
+        diif.n_t1[cuif.fu_s] = rstsif.status.idx[s_rs1].tag;
+        temp = 3'd2;
       end
+      if (!(diif.wb.s_rw_en && (diif.wb.s_rw == s_rs2)) && !hazard) begin
+        diif.n_t2[cuif.fu_s] = rstsif.status.idx[s_rs2].tag;
+        temp1 = 3'd2;
+      end
+      // end
 
       // To Issue **Combinationally**
       diif.n_fust_s_en     = (cuif.fu_t == FU_S_T & ~flush & ~hazard);
@@ -285,9 +291,9 @@ module dispatch(
       diif.n_fust_s.lui    = (cuif.u_type == UT_LOAD);
       diif.n_fust_s.j_type = (cuif.jal) ? 2'd1 : (cuif.jalr) ? 2'd2 : 2'd0;
       diif.n_fust_s.spec   = spec && !(diif.branch_resolved || diif.branch_miss); // sets spec bit in FUST on new instructions
-      if (diif.branch_resolved) begin
+      // if (diif.branch_resolved) begin
         
-      end
+      // end
 
       diif.n_fust_s.op_type = '0;
       diif.n_fust_s.mem_type = scalar_mem_t'('0);

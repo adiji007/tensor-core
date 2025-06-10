@@ -43,8 +43,8 @@ module issue(
 
     logic [4:0] rdy;
     logic [4:0] n_rdy;
-    logic [4:0][2:0] age;
-    logic [4:0][2:0] n_age;
+    logic [4:0][5:0] age;
+    logic [4:0][5:0] n_age;
     fust_state_e [4:0] fust_state;
     fust_state_e [4:0] next_fust_state;
     logic [4:0] oldest_rdy;
@@ -161,8 +161,8 @@ module issue(
       for (int i = 0; i < 5; i++) begin
         case (fust_state[i])
           FUST_EMPTY: n_age[i] = {1'b0,incoming_instr[i]}; // set new instructions to age 1
-          FUST_WAIT:  n_age[i] = (|incoming_instr) ? age[i] + 1 : age[i];
-          FUST_RDY:   n_age[i] = (|incoming_instr) ? age[i] + 1 : age[i];
+          FUST_WAIT:  n_age[i] = (next_fust_state[i] == FUST_EX) ? 1'b0 : (|incoming_instr) ? age[i] + 1 : age[i];
+          FUST_RDY:   n_age[i] = (next_fust_state[i] == FUST_EX) ? 1'b0 : (|incoming_instr) ? age[i] + 1 : age[i];
           FUST_EX:    n_age[i] = (next_fust_state[i] == FUST_WAIT) ? 1'b1 :'0;
           default: n_age = age;
         endcase
@@ -188,26 +188,26 @@ module issue(
       // for (int i = 0; i < 5; i++) begin
           // && (age[i] > oldest_age)
           // next_oldest_rdy[i] = 1'b1;
-      if (rdy[0] && (fust_state[0] != FUST_EX)) begin
-        next_oldest_rdy[0] = ((age[0] > age[1]) && (age[0] > age[2]) && (age[0] > age[3]) && (age[0] > age[4])) ? 1'b1 : (next_fust_state[0] == FUST_EMPTY) ? 1'b0 : oldest_rdy[0];
-        test[1] = 1;
-      end
-      if (rdy[1] && (fust_state[1] != FUST_EX)) begin
-        next_oldest_rdy[1] = ((age[1] > age[0]) && (age[1] > age[2]) && (age[1] > age[3]) && (age[1] > age[4])) ? 1'b1 : (next_fust_state[1] == FUST_EMPTY) ? 1'b0 : oldest_rdy[1];
-        test[2] = 1;
-      end
-      if (rdy[2] && (fust_state[2] != FUST_EX)) begin
-        next_oldest_rdy[2] = ((age[2] > age[0]) && (age[2] > age[1]) && (age[2] > age[3]) && (age[2] > age[4])) ? 1'b1 : (next_fust_state[2] == FUST_EMPTY) ? 1'b0 : oldest_rdy[2];
-        test[3] = 1;
-      end
-      if (rdy[3] && (fust_state[3] != FUST_EX)) begin
-        next_oldest_rdy[3] = ((age[3] > age[0]) && (age[3] > age[1]) && (age[3] > age[2]) && (age[3] > age[4])) ? 1'b1 : (next_fust_state[3] == FUST_EMPTY) ? 1'b0 : oldest_rdy[3];
-        test[4] = 1;
-      end
-      if (rdy[4] && (fust_state[4] != FUST_EX)) begin
-        next_oldest_rdy[4] = ((age[4] > age[0]) && (age[4] > age[1]) && (age[4] > age[2]) && (age[4] > age[3])) ? 1'b1 : (next_fust_state[4] == FUST_EMPTY) ? 1'b0 : oldest_rdy[4];
-        test[5] = 1;
-      end
+      // if ((fust_state[0] != FUST_EX)) begin
+      next_oldest_rdy[0] = (rdy[0] && (age[0] > age[1]) && (age[0] > age[2]) && (age[0] > age[3]) && (age[0] > age[4])) ? 1'b1 : (next_fust_state[0] == FUST_EMPTY || (fust_state[0] == FUST_EX && next_fust_state[0] == FUST_WAIT)) ? 1'b0 : oldest_rdy[0];
+      test[1] = 1;
+      // end
+      // if ((fust_state[1] != FUST_EX)) begin
+      next_oldest_rdy[1] = (rdy[1] && (age[1] > age[0]) && (age[1] > age[2]) && (age[1] > age[3]) && (age[1] > age[4])) ? 1'b1 : (next_fust_state[1] == FUST_EMPTY || (fust_state[1] == FUST_EX && next_fust_state[1] == FUST_WAIT)) ? 1'b0 : oldest_rdy[1];
+      test[2] = 1;
+      // end
+      // if ((fust_state[2] != FUST_EX)) begin
+      next_oldest_rdy[2] = (rdy[2] && (age[2] > age[0]) && (age[2] > age[1]) && (age[2] > age[3]) && (age[2] > age[4])) ? 1'b1 : (next_fust_state[2] == FUST_EMPTY || (fust_state[2] == FUST_EX && next_fust_state[2] == FUST_WAIT)) ? 1'b0 : oldest_rdy[2];
+      test[3] = 1;
+      // end
+      // if ((fust_state[3] != FUST_EX)) begin
+      next_oldest_rdy[3] = (rdy[3] && (age[3] > age[0]) && (age[3] > age[1]) && (age[3] > age[2]) && (age[3] > age[4])) ? 1'b1 : (next_fust_state[3] == FUST_EMPTY || (fust_state[3] == FUST_EX && next_fust_state[3] == FUST_WAIT)) ? 1'b0 : oldest_rdy[3];
+      test[4] = 1;
+      // end
+      // if ((fust_state[4] != FUST_EX)) begin
+      next_oldest_rdy[4] = (rdy[4] && (age[4] > age[0]) && (age[4] > age[1]) && (age[4] > age[2]) && (age[4] > age[3])) ? 1'b1 : (next_fust_state[4] == FUST_EMPTY || (fust_state[4] == FUST_EX && next_fust_state[4] == FUST_WAIT)) ? 1'b0 : oldest_rdy[4];
+      test[5] = 1;
+      // end
 
         // if (rdy[i] && fust_state == FUST_RDY && (age[i] > oldest_rdy)) begin
         //   next_oldest_rdy[i] = 1'b1;
@@ -300,16 +300,16 @@ module issue(
                     next_fust_state[i] = FUST_RDY;
                   end 
                   else begin
-                    next_fust_state[i] = (((n_rdy[i] == next_oldest_rdy[i]) || (next_single_ready))) ? FUST_EX : FUST_RDY;
+                    next_fust_state[i] = (((n_rdy[i] == next_oldest_rdy[i]) || (next_single_ready && next_ready[i]))) ? FUST_EX : FUST_RDY;
                   end
                 end
               end
               FUST_RDY: begin
-                if ((i==3 || i==4 || i==1) && fusif.fust.op[i].spec) begin
+                if ((i==3 || i==4 || i==1) && fusif.fust.op[i].spec) begin 
                     next_fust_state[i] = FUST_RDY;
                 end 
                 else begin 
-                  next_fust_state[i] = (((next_oldest_rdy[i]) || (single_ready))) ? FUST_EX : FUST_RDY;
+                  next_fust_state[i] = (((next_oldest_rdy[i]) || (single_ready && fu_ready[i]))) ? FUST_EX : FUST_RDY;
                 end
               end
               FUST_EX: begin
