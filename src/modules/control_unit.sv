@@ -14,13 +14,11 @@ module control_unit(
 
     word_t instr;
     logic [6:0] op;
-    logic dummy;
 
     assign instr = cu_if.instr;
     assign op = opcode_t'(instr[6:0]);
 
     always_comb begin
-      dummy = '0;
       cu_if.halt = '0;
       cu_if.i_flag = '0;
       cu_if.s_mem_type = scalar_mem_t'('0);
@@ -203,7 +201,6 @@ module control_unit(
                 cu_if.m_reg_write = '1;
                 cu_if.fu_t = FU_G_T;
             end
-      default: dummy = '0;
       endcase
     end
 

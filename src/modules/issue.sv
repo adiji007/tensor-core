@@ -126,8 +126,8 @@ module issue(
       fumif.fust_row = isif.n_fust_m;
       fumif.busy     = (fust_state[3] == FUST_EX && (next_fust_state[3] == FUST_EMPTY || next_fust_state[3] == FUST_WAIT)) ? 1'd0 : next_fust_state[3] != FUST_EMPTY;
 
-      fumif.t1 = isif.n_rm;
-      fumif.t2 = isif.n_mm;
+      fumif.t1 = isif.n_rm; // t1 is for scalar reg
+      fumif.t2 = isif.n_mm; // t2 is for matrix reg
 
       fugif.en       = isif.n_fust_g_en;
       fugif.fust_row = isif.n_fust_g;
@@ -377,15 +377,18 @@ module issue(
       // end
     end
 
+    logic n_halt;
+
     always_ff @(posedge CLK, negedge nRST)begin
       if (!nRST) begin
         halt <= '0;
       end
       else begin 
-        halt <= halt || isif.dispatch.halt;
+        halt <= n_halt;
       end
     end
 
+    assign n_halt = (isif.branch_miss) ? '0 : (halt || isif.dispatch.halt);
     assign isif.halt = halt;
 
     always_comb begin : Output_Logic

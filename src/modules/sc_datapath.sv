@@ -90,8 +90,8 @@ module sc_datapath
     assign sbif.wb_dispatch.load_done   = wb_reg.load_done;
     assign sbif.wb_dispatch.gemm_done   = dcif.gemm_complete; 
     assign sbif.wb_dispatch.m_load_done = dcif.load_complete; 
-    assign sbif.wb_dispatch.m_rw_ld     = '0; // TODO these need logc from memory?, saying which m_reg can be cleared from rsts
-    assign sbif.wb_dispatch.m_rw_gemm   = '0; // TODO these need logc from memory?, saying which m_reg can be cleared from rsts
+    // assign sbif.wb_dispatch.m_rw_ld     = '0; // TODO these need logc from memory?, saying which m_reg can be cleared from rsts
+    // assign sbif.wb_dispatch.m_rw_gemm   = '0; // TODO these need logc from memory?, saying which m_reg can be cleared from rsts
     assign sbif.branch_miss             = eif.eif_output.bfu_miss;
     assign sbif.branch_resolved         = eif.eif_output.bfu_resolved;
     assign sbif.fu_ex                   = eif.eif_output.fu_ex;

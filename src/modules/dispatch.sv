@@ -59,17 +59,31 @@ module dispatch(
       end
     end
 
+    logic n_new_weight, new_weight;
+
     always_comb begin
-      gemm_weight_addr = diif.out.gemm_weight_addr;
+      gemm_weight_addr = diif.fust_g.op.ms2;
+      n_new_weight = new_weight;
       if (cuif.fu_m == FU_M_GEMM) begin
         gemm_weight_addr = m_rs2;
+        n_new_weight = 1'b0;
       end
       else if (cuif.m_mem_type == M_LOAD) begin
-        if (diif.out.gemm_weight_addr == m_rd) begin
-          gemm_weight_addr = ~gemm_weight_addr;
+        if (diif.fust_g.op.ms2 == m_rd) begin
+          n_new_weight = 1'b1;
         end
       end
     end
+
+    always_ff @(posedge CLK, negedge nRST) begin
+      if (!nRST) begin
+        new_weight = '0;
+      end
+      else begin 
+        new_weight = n_new_weight;
+      end
+    end
+
 
     assign flush = diif.branch_miss;
     always_comb begin : Pipeline_Output
@@ -133,7 +147,7 @@ module dispatch(
         default: s_busy = 1'b0;
       endcase
       case (cuif.fu_m)
-        FU_M_LD_ST:   m_busy = (diif.fu_ex[3] == 1'b0) ? diif.fust_m.busy : '0;
+        FU_M_LD_ST:   m_busy = (diif.fu_ex[3] == 1'b0) || (|diif.fust_m.t1 || |diif.fust_m.t2) ? (diif.fu_ex[3] == 1'b1) ? '0 : diif.fust_m.busy : '0;
         FU_M_GEMM:    m_busy = (diif.fu_ex[4] == 1'b0) ? diif.fust_g.busy : '0;
         default: m_busy = 1'b0;
       endcase
@@ -310,7 +324,7 @@ module dispatch(
         diif.n_fust_s.mem_type = cuif.s_mem_type;
       end
 
-      if ((diif.fu_ex[3] == 1'b1) && diif.fust_state[3] == FUST_EX) begin // clearing matrix
+      if (diif.wb.m_load_done) begin // clearing matrix
         diif.n_gt1 = (diif.fust_g.t1 != '0) && diif.fust_g.busy ? '0 : diif.fust_g.t1;
         diif.n_gt2 = (diif.fust_g.t2 != '0) && diif.fust_g.busy ? '0 : diif.fust_g.t2;
         diif.n_gt3 = (diif.fust_g.t3 != '0) && diif.fust_g.busy ? '0 : diif.fust_g.t3;
@@ -321,14 +335,14 @@ module dispatch(
         diif.n_gt3 = (cuif.fu_t == FU_G_T & ~flush & ~hazard) ? rstmif.status.idx[m_rs3].tag : diif.fust_g.t3;
       end
 
-      if ((diif.fu_ex[4] == 1'b1) && diif.fust_state[4] == FUST_EX) begin // clearing matrix
+      if (diif.wb.gemm_done)  begin // clearing matrix
         diif.n_mm = (diif.fust_m.t2 != '0) && diif.fust_m.busy ? '0 : diif.fust_m.t2;
       end
       else begin
         diif.n_mm  = (cuif.fu_t == FU_M_T & ~flush & ~hazard) ? rstmif.status.idx[m_rd].tag  : diif.fust_m.t2;
       end
 
-      if (!(diif.wb.s_rw_en && (diif.wb.s_rw == s_rs1)))begin
+      if (!(diif.wb.s_rw_en && (diif.wb.s_rw == s_rs1)) && !hazard)begin
         diif.n_rm = diif.n_fust_m_en ? rstsif.status.idx[s_rs1].tag : diif.fust_m.t1;
       end
       
@@ -340,7 +354,7 @@ module dispatch(
       // diif.n_mm  = (cuif.fu_t == FU_M_T & ~flush & ~hazard) ? rstmif.status.idx[m_rd].tag  : diif.fust_m.t2;
       
 
-      tag_val = (cuif.fu_t == FU_G_T & ~flush & ~hazard) ? rstmif.status.idx[m_rs3].tag : '0;
+      // tag_val = (cuif.fu_t == FU_G_T & ~flush & ~hazard) ? rstmif.status.idx[m_rs3].tag : '0;
 
       if (cuif.fu_m == FU_M_LD_ST) begin
         diif.n_fust_m.mem_type = cuif.m_mem_type;
@@ -362,7 +376,7 @@ module dispatch(
       diif.n_fust_g.ms2  = m_rs2;
       diif.n_fust_g.ms3  = m_rs3;
 
-      diif.n_fust_g.new_weight = (diif.out.gemm_weight_addr != gemm_weight_addr);
+      diif.n_fust_g.new_weight = ((diif.fust_g.op.ms2 != m_rs2) || new_weight);
       // diif.n_fust_g.t1   = rstmif.status.idx[m_rs1].tag;
       // diif.n_fust_g.t2   = rstmif.status.idx[m_rs2].tag;
       // diif.n_fust_g.t3   = rstmif.status.idx[m_rs3].tag;
