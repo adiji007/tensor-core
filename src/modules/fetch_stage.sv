@@ -12,18 +12,23 @@ module fetch_stage(
   word_t prev_pc, prev_instr;
   logic prev_pred;
 
+  word_t save_pc, pc_change;
+  logic miss_pred, missed;
+
   // Instantiation interfaces
   fetch_if fif();
   fu_branch_predictor_if btbif();
 
   // Fetch unit connections
   assign fif.imemload = fsif.imemload;           // Input from memory
-  assign fif.freeze = fsif.freeze || fsif.jump;               // Input from scoreboard
+  assign fif.freeze = fsif.freeze || fsif.jump;  // Input from scoreboard
+  assign fif.jump = fsif.jump;
   assign fif.misprediction = fsif.misprediction; // Input from branch predictor
   assign fif.correct_pc = fsif.correct_pc;       // Input from branch predictor
   assign fif.br_jump = fsif.br_jump;
-  assign fsif.pc = (fsif.freeze) ? prev_pc : fif.pc;                       // Output to scoreboard, branch predictor
-  assign fsif.instr = (fsif.freeze) ? prev_instr : fif.instr;                 // Output to scoreboard
+  assign fif.missed = missed;
+  // assign fsif.pc = (fsif.freeze) ? prev_pc : fif.pc;                       // Output to scoreboard, branch predictor
+  // assign fsif.instr = (fsif.freeze) ? prev_instr : fif.instr;              // Output to scoreboard
   assign fsif.imemREN = fif.imemREN;             // Output to memory
   assign fsif.imemaddr = fif.imemaddr;           // Output to memory
 
@@ -42,6 +47,46 @@ module fetch_stage(
       prev_pc <= fif.pc;
       prev_instr <= fif.instr;
       prev_pred <= btbif.predicted_outcome;
+    end
+  end
+
+  
+  
+  always_comb begin
+    pc_change = save_pc;
+    miss_pred = missed;
+    if (fsif.update_btb && fsif.misprediction) begin
+      pc_change = fsif.correct_pc;
+      miss_pred = '1;
+      fsif.pc = '0;
+      fsif.instr = '0;
+    end
+    else if (missed) begin
+      if (save_pc == fif.pc) begin
+        miss_pred = '0;
+        pc_change = '0;
+        fsif.pc = (fsif.freeze) ? prev_pc : fif.pc;                       // Output to scoreboard, branch predictor
+        fsif.instr = (fsif.freeze) ? prev_instr : fif.instr;              // Output to scoreboard
+      end 
+      else begin
+        fsif.pc = '0;
+        fsif.instr = '0;
+      end
+    end
+    else begin 
+      fsif.pc = (fsif.freeze) ? prev_pc : (fsif.jump) ? '0 : fif.pc;                       // Output to scoreboard, branch predictor
+      fsif.instr = (fsif.freeze) ? prev_instr : (fsif.jump) ? '0 : fif.instr;              // Output to scoreboard
+    end
+  end
+
+  always_ff @(posedge CLK, negedge nRST) begin
+    if (!nRST) begin
+      save_pc <= '0;
+      missed <= '0;
+    end
+    else begin
+      save_pc <= pc_change;
+      missed <= miss_pred;
     end
   end
 

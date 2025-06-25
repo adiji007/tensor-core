@@ -24,6 +24,7 @@ module fust_m (
     fust.busy = fuif.busy;
 
     fust.t1 = fuif.t1;
+    fust.t2 = fuif.t2;
   end
 
 endmodule

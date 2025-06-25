@@ -121,17 +121,17 @@ module memory_arbiter_basic(
     if (!nRST) begin
       load_data_reg <= '0;
     end
-    else if (arbiter_state == SP_LOAD1 && !sp_wait) begin
+    else if (arbiter_state == SP_LOAD1) begin
       load_data_reg[31:0] <= sp_load_data;
     end
-    else if (arbiter_state == SP_LOAD2 && !sp_wait) begin
+    else if (arbiter_state == SP_LOAD2) begin
       load_data_reg[63:32] <= sp_load_data;
     end
   end
   assign spif.load_data = load_data_reg;
   assign spif.sLoad_row = sLoad_row_reg;
   always_comb begin
-    if (((arbiter_state == SP_LOAD1) || (arbiter_state == SP_LOAD2)) && !sp_wait)
+    if (((arbiter_state == SP_LOAD1) || (arbiter_state == SP_LOAD2)))
       mem_read(sp_load_addr, sp_load_data);
   end
 
@@ -154,28 +154,29 @@ module memory_arbiter_basic(
     sp_hit = '0;
     case (arbiter_state)
       SP_LOAD1: begin
-        sp_wait = acif.ramstate == BUSY;
+        // sp_wait = acif.ramstate == BUSY;
         sp_load_addr = spif.load_addr + (load_count * local_addr_inc1);
         acif.ramREN = 1'b1;
       end
       SP_LOAD2: begin
-        sp_wait = acif.ramstate == BUSY;
+        // sp_wait = acif.ramstate == BUSY;
         sp_load_addr = spif.load_addr + (load_count * local_addr_inc1) + local_addr_inc2;
         acif.ramREN = 1'b1;
         if (!sp_wait) sp_hit = 1'b1;
       end
       SP_STORE1: begin
-        sp_wait = acif.ramstate == BUSY;
+        // sp_wait = acif.ramstate == BUSY;
         mem_write(spif.store_addr, spif.store_data[31:0]);
         mem_save();
         acif.ramWEN = 1'b1;
       end
       SP_STORE2: begin
-        sp_wait = acif.ramstate == BUSY;
+        // sp_wait = acif.ramstate == BUSY;
         mem_write(spif.store_addr + local_addr_inc2, spif.store_data[63:32]);
         mem_save();
         acif.ramWEN = 1'b1;
-        if (!sp_wait) spif.sStore_hit = 1'b1;
+        // if (!sp_wait) spif.sStore_hit = 1'b1;
+        spif.sStore_hit = 1'b1;
       end
       IDLE: begin
         //DCACHE

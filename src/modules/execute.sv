@@ -12,6 +12,7 @@ module execute (
     execute_if.eif eif
 );
 
+    logic gemm_edge, mls_edge;
     // shared signals immediate
     // Interfaces
     fu_matrix_ls_if mlsif();
@@ -90,7 +91,7 @@ module execute (
 
     // Matrix Load/Store FU
     fu_matrix_ls MLS(mlsif);
-    assign mlsif.mhit = eif.mls_mhit; // from mem (scratchpad)
+    // assign mlsif.mhit = eif.mls_mhit; // from mem (scratchpad)
     assign mlsif.enable = eif.mls_enable; // from sb
     assign mlsif.ls_in = eif.mls_ls_in; // from sb
     assign mlsif.rd_in = eif.mls_rd_in; // from sb
@@ -98,8 +99,8 @@ module execute (
     // assign mlsif.stride_in = eif.mls_stride_in; // from sb
     assign mlsif.imm_in = eif.mls_imm_in; // from sb
     // MLS Outputs
-    assign eif.eif_output.fu_matls_out = mlsif.fu_matls_out; 
-    assign eif.eif_output.fu_ex[3] = mlsif.fu_matls_out.done;
+    // assign eif.eif_output.fu_matls_out = mlsif.fu_matls_out; 
+    assign eif.eif_output.fu_ex[3] = eif.load_complete || eif.store_complete;
     // fu_matls_out struct
     // done         to sb
     // ls_out       to mem (scratchpad)
@@ -118,10 +119,24 @@ module execute (
     // Outputs
     /* Nick Changes: Outputs to Scratchpad FIFO Buff using my structs */
     
-    // assign eif.eif_output.gemm_new_weight_out = fugif.new_weight_out; // to mem (scratchpad)
+    // assign eif.eif_output.gemm_new_weight_out = eif.gemm_new_weight_in; // to mem (scratchpad)
     // assign eif.eif_output.gemm_matrix_num = fugif.gemm_matrix_num;    // to mem (scratchpad)
-    assign eif.eif_output.gemm_out = fugif.gemm_out; 
+    // assign eif.eif_output.gemm_out = fugif.gemm_out; 
     // TODO: need some sort of done signal
-    assign eif.eif_output.fu_ex[4] = '0; 
+    assign eif.eif_output.fu_ex[4] = eif.gemm_complete; 
+
+    assign eif.eif_output.sp_out = (eif.mls_enable) ? mlsif.fu_matls_out : fugif.gemm_out;
+    assign eif.eif_output.sp_write = ((eif.mls_enable && !mls_edge) || (eif.gemm_enable && !gemm_edge));
+
+    always_ff @(posedge CLK, negedge nRST) begin
+        if (!nRST) begin
+            gemm_edge <= '0;
+            mls_edge <= '0;
+        end
+        else begin
+            gemm_edge <= eif.gemm_enable;
+            mls_edge <= eif.mls_enable;
+        end
+    end
 
 endmodule

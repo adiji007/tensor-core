@@ -3,6 +3,7 @@
 
 `include "datapath_types.vh"
 `include "isa_types.vh"
+`include "sp_types_pkg.vh"
 
 
 // IGNORE
@@ -22,6 +23,7 @@
 interface execute_if;
   import datapath_pkg::*; 
   import isa_pkg::*;
+  import sp_types_pkg::*;
 
   // Branch FU
   logic bfu_enable;
@@ -43,7 +45,7 @@ interface execute_if;
   scalar_mem_t sls_mem_type;
 
   // MLS FU
-  logic           mls_mhit, mls_enable;
+  logic           mls_enable;
   matrix_mem_t    mls_ls_in;
   matbits_t       mls_rd_in;
   word_t          mls_rs_in, mls_imm_in;
@@ -60,8 +62,11 @@ interface execute_if;
   logic spec;
   regbits_t rd;
 
+  logic gemm_complete, store_complete, load_complete;
+
   modport eif (
-    input // lw and alu destination
+    input gemm_complete, store_complete, load_complete,
+          // lw and alu destination
           rd,
           // Branch FU
           bfu_enable, bfu_branch_type, bfu_reg_a, bfu_reg_b, bfu_current_pc, bfu_imm, bfu_predicted_outcome, bfu_j_type,
@@ -70,9 +75,9 @@ interface execute_if;
           // Scalar Load/Store FU
           sls_enable, sls_imm, sls_rs1, sls_rs2, sls_dmem_in, sls_dhit_in, sls_mem_type,
           // Matrix Load/Store FU
-          mls_mhit, mls_enable, mls_ls_in, mls_rd_in, mls_rs_in, mls_imm_in,
+          mls_enable, mls_ls_in, mls_rd_in, mls_rs_in, mls_imm_in,
           // GEMM FUsadsaf
-          gemm_enable, gemm_new_weight_in, gemm_rs1_in, gemm_rs2_in, gemm_rs3_in, gemm_rd_in, gemm_done,
+          gemm_enable, gemm_new_weight_in, gemm_rs1_in, gemm_rs2_in, gemm_rs3_in, gemm_rd_in,
           // halt
           halt,
           // spec 
@@ -91,9 +96,9 @@ interface execute_if;
           // Scalar Load/Store FU
           sls_enable, sls_imm, sls_rs1, sls_rs2, sls_dmem_in, sls_dhit_in, sls_mem_type,
           // MLS FU
-          mls_mhit, mls_enable, mls_ls_in, mls_rd_in, mls_rs_in, mls_imm_in,
+          mls_enable, mls_ls_in, mls_rd_in, mls_rs_in, mls_imm_in,
           // GEMM FU
-          gemm_enable, gemm_new_weight_in, gemm_rs1_in, gemm_rs2_in, gemm_rs3_in, gemm_rd_in, gemm_done,
+          gemm_enable, gemm_new_weight_in, gemm_rs1_in, gemm_rs2_in, gemm_rs3_in, gemm_rd_in,
           // halt
           halt,
           // spec

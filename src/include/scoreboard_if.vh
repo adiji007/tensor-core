@@ -22,15 +22,17 @@ interface scoreboard_if;
     logic freeze;
     logic jump;
 
+    logic halt;
+
     issue_t out;
     
     modport SB (
         input fetch, wb_issue, wb_dispatch, branch_miss, branch_resolved, fu_ex,
-        output out, freeze, jump
+        output out, freeze, jump, halt
     );
 
     modport tb (
-        input out, freeze, jump,
+        input out, freeze, jump, halt,
         output fetch, wb_issue, wb_dispatch, branch_miss, branch_resolved, fu_ex
     );
     

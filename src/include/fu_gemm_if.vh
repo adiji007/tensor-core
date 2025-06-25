@@ -2,10 +2,12 @@
 `define FU_GEMM_IF_VH
 `include "isa_types.vh"
 `include "datapath_types.vh"
+`include "sp_types_pkg.vh"
 
 interface fu_gemm_if;
     import isa_pkg::*;
     import datapath_pkg::*;
+    import sp_types_pkg::*;
     
     // Signals
     /*
@@ -28,7 +30,7 @@ interface fu_gemm_if;
     */
     logic new_weight_out;
     // fu_gemm_t gemm_matrix_num;
-    scratch_input_t gemm_out;
+    instrFIFO_t gemm_out;
 
     modport GEMM (
         input gemm_enable, new_weight_in, rs1_in, rs2_in, rs3_in, rd_in,

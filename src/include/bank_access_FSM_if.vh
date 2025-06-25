@@ -1,11 +1,13 @@
 `ifndef BANK_ACCESS_FM_IF
 `define BANK_ACCESS_FM_IF
 `include "sp_types_pkg.vh"
+`include "isa_types.vh"
 
 
 interface bank_access_FSM_if;
 
     import sp_types_pkg::*;
+    import isa_pkg::*;
 
     logic sLoad_hit, wFIFO_full, instrFIFO_empty, rFIFO_full, psumoutFIFO_full, new_instr;
     logic [ROW_S_W-1:0] sLoad_row;

@@ -7,11 +7,13 @@
 // types
 `include "datapath_types.vh"
 `include "isa_types.vh"
+`include "sp_types_pkg.vh"
 
 interface fu_matrix_ls_if;
 // import types
 import datapath_pkg::*;
 import isa_pkg::*;
+import sp_types_pkg::*;
 
 // Signals
 
@@ -26,22 +28,22 @@ import isa_pkg::*;
     mhit: Scratchpad ready
 */
 
-logic           mhit, enable;
+logic           enable;
 matrix_mem_t    ls_in;
 matbits_t       rd_in;
-word_t          rs_in, imm_in, stride_in;
+word_t          rs_in, imm_in;
 
 // Outputs (REFER TO DATAPATH_TYPES)
-matrix_ls_t fu_matls_out;
+instrFIFO_t fu_matls_out;
 
 // LS Matrix Port Map
 modport mls (
-    input   mhit, enable, ls_in, rd_in, rs_in, stride_in, imm_in,
+    input   enable, ls_in, rd_in, rs_in, imm_in,
     output  fu_matls_out
 );
 
 modport tb (
-    output   mhit, enable, ls_in, rd_in, rs_in, stride_in, imm_in,
+    output  enable, ls_in, rd_in, rs_in, imm_in,
     input  fu_matls_out
 );
 

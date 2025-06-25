@@ -29,7 +29,7 @@ module system (
   arbiter_caches_if acif,
   scratchpad_if spif,
   systolic_array_if saif,
-  system_if.sys syif,
+  system_if.sys syif
 );
 
 
@@ -90,6 +90,11 @@ module system (
     spif.psumout_data = saif.array_output;
     spif.psumout_row_sel_in = saif.row_out;
     spif.psumout_en = saif.out_en;
+    spif.instrFIFO_wdata = dcif.sp_out;
+    spif.instrFIFO_WEN = dcif.sp_write;
+    dcif.load_complete = spif.load_complete;
+    dcif.gemm_complete = spif.gemm_complete;
+    dcif.store_complete = spif.store_complete;
   end
   // // memory
   // ram                                   RAM (CLK, nrst, prif);

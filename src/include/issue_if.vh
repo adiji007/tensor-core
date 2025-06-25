@@ -23,7 +23,8 @@ interface issue_if;
     logic [1:0] n_gt2;
     logic [1:0] n_gt3;
 
-    logic [1:0] n_mt1;
+    logic [1:0] n_rm;
+    logic [1:0] n_mm;
 
     // Inputs to latch
     // logic flush;
@@ -36,9 +37,10 @@ interface issue_if;
     logic freeze;
     // Inputs from writeback
     wb_t wb; //alu and ld/st done signals
-    word_t s_wdata;
+    // word_t s_wdata;
     
     // Outputs of stage
+    logic halt;
     issue_t out;
     fust_s_t fust_s;
     fust_m_t fust_m;
@@ -47,8 +49,8 @@ interface issue_if;
     
     modport IS (
         input dispatch, wb, n_fu_t, n_fust_s, n_fust_m, n_fust_g, n_fu_s, n_fust_s_en, n_fust_m_en, n_fust_g_en, 
-        input n_t1, n_t2, s_wdata, branch_miss, branch_resolved, fu_ex, n_mt1, n_gt1, n_gt2, n_gt3, freeze,
-        output out, fust_s, fust_m, fust_g, fust_state
+        input n_t1, n_t2, branch_miss, branch_resolved, fu_ex, n_rm, n_mm, n_gt1, n_gt2, n_gt3, freeze,
+        output out, fust_s, fust_m, fust_g, fust_state, halt
     );
 
 endinterface

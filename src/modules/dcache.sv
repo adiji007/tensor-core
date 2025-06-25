@@ -232,7 +232,7 @@ always_comb begin
       if (!cif.dwait && dcache_state == WRITE1) begin
         next_dcache[flush_idx][way_sel].dirty = 1'b0;
         next_dcache[flush_idx][way_sel].valid = 1'b0;
-        next_flush_counter = flush_counter + 1;
+        // next_flush_counter = flush_counter + 1;
       end
     end
 

@@ -1,10 +1,14 @@
 `ifndef SP_TYPES_PKG_VH
 `define SP_TYPES_PKG_VH
 
+`include "isa_types.vh"
+
 package sp_types_pkg;
-  parameter WORD_W = 32;
-  parameter REG_W  = 5;
-  parameter MATRIX_W = 4;
+  import isa_pkg::*;
+
+  // parameter WORD_W = 32;
+  // parameter REG_W  = 5;
+  // parameter MATRIX_W = 4;
   parameter VALUE_BITS = 16;
   parameter BITS_PER_ROW = 64;
 

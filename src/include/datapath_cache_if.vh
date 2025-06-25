@@ -4,11 +4,13 @@
 // types
 `include "isa_types.vh"
 `include "datapath_types.vh"
+`include "sp_types_pkg.vh"
 
 interface datapath_cache_if;
   // import types
   import isa_pkg::*;
   import datapath_pkg::*;
+  import sp_types_pkg::*;
 
 // datapath signals
   // stop processing
@@ -27,26 +29,29 @@ interface datapath_cache_if;
   word_t              dmemload, dmemstore, dmemaddr;
 
 // Scratchpad signals
-  logic mhit; // -> could change this to be 1 for load done, 2 for store done
-  matrix_ls_t         matrix_ls;
-  logic gemm_done;
-  logic m_ld_done; // needed?
+  // logic mhit; // -> could change this to be 1 for load done, 2 for store done
+  // matrix_ls_t         matrix_ls;
+  // logic gemm_done;
+  // logic m_ld_done; // needed?
 
-  scratch_input_t     gemm_out; 
+  logic gemm_complete, store_complete, load_complete;
+
+  instrFIFO_t     sp_out; 
+  logic           sp_write;
 
   // datapath ports
   modport dp (
-    input   ihit, imemload, dhit, dmemload, mhit,  
-    input   m_ld_done, gemm_done,
+    input   ihit, imemload, dhit, dmemload,  
+    input   load_complete, gemm_complete, store_complete,
     output  halt, imemREN, imemaddr, dmemREN, dmemWEN,
-            dmemstore, dmemaddr, matrix_ls, gemm_out
+            dmemstore, dmemaddr, sp_out, sp_write
   );
 
   modport tb (
-    output  ihit, imemload, dhit, dmemload, mhit,
-    output  m_ld_done, gemm_done,
+    output  ihit, imemload, dhit, dmemload,
+    output  load_complete, gemm_complete, store_complete,
     input   halt, imemREN, imemaddr, dmemREN, dmemWEN,
-            dmemstore, dmemaddr, matrix_ls, gemm_out
+            dmemstore, dmemaddr, sp_out, sp_write
   );
 
   // cache block ports

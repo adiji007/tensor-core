@@ -2,9 +2,11 @@
 `define DP_TYPES_PKG_VH
 
 `include "isa_types.vh"
+`include "sp_types_pkg.vh"
 
 package datapath_pkg;
   import isa_pkg::*;
+  import sp_types_pkg::*;
 
   parameter FU_W   = 5;
   parameter FU_S_W = 2;
@@ -138,6 +140,7 @@ package datapath_pkg;
     logic busy;
     fust_m_row_t op;
     logic [1:0] t1;
+    logic [1:0] t2;
   } fust_m_t;
 
   typedef struct packed {
@@ -145,6 +148,7 @@ package datapath_pkg;
     matbits_t ms2;
     matbits_t ms3;
     matbits_t md;
+    logic new_weight;
   } fust_g_row_t;
 
   typedef struct packed {
@@ -174,7 +178,7 @@ package datapath_pkg;
   } rst_m_row_t;
 
   typedef struct packed {
-    rst_m_row_t [15:0] idx; 
+    rst_m_row_t [63:0] idx; 
   } rst_m_t;
 
   /*******
@@ -251,6 +255,9 @@ package datapath_pkg;
 
     word_t n_br_pc;
     logic n_br_pred;
+
+    matbits_t gemm_weight_addr;
+    logic new_weight;
 
     logic i_type;
     logic freeze;
@@ -343,16 +350,19 @@ package datapath_pkg;
     regbits_t sls_rd;          // (load_reg_sel) to wb thru latch ***
     
     // MLS FU
-    matrix_ls_t fu_matls_out;  // to mem
+    // matrix_ls_t fu_matls_out;  // to mem
     
     // Gemm FU
-    // logic gemm_new_weight_out; // to mem
+    logic gemm_new_weight_out; // to scratchpad
     // fu_gemm_t gemm_matrix_num; // to mem
-    scratch_input_t gemm_out;
+    // scratch_input_t gemm_out;
+    instrFIFO_t sp_out;
 
     logic [4:0] fu_ex; // to sb, fu_ex[0] (alu_done) to wb thru latch ***
     logic spec;
     logic halt;
+
+    logic sp_write;
 
   } eif_output_t;
 
