@@ -133,6 +133,7 @@ package datapath_pkg;
     // regbits_t rs2; // stride
     word_t imm;
     matrix_mem_t mem_type;
+    logic spec;
     // fu_sbits_t t3;
   } fust_m_row_t;
 
@@ -149,6 +150,7 @@ package datapath_pkg;
     matbits_t ms3;
     matbits_t md;
     logic new_weight;
+    logic spec;
   } fust_g_row_t;
 
   typedef struct packed {

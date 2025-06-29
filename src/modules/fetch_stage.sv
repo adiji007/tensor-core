@@ -55,7 +55,11 @@ module fetch_stage(
   always_comb begin
     pc_change = save_pc;
     miss_pred = missed;
-    if (fsif.update_btb && fsif.misprediction) begin
+    if (fsif.halt) begin
+      fsif.pc = '0;
+      fsif.instr = '0;
+    end
+    else if (fsif.update_btb && fsif.misprediction) begin
       pc_change = fsif.correct_pc;
       miss_pred = '1;
       fsif.pc = '0;

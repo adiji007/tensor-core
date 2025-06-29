@@ -21,6 +21,7 @@ interface fetch_stage_if;
   logic jump;
   logic br_jump;
   logic misprediction;
+  logic halt;
   word_t correct_pc;
   
   // Outputs
@@ -29,7 +30,7 @@ interface fetch_stage_if;
   word_t predicted_pc;
 
   modport fs (
-    input imemload, freeze, misprediction, correct_pc,
+    input imemload, freeze, misprediction, correct_pc, halt,
     input update_btb, branch_outcome, update_pc, branch_target, jump, br_jump,
     output pc, instr, imemREN, predicted_outcome, imemaddr
   );
