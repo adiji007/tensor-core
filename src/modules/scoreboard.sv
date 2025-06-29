@@ -22,7 +22,6 @@ module scoreboard(
 
     always_comb begin
       diif.fetch = sbif.fetch;
-      // diif.flush = sbif.flush;
 
       diif.fust_s = isif.fust_s;
       diif.fust_m = isif.fust_m;
@@ -31,7 +30,6 @@ module scoreboard(
       diif.wb = sbif.wb_dispatch;
 
       isif.dispatch = diif.out;
-      // isif.flush = sbif.flush;
       isif.wb = sbif.wb_issue;
 
       isif.n_fust_s = diif.n_fust_s;
@@ -42,10 +40,8 @@ module scoreboard(
       isif.n_fu_s = diif.n_fu_s;
       isif.n_t1   = diif.n_t1;
       isif.n_t2   = diif.n_t2;
-      // isif.n_fu_m = diif.n_fu_m;
-      // isif.n_fu_g = diif.n_fu_g;
-      isif.n_rm = diif.n_rm;
-      isif.n_mm = diif.n_mm;
+      isif.n_s_t1 = diif.n_s_t1;
+      isif.n_m_t2 = diif.n_m_t2;
 
       isif.n_gt1 = diif.n_gt1;
       isif.n_gt2 = diif.n_gt2;
@@ -54,8 +50,6 @@ module scoreboard(
       isif.n_fust_s_en = diif.n_fust_s_en;
       isif.n_fust_m_en = diif.n_fust_m_en;
       isif.n_fust_g_en = diif.n_fust_g_en;
-
-      // isif.s_wdata = sbif.s_wdata;
 
       isif.fu_ex = sbif.fu_ex;
       diif.fu_ex = sbif.fu_ex;
@@ -70,6 +64,7 @@ module scoreboard(
       sbif.jump = diif.jump;
 
       sbif.halt = isif.halt;
+      sbif.fetch_halt = diif.halt;
 
       sbif.out = isif.out;
     end

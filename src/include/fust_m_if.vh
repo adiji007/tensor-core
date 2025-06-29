@@ -12,12 +12,14 @@ interface fust_m_if;
   logic [1:0] t1, t2;
   // Inputs from issue
   logic busy;
+  logic flush;
+  logic resolved;
 
   // Outputs of stage
   fust_m_t fust;
     
   modport FUSTM (
-      input en, fust_row, busy, t1, t2,
+      input en, fust_row, busy, t1, t2, flush, resolved,
       output fust
   );
 

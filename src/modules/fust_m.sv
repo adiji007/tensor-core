@@ -25,6 +25,13 @@ module fust_m (
 
     fust.t1 = fuif.t1;
     fust.t2 = fuif.t2;
+    if (fuif.flush && fust.op.spec) begin
+      fust = '0;
+    end
+
+    if (fuif.flush && fust.op.spec) begin
+      fust.op.spec = '0;
+    end
   end
 
 endmodule

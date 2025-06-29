@@ -26,9 +26,11 @@ module fust_s (
 
     if (fuif.flush) begin
       for (int i = 0; i < 3; i++) begin
-        fust.op = '0;
-        fust.t1 = '0;
-        fust.t2 = '0;
+        if (fust.op[i].spec) begin
+          fust.op = '0;
+          fust.t1 = '0;
+          fust.t2 = '0;
+        end
       end
     end
 
