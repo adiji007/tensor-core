@@ -39,7 +39,8 @@ module issue(
     regbits_t s_rs1, s_rs2;
     word_t imm;
     logic [4:0] incoming_instr;
-
+    logic [4:0] fu_ready, next_ready;
+    logic single_ready, next_single_ready;
     logic [4:0] rdy;
     logic [4:0] n_rdy;
     logic [4:0][5:0] age;
@@ -50,30 +51,35 @@ module issue(
     logic [4:0] next_oldest_rdy;
     logic i_type;
     logic lui_type;
+    logic n_halt;
 
+    // incoming_instr signal holds what fu is needed by that instr
     always_comb begin : Incoming_Instr_Logic
       incoming_instr = '0;
-      if (isif.n_fu_t == FU_S_T) begin
-        case (isif.n_fu_s)
-          FU_S_ALU:    incoming_instr = 5'b00001;
-          FU_S_LD_ST:  incoming_instr = 5'b00010;
-          FU_S_BRANCH: incoming_instr = 5'b00100;
-          default: incoming_instr = '0;
-        endcase
-      end else if (isif.n_fu_t == FU_M_T)
-        incoming_instr = 5'b01000;
-      else if (isif.n_fu_t == FU_G_T)
-        incoming_instr = 5'b10000;
+      if (!isif.dispatch.freeze) begin
+        if (isif.n_fu_t == FU_S_T) begin
+          case (isif.n_fu_s)
+            FU_S_ALU:    incoming_instr = 5'b00001;
+            FU_S_LD_ST:  incoming_instr = 5'b00010;
+            FU_S_BRANCH: incoming_instr = 5'b00100;
+            default: incoming_instr = '0;
+          endcase
+        end else if (isif.n_fu_t == FU_M_T)
+          incoming_instr = 5'b01000;
+        else if (isif.n_fu_t == FU_G_T)
+          incoming_instr = 5'b10000;
+      end
     end
       
-
+    // n_issue is combinationally set by output logic
     always_ff @ (posedge CLK, negedge nRST) begin: Pipeline_Latching
       if (~nRST)
         isif.out <= '0;
     	else
         isif.out <= n_issue;
     end
-
+    
+    // if hazard set from dispatch, output stays the same
     always_comb begin : Pipeline_Output
       case (1'b1)
         isif.dispatch.freeze: n_issue = isif.out; 
@@ -81,6 +87,7 @@ module issue(
       endcase
     end
 
+    // control inputs to register file
     always_comb begin : Regfile
       rfif.WEN   = isif.wb.reg_en;
       rfif.wsel  = isif.wb.reg_sel;
@@ -89,12 +96,15 @@ module issue(
       rfif.rsel2 = s_rs2;
     end
 
+    // writing the fust logic from dispatch combinationally - key area for speed up but possible loss in cycles
     always_comb begin : FUST
+      // scalar
       fusif.en       = isif.n_fust_s_en;
       fusif.fu       = isif.n_fu_s;
       fusif.fust_row = isif.n_fust_s; 
       fusif.resolved = isif.branch_resolved;
 
+      // states say what functional units are being used
       fusif.busy[0]  = (fust_state[0] == FUST_EX && (next_fust_state[0] == FUST_EMPTY || (next_fust_state[0] == FUST_WAIT && !incoming_instr[0]))) ? 1'd0 : next_fust_state[0] != FUST_EMPTY;
       fusif.busy[1]  = (fust_state[1] == FUST_EX && (next_fust_state[1] == FUST_EMPTY || next_fust_state[1] == FUST_WAIT)) ? 1'd0 : next_fust_state[1] != FUST_EMPTY;
       fusif.busy[2]  = (fust_state[2] == FUST_EX && (next_fust_state[2] == FUST_EMPTY || next_fust_state[2] == FUST_WAIT)) ? 1'd0 : next_fust_state[2] != FUST_EMPTY;
@@ -102,6 +112,9 @@ module issue(
       fusif.t1 = isif.n_t1;
       fusif.t2 = isif.n_t2;
 
+      fusif.flush = isif.branch_miss;
+
+      // matrix
       fumif.en       = isif.n_fust_m_en;
       fumif.fust_row = isif.n_fust_m;
       fumif.busy     = (fust_state[3] == FUST_EX && (next_fust_state[3] == FUST_EMPTY || next_fust_state[3] == FUST_WAIT)) ? 1'd0 : next_fust_state[3] != FUST_EMPTY;
@@ -109,6 +122,10 @@ module issue(
       fumif.t1 = isif.n_s_t1; // t1 is for scalar reg
       fumif.t2 = isif.n_m_t2; // t2 is for matrix reg
 
+      fumif.flush = isif.branch_miss;
+      fumif.resolved = isif.branch_resolved;
+
+      // gemm
       fugif.en       = isif.n_fust_g_en;
       fugif.fust_row = isif.n_fust_g;
       fugif.busy     = (fust_state[4] == FUST_EX && (next_fust_state[4] == FUST_EMPTY || next_fust_state[4] == FUST_WAIT)) ? 1'd0 : next_fust_state[4] != FUST_EMPTY;
@@ -117,23 +134,12 @@ module issue(
       fugif.t2 = isif.n_gt2;
       fugif.t3 = isif.n_gt3;
 
-      fusif.flush = isif.branch_miss;
-
-      fumif.flush = isif.branch_miss;
-      fumif.resolved = isif.branch_resolved;
-
       fugif.flush = isif.branch_miss;
-      fumif.resolved = isif.branch_resolved;
+      fugif.resolved = isif.branch_resolved;
 
     end
 
-    always_ff @ (posedge CLK, negedge nRST) begin: Age_Latch
-      if (~nRST)
-        age <= '0;
-      else
-        age <= n_age;
-    end
-
+    // age logic for knowing what instr is the oldest to issue - insreased by 1 whenever new instr comes into issue
     always_comb begin : Age_Logic
       n_age = age;
       for (int i = 0; i < 5; i++) begin
@@ -146,15 +152,15 @@ module issue(
         endcase
       end
     end
-    
-    always_ff @ (posedge CLK, negedge nRST) begin: Oldest_Latch
-      if (~nRST) begin
-        oldest_rdy <= '0;
-      end else begin
-        oldest_rdy <= next_oldest_rdy;
-      end
-    end
 
+    always_ff @ (posedge CLK, negedge nRST) begin: Age_Latch
+      if (~nRST)
+        age <= '0;
+      else
+        age <= n_age;
+    end
+    
+    // oldest_rdy signal is for knowing which signal has been ready the longest looking at age and if ready
     always_comb begin : Oldest_Logic
       next_oldest_rdy = oldest_rdy;
       next_oldest_rdy[0] = (rdy[0] && (age[0] > age[1]) && (age[0] > age[2]) && (age[0] > age[3]) && (age[0] > age[4])) ? 1'b1 : (next_fust_state[0] == FUST_EMPTY || (fust_state[0] == FUST_EX && next_fust_state[0] == FUST_WAIT)) ? 1'b0 : oldest_rdy[0];
@@ -163,6 +169,7 @@ module issue(
       next_oldest_rdy[3] = (rdy[3] && (age[3] > age[0]) && (age[3] > age[1]) && (age[3] > age[2]) && (age[3] > age[4])) ? 1'b1 : (next_fust_state[3] == FUST_EMPTY || (fust_state[3] == FUST_EX && next_fust_state[3] == FUST_WAIT)) ? 1'b0 : oldest_rdy[3];
       next_oldest_rdy[4] = (rdy[4] && (age[4] > age[0]) && (age[4] > age[1]) && (age[4] > age[2]) && (age[4] > age[3])) ? 1'b1 : (next_fust_state[4] == FUST_EMPTY || (fust_state[4] == FUST_EX && next_fust_state[4] == FUST_WAIT)) ? 1'b0 : oldest_rdy[4];
     
+      // cleared when fu goes to being empty
       for (int i = 0; i < 5; i++) begin
         if (next_fust_state[i] == FUST_EMPTY) begin
           next_oldest_rdy[i] = '0;
@@ -170,13 +177,15 @@ module issue(
       end
     end
 
-    always_ff @ (posedge CLK, negedge nRST) begin: Ready_Latch
-      if (~nRST)
-        rdy <= '0;
-      else
-        rdy <= n_rdy;
+    always_ff @ (posedge CLK, negedge nRST) begin: Oldest_Latch
+      if (~nRST) begin
+        oldest_rdy <= '0;
+      end else begin
+        oldest_rdy <= next_oldest_rdy;
+      end
     end
 
+    // rdy signal set when there are no dependencies
     always_comb begin : Ready_Logic
       n_rdy = rdy;
       for (int i = 0; i < 5; i++) begin
@@ -197,15 +206,15 @@ module issue(
       end
     end
 
-    always_ff @ (posedge CLK, negedge nRST) begin: FUST_State
+    always_ff @ (posedge CLK, negedge nRST) begin: Ready_Latch
       if (~nRST)
-        fust_state <= {5{FUST_EMPTY}};
-    	else
-        fust_state <= next_fust_state;
+        rdy <= '0;
+      else
+        rdy <= n_rdy;
     end
 
-    logic [4:0] fu_ready, next_ready;
-    logic single_ready, next_single_ready;
+    // whenever there is more than one instruction that becomes ready at the same time, logic to handle that, oldest one gets selected
+    // only one instr issued at a time
     always_comb begin
       fu_ready = '0;
       next_ready = '0;
@@ -219,6 +228,19 @@ module issue(
       end
       single_ready = (fu_ready == 5'd1) || (fu_ready == 5'd2) || (fu_ready == 5'd4) || (fu_ready == 5'd8) || (fu_ready == 5'd16);
       next_single_ready = (next_ready == 5'd1) || (next_ready == 5'd2) || (next_ready == 5'd4) || (next_ready == 5'd8) || (next_ready == 5'd16);
+    end
+
+    // states for each funtional unit:
+    // FUST_EMPTY - empty and waiting for an instr
+    // FUST_WAIT  - instr has been put into the fusts and check dependencies here
+    // FUST_RDY   - dependencies cleared and waiting for functional unit to be clear
+    // FUST_EX    - instr is in functional unit in execute stage
+    // instr can go straight from wait to ex if no dependencies or hazards
+    always_ff @ (posedge CLK, negedge nRST) begin: FUST_State
+      if (~nRST)
+        fust_state <= {5{FUST_EMPTY}};
+    	else
+        fust_state <= next_fust_state;
     end
 
     // Issue Policy: Oldest instruction first
@@ -285,7 +307,9 @@ module issue(
         end
     end
 
-    logic n_halt;
+    // halt logic - same as dispatch
+    assign n_halt = (isif.branch_miss) ? '0 : (halt || isif.dispatch.halt);
+    assign isif.halt = halt;
 
     always_ff @(posedge CLK, negedge nRST) begin : Halt_Latch
       if (!nRST) begin
@@ -296,9 +320,7 @@ module issue(
       end
     end
 
-    assign n_halt = (isif.branch_miss) ? '0 : (halt || isif.dispatch.halt);
-    assign isif.halt = halt;
-
+    // when the next state for an instr is changing to FUST_EX, the output control signals and data are outputted here
     always_comb begin : Output_Logic
       issue = isif.out;
       isif.fust_state = fust_state;
@@ -308,6 +330,7 @@ module issue(
       i_type = '0;
       lui_type = '0;
       issue.halt = '0;
+      // halt is only set when all instructions that come before are done and there is no branch miss
       if (!(|isif.fust_s.busy || isif.fust_m.busy || isif.fust_g.busy || isif.branch_miss)) begin
         issue.halt = halt;
       end
@@ -315,8 +338,8 @@ module issue(
         if (isif.fu_ex[i]) begin
           issue.fu_en[i] = 1'b0;
         end
-        if (fust_state[i] != FUST_EX && next_fust_state[i] == FUST_EX) begin
-          if (i < 3) begin // alu, sls, br
+        if (fust_state[i] != FUST_EX && next_fust_state[i] == FUST_EX) begin // state going from either wait or rdy to ex
+          if (i < 3) begin // scakar alu, scalar ld/st, br
             s_rs1 = fusif.fust.op[i].rs1;
             s_rs2 = fusif.fust.op[i].rs2;
             i_type = fusif.fust.op[i].i_type;
@@ -331,7 +354,7 @@ module issue(
             issue.rd = fusif.fust.op[i].rd;
             issue.spec = ((i==0 || i==1) && !isif.branch_resolved && !isif.branch_miss) ? fusif.fust.op[i].spec : '0; // pretty sure only on alu instr
             issue.j_type = fusif.fust.op[i].j_type;
-          end else if (i == 3) begin // mls
+          end else if (i == 3) begin // matrix ld/st
             issue.md = fumif.fust.op.md;
             issue.ls_in = fumif.fust.op.mem_type;
             s_rs1 = fumif.fust.op.rs1;
@@ -352,6 +375,7 @@ module issue(
       end
     end
 
+    // fusts are sent back to dispatch - connected in scoreboard.sv
     always_comb begin : Dispatch_Loopback
       isif.fust_s = fusif.fust;
       isif.fust_m = fumif.fust;

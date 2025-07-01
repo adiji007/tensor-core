@@ -45,6 +45,7 @@ module dispatch(
     logic n_halt, halt;
     logic n_new_weight, new_weight;
 
+    // n_dispatch is combinationally set by output logic
     always_ff @ (posedge CLK, negedge nRST) begin: Pipeline_Latching
       if (~nRST)
         diif.out <= '0;
@@ -52,6 +53,7 @@ module dispatch(
         diif.out <= n_dispatch;
     end
 
+    // current pc and branch prediction (taken = 1 or not taken = 0) from fetch
     always_comb begin
       fetch_br_pc  = diif.out.n_br_pc;
       fetch_br_pred = diif.out.n_br_pred;
@@ -61,6 +63,8 @@ module dispatch(
       end
     end
 
+    // if there are new new weights for the systollic array, scratchpad needs to load in new weight matrix
+    // if no change in weights from previous gemm instr, scratchpad can directly load in input and partial sum matrices
     always_comb begin
       gemm_weight_addr = diif.fust_g.op.ms2;
       n_new_weight = new_weight;
@@ -84,8 +88,12 @@ module dispatch(
       end
     end
 
+    // when there is a branch miss, fust and certain latches need to be flushed
     assign flush = diif.branch_miss;
 
+    // n_dispatch is set based on what is happening
+    // if flush (branch miss), decoded instruction is cleared
+    // if there is a hazard (logic below), output should be held until hazars cleared
     always_comb begin : Pipeline_Output
       case (1'b1)
         flush:       n_dispatch = '0;
@@ -94,6 +102,8 @@ module dispatch(
       endcase
     end
 
+    // decoding registers bsaed on instruction
+    // depending on type of instr, registers not being used are set to 0 for clean dependence checking 
     always_comb begin: Instr_Signals
       instr  = diif.fetch.imemload;
       s_rd   = (cuif.s_mem_type == STORE || (cuif.fu_s == FU_S_BRANCH && !(cuif.jal || cuif.jalr)) ) ? '0 : instr[11:7];
@@ -105,11 +115,14 @@ module dispatch(
       m_rs3  = instr[13:8];
     end
 
+    // control unit takes in instruction passed from fetch
     always_comb begin : Control_Unit
       cuif.instr = instr;
     end
 
+    
     always_comb begin : Hazard_Logic
+      // hazard logic to check if there is a structural hazard
       case (cuif.fu_s)
         FU_S_ALU:     s_busy = (diif.fu_ex[0] == 1'b0 || (|diif.fust_s.t1 || |diif.fust_s.t2)) ? (diif.fu_ex[0] == 1'b1) ? '0 : diif.fust_s.busy[FU_S_ALU] : '0;
         FU_S_LD_ST:   s_busy = (diif.fu_ex[1] == 1'b0 || (|diif.fust_s.t1 || |diif.fust_s.t2)) ? (diif.fu_ex[1] == 1'b1) ? '0 : diif.fust_s.busy[FU_S_LD_ST] : '0;
@@ -122,9 +135,19 @@ module dispatch(
         default: m_busy = 1'b0;
       endcase
 
+      // hazard logic if there is a waw hazard
       WAW = (cuif.m_mem_type == M_LOAD || cuif.fu_m == FU_M_GEMM) ? rstmif.status.idx[m_rd].busy : 
             (cuif.s_reg_write || (cuif.jal || cuif.jalr)) ? rstsif.status.idx[s_rd].busy: 1'b0;
       hazard = (s_busy | m_busy | WAW); 
+    end
+
+    // if there is a branch, instructions following are in "speculation state"
+    always_comb begin : Speculation_State
+      n_spec = spec;
+      if (diif.branch_resolved || diif.branch_miss)
+        n_spec = 1'b0;
+      else if (cuif.fu_s == FU_S_BRANCH && !(cuif.jal || cuif.jalr))
+        n_spec = 1'b1;
     end
 
     always_ff @ (posedge CLK, negedge nRST) begin: Speculation_State_Latch
@@ -134,12 +157,16 @@ module dispatch(
         spec <= n_spec;
     end
 
-    always_comb begin : Speculation_State
-      n_spec = spec;
-      if (diif.branch_resolved || diif.branch_miss)
-        n_spec = 1'b0;
-      else if (cuif.fu_s == FU_S_BRANCH && !(cuif.jal || cuif.jalr))
-        n_spec = 1'b1;
+    // if there is a jump, no new instructions come until fetch brings in the pc resulting from the jump
+    // ex. 
+    // at pc 100, jump instr to pc 124
+    // fetch holds pc and instr signals to 0 until it gets instr for pc 124
+    always_comb begin : Jump_State
+      n_jump = jump;
+      if ((diif.branch_resolved && !(cuif.jal || cuif.jalr)) || diif.branch_miss)
+        n_jump = 1'b0;
+      else if (cuif.jal || cuif.jalr)
+        n_jump = 1'b1;
     end
 
     always_ff @ (posedge CLK, negedge nRST) begin: Jump_State_Latch
@@ -149,15 +176,11 @@ module dispatch(
         jump <= n_jump;
     end
 
-    always_comb begin : Jump_State
-      n_jump = jump;
-      if ((diif.branch_resolved && !(cuif.jal || cuif.jalr)) || diif.branch_miss)
-        n_jump = 1'b0;
-      else if (cuif.jal || cuif.jalr)
-        n_jump = 1'b1;
-    end
-
-
+    // if halt, halt latch is set and cleared if there is a branch miss meaning that halt came after a mispredicted branch
+    // fetch holds pc and instr signal to 0 when diif.halt is high, if cleared, fetch will bring whatever resolved pc's instr
+    assign n_halt = (diif.branch_miss) ? '0 : (halt || cuif.halt);
+    assign diif.halt = (halt || n_halt);
+    
     always_ff @(posedge CLK, negedge nRST) begin : Halt_Latch
       if (!nRST) begin
         halt <= '0;
@@ -167,12 +190,19 @@ module dispatch(
       end
     end
 
-    assign n_halt = (diif.branch_miss) ? '0 : (halt || cuif.halt);
-    assign diif.halt = halt || n_halt;
-
     always_comb begin : Reg_Status_Tables
       init_rst(); 
 
+      // reg status tables (rsts) are set whenever there is an instruction writing to a register
+      // when set, the status table holds what functional unit will be writing to it
+      // ex.
+      // if alu is writing to reg 5, reg 5 in scalar rsts will be set to 1
+      // if matrix lead to matrix reg 10, matrix reg 10 in matrix rsts will be set to 2
+
+      // there is a rsts for scalar and for matrix - scalar same size as reg file (32), matrix same as scratchpad (64)
+
+      // rsts also hold spec bit, when branch miss, the whole status is cleared as it will not be written to
+      // if branch resolved (correct prediction), only spec bit is cleared
       rstsif.di_write = 1'b0;
       rstsif.spec = 1'b0;
       rstsif.flush = diif.branch_miss;
@@ -212,11 +242,18 @@ module dispatch(
       end
     end
 
+    // next logic for functional unit status tables (fusts), these are sent to issue where the fusts get written to
+    // fust for the three types of instructions
+    // 1. scalar - branch/jump fu, alu fu, scalar ld/st fu
+    // 2. matrix - matrix ld/st fu
+    // 3. gemm   - gemm fu
     always_comb begin : FUST
       diif.n_fu_t = cuif.fu_t;
       diif.n_t1 = diif.fust_s.t1;
       diif.n_t2 = diif.fust_s.t2;
 
+      // t1 and t2 are scalar tags - cleared whenever the regs are written to - notified by writeback stage
+      // s_t1 is scalar tag for matrix load and store - used for calculating memory location - cleared same way as scalar instrunction tags t1 and t2
       if (diif.wb.s_rw_en && diif.wb.alu_done) begin
         diif.n_t1[FU_S_LD_ST] = ((diif.wb.s_rw == diif.fust_s.op[FU_S_LD_ST].rs1) && (diif.fust_s.t1[FU_S_LD_ST] == 2'd1) && diif.fust_s.busy[FU_S_LD_ST]) ? '0 : diif.fust_s.t1[FU_S_LD_ST];
         diif.n_t2[FU_S_LD_ST] = ((diif.wb.s_rw == diif.fust_s.op[FU_S_LD_ST].rs2) && (diif.fust_s.t2[FU_S_LD_ST] == 2'd1) && diif.fust_s.busy[FU_S_LD_ST]) ? '0 : diif.fust_s.t2[FU_S_LD_ST];
@@ -242,7 +279,8 @@ module dispatch(
         diif.n_t2[FU_S_BRANCH] = (diif.wb.s_rw == diif.fust_s.op[FU_S_BRANCH].rs2) && (diif.fust_s.t2[FU_S_BRANCH] == 2'd3) && diif.fust_s.busy[FU_S_BRANCH] ? '0 : diif.fust_s.t2[FU_S_BRANCH];
         diif.n_s_t1 = (diif.fust_m.t1 == 2'd3 && diif.fust_m.busy) ? '0 : diif.fust_m.t1;
       end
-
+      
+      // setting scalar tags t1 and t2 looking at reg status tables to see what functional unit is writing to that register
       if (!(diif.wb.s_rw_en && (diif.wb.s_rw == s_rs1)) && !hazard) begin
         diif.n_t1[cuif.fu_s] = rstsif.status.idx[s_rs1].tag;
       end
@@ -250,34 +288,9 @@ module dispatch(
         diif.n_t2[cuif.fu_s] = rstsif.status.idx[s_rs2].tag;
       end
 
-      // To Issue **Combinationally** (is latched when into fust in issue)
-      diif.n_fust_s_en     = (cuif.fu_t == FU_S_T & ~flush & ~hazard);
-      diif.n_fu_s          = cuif.fu_s;
-      diif.n_fust_s.rd     = s_rd;
-      diif.n_fust_s.rs1    = s_rs1;
-      diif.n_fust_s.rs2    = s_rs2;
-      diif.n_fust_s.imm    = cuif.imm;
-      diif.n_fust_s.i_type = cuif.i_flag;
-      diif.n_fust_s.lui    = (cuif.u_type == UT_LOAD);
-      diif.n_fust_s.j_type = (cuif.jal) ? 2'd1 : (cuif.jalr) ? 2'd2 : 2'd0;
-      diif.n_fust_s.spec   = spec && !(diif.branch_resolved || diif.branch_miss); // sets spec bit in FUST on new instructions
-
-      diif.n_fust_s.op_type = '0;
-      diif.n_fust_s.mem_type = scalar_mem_t'('0);
-      diif.n_fust_m.mem_type = matrix_mem_t'('0);
-      diif.n_fust_m.spec = spec && !(diif.branch_resolved || diif.branch_miss);
-
-      if (cuif.fu_s == FU_S_ALU) begin
-        diif.n_fust_s.op_type = cuif.alu_op;
-      end 
-      else if (cuif.fu_s == FU_S_BRANCH) begin
-        diif.n_fust_s.op_type = {1'b0,cuif.branch_op};
-      end
-      
-      if (cuif.fu_s == FU_S_LD_ST) begin
-        diif.n_fust_s.mem_type = cuif.s_mem_type;
-      end
-
+      // gt1, gt2, and gt3 are matrix tags for gemm instructions - cleared whenever matrix load finishes 
+      // none of the tags are needed to be cleared when gemm isntr happens because that is a structural hazard and
+      // gemm done signal is set by scratchpad when systollic array has written output matrix
       if (diif.wb.m_load_done) begin
         diif.n_gt1 = (diif.fust_g.t1 != '0) && diif.fust_g.busy ? '0 : diif.fust_g.t1;
         diif.n_gt2 = (diif.fust_g.t2 != '0) && diif.fust_g.busy ? '0 : diif.fust_g.t2;
@@ -289,16 +302,52 @@ module dispatch(
         diif.n_gt3 = (cuif.fu_t == FU_G_T & ~flush & ~hazard) ? rstmif.status.idx[m_rs3].tag : diif.fust_g.t3;
       end
 
+      // m_t2 is matrix tag for matrix stores and loads - cleared when gemm instr is done
+      // no need to explicitely clear on matrix load or store done as it is a structural hazard and scratchpad
+      // only says done signal whenever matrix is finished storing or loading to or from memory
       if (diif.wb.gemm_done)  begin
         diif.n_m_t2 = (diif.fust_m.t2 != '0) && diif.fust_m.busy ? '0 : diif.fust_m.t2;
       end
-      else begin
+      else begin // setting tag
         diif.n_m_t2  = (cuif.fu_t == FU_M_T & ~flush & ~hazard) ? rstmif.status.idx[m_rd].tag  : diif.fust_m.t2;
       end
 
+      // setting tag
       if (!(diif.wb.s_rw_en && (diif.wb.s_rw == s_rs1)) && !hazard)begin
         diif.n_s_t1 = rstsif.status.idx[s_rs1].tag;
       end
+
+
+      // To Issue **Combinationally** (is latched when into fust in issue) - fusts also hold necessary control signals and data
+      
+      // scalar
+      diif.n_fust_s_en     = (cuif.fu_t == FU_S_T & ~flush & ~hazard);
+      diif.n_fu_s          = cuif.fu_s;
+      diif.n_fust_s.rd     = s_rd;
+      diif.n_fust_s.rs1    = s_rs1;
+      diif.n_fust_s.rs2    = s_rs2;
+      diif.n_fust_s.imm    = cuif.imm;
+      diif.n_fust_s.i_type = cuif.i_flag;
+      diif.n_fust_s.lui    = (cuif.u_type == UT_LOAD);
+      diif.n_fust_s.j_type = (cuif.jal) ? 2'd1 : (cuif.jalr) ? 2'd2 : 2'd0;
+      diif.n_fust_s.spec   = spec && !(diif.branch_resolved || diif.branch_miss); // sets spec bit in FUST on new instructions
+      diif.n_fust_s.op_type = '0;
+      diif.n_fust_s.mem_type = scalar_mem_t'('0);
+
+      if (cuif.fu_s == FU_S_ALU) begin
+        diif.n_fust_s.op_type = cuif.alu_op;
+      end 
+      else if (cuif.fu_s == FU_S_BRANCH) begin
+        diif.n_fust_s.op_type = {1'b0,cuif.branch_op};
+      end
+
+      if (cuif.fu_s == FU_S_LD_ST) begin
+        diif.n_fust_s.mem_type = cuif.s_mem_type;
+      end
+
+      // matrix ld/st
+      diif.n_fust_m.mem_type = matrix_mem_t'('0);
+      diif.n_fust_m.spec = spec && !(diif.branch_resolved || diif.branch_miss);
 
       if (cuif.fu_m == FU_M_LD_ST) begin
         diif.n_fust_m.mem_type = cuif.m_mem_type;
@@ -309,6 +358,7 @@ module dispatch(
       diif.n_fust_m.rs1  = s_rs1;
       diif.n_fust_m.imm  = cuif.imm;
 
+      // gemm
       diif.n_fust_g_en   = (cuif.fu_t == FU_G_T & ~flush & ~hazard);
       diif.n_fust_g.md   = m_rd;
       diif.n_fust_g.ms1  = m_rs1;
@@ -319,6 +369,7 @@ module dispatch(
       diif.n_fust_g.new_weight = ((diif.fust_g.op.ms2 != m_rs2) || new_weight);
     end
 
+    // output logic
     always_comb begin : Dispatch_Out 
       dispatch = diif.out;
 
@@ -346,6 +397,7 @@ module dispatch(
 
     end
 
+    // initializations for reg status tables, no particular reason it was done as a function
     function automatic void init_rst();
       begin
         rstsif.di_sel = '0;
