@@ -6,10 +6,10 @@ interface rst_s_if;
   import datapath_pkg::*;
 
   // Inputs from dispatch
-  logic [4:0] di_sel;
+  logic [4:0] di_sel;  // 5bits for the selecting the register index
   logic di_write;
   logic [1:0] di_tag;
-  logic spec;
+  logic spec;         // :this spec seems to differ from spec bit for individual registers.
   logic flush, resolved;
 
   // Inputs from writeback

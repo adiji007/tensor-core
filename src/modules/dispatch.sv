@@ -21,7 +21,7 @@ module dispatch(
     rst_m_if rstmif();
 
     control_unit CU(cuif);
-    rst_s RSTS(CLK, nRST, rstsif);
+    rst_s RSTS(CLK, nRST, rstsif); // :Gets dispatch inputs and updates scalar reg status table (clears/updates tags, busy, etc.)
     rst_m RSTM(CLK, nRST, rstmif);
 
     // Local Variables
@@ -55,7 +55,7 @@ module dispatch(
 
     // current pc and branch prediction (taken = 1 or not taken = 0) from fetch
     always_comb begin
-      fetch_br_pc  = diif.out.n_br_pc;
+      fetch_br_pc  = diif.out.n_br_pc;    // :Why does branch prediction signals come from dispatch and not execute?
       fetch_br_pred = diif.out.n_br_pred;
       if (cuif.fu_s == FU_S_BRANCH) begin
         fetch_br_pc  = diif.fetch.br_pc;
@@ -106,7 +106,7 @@ module dispatch(
     // depending on type of instr, registers not being used are set to 0 for clean dependence checking 
     always_comb begin: Instr_Signals
       instr  = diif.fetch.imemload;
-      s_rd   = (cuif.s_mem_type == STORE || (cuif.fu_s == FU_S_BRANCH && !(cuif.jal || cuif.jalr)) ) ? '0 : instr[11:7];
+      s_rd   = (cuif.s_mem_type == STORE || (cuif.fu_s == FU_S_BRANCH && !(cuif.jal || cuif.jalr)) ) ? '0 : instr[11:7]; // :no destination register for store, branch, jal, jalr
       s_rs1  = (cuif.u_type == UT_LOAD || cuif.jal) ? '0 : (cuif.fu_m == FU_M_LD_ST) ? instr [25:21] : instr[19:15];
       s_rs2  = (cuif.i_flag && (cuif.fu_s == FU_S_ALU || cuif.s_mem_type == LOAD || cuif.jal || cuif.jalr)) ? '0 : instr[24:20];
       m_rd   = instr[31:26];
@@ -123,7 +123,7 @@ module dispatch(
     
     always_comb begin : Hazard_Logic
       // hazard logic to check if there is a structural hazard
-      case (cuif.fu_s)
+      case (cuif.fu_s) // :Why are opposite cases checked?
         FU_S_ALU:     s_busy = (diif.fu_ex[0] == 1'b0 || (|diif.fust_s.t1 || |diif.fust_s.t2)) ? (diif.fu_ex[0] == 1'b1) ? '0 : diif.fust_s.busy[FU_S_ALU] : '0;
         FU_S_LD_ST:   s_busy = (diif.fu_ex[1] == 1'b0 || (|diif.fust_s.t1 || |diif.fust_s.t2)) ? (diif.fu_ex[1] == 1'b1) ? '0 : diif.fust_s.busy[FU_S_LD_ST] : '0;
         FU_S_BRANCH:  s_busy = (diif.fu_ex[2] == 1'b0 || (|diif.fust_s.t1 || |diif.fust_s.t2)) ? (diif.fu_ex[2] == 1'b1) ? '0 : diif.fust_s.busy[FU_S_BRANCH] : '0;
@@ -135,7 +135,7 @@ module dispatch(
         default: m_busy = 1'b0;
       endcase
 
-      // hazard logic if there is a waw hazard
+      // hazard logic if there is a waw hazard // :What does jump have to do with WAW?
       WAW = (cuif.m_mem_type == M_LOAD || cuif.fu_m == FU_M_GEMM) ? rstmif.status.idx[m_rd].busy : 
             (cuif.s_reg_write || (cuif.jal || cuif.jalr)) ? rstsif.status.idx[s_rd].busy: 1'b0;
       hazard = (s_busy | m_busy | WAW); 
@@ -165,7 +165,7 @@ module dispatch(
       n_jump = jump;
       if ((diif.branch_resolved && !(cuif.jal || cuif.jalr)) || diif.branch_miss)
         n_jump = 1'b0;
-      else if (cuif.jal || cuif.jalr)
+      else if (cuif.jal || cuif.jalr)   // :doesn't branch prediction predict jal and jalr PC addresses?
         n_jump = 1'b1;
     end
 
@@ -178,7 +178,7 @@ module dispatch(
 
     // if halt, halt latch is set and cleared if there is a branch miss meaning that halt came after a mispredicted branch
     // fetch holds pc and instr signal to 0 when diif.halt is high, if cleared, fetch will bring whatever resolved pc's instr
-    assign n_halt = (diif.branch_miss) ? '0 : (halt || cuif.halt);
+    assign n_halt = (diif.branch_miss) ? '0 : (halt || cuif.halt); // :Need ot understand this
     assign diif.halt = (halt || n_halt);
     
     always_ff @(posedge CLK, negedge nRST) begin : Halt_Latch
@@ -203,14 +203,14 @@ module dispatch(
 
       // rsts also hold spec bit, when branch miss, the whole status is cleared as it will not be written to
       // if branch resolved (correct prediction), only spec bit is cleared
-      rstsif.di_write = 1'b0;
+      rstsif.di_write = 1'b0;   // :why is it always 0?
       rstsif.spec = 1'b0;
       rstsif.flush = diif.branch_miss;
       rstsif.resolved = diif.branch_resolved;
       if (cuif.s_reg_write || (cuif.jal || cuif.jalr)) begin
         if (~hazard & ~flush) begin 
           rstsif.di_sel = s_rd;
-          rstsif.di_write = 1'b1;
+          rstsif.di_write = 1'b1;   // :it's set and unset in combination block, why?
           rstsif.di_tag = (cuif.fu_s == FU_S_LD_ST) ? 2'd3 : (cuif.fu_s == FU_S_ALU) ? 2'd1 : 2'd2; // 1 for ALU, 3 for LD, 2 for BR (jump)
           rstsif.spec = spec;
         end
@@ -226,7 +226,7 @@ module dispatch(
 
 
       // clearing reg status tables when data written to reg file or scratchpad done
-      if (diif.wb.s_rw_en) begin 
+      if (diif.wb.s_rw_en) begin    // :Note: tags for individual registers are cleared in rst_s module
         rstsif.wb_sel = diif.wb.s_rw;
         rstsif.wb_write = '1;
       end
@@ -255,6 +255,7 @@ module dispatch(
       // t1 and t2 are scalar tags - cleared whenever the regs are written to - notified by writeback stage
       // s_t1 is scalar tag for matrix load and store - used for calculating memory location - cleared same way as scalar instrunction tags t1 and t2
       if (diif.wb.s_rw_en && diif.wb.alu_done) begin
+        // :Check if tag is set to 2'd1 (ALU) ig, if operand match the broadcasted register, and busy is set: then clear tag (need to find where operands written with broadcasted register)
         diif.n_t1[FU_S_LD_ST] = ((diif.wb.s_rw == diif.fust_s.op[FU_S_LD_ST].rs1) && (diif.fust_s.t1[FU_S_LD_ST] == 2'd1) && diif.fust_s.busy[FU_S_LD_ST]) ? '0 : diif.fust_s.t1[FU_S_LD_ST];
         diif.n_t2[FU_S_LD_ST] = ((diif.wb.s_rw == diif.fust_s.op[FU_S_LD_ST].rs2) && (diif.fust_s.t2[FU_S_LD_ST] == 2'd1) && diif.fust_s.busy[FU_S_LD_ST]) ? '0 : diif.fust_s.t2[FU_S_LD_ST];
         diif.n_t1[FU_S_BRANCH] = ((diif.wb.s_rw == diif.fust_s.op[FU_S_BRANCH].rs1) && (diif.fust_s.t1[FU_S_BRANCH] == 2'd1) && diif.fust_s.busy[FU_S_BRANCH]) ? '0 : diif.fust_s.t1[FU_S_BRANCH];
@@ -314,7 +315,7 @@ module dispatch(
 
       // setting tag
       if (!(diif.wb.s_rw_en && (diif.wb.s_rw == s_rs1)) && !hazard)begin
-        diif.n_s_t1 = rstsif.status.idx[s_rs1].tag;
+        diif.n_s_t1 = rstsif.status.idx[s_rs1].tag; //:How is this different from diif.n_t1?
       end
 
 

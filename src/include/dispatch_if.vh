@@ -16,10 +16,10 @@ interface dispatch_if;
     fust_s_t fust_s;
     fust_m_t fust_m;
     fust_g_t fust_g;
-    fust_state_e [4:0] fust_state;
+    fust_state_e [4:0] fust_state; // :Represents the state of each functional unit (Empty, Wait, Ready, Execute))
 
-    // Inputs from writeback
-    wb_ctr_t wb;
+    // Inputs from writeback // :for the dispatch stage
+    wb_ctr_t wb;   
     
     // Inputs from memory
     // logic ihit;
@@ -31,7 +31,7 @@ interface dispatch_if;
     
     // Outputs of stage
     dispatch_t out;
-    fust_s_row_t n_fust_s;
+    fust_s_row_t n_fust_s; //:why doesn't dispatch output n_fust_s as a Table instead of a row?
     fust_m_row_t n_fust_m;
     fust_g_row_t n_fust_g;
     fu_scalar_t n_fu_s;
@@ -45,8 +45,8 @@ interface dispatch_if;
     logic [1:0] n_gt2;
     logic [1:0] n_gt3;
 
-    logic [1:0] n_s_t1;
-    logic [1:0] n_m_t2;
+    logic [1:0] n_s_t1; // :what's this be n_m_t1?
+    logic [1:0] n_m_t2; // :why n_m_t1 doesn't exist?
 
     logic jump, freeze, halt;
     

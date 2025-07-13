@@ -20,7 +20,7 @@ module rst_s (
   always_comb begin
     status = rstif.status;
 
-    if (rstif.flush) begin
+    if (rstif.flush) begin                // :Flush the flags for every individual register
       for (int i = 1; i < 32; i++) begin
         status.idx[i].busy = '0;
         status.idx[i].tag = '0;
@@ -34,12 +34,12 @@ module rst_s (
       end
     end
 
-    if (rstif.di_write) begin //assumes dispatch reads the state is IDLE
+    if (rstif.di_write) begin //assumes dispatch reads the state is IDLE // :Whenever an instruction is dispatched, update flags for the register
       status.idx[rstif.di_sel].busy = 1;
       status.idx[rstif.di_sel].tag = rstif.di_tag;
       status.idx[rstif.di_sel].spec = rstif.spec;
     end
-    if (rstif.wb_write) begin
+    if (rstif.wb_write) begin                 // :Written to register file, so clear busy and tag entry
       status.idx[rstif.wb_sel].busy = 0;
       status.idx[rstif.wb_sel].tag = '0;
     end

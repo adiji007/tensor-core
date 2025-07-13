@@ -109,20 +109,20 @@ package datapath_pkg;
     regbits_t rd;
     regbits_t rs1;
     regbits_t rs2;
-    word_t imm; //instr[31:7] TODO: double check this is right 
+    word_t imm; //instr[31:7] TODO: double check this is right // :What's this??
     logic spec;
     logic i_type;
     logic [3:0] op_type;
     scalar_mem_t mem_type;
     logic lui;
     logic [1:0] j_type; // 0(branch) 1(jal) 2(jalr)
-  } fust_s_row_t;
+  } fust_s_row_t;       // :the Packing order might not be uniform across all structs.
 
 
 
   typedef struct packed {
     logic [2:0] busy;
-    logic [2:0][1:0] t1;
+    logic [2:0][1:0] t1;   // :[1:0]tag represent one of four op_type from fust_s_row_t?
     logic [2:0][1:0] t2;
     fust_s_row_t [2:0] op;
   } fust_s_t;
@@ -187,7 +187,7 @@ package datapath_pkg;
     FETCH
   *******/
   typedef struct packed {
-    word_t imemload;
+    word_t imemload;  // :Instruction
     word_t br_pc;
     logic br_pred;
   } fetch_t;
